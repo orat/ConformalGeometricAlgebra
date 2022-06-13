@@ -6,7 +6,7 @@ This repository contains two implementations of CGA in java. One is based on cod
 
 Ganja.js does is not yet able to generate code for the inverse() function to calculate the inverse of an arbitrary multivector. The inverse-function is implemented in js only. That´s why an implementation is added based on [this](http://repository.essex.ac.uk/17282/1/TechReport_CES-534.pdf) paper.
 
-It is planed also to add an implementation based on the [JClifford](http://jvclifford.sourceforge.net/) project. All implementations can be switched transparently for testing purposes. The API and its unit tests are encapsulates the concrete underlaying implementation.
+It is planed also to add an implementation based on the [JClifford](http://jvclifford.sourceforge.net/) project. All implementations can be switched transparently for testing purposes. The API and its unit tests encapsulates the concrete underlaying implementation.
 
 This repository includes code to decompose multivectors into geometric 3d parameters like location, attitude, radius/size/squaredSize, weight etc. and specialized classes to represent Vectors, Bivectors, Trivectors etc.
 
