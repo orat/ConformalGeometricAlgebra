@@ -30,6 +30,7 @@ public class CGA1Metric {
     static {
         try {
             // Metric: [-1.0, 0.9999999999999998, 1.0, 1.0, 1.0]
+            // null-basis
             CGA_METRIC = new Metric(new double[][]{
                 {0.0, 0.0, 0.0, 0.0, -1.0},
                 {0.0, 1.0, 0.0, 0.0, 0.0},
@@ -39,6 +40,7 @@ public class CGA1Metric {
         } catch (MetricException e){}
     }
     // e+, e1, e2, e3, e-
+    // non-degenerate basis
     public static Metric CGA2_METRIC;
     static {
         try {

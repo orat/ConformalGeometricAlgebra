@@ -26,11 +26,15 @@ public interface iCGAMultivector {
     default iCGAMultivector createE(Tuple3d p){
         return createEx(p.x).add(createEy(p.y)).add(createEz(p.z));
     }
+    default iCGAMultivector createPseudoScalar(){
+        double[] values = new double[32];
+        values[31] = 1d;
+        return create(values);
+    }
     
     public iCGAMultivector createScalar(double d);
     
     public boolean isScalar();
-    
     
     // dual operators
     
@@ -82,6 +86,15 @@ public interface iCGAMultivector {
     
     // monadic/unary operators
     
+    /**
+     * The inverse of the multivector even if it is not a versor (returns 0 if 
+     * inverse does not exist).
+     * 
+     * @return the inverse of an arbitray multivector or 0 if no inverse exist.
+     * 
+     * TODO
+     * test if it really returns 0 if no inverse exists!
+     */
     default iCGAMultivector generalInverse(){
         iCGAMultivector conjugate = conjugate();
         iCGAMultivector gradeInversion = gradeInversion();
@@ -90,6 +103,16 @@ public interface iCGAMultivector {
         iCGAMultivector part = gp(conjugate).gp(gradeInversion).gp(reversion);
         double scalar = part.gp(negate14).gp(part).scalarPart();
         return conjugate.gp(gradeInversion).gp(reversion).gp(negate14).gp(part).gp(1d/scalar);
+    }
+        
+    /**
+     * An more efficient implementation can use the information that the multivector 
+     * a versor.
+     * 
+     * @return the default implementation is identical to generalInverse()
+     */
+    default iCGAMultivector versorInverse(){
+        return generalInverse();
     }
     
     /**
@@ -109,7 +132,16 @@ public interface iCGAMultivector {
         }
         return create(coordinates);
     }
-    public iCGAMultivector dual();
+   
+    /**
+     * Computes the dual of this element.
+     * 
+     * @return a new element that is the dual of this element.
+     */
+    default iCGAMultivector dual(){
+       return gp(createPseudoScalar().reverse());
+    }
+    
     //TODO
     // implement default implementation
     public iCGAMultivector undual();

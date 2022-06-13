@@ -728,11 +728,15 @@ public class CGAMultivector {
         return createPseudoscalar().gp(this).ip(mv2);
     }
     
-    
-    
-    
-    
-   
+    /**
+     * Computes the reflection against the specified vector.
+     * 
+     * @param n the vector against which reflect.
+     * @return a new element from the reflection against the specified vector.
+     */
+    /*public final CGAMultivector reflect(final CGAMultivector n){
+           return (gp(n.sQuadMod())).sub(n.gp(2.0 * dot(n)));
+    }*/
     
     
     // monadic operators
@@ -796,6 +800,22 @@ public class CGAMultivector {
     public boolean isNull(){
         return impl.isNull();
     }
+    public boolean isScalar(){
+        return impl.isScalar();
+    }
+    
+    /**
+     * Verifies if this element is a vector.
+     * 
+     * @return true if this element is a vector, false otherwise.
+     */
+    /*public boolean isVector(){
+       // getMaxGrade() ins spi einfügen, impl bisher nur für JClifford und CGAMultivector1a/Multivector vorhanden
+       // für CGAMultivector2 auf Basis von CGA sollte das aber leicht zu implementieren sein
+       // und was ist mit get(0)?
+       return ((get(0) == 0.0) && (getMaxGrade() == 1));
+    }*/
+    
     public double scalarPart(){
         return impl.scalarPart();
     }
@@ -803,6 +823,16 @@ public class CGAMultivector {
     
     // dual operators
     
+    /**
+     * Computes the commutation with the specified element.
+     * 
+     * @param cl the second element of the commutation.
+     * @return a new element from the commutation with the specified element.
+     */
+    public final CGAMultivector commutaton(final CGAMultivector cl){
+        return ((gp(cl)).sub(cl.gp(this))).gp(0.5);
+    }
+   
     /**
      * @Deprectated brauche ich vermutlich gar nicht
      * 
@@ -860,9 +890,6 @@ public class CGAMultivector {
         return new CGAMultivector(impl.abs());
     }
     
-    public boolean isScalar(){
-        return impl.isScalar();
-    }
     public CGAMultivector extractGrade(int grade){
         return new CGAMultivector(impl.extractGrade(grade));
     }

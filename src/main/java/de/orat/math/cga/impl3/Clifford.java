@@ -230,6 +230,7 @@ public class Clifford{
 
 	/**
 	 * Sets meet operation subspace.
+         * 
 	 * @throws IllegalArgumentException if subspace is negative or outside algebra's space mask.
 	 * @param subspace the meet operation subspace.
 	 */
@@ -356,8 +357,10 @@ public class Clifford{
 
 	/**
 	 * Returns a string representation of the element.
+         * 
 	 * @return the string representation of the element.
 	 */
+        @Override
 	public String toString(){
 		//String representation of the element
 		String str = new String();
@@ -382,7 +385,8 @@ public class Clifford{
 	/**
 	 * Creates and returns an element deeply cloning this element.
 	 */
-	public Object clone(){
+        @Override
+	public Object clone() {
 		//Creating a new empty element
 		Clifford newcl = new Clifford();
 		//Temporary reference variables
@@ -425,6 +429,7 @@ public class Clifford{
 
 	/**
 	 * Computes the quad module of an element discarding signature.
+         * 
 	 * @return the quad module of the specified element discarding signature.
 	 */
 	public final double uQuadMod(){
@@ -447,26 +452,27 @@ public class Clifford{
 
 	/**
 	 * Computes the quad module of an element regarding signature.
+         * 
 	 * @return the quad module of the specified element regarding signature.
 	 */
 	public final double sQuadMod(){
-		//Temporary module
-		double sqm = 0.0;
-		//Temporary reference variables
-		Map.Entry entry;
-		Blade bld;
-		Value val;
-		//For all blade-value mappings
-		Iterator it = map.entrySet().iterator();
-		while(it.hasNext()) {
-			//Getting blade and value
-			entry = (Map.Entry) it.next();
-			bld = (Blade) entry.getKey();
-			val = (Value) entry.getValue();
-			//Uptdating temporary module regarding versor square sign
-			sqm += val.value * (signTable[bld.blade][bld.blade] ? -val.value : val.value);
-		}
-		return sqm;
+            //Temporary module
+            double sqm = 0.0;
+            //Temporary reference variables
+            Map.Entry entry;
+            Blade bld;
+            Value val;
+            //For all blade-value mappings
+            Iterator it = map.entrySet().iterator();
+            while(it.hasNext()) {
+                //Getting blade and value
+                entry = (Map.Entry) it.next();
+                bld = (Blade) entry.getKey();
+                val = (Value) entry.getValue();
+                //Uptdating temporary module regarding versor square sign
+                sqm += val.value * (signTable[bld.blade][bld.blade] ? -val.value : val.value);
+            }
+            return sqm;
 	}
 
 	/**
@@ -499,24 +505,25 @@ public class Clifford{
 
 	/**
 	 * Gets highest grade of this element.
+         * 
 	 * @return highest grade of this element.
 	 */
 	public final int getMaxGrade(){//Not using entrySet().iterator
-		//Temporary grade
-		int maxgrade = 0;
-		//Temporary reference variable
-		Blade bld;
-		//Defining an array of cl blades
-		Object[] arrbld = map.keySet().toArray();
-		//For all cl blades
-		for(int x = 0; x < arrbld.length; x ++){
-			//Getting blade
-			bld = (Blade) arrbld[x];
-			//Comparing blade grade with temporary grade
-			if(gradeTable[bld.blade] > maxgrade)
-				maxgrade = gradeTable[bld.blade];
-		}
-		return maxgrade;
+            //Temporary grade
+            int maxgrade = 0;
+            //Temporary reference variable
+            Blade bld;
+            //Defining an array of cl blades
+            Object[] arrbld = map.keySet().toArray();
+            //For all cl blades
+            for(int x = 0; x < arrbld.length; x ++){
+                    //Getting blade
+                    bld = (Blade) arrbld[x];
+                    //Comparing blade grade with temporary grade
+                    if(gradeTable[bld.blade] > maxgrade)
+                            maxgrade = gradeTable[bld.blade];
+            }
+            return maxgrade;
 	}
 
 	/**
@@ -524,15 +531,16 @@ public class Clifford{
 	 * @return true if this element is a scalar, false otherwise.
 	 */
 	public final boolean isScalar(){
-		return (getMaxGrade() == 0) ? true : false;
+	    return (getMaxGrade() == 0);
 	}
 
 	/**
 	 * Verifies if this element is a vector.
+         * 
 	 * @return true if this element is a vector, false otherwise.
 	 */
 	public final boolean isVector(){
-		return ((get(0) == 0.0) && (getMaxGrade() == 1)) ? true : false;
+	    return ((get(0) == 0.0) && (getMaxGrade() == 1));
 	}
 
 	/**
@@ -645,6 +653,7 @@ public class Clifford{
 
 	/**
 	 * Computes the grade involution of this element.
+         * 
 	 * @return a new element from the grade involution of the specified element.
 	 */
 	public final Clifford gradeInv(){
@@ -673,6 +682,7 @@ public class Clifford{
 
 	/**
 	 * Computes the reverse of this element.
+         * 
 	 * @return a new element from the reversion of this element.
 	 */
 	public final Clifford rev(){
@@ -714,6 +724,7 @@ public class Clifford{
 
 	/**
 	 * Computes the inverse of this element.
+         * 
 	 * @return a new element from the inversion of this element.
 	 */
 	public final Clifford inv(){
@@ -750,7 +761,9 @@ public class Clifford{
 
 	/**
 	 * Computes the conjugation of this element.
+         * 
 	 * The conjugation of an element is a grade involution and a reversion.
+         * 
 	 * @return a new element from the conjugation of the specified element.
 	 */
 	public final Clifford conj(){
@@ -788,6 +801,7 @@ public class Clifford{
 
 	/**
 	 * Grades an element.
+         * 
 	 * @param grade the specified grade of the grading operation.
 	 * @return a new element with only terms of the specified grade.
 	 */
@@ -815,6 +829,7 @@ public class Clifford{
 
 	/**
 	 * Computes the geometric product of an element and a scalar.
+         * 
 	 * @param scalar the scalar of the geometric product.
 	 * @return a new element from the geometric product of the specified element and the specified scalar.
 	 */
@@ -845,6 +860,7 @@ public class Clifford{
 
 	/**
 	 * Computes the geometric product of two elements.
+         * 
 	 * @param cl the second element of the geometric product.
 	 * @return a new element from the geometric product of the two specified elements.
 	 */
@@ -934,6 +950,7 @@ public class Clifford{
 
 	/**
 	 * Computes the wedge product of two elements.
+         * 
 	 * @param cl the second element of the wedge product.
 	 * @return a new element from the wedge product of the two specified elements.
 	 */
@@ -981,6 +998,7 @@ public class Clifford{
 
 	/**
 	 * Computes the left contraction with the specified element.
+         * 
 	 * @param cl the second element of the left contraction.
 	 * @return a new element from the left contraction with the specified element.
 	 */
@@ -1028,6 +1046,7 @@ public class Clifford{
 
 	/**
 	 * Computes the right contraction with the specified element.
+         * 
 	 * @param cl the second element of the right contraction.
 	 * @return a new element from the right contraction with the specified element.
 	 */
@@ -1075,38 +1094,40 @@ public class Clifford{
 
 	/**
 	 * Computes the fast dot product of two vector.
+         * 
 	 * @throws IllegalArgumentException if elements are not vectors.
 	 * @param cl the second vector of the fast dot product.
 	 * @return the dot product of the two specified vector.
 	 */
 	public final double dot(final Clifford cl) throws IllegalArgumentException{
-		//Temporary dot product
-		double d = 0.0;
-		//Temporary reference variables
-		Map.Entry entry1;
-		Blade bld1;
-		Value val1,val2;
-		//For all blade-value mappings
-		Iterator it = map.entrySet().iterator();
-		while(it.hasNext()) {
-			//Getting blade and value
-			entry1 = (Map.Entry) it.next();
-			bld1 = (Blade) entry1.getKey();
-			val1 = (Value) entry1.getValue();
-			//Checking for grade 1 blade
-			if(gradeTable[bld1.blade] != 1)
-				throw new RuntimeException("Invalid argument: fast dot product is only for vectors.");
-			//Searching bld1 in cl
-			val2 = (Value) cl.map.get(bld1);
-			//Updating temporary dot product
-			if(val2 != null)
-				d += (val1.value * (((bld1.blade & signMask) != 0) ? -val2.value : val2.value));
-		}
-		return d;
+            //Temporary dot product
+            double d = 0.0;
+            //Temporary reference variables
+            Map.Entry entry1;
+            Blade bld1;
+            Value val1,val2;
+            //For all blade-value mappings
+            Iterator it = map.entrySet().iterator();
+            while(it.hasNext()) {
+                //Getting blade and value
+                entry1 = (Map.Entry) it.next();
+                bld1 = (Blade) entry1.getKey();
+                val1 = (Value) entry1.getValue();
+                //Checking for grade 1 blade
+                if(gradeTable[bld1.blade] != 1)
+                        throw new RuntimeException("Invalid argument: fast dot product is only for vectors.");
+                //Searching bld1 in cl
+                val2 = (Value) cl.map.get(bld1);
+                //Updating temporary dot product
+                if(val2 != null)
+                        d += (val1.value * (((bld1.blade & signMask) != 0) ? -val2.value : val2.value));
+            }
+            return d;
 	}
 
 	/**
 	 * Computes the commutation with the specified element.
+         * 
 	 * @param cl the second element of the commutation.
 	 * @return a new element from the commutation with the specified element.
 	 */
@@ -1116,14 +1137,16 @@ public class Clifford{
 
 	/**
 	 * Computes the dual of this element.
+         * 
 	 * @return a new element that is the dual of this element.
 	 */
 	public final Clifford dual(){
-		return gP(pseudoScalar.rev());
+	    return gP(pseudoScalar.rev());
 	}
 
 	/**
 	 * Computes the meet with the specified element.
+         * 
 	 * @param cl the second element of the meet.
 	 * @return a new element from the meet with the specified element.
 	 */
@@ -1133,6 +1156,7 @@ public class Clifford{
 
 	/**
 	 * Computes the meet with the specified element in a common subspace.
+         * 
 	 * @param cl the second element of the meet.
 	 * @param is the element representing a common subspace.
 	 * @return a new element from the meet with the specified element.
@@ -1143,11 +1167,10 @@ public class Clifford{
 
 	/**
 	 * Computes the reflection against the specified vector.
-	 * @param n the vector against wich reflect.
+	 * @param n the vector against which reflect.
 	 * @return a new element from the reflection against the specified vector.
 	 */
 	public final Clifford reflect(final Clifford n){
 		return (gP(n.sQuadMod())).sub(n.gP(2.0 * dot(n)));
 	}
-
 }

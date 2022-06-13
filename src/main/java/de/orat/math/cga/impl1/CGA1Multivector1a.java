@@ -251,9 +251,29 @@ public class CGA1Multivector1a extends Multivector implements iCGAMultivector {
     public CGA1Multivector1a gradeInversion() {
         return new CGA1Multivector1a(super.gradeInversion());
     }
+    /**
+     * The inverse of the multivector even if it is not a versor (returns 0 if 
+     * inverse does not exist).
+     * 
+     * @return the inverse of an arbitray multivector or 0 if no inverse exist.
+     */
     @Override
     public iCGAMultivector generalInverse() {
         return new CGA1Multivector1a(super.generalInverse(CGA_METRIC));
+    }
+    
+    /**
+     * A versor is a multivector that can be expressed as the geometric product 
+     * of a number of non-null 1-vectors. 
+     * 
+     * A sum of two versors does not in general result in a versor!<p>
+     * 
+     * @return inverse of this (assuming, it is a versor, no check is made!)
+     * @throws java.lang.ArithmeticException if the multivector is not invertable
+     */
+    @Override
+    public iCGAMultivector versorInverse(){
+        return new CGA1Multivector1a(super.versorInverse(CGA_METRIC));
     }
    
     @Override
