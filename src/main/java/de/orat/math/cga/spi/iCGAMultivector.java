@@ -1,5 +1,6 @@
 package de.orat.math.cga.spi;
 
+import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import org.jogamp.vecmath.Tuple3d;
 
@@ -26,15 +27,21 @@ public interface iCGAMultivector {
     default iCGAMultivector createE(Tuple3d p){
         return createEx(p.x).add(createEy(p.y)).add(createEz(p.z));
     }
+    // the pseudo scalar is always the last blade
     default iCGAMultivector createPseudoScalar(){
         double[] values = new double[32];
         values[31] = 1d;
         return create(values);
     }
-    
+    // the scalar is always the first blade
+    //TODO
+    // default-impl
     public iCGAMultivector createScalar(double d);
     
     public boolean isScalar();
+    // unklar wie sich das implementieren lässt
+    //TODO
+    //public boolean isVersor();
     
     // dual operators
     
@@ -83,7 +90,34 @@ public interface iCGAMultivector {
         return dual().op(x.dual()).undual();
     }
     
+    /**
+     * Computes the meet with the specified element in a common subspace.
+     * 
+     * @param mv the second element of the meet.
+     * @return a new element from the meet with the specified element.
+     */
     
+    /**
+     * Computes the meet with the specified element.
+     * 
+     * @param mv the second element of the meet.
+     * @return a new element from the meet with the specified element.
+     */
+    default iCGAMultivector meet(iCGAMultivector mv){
+        return (gp(createPseudoScalar()).ip(this, LEFT_CONTRACTION));
+    }
+    
+    /**
+     * Computes the meet with the specified element in a common subspace.
+     * 
+     * @param mv1 the second element of the meet.
+     * @param mv2 the element representing a common subspace.
+     * @return a new element from the meet with the specified element.
+     */
+    default iCGAMultivector meet(iCGAMultivector mv1, iCGAMultivector mv2){
+       return gp(mv2).ip(mv1, LEFT_CONTRACTION);
+    }
+        
     // monadic/unary operators
     
     /**

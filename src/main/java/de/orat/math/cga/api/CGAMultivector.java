@@ -54,7 +54,7 @@ public class CGAMultivector {
     public static CGAVector createE3(){
         return new CGAVector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
     }
-    public static CGAVector createVector(Vector3d v){
+    public static CGAVector createE3(Vector3d v){
         return new CGAVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
     
@@ -115,7 +115,7 @@ public class CGAMultivector {
      * @return multivector representing a dual sphere.
      */
     public static CGAMultivector createDualSphere(CGAMultivector p1, CGAMultivector p2, 
-                                                CGAMultivector p3, CGAMultivector p4){
+                                                  CGAMultivector p3, CGAMultivector p4){
         return p1.op(p2).op(p3).op(p4);
     }
     /**
@@ -136,7 +136,7 @@ public class CGAMultivector {
      * 
      * Inner and outer product null space representation is identical.<p>
      * 
-     * Multiplication of the multivector by double alpha possible
+     * Multiplication of the multivector by double alpha possible.<p>
      * 
      * @param p result
      * @return conformal result
@@ -162,7 +162,7 @@ public class CGAMultivector {
      * @return conformal result in inner product null space representation
      */
     public static CGAMultivector createDualPoint(CGAMultivector sphere1, CGAMultivector sphere2, 
-                                              CGAMultivector sphere3, CGAMultivector sphere4){
+                                                 CGAMultivector sphere3, CGAMultivector sphere4){
         return sphere1.op(sphere2).op(sphere3).op(sphere4);
     }
     
@@ -198,7 +198,7 @@ public class CGAMultivector {
      * 
      * @param p1
      * @param p2
-     * @return 
+     * @return multivector representing a dual plane.
      */
     public static CGAMultivector createDualPlane(CGAMultivector p1, CGAMultivector p2){
         return createEinf(1d).op((p1.op(p2)).dual());
@@ -209,7 +209,7 @@ public class CGAMultivector {
      * 
      * @param p result on the plane.
      * @param n normal vector.
-     * @return 
+     * @return multivector representing a dual plane
      */
     public static CGAMultivector createDualPlane(Point3d p, Vector3d n){
         CGAMultivector cp = createPoint(p);
@@ -283,7 +283,7 @@ public class CGAMultivector {
      * @param point1
      * @param point2
      * @param point3
-     * @return 
+     * @return multivector representing a dual circle.
      */
     public static CGAMultivector createDualCircle(Point3d point1, Point3d point2, Point3d point3){
         return createPoint(point1).op(createPoint(point2)).op(createPoint(point3));
@@ -295,7 +295,7 @@ public class CGAMultivector {
      * @param sphere1
      * @param sphere2
      * @param sphere3
-     * @return 
+     * @return multivector representing a point pair.
      */
     public static CGAMultivector createPointPair(CGAMultivector sphere1, CGAMultivector sphere2, CGAMultivector sphere3){
         return sphere1.op(sphere2).op(sphere3);
@@ -305,11 +305,18 @@ public class CGAMultivector {
      * 
      * @param point1
      * @param point2
-     * @return 
+     * @return multivector representing a dual point pair.
      */
     public static CGAMultivector createDualPointPair(CGAMultivector point1, CGAMultivector point2){
         return point1.op(point2);
     }
+    /**
+     * Create dual result pair in outer product null space representation (grade 2 multivector).
+     * 
+     * @param point1
+     * @param point2
+     * @return multivector representing a dual point pair.
+     */
     public static CGAMultivector createDualPointPair(Point3d point1, Point3d point2){
         return createPoint(point1).op(createPoint(point2));
     }
@@ -350,7 +357,7 @@ public class CGAMultivector {
      * @return multivector representing a parallelogram
      */
     public static CGAMultivector createDualParallelogram(Vector3d v1, Vector3d v2){
-        return createVector(v1).op(createVector(v2));
+        return createE3(v1).op(createE3(v2));
     }
     /**
      * Create parallelepiped (volumen formed by three anchored vectors).
@@ -361,7 +368,7 @@ public class CGAMultivector {
      * @return multivector representing a parallelepiped
      */
     public static CGAMultivector createDualParallelepiped(Vector3d v1, Vector3d v2, Vector3d v3){
-        return createVector(v1).op(createVector(v2)).op(createVector(v3));
+        return createE3(v1).op(createE3(v2)).op(createE3(v3));
     }
     
     
@@ -729,14 +736,36 @@ public class CGAMultivector {
     }
     
     /**
-     * Computes the reflection against the specified vector.
+     * Computes the meet with the specified element in a common subspace.
      * 
-     * @param n the vector against which reflect.
-     * @return a new element from the reflection against the specified vector.
+     * @param mv the second element of the meet.
+     * @return a new element from the meet with the specified element.
      */
-    /*public final CGAMultivector reflect(final CGAMultivector n){
-           return (gp(n.sQuadMod())).sub(n.gp(2.0 * dot(n)));
-    }*/
+    public final CGAMultivector meet(final CGAMultivector mv){
+       return new CGAMultivector(impl.meet(mv.impl));
+    }
+
+    /**
+     * Computes the meet with the specified element in a common subspace.
+     * 
+     * @param mv1 the second element of the meet.
+     * @param mv2 the element representing a common subspace.
+     * @return a new element from the meet with the specified element.
+     */
+    public final CGAMultivector meet(CGAMultivector mv1, CGAMultivector mv2){
+       return new CGAMultivector(impl.meet(mv1.impl,mv2.impl));
+    }
+    
+    
+    /**
+     * Computes the commutation with the specified element.
+     * 
+     * @param mv the second element of the commutation.
+     * @return a new element from the commutation with the specified element.
+     */
+    public final CGAMultivector commutation(CGAMultivector mv){
+        return ((gp(mv)).sub(mv.gp(this))).gp(0.5);
+    }
     
     
     // monadic operators

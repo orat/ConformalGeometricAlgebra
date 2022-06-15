@@ -5,8 +5,10 @@ package de.orat.math.cga.api;
  */
 public class CGAScalar extends CGAMultivector {
     
-    public CGAScalar(CGAMultivector m){
+    public CGAScalar(CGAMultivector m) throws IllegalArgumentException {
         super(m.impl);
+        if (!m.isScalar()) throw new IllegalArgumentException("Construction of scalar object from "
+                +m.toString()+" failed!");
     }
     @Override
     public boolean isScalar(){

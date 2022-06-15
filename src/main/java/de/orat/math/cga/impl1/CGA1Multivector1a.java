@@ -318,6 +318,7 @@ public class CGA1Multivector1a extends Multivector implements iCGAMultivector {
         return super.norm_e(CGA_METRIC);
     }
             
+    @Override
     public iCGAMultivector meet(iCGAMultivector b){
         MeetJoin mj = new MeetJoin(this, (CGA1Multivector1a) b);
         return new CGA1Multivector1a(mj.getMeet());
