@@ -3,7 +3,6 @@ package de.orat.math.cga.impl2;
 import de.orat.math.cga.impl1.CGA1Multivector;
 import de.orat.math.cga.impl2.generated.CGA;
 import de.orat.math.cga.spi.iCGAMultivector;
-import org.jogamp.vecmath.Tuple3d;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -394,5 +393,10 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     @Override
     public double squaredNorm() {
         return Math.abs(binop_Mul(this, this.Conjugate())._mVec[0]);
+    }
+
+    @Override
+    public int grade() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

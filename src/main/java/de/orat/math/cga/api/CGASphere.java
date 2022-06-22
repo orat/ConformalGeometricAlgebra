@@ -8,10 +8,10 @@ import org.jogamp.vecmath.Point3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGASphere extends CGAMultivector {
+public class CGASphere extends CGAVector implements iRoundElement {
     
     public CGASphere(CGAMultivector m){
-        super(m.impl);
+        super(m);
     }
     
     /**
@@ -24,7 +24,7 @@ public class CGASphere extends CGAMultivector {
      * @param location multivector representing a location
      * @param r radius of the sphere to CGAMultivector
      */
-    public CGASphere(CGAMultivector location, double r){
+    public CGASphere(CGAPoint location, double r){
         this(location.sub(createEinf(0.5*r*r)));
     }
     
@@ -44,5 +44,9 @@ public class CGASphere extends CGAMultivector {
     
     public RoundAndTangentParameters decompose(){
         return decomposeRound();
+    }
+    
+    public double decomposeWeight(){
+        return CGAMultivector.decomposeWeight(decomposeTangentAndRoundDirectionAsMultivector(), createOrigin(1d));
     }
 }

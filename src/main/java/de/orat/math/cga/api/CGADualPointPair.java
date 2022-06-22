@@ -7,19 +7,20 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPointPair extends CGAMultivector {
+public class CGADualPointPair extends CGABivector {
     
     public CGADualPointPair(CGAMultivector m){
-        super(m.impl);
+        super(m);
     }
     
     /**
-     * Create dual point pair in outer product null space representation (grade 2 multivector).
+     * Create dual point pair in outer product null space representation 
+     * (grade 2 multivector).
      * 
      * @param point1
      * @param point2
      */
-    public CGADualPointPair(CGAMultivector point1, CGAMultivector point2){
+    public CGADualPointPair(CGAPoint point1, CGAPoint point2){
         this(point1.op(point2));
     }
     

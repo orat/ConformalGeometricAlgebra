@@ -230,6 +230,14 @@ public interface iCGAMultivector {
     
     public iCGAMultivector extractGrade(int grade);
     
+    /**
+     * Get the grade of the multivector if it is homogenious, else -1
+     * 
+     * @return grade of the multivector or -1 if the multivector contains components
+     * of different grades.
+     */
+    public int grade();
+    
     //TODO
     // die folgenden Indize-Methoden taugen so nicht, besser statt dessen create/get-
     // Methoden für origin, euclid3d und inf einführen, aber ich brauche ja noch 

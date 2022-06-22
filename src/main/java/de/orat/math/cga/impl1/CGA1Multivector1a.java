@@ -8,7 +8,6 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import de.orat.math.ga.basis.MeetJoin;
 import java.util.ArrayList;
 import java.util.List;
-import org.jogamp.vecmath.Tuple3d;
 
 /**
  * CGA Multivector reference implementation based on the reference implementation 

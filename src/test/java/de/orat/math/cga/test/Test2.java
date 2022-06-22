@@ -72,13 +72,22 @@ public class Test2 {
         System.out.println("CGA CGA2_METRIC: "+sb.toString());
     }
     
+    /**
+     * n=(0.0,0.0, 1.0)
+     * plane=1.0*e3 + 2.0*ei
+     * probe=1.0*eo + 0.5*e1 + 0.5*e2 + 0.5*e3 + 0.375*ei
+     * attitude=-5.551115123125783E-17*eo^e1^e2 + 0.9999999999999996*e1^e2^ei
+     * location=(2.500000000000001, 2.500000000000001, 1.2500000000000004)
+     * n=(0.0, 0.0, 0.9999999999999996)
+     */
     public void testPlane(){
         System.out.println("---------------------- plane ----");
         Vector3d n = new Vector3d(0d,0d,1d);
         double d = 2d;
         CGAPlane plane = new CGAPlane(n, d);
-        System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+")");
+        System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
         System.out.println("plane="+plane.toString());
+        
         CGAPoint cp = new CGAPoint(new Point3d(0.5d,0.5d,0.5d));
         System.out.println("probe="+cp.toString());
         FlatAndDirectionParameters flat = plane.decompose(cp);
@@ -91,6 +100,7 @@ public class Test2 {
         //assertEquals(n.y,attitude.y);
         //assertEquals(n.z,attitude.z);
     }
+    
     public void testSphere(){
         System.out.println("----------------- sphere -----");
         Point3d p = new Point3d(0.02,0.02,1);
@@ -110,8 +120,9 @@ public class Test2 {
         System.out.println("radius2squared = "+String.valueOf(Math.abs(rp2.squaredSize())));
         
         // weight bestimmen
-        double weight = CGAMultivector.decomposeWeight(sphere.decomposeTangentAndRoundDirectionAsMultivector(), 
-                CGAMultivector.createOrigin(1d));
+        double weight = //CGAMultivector.decomposeWeight(sphere.decomposeTangentAndRoundDirectionAsMultivector(), 
+                //CGAMultivector.createOrigin(1d));
+                sphere.decomposeWeight();
         // weight=0.9999999999999989 richtig
         System.out.println("weight="+String.valueOf(weight));
         
@@ -143,9 +154,10 @@ public class Test2 {
         System.out.println("squaredSize="+String.valueOf(squaredSize));
         // weight sollte auch 1 sein
         // weight=0.9999999999999976
-        CGAMultivector attitude = cp.decomposeTangentAndRoundDirectionAsMultivector();
-        CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
-        double weight = CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
+        //CGAMultivector attitude = cp.decomposeTangentAndRoundDirectionAsMultivector();
+        //CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
+        //double weight = CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
+        double weight = cp.decomposeSquaredWeight();
         System.out.println("weight="+String.valueOf(weight));
     }
     

@@ -14,7 +14,6 @@ public class CGAScalar extends CGAMultivector {
                 +m.toString()+" failed!");
     }
     
-    
     @Override
     public boolean isScalar(){
         return true;

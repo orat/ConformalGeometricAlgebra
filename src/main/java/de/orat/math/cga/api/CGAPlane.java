@@ -4,29 +4,32 @@ import static de.orat.math.cga.api.CGAMultivector.createEinf;
 import static de.orat.math.cga.api.CGAMultivector.createEx;
 import static de.orat.math.cga.api.CGAMultivector.createEy;
 import static de.orat.math.cga.api.CGAMultivector.createEz;
-import de.orat.math.cga.util.Decomposition3d;
 import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * planes formed between the Euclidean and Null
- * basis, v ∧o and v ∧∞, which square to 0. These other kinds of planes enable different
- * kinds of transformations – namely timelike and lightlike depending upon whether
- * they square to a positive term, or to zero, respectively.
- * Because of the generality in speaking about spacelike, timelike, and lightlike planes,
- * and the fact that these are two-dimensional planes within a higher dimension, we
- * call all of these planes hyperplanes. Since they are a vector space they can be added
- * together continuously. Also, composites planes are possible – for instance a ∧b +v ∧
- * ∞, which is a combination of a rotation plane and translation plane, which creates
- * an interpolatable dual line twist axis.
+ * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
+ * square to 0. 
+ * 
+ * These other kinds of planes enable different kinds of transformations – 
+ * namely timelike and lightlike depending upon whether they square to a 
+ * positive term, or to zero, respectively.
+ * Because of the generality in speaking about spacelike, timelike, and 
+ * lightlike planes, and the fact that these are two-dimensional planes within a 
+ * higher dimension, we call all of these planes hyperplanes. Since they are a 
+ * vector space they can be added together continuously. Also, composites planes 
+ * are possible – for instance a ∧ b + v ∧ ∞, which is a combination of a 
+ * rotation plane and translation plane, which creates an interpolatable dual 
+ * line twist axis.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPlane extends CGAMultivector {
+public class CGAPlane extends CGAVector {
     
     public CGAPlane(CGAMultivector m){
-        super(m.impl);
+        super(m);
     }
+    
     /**
      * Create plane in inner product null space representation (grade 1 multivector).
      * 
@@ -36,10 +39,10 @@ public class CGAPlane extends CGAMultivector {
      * @param d distance of the plane to the origin
      */
     public CGAPlane(Vector3d n, double d){
-        impl = createEx(n.x)
+        this(createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
-            .add(createEinf(d)).impl;
+            .add(createEinf(d)));
     }
     
     public FlatAndDirectionParameters decompose(CGAMultivector probePoint){

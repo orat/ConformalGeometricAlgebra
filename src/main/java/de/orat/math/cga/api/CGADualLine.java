@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createEinf;
-import de.orat.math.cga.util.Decomposition3d;
 import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
@@ -18,10 +13,10 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualLine extends CGAMultivector {
+public class CGADualLine extends CGATreevector {
     
     public CGADualLine(CGAMultivector m){
-        super(m.impl);
+        super(m);
     }
     
     /**
@@ -39,19 +34,20 @@ public class CGADualLine extends CGAMultivector {
     }
     
     /**
-     * Create line in outer product null space representation (grade 3 multivector).
+     * Create line in outer product null space representation 
+     * (grade 3 multivector).
      * 
-     * @param p1 first result in inner product null space representation
-     * @param p2 seconds result in inner product null space representation
+     * @param p1 first point in inner product null space representation
+     * @param p2 seconds point in inner product null space representation
      * 
      * Be careful: The representation is called dual in Hildenbrand213 but not
      * in Dorst2007.
      */
-    public CGADualLine(CGAMultivector p1, CGAMultivector p2){
+    public CGADualLine(CGAPoint p1, CGAPoint p2){
         this(p1.op(p2).op(createEinf(1d)));
     }
     
-    public FlatAndDirectionParameters decompose(CGAMultivector probePoint){
+    public FlatAndDirectionParameters decompose(CGAPoint probePoint){
         return decomposeDualFlat(probePoint);
     }
 }

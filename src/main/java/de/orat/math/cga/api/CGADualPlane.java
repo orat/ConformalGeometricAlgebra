@@ -8,20 +8,20 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPlane extends CGAMultivector {
+public class CGADualPlane extends CGAQuadvector {
     
-    public CGADualPlane(CGAMultivector p){
-        super(p.impl);
+    public CGADualPlane(CGAMultivector m){
+        super(m);
     }
     
     /**
      * Create plane in outer product null space representation (grade 4 multivector).
      * 
-     * @param p1 first result in inner product null space representation
-     * @param p2 second result in inner product null space representation
-     * @param p3 third result in inner product null space representation
+     * @param p1 first point in inner product null space representation
+     * @param p2 second point in inner product null space representation
+     * @param p3 third point in inner product null space representation
      */
-    public CGADualPlane(CGAMultivector p1, CGAMultivector p2, CGAMultivector p3){
+    public CGADualPlane(CGAPoint p1, CGAPoint p2, CGAPoint p3){
         this(p1.op(p2).op(p3).op(createEinf(1d)));
     }
     /**
@@ -31,7 +31,7 @@ public class CGADualPlane extends CGAMultivector {
      * @param p1 point 1
      * @param p2 point 2
      */
-    public CGADualPlane(CGAMultivector p1, CGAMultivector p2){
+    public CGADualPlane(CGAPoint p1, CGAPoint p2){
         this(createEinf(1d).op((p1.op(p2)).dual()));
     }
     /**

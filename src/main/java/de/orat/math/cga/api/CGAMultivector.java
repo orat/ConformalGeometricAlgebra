@@ -206,7 +206,7 @@ public class CGAMultivector {
                new Point3d(locationCoord[index++], locationCoord[index++], locationCoord[index]));
     }
     
-    public CGAMultivector decomposeTangentAndRoundDirectionAsMultivector(){
+    protected CGAMultivector decomposeTangentAndRoundDirectionAsMultivector(){
         // ungetestet
         CGAMultivector einfM = CGAMultivector.createEinf(-1d);
         CGAMultivector einf = CGAMultivector.createEinf(1d);
@@ -249,8 +249,8 @@ public class CGAMultivector {
      * 
      * @return direction and location, radius=0
      */
-    public Decomposition3d.RoundAndTangentParameters decomposeTangent(){
-        return new Decomposition3d.RoundAndTangentParameters(decomposeTangentAndRoundDirection(), decomposeTangentAndRoundLocation(), 0d);
+    protected RoundAndTangentParameters decomposeTangent(){
+        return new RoundAndTangentParameters(decomposeTangentAndRoundDirection(), decomposeTangentAndRoundLocation(), 0d);
     }
     
     /**
@@ -260,7 +260,7 @@ public class CGAMultivector {
      * 
      * @return direction and location, radius=0
      */
-    public Decomposition3d.RoundAndTangentParameters decomposeDualTangent(){
+    protected Decomposition3d.RoundAndTangentParameters decomposeDualTangent(){
         return new Decomposition3d.RoundAndTangentParameters(decomposeDualTangentAndRoundDirection(), 
                 decomposeTangentAndRoundLocation(), 0d);
     }
@@ -304,10 +304,10 @@ public class CGAMultivector {
      * @return attitude, location and squared size for multivectors corresponding to rounds in
      * inner product null space representaton
      */
-    protected Decomposition3d.RoundAndTangentParameters decomposeRound(){
+    protected RoundAndTangentParameters decomposeRound(){
         // (-) because the radius for dual round corresponding to Dorst2007 is needed to
         // get the value corresponding to inner product null space representation
-        return new Decomposition3d.RoundAndTangentParameters(decomposeTangentAndRoundDirection(), 
+        return new RoundAndTangentParameters(decomposeTangentAndRoundDirection(), 
                 decomposeTangentAndRoundLocation(), -roundSquaredSize());
     }
     
@@ -361,7 +361,7 @@ public class CGAMultivector {
      * 
      * @return attitude, location and radius
      */
-    public Decomposition3d.RoundAndTangentParameters decomposeDualRound(){
+    protected RoundAndTangentParameters decomposeDualRound(){
         return new Decomposition3d.RoundAndTangentParameters(decomposeDualTangentAndRoundDirection(), 
                 decomposeTangentAndRoundLocation(), -roundSquaredSize());
     }
@@ -437,7 +437,7 @@ public class CGAMultivector {
      * @param probePoint If not specified use e0.
      * @return squared weight
      */
-    public static double decomposeSquaredWeight(CGAMultivector attitude, CGAMultivector probePoint){
+    protected static double decomposeSquaredWeight(CGAMultivector attitude, CGAMultivector probePoint){
         CGAMultivector A = probePoint.ip(attitude);
         return A.reverse().gp(A).scalarPart();
     }
@@ -448,7 +448,7 @@ public class CGAMultivector {
      * @param probePoint If not specified use e0.
      * @return 
      */
-    public static double decomposeWeight(CGAMultivector attitude, CGAMultivector probePoint){
+    protected static double decomposeWeight(CGAMultivector attitude, CGAMultivector probePoint){
         return Math.sqrt(Math.abs(decomposeSquaredWeight(attitude, probePoint)));
     }
     
@@ -654,8 +654,24 @@ public class CGAMultivector {
         return new CGAMultivector(impl.abs());
     }
     
+    /**
+     * Extract a multivector which contains only components of the given grade.
+     * 
+     * @param grade
+     * @return 
+     */
     public CGAMultivector extractGrade(int grade){
         return new CGAMultivector(impl.extractGrade(grade));
+    }
+    
+    /**
+     * Get the grade of the multivector if it is homogenious, else -1
+     * 
+     * @return grade of the multivector or -1 if the multivector contains components
+     * of different grades.
+     */
+    public int grade(){
+        return impl.grade();
     }
     public CGAMultivector normalize(){
         return new CGAMultivector(impl.normalize());

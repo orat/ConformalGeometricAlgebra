@@ -2,15 +2,17 @@ package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createEinf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
-import de.orat.math.cga.util.Decomposition3d;
 import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
+import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
- * have a weight of 1. They can also be considered as dual spheres with zero radius. By
+ * have a weight of 1 (grade 1 multivector). 
+ * 
+ * They can also be considered as dual spheres with zero radius. By
  * adding to or subtracting from the weight of the ∞ basis, we can create imaginary or
- * real dual spheres of the from σ = p ± δ∞ where p is the homogenous center point
+ * real dual spheres of the from σ = p ± δ ∞ where p is the homogenous center point
  * and δ is the radius of the sphere: by adding δ we create imaginary spheres with a
  * negative squared radius. Finding this squared radius is as simple as squaring the
  * dual sphere: σ 2 = r 2 . What exactly an imaginary sphere is varies from application to
@@ -23,10 +25,10 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPoint extends CGAMultivector {
+public class CGAPoint extends CGAVector {
     
     public CGAPoint(CGAMultivector m){
-        super(m.impl);
+        super(m);
     }
     
     /**
@@ -56,5 +58,11 @@ public class CGAPoint extends CGAMultivector {
     
     public RoundAndTangentParameters decompose(){
         return decomposeRound();
+    }
+    
+    public double decomposeSquaredWeight(){
+        CGAMultivector attitude = decomposeTangentAndRoundDirectionAsMultivector();
+        CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
+        return CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
     }
 }

@@ -8,10 +8,10 @@ import de.orat.math.cga.util.Decomposition3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGALine extends CGAMultivector {
+public class CGALine extends CGABivector {
     
     public CGALine(CGAMultivector m){
-        super(m.impl);
+        super(m);
     }
      
     /**
@@ -22,11 +22,11 @@ public class CGALine extends CGAMultivector {
      * @param plane1 plane1 in inner product null space representation
      * @param plane2 plane2 in inner product null space representation
      */
-    public CGALine(CGAMultivector plane1, CGAMultivector plane2){
+    public CGALine(CGAPlane plane1, CGAPlane plane2){
         this(plane1.op(plane2));
     }
     
-    public Decomposition3d.FlatAndDirectionParameters decompose(CGAMultivector probePoint){
+    public Decomposition3d.FlatAndDirectionParameters decompose(CGAPoint probePoint){
         return decomposeFlat(probePoint);
     }
     
