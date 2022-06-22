@@ -1,6 +1,10 @@
 package de.orat.math.cga.test;
 
+import de.orat.math.cga.api.CGADualLine;
 import de.orat.math.cga.api.CGAMultivector;
+import de.orat.math.cga.api.CGAPlane;
+import de.orat.math.cga.api.CGAPoint;
+import de.orat.math.cga.api.CGASphere;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA2_METRIC;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA_METRIC;
@@ -9,7 +13,6 @@ import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -73,12 +76,12 @@ public class Test2 {
         System.out.println("---------------------- plane ----");
         Vector3d n = new Vector3d(0d,0d,1d);
         double d = 2d;
-        CGAMultivector plane = CGAMultivector.createPlane(n, d);
+        CGAPlane plane = new CGAPlane(n, d);
         System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+")");
         System.out.println("plane="+plane.toString());
-        CGAMultivector cp = CGAMultivector.createPoint(new Point3d(0.5d,0.5d,0.5d));
+        CGAPoint cp = new CGAPoint(new Point3d(0.5d,0.5d,0.5d));
         System.out.println("probe="+cp.toString());
-        FlatAndDirectionParameters flat = plane.decomposeFlat(cp);
+        FlatAndDirectionParameters flat = plane.decompose(cp);
         System.out.println("location=("+String.valueOf(flat.location().x)+", "+
                 String.valueOf(flat.location().y)+", "+String.valueOf(flat.location().z)+")");
         Vector3d attitude = flat.attitude();
@@ -94,15 +97,15 @@ public class Test2 {
         System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
         double radius = 2d;
         System.out.println("radius="+String.valueOf(radius));
-        CGAMultivector sphere = CGAMultivector.createSphere(p, radius);
+        CGASphere sphere = new CGASphere(p, radius);
         System.out.println("sphere="+sphere.toString());
         
         // radius = 2.061455835083547 das ist auch falsch
-        RoundAndTangentParameters rp = sphere.decomposeRound();
+        RoundAndTangentParameters rp = sphere.decompose();
         System.out.println("radius = "+String.valueOf(Math.sqrt(Math.abs(rp.squaredSize()))));
         
         // radius = 1.7318198520631412 das ist falsch
-        RoundAndTangentParameters rp2 = sphere.decomposeSphere();
+        RoundAndTangentParameters rp2 = sphere.decompose();
         System.out.println("radius2 = "+String.valueOf(Math.sqrt(Math.abs(rp2.squaredSize()))));
         System.out.println("radius2squared = "+String.valueOf(Math.abs(rp2.squaredSize())));
         
@@ -128,20 +131,20 @@ public class Test2 {
         System.out.println("--------------- point -------");
         Point3d p = new Point3d(0.02,0.02,1);
         System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
-        CGAMultivector cp = CGAMultivector.createPoint(p);
+        CGAPoint cp = new CGAPoint(p);
         System.out.println("cp="+cp.toString());
-        Vector3d a1 = cp.decomposeRound().attitude();
+        Vector3d a1 = cp.decompose().attitude();
         System.out.println("attitude=("+String.valueOf(a1.x)+", "+String.valueOf(a1.y)+", "+String.valueOf(a1.z)+")");
-        Point3d p1 = cp.decomposeRound().location();
+        Point3d p1 = cp.decompose().location();
         System.out.println("location=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
         // sollte aber 0 sein.
         // squaredSize=-2.2512001600000007
-        double squaredSize = cp.decomposeRound().squaredSize();
+        double squaredSize = cp.decompose().squaredSize();
         System.out.println("squaredSize="+String.valueOf(squaredSize));
         // weight sollte auch 1 sein
         // weight=0.9999999999999976
         CGAMultivector attitude = cp.decomposeTangentAndRoundDirectionAsMultivector();
-        CGAMultivector probePoint = CGAMultivector.createPoint(new Point3d(0d,0d,0d));
+        CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
         double weight = CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
         System.out.println("weight="+String.valueOf(weight));
     }
@@ -155,10 +158,10 @@ public class Test2 {
         System.out.println("distsquare="+String.valueOf(p2.distanceSquared(p1)));
         
         // die beiden Multivektoren brauchen scheinbar nicht normalisiert zu werden
-        CGAMultivector cp1 = CGAMultivector.createPoint(p1);
+        CGAPoint cp1 = new CGAPoint(p1);
         System.out.println("cp1="+cp1.toString());
         //System.out.println("cp1.unit="+cp1.unit().toString(CGA1Metric.baseVectorNames));
-        CGAMultivector cp2 = CGAMultivector.createPoint(p2);
+        CGAPoint cp2 = new CGAPoint(p2);
         System.out.println("cp2="+cp2.toString());
         
         double result = CGA1Metric.squareDistanceBetweenPoints(cp1, cp2);
@@ -173,18 +176,18 @@ public class Test2 {
         
         Point3d p1 = new Point3d(0.02,0.02,1);
         System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
-        CGAMultivector cp1 = CGAMultivector.createPoint(p1);
+        CGAPoint cp1 = new CGAPoint(p1);
         System.out.println("cp1="+cp1);
         
         Point3d p2 = new Point3d(1,0.02,1);
         System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
-        CGAMultivector cp2 = CGAMultivector.createPoint(p2);
+        CGAPoint cp2 = new CGAPoint(p2);
         System.out.println("cp2="+cp2);
         
         Vector3d n = new Vector3d(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z);
         System.out.println("n1=("+String.valueOf(n.x)+","+String.valueOf(n.y)+","+String.valueOf(n.z)+")");
         
-        CGAMultivector l1dual = CGAMultivector.createDualLine(p1, p2);
+        CGADualLine l1dual = new CGADualLine(p1, p2);
         // dual line represented as tri-vector
         // l1dual= 0.98*no^e1^ni - 0.0196*e1^e2^ni - 0.98*e1^e3^ni
         System.out.println("l1*= "+l1dual);
@@ -195,7 +198,7 @@ public class Test2 {
         // 0.979993*e2^e3 + 0.979999995*e2^ni - 0.0195999985*e3^ni
         System.out.println("l1= "+l1);
         
-        FlatAndDirectionParameters flatParameters = l1dual.decomposeDualFlat(CGAMultivector.createPoint(new Point3d()));
+        FlatAndDirectionParameters flatParameters = l1dual.decompose(new CGAPoint(new Point3d()));
         Vector3d attitude = flatParameters.attitude();
         // sollte (0.98,0.0,0.0) - hat aber falsches Vorzeichen
         System.out.println("attitude=("+String.valueOf(attitude.x)+", "+String.valueOf(attitude.y)+
@@ -216,15 +219,15 @@ public class Test2 {
         Multivector ni = Multivector.createBasisVector(4);*/
         
         Point3d p1 = new Point3d(0.02,0.02,1);
-        CGAMultivector cp1 = CGAMultivector.createPoint(p1);
+        CGAPoint cp1 = new CGAPoint(p1);
         
         Point3d p2 = new Point3d(1,0.02,1);
-        CGAMultivector cp2 = CGAMultivector.createPoint(p2);
+        CGAPoint cp2 = new CGAPoint(p2);
         
         Vector3d n1 = new Vector3d(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z);
         System.out.println("n1=("+String.valueOf(n1.x)+","+String.valueOf(n1.y)+","+String.valueOf(n1.z)+")");
        
-        CGAMultivector l1 = CGAMultivector.createDualLine(p1, p2);
+        CGADualLine l1 = new CGADualLine(p1, p2);
         System.out.println("l1= "+l1.toString());
         System.out.println("l1 normiert= "+l1.normalize().toString());
         // ipns representation
@@ -241,7 +244,7 @@ public class Test2 {
         cross.cross(n1, n2);
         System.out.println("cross=("+String.valueOf(cross.x)+","+String.valueOf(cross.y)+","+String.valueOf(cross.z)+")");
        
-        CGAMultivector l2 = CGAMultivector.createDualLine(p3, p4);
+        CGADualLine l2 = new CGADualLine(p3, p4);
         System.out.println("l2= "+l2.toString());
         System.out.println("l2 normiert= "+l1.normalize().toString());
         CGAMultivector l2l1 = l2.gp(l1).normalize();

@@ -3,6 +3,7 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.impl1.CGA1Multivector1a;
 import de.orat.math.cga.spi.iCGAMultivector;
 import de.orat.math.cga.util.Decomposition3d;
+import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
 import org.jogamp.vecmath.Point3d;
@@ -11,7 +12,6 @@ import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAMultivector {
@@ -62,265 +62,10 @@ public class CGAMultivector {
     // Create conformal algebra primitives
     
     
-    /**
-     * Create sphere in inner product null space representation (grade 1 multivector).
-     * 
-     * Be careful: This is a dual real sphere corresponding to Dorst2007 but a 
-     * real sphere in Hildenbrand2013.
-     * 
-     * @param o origin of the shphere
-     * @param r radius of the sphere (A negative radius does not CGAMultivector an imagninary 
-        sphere. Use the method createImaginarySphere() instead.)
-     * @return multivector representation of a sphere (e0, e1, e2, e3, einfM)
-     */
-    public static CGAVector createSphere(Point3d o, double r){
-        return createSphere(createPoint(o), r);
-    }
-    /**
-     * Create sphere in inner product null space representation (grade 1 multivector).
-     * 
-     * Multiplication of the resulting multivector by double alpha is possible.
-     * 
-     * Dorst2007 page 363 == Hildenbrand1998 page 29
-     * 
-     * @param location multivector representing a result
-     * @param r radius of the sphere to CGAMultivector
-     * @return multivector representing a sphere
-     */
-    public static CGAVector createSphere(CGAMultivector location, double r){
-        return new CGAVector(location.sub(createEinf(0.5*r*r)));
-    }
     public static CGAVector createImaginarySphere(CGAMultivector o, double r){
         return new CGAVector(o.add(createEinf(0.5*r*r)));
     }
-    /**
-     * Create dual sphere.
-     * 
-     * Multiplication of the resulting multivector by double alpha is possible.
-     * 
-     * @param o origin of the sphere
-     * @param p result on the sphere
-     * @return dual sphere (inner product null space representation) as a multivector of grade 4.
-     */
-    public static CGAQuadvector createDualSphere(Point3d o, Point3d p){
-        return new CGAQuadvector(createPoint(p).ip(createEinf(1d).op(createPoint(o))));
-    }
-    /**
-     * Create dual sphere in outer product null space representation (grade 4 multivector).
-     * 
-     * @param p1 multivector representing a result on the sphere
-     * @param p2 multivector representing a result on the sphere
-     * @param p3 multivector representing a result on the sphere
-     * @param p4 multivector representing a result on the sphere
-     * @return multivector representing a dual sphere.
-     */
-    public static CGAMultivector createDualSphere(CGAMultivector p1, CGAMultivector p2, 
-                                                  CGAMultivector p3, CGAMultivector p4){
-        return p1.op(p2).op(p3).op(p4);
-    }
-    /**
-     * Create dual sphere in outer product null space represenation (grade 4 multivector).
-     * 
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @return dual sphere in outer product null space representation
-     */
-    public static CGAMultivector createDualSphere(Point3d p1, Point3d p2, Point3d p3, Point3d p4){
-        return createPoint(p1).op(createPoint(p2)).op(createPoint(p3)).op(createPoint(p4));
-    }
-    /**
-     * Create a conformal point (grade 1 multivector) by up-projecting an euclidian vector
-     * into a conformal vector.
-     * 
-     * Inner and outer product null space representation is identical.<p>
-     * 
-     * Multiplication of the multivector by double alpha possible.<p>
-     * 
-     * @param p result
-     * @return conformal result
-     */
-    public static CGAMultivector createPoint(Tuple3d p){
-        // old version
-        //return createOrigin(1d)
-        //        .add(createEx(p.x))
-        //        .add(createEy(p.y))
-        //        .add(createEz(p.z))
-        //        .add(createEinf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z)));
-        CGAMultivector x = new CGAMultivector(p);
-        return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createEinf(1d))).add(createOrigin(1d));
-    }
-    
-    /**
-     * Create a conformal result in inner product null space representation (grade 4 multivector).
-     * 
-     * @param sphere1 first sphere in inner product null space representation
-     * @param sphere2 seconds sphere in inner product null space represenation
-     * @param sphere3 third sphere in inner product null space representation
-     * @param sphere4 forth sphere in inner product null space represenation
-     * @return conformal result in inner product null space representation
-     */
-    public static CGAMultivector createDualPoint(CGAMultivector sphere1, CGAMultivector sphere2, 
-                                                 CGAMultivector sphere3, CGAMultivector sphere4){
-        return sphere1.op(sphere2).op(sphere3).op(sphere4);
-    }
-    
-    /**
-     * Create plane in inner product null space representation (grade 1 multivector).
-     * 
-     * Be careful: This corresponds to dual plane in Dorst2007.
-     * 
-     * @param n normal vector of the plane
-     * @param d distance of the plane to the origin
-     * @return conformal plane in inner product null space representation (e1, e2, e3, einfM).
-     */
-    public static CGAMultivector createPlane(Vector3d n, double d){
-        return createEx(n.x)
-            .add(createEy(n.y))
-            .add(createEz(n.z))
-            .add(createEinf(d));
-    }
-    /**
-     * Create plane in outer product null space representation (grade 4 multivector).
-     * 
-     * @param p1 first result in inner product null space representation
-     * @param p2 second result in inner product null space representation
-     * @param p3 third result in inner product null space representation
-     * @return conformal plane in outer product null space representation.
-     */
-    public static CGAMultivector createDualPlane(CGAMultivector p1, CGAMultivector p2, CGAMultivector p3){
-        return p1.op(p2).op(p3).op(createEinf(1d));
-    }
-    /**
-     * Create a dual plane as a mid plane between two given result (in outer product
-     * null space representation).
-     * 
-     * @param p1
-     * @param p2
-     * @return multivector representing a dual plane.
-     */
-    public static CGAMultivector createDualPlane(CGAMultivector p1, CGAMultivector p2){
-        return createEinf(1d).op((p1.op(p2)).dual());
-    }
-    /**
-     * Create dual plane from a result on the plane an its normal vector (in outer product
-     * null space representation).
-     * 
-     * @param p result on the plane.
-     * @param n normal vector.
-     * @return multivector representing a dual plane
-     */
-    public static CGAMultivector createDualPlane(Point3d p, Vector3d n){
-        CGAMultivector cp = createPoint(p);
-        CGAMultivector cn = createPoint(n);
-        return cp.ip(cn.op(createEinf(1d)));
-    }
-    /**
-     * Create line in inner product null space representation (grade 2 multivector).
-     * 
-     * Be careful: This corresponds to a dual line in Dorst2007.
-     * 
-     * @param plane1 plane1 in inner product null space representation
-     * @param plane2 plane2 in inner product null space representation
-     * @return conformal line in inner product null space representation 
-     */
-    public static CGAMultivector createLine(CGAMultivector plane1, CGAMultivector plane2){
-        return plane1.op(plane2);
-    }
-    /**
-     * Create line in outer product null space representation (grade 3 multivector).
-     * 
-     * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
-     * Hildenbrand2013.
-     * 
-     * @param p1 first point on the line
-     * @param p2 second point on the line or direction of the line
-     * @return conformal line in outer product null space representation (tri-vector: 
-     * (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
-     */
-    public static CGATrivector createDualLine(Point3d p1, Tuple3d p2){
-        return createDualLine(createPoint(p1), createPoint(p2));
-    }
-    /**
-     * Create line in outer product null space representation (grade 3 multivector).
-     * 
-     * @param p1 first result in inner product null space representation
-     * @param p2 seconds result in inner product null space representation
-     * @return conformal line in outer product null space representation (tree-vector)
-     * 
-     * Be careful: The representation is called dual in Hildenbrand213 but not
-     * in Dorst2007.
-     */
-    public static CGATrivector createDualLine(CGAMultivector p1, CGAMultivector p2){
-        return new CGATrivector(p1.op(p2).op(createEinf(1d)));
-    }
-    
-    /**
-     * Create circle in inner product null space represenation (grade 2 multivector).
-     * 
-     * @param sphere1
-     * @param sphere2
-     * @return conformal circle
-     */
-    public static CGAMultivector createCircle(CGAMultivector sphere1, CGAMultivector sphere2){
-        return sphere1.op(sphere2);
-    }
-    /**
-     * Create dual circle in outer product null space representation (grade 3 multivector).
-     * 
-     * @param point1
-     * @param point2
-     * @param point3
-     * @return 
-     */
-    public static CGAMultivector createDualCircle(CGAMultivector point1, CGAMultivector point2, CGAMultivector point3){
-        return point1.op(point2).op(point3);
-    }
-    /**
-     * Create dual circle in outer product null space representation (grade 3 multivector).
-     * 
-     * @param point1
-     * @param point2
-     * @param point3
-     * @return multivector representing a dual circle.
-     */
-    public static CGAMultivector createDualCircle(Point3d point1, Point3d point2, Point3d point3){
-        return createPoint(point1).op(createPoint(point2)).op(createPoint(point3));
-    }
-    
-    /**
-     * Create result pair in inner product null space representation (grade 3 multivector).
-     * 
-     * @param sphere1
-     * @param sphere2
-     * @param sphere3
-     * @return multivector representing a point pair.
-     */
-    public static CGAMultivector createPointPair(CGAMultivector sphere1, CGAMultivector sphere2, CGAMultivector sphere3){
-        return sphere1.op(sphere2).op(sphere3);
-    }
-    /**
-     * Create dual result pair in outer product null space representation (grade 2 multivector).
-     * 
-     * @param point1
-     * @param point2
-     * @return multivector representing a dual point pair.
-     */
-    public static CGAMultivector createDualPointPair(CGAMultivector point1, CGAMultivector point2){
-        return point1.op(point2);
-    }
-    /**
-     * Create dual result pair in outer product null space representation (grade 2 multivector).
-     * 
-     * @param point1
-     * @param point2
-     * @return multivector representing a dual point pair.
-     */
-    public static CGAMultivector createDualPointPair(Point3d point1, Point3d point2){
-        return createPoint(point1).op(createPoint(point2));
-    }
-    
+   
     /**
      * Create the pseudoscalar - The canonical rotor for the R41 of the conformal 
      * space vector base.
@@ -332,7 +77,7 @@ public class CGAMultivector {
                 .op(createEy(1d)).op(createEz(1d))
                 .op(createEinf(1d));
     }
-    
+   
     /**
      * Create tangent vector which includes a result and a direction in inner product null space 
      * representation.
@@ -342,8 +87,8 @@ public class CGAMultivector {
      * @return bivector representing a tangend vector
      */
     public static CGAMultivector createTangentVector(Point3d p, Vector3d u){
-        CGAMultivector cp = createPoint(p);
-        return cp.ip(cp.op(createPoint(u)).op(createEinf(1d)));
+        CGAMultivector cp = new CGAPoint(p);
+        return cp.ip(cp.op(new CGAPoint(u)).op(createEinf(1d)));
     }
     
     /**
@@ -381,7 +126,7 @@ public class CGAMultivector {
      * @param probePoint normalized probe result (e0=1, e1,e2,e3, einfM). If not specified use e0.
      * @return direction of the given flat
      */
-    public Decomposition3d.FlatAndDirectionParameters decomposeFlat(CGAMultivector probePoint){
+    protected Decomposition3d.FlatAndDirectionParameters decomposeFlat(CGAMultivector probePoint){
         // Kleppe2016
         //Multivector attitude = flat.ip(Multivector.createBasisVector(0), RIGHT_CONTRACTION)
         //        .ip(Multivector.createBasisVector(4), RIGHT_CONTRACTION);
@@ -415,7 +160,7 @@ public class CGAMultivector {
      * @return euclid parameters. The location is determined as a result of the dualFlat
      * with the smallest distance to the given probe result.
      */
-    public Decomposition3d.FlatAndDirectionParameters decomposeDualFlat(CGAMultivector probePoint){
+    protected Decomposition3d.FlatAndDirectionParameters decomposeDualFlat(CGAMultivector probePoint){
         
         // Dorst2007
         //TODO funktioniert nicht - alle components sind 0
@@ -559,7 +304,7 @@ public class CGAMultivector {
      * @return attitude, location and squared size for multivectors corresponding to rounds in
      * inner product null space representaton
      */
-    public Decomposition3d.RoundAndTangentParameters decomposeRound(){
+    protected Decomposition3d.RoundAndTangentParameters decomposeRound(){
         // (-) because the radius for dual round corresponding to Dorst2007 is needed to
         // get the value corresponding to inner product null space representation
         return new Decomposition3d.RoundAndTangentParameters(decomposeTangentAndRoundDirection(), 
@@ -574,7 +319,7 @@ public class CGAMultivector {
      * @Deprecated use decomposeRound instead.
      * @return location and squared-radius, direction=(0,0,0)
      */
-    public Decomposition3d.RoundAndTangentParameters decomposeSphere(){
+    protected RoundAndTangentParameters decomposeSphere(){
         double[] result = impl.extractCoordinates(1);
         int index = impl.getEStartIndex();
         int einfIndex = impl.getEinfIndex();
@@ -582,21 +327,6 @@ public class CGAMultivector {
                 new Point3d(result[index++], result[index++], result[index]), -2d*result[einfIndex]);
     }
     
-    /**
-     * Decompose rotation around origin.
-     * 
-     * @return quaternion representing a rotation around the origin
-     */
-    public Quat4d decomposeRotation(){
-        Quat4d result = new Quat4d();
-        result.w = impl.extractCoordinates(0)[impl.getOriginIndex()];
-        double[] vector = impl.extractCoordinates(2);
-        //TODO weitere Indizes definieren
-        result.x = -vector[4]; // i
-        result.y = vector[5];  // j
-        result.z = -vector[8]; // k
-        return result;
-    }
     
     /**
      * Determine squared radius for a round.
@@ -760,6 +490,10 @@ public class CGAMultivector {
     /**
      * Computes the commutation with the specified element.
      * 
+     * linear differential
+     * commutator durch X darstellen als eigenes Symbol
+     * a × B = 0.5 (aB − B a)
+     * 
      * @param mv the second element of the commutation.
      * @return a new element from the commutation with the specified element.
      */
@@ -901,6 +635,7 @@ public class CGAMultivector {
     public CGAMultivector div(CGAMultivector x){
         return gp(x.generalInverse());
     }
+    // expansion/wedge
     public CGAMultivector op(CGAMultivector x){
          return new CGAMultivector(impl.op(x.impl));
     }

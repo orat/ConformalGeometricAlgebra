@@ -1,0 +1,6 @@
+conformal geometric
+algebra requires a fast engine for multiplying multivectors. One way to achieve
+this is to encode each multivector via its matrix representation. For the impor-
+tant case of G(4, 1) this representation consists of 4 × 4 complex matrices. But
+in general this approach is slower than algorithms designed to take advantage
+of the unique properties of geometric algebra.
