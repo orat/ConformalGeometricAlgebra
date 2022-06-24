@@ -6,7 +6,7 @@ package de.orat.math.cga.api;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPointPair extends CGARound implements iCGATreevector  {
+public class CGAPointPair extends CGARound implements iCGATrivector  {
     
     public CGAPointPair(CGAMultivector m){
         super(m);

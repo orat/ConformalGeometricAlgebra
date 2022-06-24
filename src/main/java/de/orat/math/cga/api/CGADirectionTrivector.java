@@ -1,13 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Vector3d;
+
 /**
- *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADirectionTrivector extends CGAMultivector {
+public class CGADirectionTrivector extends CGABlade implements iCGAQuadvector {
     
+    public CGADirectionTrivector(CGAMultivector m){
+        super(m);
+    }
+    
+    public CGADirectionTrivector(Vector3d a, Vector3d b, Vector3d c){
+        this((new CGATrivector(a,b,c)).gp(createInf(1.0)));
+    }
 }

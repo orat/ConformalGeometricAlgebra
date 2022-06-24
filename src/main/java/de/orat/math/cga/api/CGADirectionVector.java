@@ -14,7 +14,11 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGADirectionVector extends CGABlade implements iCGABivector {
     
+    public CGADirectionVector(CGAMultivector m){
+        super(m);
+    }
+    
     public CGADirectionVector(Vector3d t){
-        super((new CGAVectorE3(t)).gp(createInf(1.0)));
+        super((CGAVectorE3.createCGAVectorE3(t)).gp(createInf(1.0)));
     }
 }

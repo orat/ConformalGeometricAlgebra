@@ -22,7 +22,7 @@ public class CGADualSphere extends CGABlade implements iCGAQuadvector {
      * Multiplication of the resulting multivector by double alpha is possible.
      * 
      * @param o origin of the sphere
-     * @param p result on the sphere
+     * @param p point on the sphere
      */
     public CGADualSphere(Point3d o, Point3d p){
         this((new CGAPoint(p)).ip(createInf(1d).op((new CGAPoint(o)))));

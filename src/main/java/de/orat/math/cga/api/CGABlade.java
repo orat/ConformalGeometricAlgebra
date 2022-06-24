@@ -11,4 +11,8 @@ class CGABlade extends CGAMultivector implements iCGABlade {
         super(m.impl);
         testGrade();
     }
+    
+    CGABlade(double value){
+        super(value);
+    }
 }

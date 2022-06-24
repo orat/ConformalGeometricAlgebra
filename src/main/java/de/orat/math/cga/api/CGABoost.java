@@ -13,4 +13,9 @@ package de.orat.math.cga.api;
  */
 public class CGABoost extends CGAMultivector {
     
+    public CGABoost(CGAMultivector m){
+        super(m.impl);
+    }
+    
+    // TODO
 }

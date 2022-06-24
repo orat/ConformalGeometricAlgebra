@@ -6,7 +6,7 @@ import org.jogamp.vecmath.Point3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualCircle extends CGABlade implements iCGATreevector {
+public class CGADualCircle extends CGABlade implements iCGATrivector {
     
     public CGADualCircle(CGAMultivector m){
         super(m);

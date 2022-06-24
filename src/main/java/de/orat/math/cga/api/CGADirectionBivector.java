@@ -5,9 +5,13 @@ package de.orat.math.cga.api;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADirectionBivector extends CGABlade implements iCGABivector {
+public class CGADirectionBivector extends CGABlade implements iCGATrivector {
     
-    public CGADirectionBivector(CGAMultivector B){
-        super(B.gp(createInf(1.0)));
+    public CGADirectionBivector(CGAMultivector m){
+        super(m);
+    }
+    
+    public CGADirectionBivector(CGABivector B){
+        this(B.gp(createInf(1.0)));
     }
 }

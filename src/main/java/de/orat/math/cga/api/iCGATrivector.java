@@ -5,7 +5,7 @@ package de.orat.math.cga.api;
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 
-interface iCGATreevector extends iCGABlade {
+interface iCGATrivector extends iCGABlade {
      
     @Override
     default void testGrade(){

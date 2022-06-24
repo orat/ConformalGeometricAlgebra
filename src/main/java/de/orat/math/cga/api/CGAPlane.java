@@ -3,7 +3,6 @@ package de.orat.math.cga.api;
 import static de.orat.math.cga.api.CGAMultivector.createEx;
 import static de.orat.math.cga.api.CGAMultivector.createEy;
 import static de.orat.math.cga.api.CGAMultivector.createEz;
-import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Vector3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 

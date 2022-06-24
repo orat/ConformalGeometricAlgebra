@@ -15,8 +15,17 @@ package de.orat.math.cga.api;
  * circle κ, the contraction with a point q'κ returns a direct plane that goes 
  * through the circle κ and the point q.
  * 
+ * grade 2 multivector
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAFlatPoint extends CGAMultivector {
+public class CGAFlatPoint extends CGABlade implements iCGABivector {
     
+    public CGAFlatPoint(CGAMultivector m){
+        super(m);
+    }
+   
+    public CGAFlatPoint(CGAPoint p){
+        this(p.op(createInf(1d)));
+    }
 }

@@ -7,10 +7,21 @@ import org.jogamp.vecmath.Quat4d;
  * B 2 < 0 and weighted bases (i.e. αe 1 , βe 2 , γe 3 ). The exponential expression R = e B
  * with B = I 2 θ admits a familiar expansion: e B = cos θ 2 − si n θ 2 I .
  * 
+ * A rotator is no blade, because it cotains blades of grade 0 and 2 both.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGARotor extends CGAMultivector {
     
+    public CGARotor(CGAMultivector m){
+        super(m.impl);
+        //TODO
+        // test auf o,2 blades
+    }
+    
+    public CGARotor(CGABivector B, double theta){
+        this((new CGAScalar(-theta/2d)).gp(B).exp());
+    }
     
     /**
      * Decompose rotation around origin.

@@ -15,11 +15,18 @@ import org.jogamp.vecmath.Vector3d;
  * closely related to circles, to generate implicit surfaces, and pure tangent trivectors
  * as zero-sized spheres to generate implicit volumes.
  * 
+ * TODO
+ * was ist mit position vector (grade 3) und normal vector (grade 1)?
+ *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGATangentVector extends CGABlade implements iCGABivector {
      
-    public CGATangentVector(Vector3d t){
-        super(createOrigin(1.0).gp(new CGAMultivector(t)));
+    public CGATangentVector(CGAMultivector m){
+        super(m);
+    }
+    
+    public CGATangentVector createCGATangentVector (Vector3d t){
+        return new CGATangentVector(createOrigin(1.0).gp(new CGAMultivector(t)));
     }
 }

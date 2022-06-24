@@ -685,7 +685,9 @@ public class CGAMultivector {
     public CGAMultivector abs(){
         return new CGAMultivector(impl.abs());
     }
-    
+    public CGAMultivector exp() {
+        return new CGAMultivector(impl.exp());
+    }
     /**
      * Extract a multivector which contains only components of the given grade.
      * 
