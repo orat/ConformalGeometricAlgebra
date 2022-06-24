@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPointPair extends CGABivector {
+public class CGADualPointPair extends CGABlade implements iCGABivector {
     
     public CGADualPointPair(CGAMultivector m){
         super(m);

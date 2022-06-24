@@ -7,6 +7,7 @@ import org.jogamp.vecmath.Vector3d;
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class Decomposition3d {
+    
     public record PointPairParameters(Point3d p1, Point3d p2){}
     
     public record FlatAndDirectionParameters(Vector3d attitude, Point3d location){}

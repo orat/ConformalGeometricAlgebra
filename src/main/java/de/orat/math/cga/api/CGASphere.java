@@ -1,21 +1,23 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createEinf;
 import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
+import static de.orat.math.cga.api.CGAMultivector.createInf;
 
 /**
- *
+ * Sphere in inner product null space representation (grade 1 multivector).
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGASphere extends CGAVector implements iRoundElement {
+public class CGASphere extends CGARound implements iCGAVector {
     
     public CGASphere(CGAMultivector m){
         super(m);
     }
     
     /**
-     * Create sphere in inner product null space representation (grade 1 multivector).
+     * Create sphere in inner product null space representation 
+     * (grade 1 multivector).
      * 
      * Multiplication of the resulting multivector by double alpha is possible.
      * 
@@ -25,28 +27,22 @@ public class CGASphere extends CGAVector implements iRoundElement {
      * @param r radius of the sphere to CGAMultivector
      */
     public CGASphere(CGAPoint location, double r){
-        this(location.sub(createEinf(0.5*r*r)));
+        this(location.sub(createInf(0.5*r*r)));
     }
     
     /**
-     * Create sphere in inner product null space representation (grade 1 multivector).
+     * Create (dual, real) sphere in inner product null space representation 
+     * (grade 1 multivector).
      * 
      * Be careful: This is a dual real sphere corresponding to Dorst2007 but a 
      * real sphere in Hildenbrand2013.
      * 
      * @param o origin of the shphere
-     * @param r radius of the sphere (A negative radius does not CGAMultivector an imagninary 
+     * @param r radius of the sphere (A negative radius does not create an imagninary 
      *          sphere. Use the method createImaginarySphere() instead.)
      */
     public CGASphere(Point3d o, double r){
         this(new CGAPoint(o), r);
-    }
-    
-    public RoundAndTangentParameters decompose(){
-        return decomposeRound();
-    }
-    
-    public double decomposeWeight(){
-        return CGAMultivector.decomposeWeight(decomposeTangentAndRoundDirectionAsMultivector(), createOrigin(1d));
+        if (r < 0) throw new IllegalArgumentException("Negative radius is not allowed!");
     }
 }

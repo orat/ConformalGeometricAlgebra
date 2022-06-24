@@ -1,17 +1,16 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createEinf;
 import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
+import static de.orat.math.cga.api.CGAMultivector.createInf;
 
 /**
- * Dual sphere (inner product null space representation) as a multivector of grade 4.
- * 
- * corresponds to Quadvector
+ * Dual sphere (inner product null space representation) as a multivector 
+ * of grade 4.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualSphere extends CGAQuadvector {
+public class CGADualSphere extends CGABlade implements iCGAQuadvector {
     
     public CGADualSphere(CGAMultivector m){
         super(m);
@@ -26,7 +25,7 @@ public class CGADualSphere extends CGAQuadvector {
      * @param p result on the sphere
      */
     public CGADualSphere(Point3d o, Point3d p){
-        this((new CGAPoint(p)).ip(createEinf(1d).op((new CGAPoint(o)))));
+        this((new CGAPoint(p)).ip(createInf(1d).op((new CGAPoint(o)))));
     }
     
     /**

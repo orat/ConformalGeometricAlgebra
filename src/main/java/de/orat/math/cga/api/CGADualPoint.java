@@ -4,7 +4,7 @@ package de.orat.math.cga.api;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPoint extends CGAQuadvector {
+public class CGADualPoint extends CGABlade implements iCGAQuadvector {
     
     public CGADualPoint(CGAMultivector m){
         super(m);

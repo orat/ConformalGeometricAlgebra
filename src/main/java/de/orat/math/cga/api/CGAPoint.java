@@ -1,10 +1,10 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createEinf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
+import static de.orat.math.cga.api.CGAMultivector.createInf;
 
 /**
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
@@ -25,7 +25,7 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPoint extends CGAVector {
+public class CGAPoint extends CGARound implements iCGAVector {
     
     public CGAPoint(CGAMultivector m){
         super(m);
@@ -51,17 +51,18 @@ public class CGAPoint extends CGAVector {
         //        .add(createEx(p.x))
         //        .add(createEy(p.y))
         //        .add(createEz(p.z))
-        //        .add(createEinf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z)));
+        //        .add(createInf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z)));
         CGAMultivector x = new CGAMultivector(p);
-        return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createEinf(1d))).add(createOrigin(1d));
+        return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createInf(1d))).add(createOrigin(1d));
     }
     
-    public RoundAndTangentParameters decompose(){
-        return decomposeRound();
+    public double distSquare(CGAPoint p){
+        return -2*this.ip(p).scalarPart();
     }
+   
     
     public double decomposeSquaredWeight(){
-        CGAMultivector attitude = decomposeTangentAndRoundDirectionAsMultivector();
+        CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
         CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
         return CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
     }

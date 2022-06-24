@@ -1,17 +1,19 @@
 package de.orat.math.cga.api;
 
 /**
- *
+ * P-pair in inner product null space representation 
+ * (grade 3 multivector).
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPointPair extends CGATreevector  {
+public class CGAPointPair extends CGARound implements iCGATreevector  {
     
     public CGAPointPair(CGAMultivector m){
         super(m);
     }
     
     /**
-     * Create result pair in inner product null space representation 
+     * Create point-pair in inner product null space representation 
      * (grade 3 multivector).
      * 
      * @param sphere1

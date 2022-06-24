@@ -1,15 +1,15 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createEinf;
 import static de.orat.math.cga.api.CGAMultivector.createEx;
 import static de.orat.math.cga.api.CGAMultivector.createEy;
 import static de.orat.math.cga.api.CGAMultivector.createEz;
 import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Vector3d;
+import static de.orat.math.cga.api.CGAMultivector.createInf;
 
 /**
  * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
- * square to 0. 
+ * square to 0. Planes are grade 1.
  * 
  * These other kinds of planes enable different kinds of transformations – 
  * namely timelike and lightlike depending upon whether they square to a 
@@ -24,7 +24,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPlane extends CGAVector {
+public class CGAPlane extends CGAFlat implements iCGAVector {
     
     public CGAPlane(CGAMultivector m){
         super(m);
@@ -42,10 +42,6 @@ public class CGAPlane extends CGAVector {
         this(createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
-            .add(createEinf(d)));
-    }
-    
-    public FlatAndDirectionParameters decompose(CGAMultivector probePoint){
-        return decomposeFlat(probePoint);
+            .add(createInf(d)));
     }
 }

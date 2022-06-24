@@ -1,8 +1,13 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Vector3d;
+
 /**
- * Part of the reason rounds can be so elegantly combined is that they contain tan-
- * gent elements. Pure tangents have zero size but a finite weight. They are created
+ * Grade 2 vector
+ * 
+ * Pure tangents have zero size but a finite weight. 
+ * 
+ * They are created
  * by wedging any Euclidean element (vector, bivector, or trivector) with the origin o.
  * We explore uses of tangent vectors as generators at the origin of the form ot in Sec-
  * tion 4. Translation of such elements returns an element very similar to a Point Pair.
@@ -12,6 +17,9 @@ package de.orat.math.cga.api;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGATangentVector extends CGAMultivector {
-    
+public class CGATangentVector extends CGABlade implements iCGABivector {
+     
+    public CGATangentVector(Vector3d t){
+        super(createOrigin(1.0).gp(new CGAMultivector(t)));
+    }
 }

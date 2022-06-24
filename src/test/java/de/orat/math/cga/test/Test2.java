@@ -1,5 +1,6 @@
 package de.orat.math.cga.test;
 
+import de.orat.math.cga.api.CGACircle;
 import de.orat.math.cga.api.CGADualLine;
 import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.api.CGAPlane;
@@ -101,6 +102,47 @@ public class Test2 {
         //assertEquals(n.z,attitude.z);
     }
     
+    public void testCircle(){
+        System.out.println("----------------- circle -----");
+        Point3d p1 = new Point3d(0.02,0.02,1);
+        System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        double radius = 2d;
+        System.out.println("radius="+String.valueOf(radius));
+        CGASphere sphere1 = new CGASphere(p1, radius);
+        System.out.println("sphere1="+sphere1.toString());
+        
+        Point3d p2 = new Point3d(1.02,1.02,1);
+        System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
+        CGASphere sphere2 = new CGASphere(p2, radius);
+        System.out.println("sphere2="+sphere2.toString());
+        
+        CGACircle circle = new CGACircle(sphere1.op(sphere2));
+        System.out.println("circle="+circle.toString());
+        
+        RoundAndTangentParameters decomposition = circle.decompose();
+        Vector3d attitude = decomposition.attitude();
+        Point3d location = decomposition.location();
+        double squaredSize = decomposition.squaredSize();
+        System.out.println("squaredSize="+String.valueOf(squaredSize));
+        System.out.println("attitude = "+String.valueOf(attitude.x)+", "+String.valueOf(attitude.y)+", "+String.valueOf(attitude.z));
+        System.out.println("location = "+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+String.valueOf(location.z));
+    }
+    /**
+     * p=(0.02,0.02,1.0)
+radius=2.0
+sphere=1.0*eo + 0.02*e1 + 0.02*e2 + 1.0*e3 - 1.4996*ei
+location1=-1.0000000000000004*eo - 0.02000000000000001*e1 - 0.02000000000000001*e2 - 1.0000000000000004*e3 + 1.4996000000000007*ei
+location=1.4996000000000014*eo + 0.02999200000000003*e1 + 0.02999200000000003*e2 + 1.4996000000000014*e3 - 0.12400008000000018*ei
+radius = 2.061455835083547
+location1=-1.0000000000000004*eo - 0.02000000000000001*e1 - 0.02000000000000001*e2 - 1.0000000000000004*e3 + 1.4996000000000007*ei
+location=1.4996000000000014*eo + 0.02999200000000003*e1 + 0.02999200000000003*e2 + 1.4996000000000014*e3 - 0.12400008000000018*ei
+radius2 = 2.061455835083547
+radius2squared = 4.2496001600000035
+weight=0.9999999999999989
+location = (0.02999200000000003, 0.02999200000000003, 1.4996000000000014)
+-einf*sphere = 0.9999999999999996
+norm(sphere) = 1.9999999999999998
+     */
     public void testSphere(){
         System.out.println("----------------- sphere -----");
         Point3d p = new Point3d(0.02,0.02,1);
@@ -120,7 +162,7 @@ public class Test2 {
         System.out.println("radius2squared = "+String.valueOf(Math.abs(rp2.squaredSize())));
         
         // weight bestimmen
-        double weight = //CGAMultivector.decomposeWeight(sphere.decomposeTangentAndRoundDirectionAsMultivector(), 
+        double weight = //CGAMultivector.decomposeWeight(sphere.determineDirectionFromTangentAndRoundObjectsAsMultivector(), 
                 //CGAMultivector.createOrigin(1d));
                 sphere.decomposeWeight();
         // weight=0.9999999999999989 richtig
@@ -132,7 +174,7 @@ public class Test2 {
         
         // Dorst2007: -einf*P = 1 stimmt? soll das die Normierung sein?
         System.out.println("-einf*sphere = "+
-                String.valueOf(-CGAMultivector.createEinf(1d).scp(sphere)));
+                String.valueOf(-CGAMultivector.createInf(1d).scp(sphere)));
         // norm(p) = 2 ist sollte das nicht 1 sein?
         System.out.println("norm(sphere) = "+String.valueOf(sphere.norm()));
     }
@@ -154,7 +196,7 @@ public class Test2 {
         System.out.println("squaredSize="+String.valueOf(squaredSize));
         // weight sollte auch 1 sein
         // weight=0.9999999999999976
-        //CGAMultivector attitude = cp.decomposeTangentAndRoundDirectionAsMultivector();
+        //CGAMultivector attitude = cp.determineDirectionFromTangentAndRoundObjectsAsMultivector();
         //CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
         //double weight = CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
         double weight = cp.decomposeSquaredWeight();

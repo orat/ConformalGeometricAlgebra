@@ -7,7 +7,6 @@ import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
 import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Quat4d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -16,6 +15,11 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGAMultivector {
     
+    /**
+     * Algebra's Precision.
+     */
+    //protected static double eps = 1e-12;
+
     private static CGAMultivector defaultInstance = new CGAMultivector();
     
     static int default_ip_type = LEFT_CONTRACTION;
@@ -35,13 +39,33 @@ public class CGAMultivector {
         this.impl = impl;
     }
     
+    // The origin and the Inf extends the Euclidian space to the Minkovski space.
     
+    /**
+     * This corresponds to the last base vector in homogeneous vector algebra. 
+     * 
+     * It enables us to work projectively. It represents the origin of the 
+     * subspace and therefore removes the singuarlity of the represented 
+     * Euclidean space.
+     * 
+     * @param scale
+     * @return 
+     */
     public static CGAMultivector createOrigin(double scale){
         return new CGAMultivector(defaultInstance.impl.createOrigin(scale));
     }
-    public static CGAMultivector createEinf(double scale){
+    /**
+     * Inf encodes the metric of an Euclidean space (projectively represented space). 
+     * For a geometrical CGA-round point this factor represents the distance from 
+     * that point to the origin.
+     * 
+     * @param scale
+     * @return 
+     */
+    public static CGAMultivector createInf(double scale){
         return new CGAMultivector(defaultInstance.impl.createInf(scale));
     }
+    
     public static CGAMultivector createEx(double scale){
         return new CGAMultivector(defaultInstance.impl.createEx(scale));
     }
@@ -51,20 +75,21 @@ public class CGAMultivector {
     public static CGAMultivector createEz(double scale){
         return new CGAMultivector(defaultInstance.impl.createEz(scale));
     }
-    public static CGAVector createE3(){
-        return new CGAVector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
+    public static CGAVectorE3 createE3(){
+        return new CGAVectorE3(createEx(1d).add(createEy(1d)).add(createEz(1d)));
     }
-    public static CGAVector createE3(Vector3d v){
-        return new CGAVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
+    public static CGAVectorE3 createE3(Vector3d v){
+        return new CGAVectorE3(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
     
       
     // Create conformal algebra primitives
     
-    
-    public static CGAVector createImaginarySphere(CGAMultivector o, double r){
-        return new CGAVector(o.add(createEinf(0.5*r*r)));
-    }
+    //TODO
+    // in eigene Klasse auslagern
+    /*public static CGAVectorE3 createImaginarySphere(CGAMultivector o, double r){
+        return new CGAVectorE3(o.add(createInf(0.5*r*r)));
+    }*/
    
     /**
      * Create the pseudoscalar - The canonical rotor for the R41 of the conformal 
@@ -75,7 +100,7 @@ public class CGAMultivector {
     public static CGAMultivector createPseudoscalar(){
         return createOrigin(1d).op(createEx(1d))
                 .op(createEy(1d)).op(createEz(1d))
-                .op(createEinf(1d));
+                .op(createInf(1d));
     }
    
     /**
@@ -88,7 +113,7 @@ public class CGAMultivector {
      */
     public static CGAMultivector createTangentVector(Point3d p, Vector3d u){
         CGAMultivector cp = new CGAPoint(p);
-        return cp.ip(cp.op(new CGAPoint(u)).op(createEinf(1d)));
+        return cp.ip(cp.op(new CGAPoint(u)).op(createInf(1d)));
     }
     
     /**
@@ -134,7 +159,7 @@ public class CGAMultivector {
         // use dualFlat in Dorst2007
         // damit bekomme ich die attitude in der Form E.op(einfM)
         // für attitude ist ein Vorzeichen nach Dorst2007 zu erwarten, scheint aber nicht zu stimmen
-        CGAMultivector attitude = createEinf(1d).op(this).undual();
+        CGAMultivector attitude = createInf(1d).op(this).undual();
         // attitude=-5.551115123125783E-17*no^e1^e2 + 0.9999999999999996*e1^e2^ni
         System.out.println("attitude="+String.valueOf(attitude.toString()));
                 
@@ -174,7 +199,7 @@ public class CGAMultivector {
         // Vector3d attitude = dir.extractDirectionFromEeinfRepresentation();
         
         // Nach Kleppe2016
-        CGAMultivector dir = rc(createOrigin(1d)).rc(createEinf(1d));
+        CGAMultivector dir = rc(createOrigin(1d)).rc(createInf(1d));
         // attitude=-0.9799999999999993*e1 statt (0.98,0.0,0.0) mit right contraction
         //FIXME Warum stimmt das Vorzeichen nicht?
         System.out.println("attitude Kleppe="+dir.toString()); 
@@ -206,21 +231,28 @@ public class CGAMultivector {
                new Point3d(locationCoord[index++], locationCoord[index++], locationCoord[index]));
     }
     
-    protected CGAMultivector decomposeTangentAndRoundDirectionAsMultivector(){
-        // ungetestet
-        CGAMultivector einfM = CGAMultivector.createEinf(-1d);
-        CGAMultivector einf = CGAMultivector.createEinf(1d);
-        return einfM.ip(undual()).op(einf);
-    }
     /**
-     * Decompose direction.
+     * Determine direction from tangent or round objects.
      * 
      * Dorst2007
      * 
      * @return direction
      */
-    private Vector3d decomposeTangentAndRoundDirection(){
-        CGAMultivector attitude = decomposeTangentAndRoundDirectionAsMultivector();
+    protected CGAMultivector determineDirectionFromTangentAndRoundObjectsAsMultivector(){
+        // ungetestet
+        CGAMultivector einfM = CGAMultivector.createInf(-1d);
+        CGAMultivector einf = CGAMultivector.createInf(1d);
+        return einfM.ip(undual()).op(einf);
+    }
+    /**
+     * Determine direction from tangent or round objects.
+     * 
+     * Dorst2007
+     * 
+     * @return direction
+     */
+    protected Vector3d determineDirectionFromTangentAndRoundObjects(){
+        CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
         //System.out.println("tangent(Eeinf)= "+attitude.toString(CGA1Metric.baseVectorNames));
         return attitude.extractDirectionFromEeinfRepresentation();
     }
@@ -232,7 +264,7 @@ public class CGAMultivector {
      * @return direction
      */
     private Vector3d decomposeDualTangentAndRoundDirection(){
-        CGAMultivector einf = CGAMultivector.createEinf(1d);
+        CGAMultivector einf = CGAMultivector.createInf(1d);
         CGAMultivector attitude = einf.ip(this).op(einf);
         Vector3d result = attitude.extractDirectionFromEeinfRepresentation();
         //FIXME
@@ -250,7 +282,7 @@ public class CGAMultivector {
      * @return direction and location, radius=0
      */
     protected RoundAndTangentParameters decomposeTangent(){
-        return new RoundAndTangentParameters(decomposeTangentAndRoundDirection(), decomposeTangentAndRoundLocation(), 0d);
+        return new RoundAndTangentParameters(determineDirectionFromTangentAndRoundObjects(), decomposeTangentAndRoundLocation(), 0d);
     }
     
     /**
@@ -280,7 +312,7 @@ public class CGAMultivector {
         // Vorzeichen wird unten gedreht
         // das sollte aber ein normalized dual sphere ergeben
         CGAMultivector location = 
-                gp(createEinf(1d).ip(this).generalInverse());
+                gp(createInf(1d).ip(this).generalInverse());
         // das ergibt einen reinen vector (1-blade)
         System.out.println("location1="+location.toString());
         /*double[] vector = location.extractCoordinates(1);
@@ -288,7 +320,7 @@ public class CGAMultivector {
         result.negate();*/
         
         // Hildenbrand2004 (Tutorial)
-        location = gp(CGAMultivector.createEinf(1d)).gp(this).div((createEinf(1d).ip(this)).sqr()).gp(-0.5);
+        location = gp(CGAMultivector.createInf(1d)).gp(this).div((createInf(1d).ip(this)).sqr()).gp(-0.5);
         System.out.println("location="+location.toString());
         double[] vector = location.impl.extractCoordinates(1);
         int index = location.impl.getEStartIndex();
@@ -307,7 +339,7 @@ public class CGAMultivector {
     protected RoundAndTangentParameters decomposeRound(){
         // (-) because the radius for dual round corresponding to Dorst2007 is needed to
         // get the value corresponding to inner product null space representation
-        return new RoundAndTangentParameters(decomposeTangentAndRoundDirection(), 
+        return new RoundAndTangentParameters(determineDirectionFromTangentAndRoundObjects(), 
                 decomposeTangentAndRoundLocation(), -roundSquaredSize());
     }
     
@@ -342,7 +374,7 @@ public class CGAMultivector {
      */
     private double roundSquaredSize(){
         CGAMultivector mvNumerator = gp(gradeInversion());
-        CGAMultivector mvDenominator = createEinf(1d).ip(this);
+        CGAMultivector mvDenominator = createInf(1d).ip(this);
         
         // (-) d.h. das ist die Formel für dual-round nach Dorst2007. Das sieht also
         // richtig aus.
@@ -362,7 +394,7 @@ public class CGAMultivector {
      * @return attitude, location and radius
      */
     protected RoundAndTangentParameters decomposeDualRound(){
-        return new Decomposition3d.RoundAndTangentParameters(decomposeDualTangentAndRoundDirection(), 
+        return new RoundAndTangentParameters(decomposeDualTangentAndRoundDirection(), 
                 decomposeTangentAndRoundLocation(), -roundSquaredSize());
     }
     
@@ -376,8 +408,8 @@ public class CGAMultivector {
         // X soll eine sum aus 1- und 2-blade sein
         // falsch da sind auch zwei 4-blades mit drin
         CGAMultivector n0 = CGAMultivector.createOrigin(1d);
-        CGAMultivector ni = CGAMultivector.createEinf(1d);
-        CGAMultivector X = sub(n0.ip(this).op(createEinf(1d)));
+        CGAMultivector ni = CGAMultivector.createInf(1d);
+        CGAMultivector X = sub(n0.ip(this).op(createInf(1d)));
         System.out.println("X="+X.toString());
         
         // scheint korrekt sum aus 3- und 1-blade
@@ -667,8 +699,11 @@ public class CGAMultivector {
     /**
      * Get the grade of the multivector if it is homogenious, else -1
      * 
-     * @return grade of the multivector or -1 if the multivector contains components
-     * of different grades.
+     * The grade is the number of base vectors in a blade. A blade is a multivector
+     * with includes only base vectors of the same grade.
+     * 
+     * @return grade of the blade or -1 if the multivector contains components
+     * of different grades and therefor is not a blade.
      */
     public int grade(){
         return impl.grade();

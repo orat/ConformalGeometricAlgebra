@@ -1,9 +1,9 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createEinf;
 import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
+import static de.orat.math.cga.api.CGAMultivector.createInf;
 
 /**
  * Dual line.
@@ -13,7 +13,7 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualLine extends CGATreevector {
+public class CGADualLine extends CGABlade implements iCGATreevector {
     
     public CGADualLine(CGAMultivector m){
         super(m);
@@ -44,7 +44,7 @@ public class CGADualLine extends CGATreevector {
      * in Dorst2007.
      */
     public CGADualLine(CGAPoint p1, CGAPoint p2){
-        this(p1.op(p2).op(createEinf(1d)));
+        this(p1.op(p2).op(createInf(1d)));
     }
     
     public FlatAndDirectionParameters decompose(CGAPoint probePoint){

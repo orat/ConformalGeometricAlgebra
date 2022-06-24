@@ -36,44 +36,44 @@ package de.orat.math.cga.impl3;
  */
 class Versor implements Comparable{
 
-	/**
-	 * Basis versor.
-	 */
-	public int versor;
+    /**
+     * Basis versor.
+     */
+    public int versor;
 
-	/**
-	 * Creates and returns a Versor object representing a basis versor.
-	 * @param versor the int representing the basis versor.
-	 */
-	public Versor(int versor)
-	{
-		this.versor = versor;
-	}
+    /**
+     * Creates and returns a Versor object representing a basis versor.
+     * @param versor the int representing the basis versor.
+     */
+    public Versor(int versor)
+    {
+            this.versor = versor;
+    }
 
-	/**
-	 * Creates and returns an new Object deeply cloning this Object.
-	 */
-	public Object clone()
-	{
-		return new Versor(versor);
-	}
+    /**
+     * Creates and returns an new Object deeply cloning this Object.
+     */
+    @Override
+    public Object clone() {
+            return new Versor(versor);
+    }
 
-	/**
-	 * Compare this object with another comparing versor field.
-	 */
-	public int compareTo(Object object)
-	{
-		int v = ((Versor) object).versor;
-		return (versor < v ? -1 : (versor == v ? 0 : 1));
-	}
+    /**
+     * Compare this object with another comparing versor field.
+     */
+    @Override
+    public int compareTo(Object object) {
+            int v = ((Versor) object).versor;
+            return (versor < v ? -1 : (versor == v ? 0 : 1));
+    }
 
-	/**
-	 * Returns a string representation of the versor.
-	 * @return the string representation of the versor.
-	 */
-	public String toString()
-	{
-		return "e" + String.valueOf(versor);
-	}
+    /**
+     * Returns a string representation of the versor.
+     * @return the string representation of the versor.
+     */
+    @Override
+    public String toString() {
+            return "e" + String.valueOf(versor);
+    }
 
 }
