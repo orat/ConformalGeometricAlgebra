@@ -1,15 +1,24 @@
 package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
-import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
+import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
  * have a weight of 1 (grade 1 multivector). 
  * 
+ * In CGA a point can be represented as a round or a flat. The round point is a 
+ * dual sphere with radius 0. The round point is a blade with grade 1 
+ *
+ * The round point is used more often in geometric expressions than the flat 
+ * point, since it has nice perpendicularity properties. For example, given 
+ * the round points P, Q and R, it can be used for calculating the CGA-object 
+ * that is perpendicular to those three points: P ∧ Q ∧ R. This is the
+ * circle passing through P, Q and R.
+ *
  * They can also be considered as dual spheres with zero radius. By
  * adding to or subtracting from the weight of the ∞ basis, we can create imaginary or
  * real dual spheres of the from σ = p ± δ ∞ where p is the homogenous center point
@@ -30,16 +39,20 @@ public class CGAPoint extends CGARound implements iCGAVector {
     public CGAPoint(CGAMultivector m){
         super(m);
     }
+    CGAPoint(iCGAMultivector m){
+        super(m);
+    }
     
     /**
-     * Create a conformal point (grade 1 multivector) by up-projecting an euclidian vector
-     * into a conformal vector.
+     * A conformal point (grade 1 multivector) by up-projecting an 
+     * euclidian vector into a conformal vector.
      * 
      * Inner and outer product null space representation is identical.<p>
      * 
      * Multiplication of the multivector by double alpha possible.<p>
+     *
      * 
-     * @param p result
+     * @param p euclidian point
      */
     public CGAPoint(Tuple3d p){
         this(create(p));
@@ -47,23 +60,43 @@ public class CGAPoint extends CGARound implements iCGAVector {
     
     private static CGAMultivector create(Tuple3d p){
         // old version
-        //return createOrigin(1d)
-        //        .add(createEx(p.x))
-        //        .add(createEy(p.y))
-        //        .add(createEz(p.z))
-        //        .add(createInf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z)));
-        CGAMultivector x = new CGAMultivector(p);
-        return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createInf(1d))).add(createOrigin(1d));
+        return createOrigin(1d)
+                .add(createEx(p.x))
+                .add(createEy(p.y))
+                .add(createEz(p.z))
+                .add(createInf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z)));
+        //CGAVectorE3 x = new CGAVectorE3(p);
+        //return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createInf(1d))).add(createOrigin(1d));
     }
     
+    /**
+     * Determine squared distance.
+     * 
+     * @param p second point to determine the distance to
+     * @return squared distance to the given point
+     */
     public double distSquare(CGAPoint p){
-        return -2*this.ip(p).scalarPart();
+        return -2*(this.normalize()).ip(p.normalize()).scalarPart();
     }
    
-    
-    public double decomposeSquaredWeight(){
+    /*public double decomposeSquaredWeight(){
         CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
         CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
-        return CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
+        return CGAMultivector.squaredWeight(attitude, probePoint);
+    }*/
+    
+    /**
+     * Normalized round points can be multiplied by scalar factor and 
+     * then represent the same point. Sometimes a ’unique’ or default 
+     * representation is required for calculations. 
+     * 
+     * Therefore the point is normalized by the formula P0 :=P/(-∞·P). 
+     * This sets the e0 -factor (weight) of the point to 1.
+     * 
+     * @return normalized point
+     */
+    @Override
+    public CGAPoint normalize(){
+        return new CGAPoint(this.div((new CGAScalar(-1d)).gp(createInf(1d)).ip(this)));
     }
 }

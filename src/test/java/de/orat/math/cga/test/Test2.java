@@ -2,6 +2,8 @@ package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGACircle;
 import de.orat.math.cga.api.CGADualLine;
+import de.orat.math.cga.api.CGALine;
+import de.orat.math.cga.api.CGALinePair;
 import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.api.CGAPlane;
 import de.orat.math.cga.api.CGAPoint;
@@ -83,23 +85,20 @@ public class Test2 {
      */
     public void testPlane(){
         System.out.println("---------------------- plane ----");
-        Vector3d n = new Vector3d(0d,0d,1d);
+        Vector3d n = new Vector3d(0d,0d,2d);
         double d = 2d;
         CGAPlane plane = new CGAPlane(n, d);
         System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
         System.out.println("plane="+plane.toString());
         
-        CGAPoint cp = new CGAPoint(new Point3d(0.5d,0.5d,0.5d));
-        System.out.println("probe="+cp.toString());
-        FlatAndDirectionParameters flat = plane.decompose(cp);
-        System.out.println("location=("+String.valueOf(flat.location().x)+", "+
+        //CGAPoint cp = new CGAPoint(new Point3d(0.0d,0.0d,2.0d));
+        //System.out.println("probe="+cp.toString());
+        FlatAndDirectionParameters flat = plane.decompose(new Point3d(0.1d,0.1d,0d));
+        System.out.println("location2=("+String.valueOf(flat.location().x)+", "+
                 String.valueOf(flat.location().y)+", "+String.valueOf(flat.location().z)+")");
         Vector3d attitude = flat.attitude();
-        System.out.println("n=("+String.valueOf(attitude.x)+", "+
+        System.out.println("nn=("+String.valueOf(attitude.x)+", "+
                 String.valueOf(attitude.y)+", "+String.valueOf(attitude.z)+")");
-        //assertEquals(n.x,attitude.x);
-        //assertEquals(n.y,attitude.y);
-        //assertEquals(n.z,attitude.z);
     }
     
     public void testCircle(){
@@ -164,7 +163,7 @@ norm(sphere) = 1.9999999999999998
         // weight bestimmen
         double weight = //CGAMultivector.decomposeWeight(sphere.determineDirectionFromTangentAndRoundObjectsAsMultivector(), 
                 //CGAMultivector.createOrigin(1d));
-                sphere.decomposeWeight();
+                sphere.squaredWeight();
         // weight=0.9999999999999989 richtig
         System.out.println("weight="+String.valueOf(weight));
         
@@ -186,21 +185,31 @@ norm(sphere) = 1.9999999999999998
         System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
         CGAPoint cp = new CGAPoint(p);
         System.out.println("cp="+cp.toString());
-        Vector3d a1 = cp.decompose().attitude();
+        
+        RoundAndTangentParameters decomposed = cp.decompose();
+        Vector3d a1 = decomposed.attitude();
         System.out.println("attitude=("+String.valueOf(a1.x)+", "+String.valueOf(a1.y)+", "+String.valueOf(a1.z)+")");
-        Point3d p1 = cp.decompose().location();
+        Point3d p1 = decomposed.location();
         System.out.println("location=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        // location=(-0.010008000000000005,-0.010008000000000005,-0.5004000000000002)
+        // falsch, sollte 0.02,0.02, 1.0 sein
         // sollte aber 0 sein.
         // squaredSize=-2.2512001600000007
-        double squaredSize = cp.decompose().squaredSize();
+        double squaredSize = decomposed.squaredSize();
         System.out.println("squaredSize="+String.valueOf(squaredSize));
         // weight sollte auch 1 sein
         // weight=0.9999999999999976
         //CGAMultivector attitude = cp.determineDirectionFromTangentAndRoundObjectsAsMultivector();
         //CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
-        //double weight = CGAMultivector.decomposeSquaredWeight(attitude, probePoint);
-        double weight = cp.decomposeSquaredWeight();
+        //double weight = CGAMultivector.squaredWeight(attitude, probePoint);
+        double weight = cp.squaredWeight();
         System.out.println("weight="+String.valueOf(weight));
+        Point3d p2 = new Point3d(2.02,0.02,1);
+        System.out.println("p2=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
+        CGAPoint cp2 = new CGAPoint(p2);
+        System.out.println("cp2="+cp.toString());
+        System.out.println("distSquare="+String.valueOf(cp2.distSquare(cp)));
+        
     }
     
     // scheint zu funktionieren
@@ -246,13 +255,13 @@ norm(sphere) = 1.9999999999999998
         // l1dual= 0.98*no^e1^ni - 0.0196*e1^e2^ni - 0.98*e1^e3^ni
         System.out.println("l1*= "+l1dual);
       
-        CGAMultivector l1 = l1dual.undual();
+        CGALine l1 = l1dual.undual();
         // line represented as bivector
         // 5.551115123125783E-17*no^e2 - 1.734723475976807E-18*no^e3 + 0.9799999999999993*e2^e3 + 0.9799999999999995*e2^ni - 0.019599999999999985*e3^ni
         // 0.979993*e2^e3 + 0.979999995*e2^ni - 0.0195999985*e3^ni
         System.out.println("l1= "+l1);
         
-        FlatAndDirectionParameters flatParameters = l1dual.decompose(new CGAPoint(new Point3d()));
+        FlatAndDirectionParameters flatParameters = l1dual.decompose(new Point3d());
         Vector3d attitude = flatParameters.attitude();
         // sollte (0.98,0.0,0.0) - hat aber falsches Vorzeichen
         System.out.println("attitude=("+String.valueOf(attitude.x)+", "+String.valueOf(attitude.y)+
@@ -301,7 +310,7 @@ norm(sphere) = 1.9999999999999998
         CGADualLine l2 = new CGADualLine(p3, p4);
         System.out.println("l2= "+l2.toString());
         System.out.println("l2 normiert= "+l1.normalize().toString());
-        CGAMultivector l2l1 = l2.gp(l1).normalize();
+        //CGALinePair l2l1 = new CGALinePair(l1, l2); //l2.gp(l1).normalize();
         // bi- und trivector Anteile
         // l2l1= -2.87728 + 0.21520800000000018*no^e1 - 0.019208*no^e2 + 
         //                  2.87728*e1^e2 + 0.95648*no^e3 + 0.15766240000000017*e1^e3 + 
@@ -310,6 +319,6 @@ norm(sphere) = 1.9999999999999998
 
         //System.out.println("l2l1= "+l2l1.unit().toString(CGA1Metric.baseVectorNames));
         
-        l2l1.decomposeLinePair();
+        //l2l1.decomposeLinePair();
     }
 }

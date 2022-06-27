@@ -1,8 +1,8 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
+import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * Sphere in inner product null space representation (grade 1 multivector).
@@ -14,7 +14,9 @@ public class CGASphere extends CGARound implements iCGAVector {
     public CGASphere(CGAMultivector m){
         super(m);
     }
-    
+    CGASphere(iCGAMultivector impl){
+        super(impl);
+    }
     /**
      * Create sphere in inner product null space representation 
      * (grade 1 multivector).
@@ -44,5 +46,9 @@ public class CGASphere extends CGARound implements iCGAVector {
     public CGASphere(Point3d o, double r){
         this(new CGAPoint(o), r);
         if (r < 0) throw new IllegalArgumentException("Negative radius is not allowed!");
+    }
+    @Override
+    public CGADualSphere dual(){
+        return new CGADualSphere(impl.dual());
     }
 }

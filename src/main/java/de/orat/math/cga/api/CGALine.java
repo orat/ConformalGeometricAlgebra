@@ -1,5 +1,7 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.spi.iCGAMultivector;
+
 /**
  * 
  * Generates the motor algebra. 
@@ -14,7 +16,9 @@ public class CGALine extends CGAFlat implements iCGABivector {
     public CGALine(CGAMultivector m){
         super(m);
     }
-     
+    CGALine(iCGAMultivector m){
+        super(m);
+    }
     /**
      * Create line in inner product null space representation (grade 2 multivector).
      * 
@@ -31,10 +35,15 @@ public class CGALine extends CGAFlat implements iCGABivector {
         this(pointPair.op(createInf(1d)));
     }
      
-    public CGALine(CGAPoint point, CGADirectionVector direction){
+    public CGALine(CGAPoint point, CGAAttitudeVector direction){
         this(point.op(direction));
     }
    
+    @Override
+    public CGADualLine dual(){
+        return new CGADualLine(impl.dual());
+    }
+    
     /**
      * Is this 3-vector representing a line.
      * 

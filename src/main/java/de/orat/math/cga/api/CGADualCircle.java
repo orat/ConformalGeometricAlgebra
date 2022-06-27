@@ -1,17 +1,20 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualCircle extends CGABlade implements iCGATrivector {
+public class CGADualCircle extends CGADualFlat implements iCGATrivector {
     
     public CGADualCircle(CGAMultivector m){
         super(m);
     }
-    
+    CGADualCircle(iCGAMultivector m){
+        super(m);
+    }
     /**
      * Create dual circle in outer product null space representation 
      * (grade 3 multivector).
@@ -33,5 +36,9 @@ public class CGADualCircle extends CGABlade implements iCGATrivector {
      */
     public CGADualCircle(Point3d point1, Point3d point2, Point3d point3){
          this((new CGAPoint(point1)).op((new CGAPoint(point2))).op((new CGAPoint(point3))));
+    }
+   
+    public CGACircle undual(){
+        return new CGACircle(impl.undual());
     }
 }

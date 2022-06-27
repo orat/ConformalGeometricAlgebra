@@ -3,6 +3,7 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
+import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * Dual sphere (inner product null space representation) as a multivector 
@@ -10,12 +11,14 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualSphere extends CGABlade implements iCGAQuadvector {
+public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
     
     public CGADualSphere(CGAMultivector m){
         super(m);
     }
-    
+    CGADualSphere(iCGAMultivector impl){
+        super(impl);
+    }
     /**
      * Create dual sphere.
      * 
@@ -29,7 +32,8 @@ public class CGADualSphere extends CGABlade implements iCGAQuadvector {
     }
     
     /**
-     * Create dual sphere in outer product null space representation (grade 4 multivector).
+     * Create dual sphere in outer product null space representation 
+     * (grade 4 multivector).
      * 
      * @param p1 multivector representing a point on the sphere
      * @param p2 multivector representing a point on the sphere
@@ -53,7 +57,7 @@ public class CGADualSphere extends CGABlade implements iCGAQuadvector {
         this((new CGAPoint(p1)).op((new CGAPoint(p2))).op((new CGAPoint(p3))).op((new CGAPoint(p4))));
     }
     
-    public RoundAndTangentParameters decompose(){
-        return decomposeDualRound();
+    public CGASphere undual(){
+        return new CGASphere(impl.undual());
     }
 }

@@ -12,13 +12,13 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADirectionVector extends CGABlade implements iCGABivector {
+public class CGAAttitudeVector extends CGAAttitude implements iCGABivector {
     
-    public CGADirectionVector(CGAMultivector m){
+    public CGAAttitudeVector(CGAMultivector m){
         super(m);
     }
     
-    public CGADirectionVector(Vector3d t){
-        super((CGAVectorE3.createCGAVectorE3(t)).gp(createInf(1.0)));
+    public CGAAttitudeVector(Vector3d t){
+        super((new CGAVectorE3(t)).gp(createInf(1.0)));
     }
 }

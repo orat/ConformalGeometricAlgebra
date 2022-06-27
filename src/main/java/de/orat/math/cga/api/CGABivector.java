@@ -16,7 +16,7 @@ public class CGABivector extends CGABlade implements iCGABivector {
         // eigentlich will ich hier einen euclidischen Bivector B erzeugen. Unklar
         // ob das so überhaupt richtig ist, ist der dann hier eingebettet in CGA?
         //FIXME
-        this(CGAVectorE3.createCGAVectorE3(a).op(
-             CGAVectorE3.createCGAVectorE3(b)));
+        this((new CGAVectorE3(a)).op(
+             (new CGAVectorE3(b))));
     }
 }

@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.spi.iCGAMultivector;
 import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 
 /**
@@ -13,7 +14,9 @@ public class CGACircle extends CGARound implements iCGABivector {
     public CGACircle(CGAMultivector m){
         super(m);
     }
-    
+    protected CGACircle(iCGAMultivector impl){
+        super(impl);
+    }
     /**
      * Create a circle by intersection of two spheres.
      * 
@@ -22,5 +25,9 @@ public class CGACircle extends CGARound implements iCGABivector {
      */
     public CGACircle(CGASphere sphere1, CGASphere sphere2){
         this(sphere1.op(sphere2));
+    }
+    @Override
+    public CGADualCircle dual(){
+        return new CGADualCircle(impl.dual());
     }
 }

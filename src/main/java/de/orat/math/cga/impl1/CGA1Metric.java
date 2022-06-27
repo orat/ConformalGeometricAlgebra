@@ -124,17 +124,17 @@ public class CGA1Metric {
         //trivectors
         bitsetMap.put(1+2+4,16); //e012
         gradeCoordinatesMap.put(16,0);
-        bitsetMap.put(1+2+8,17);
+        bitsetMap.put(1+2+8,17); //e013
         gradeCoordinatesMap.put(17,1);
-        bitsetMap.put(1+2+16,18);
+        bitsetMap.put(1+2+16,18); //e014
         gradeCoordinatesMap.put(18,2);
-        bitsetMap.put(1+4+8,19);
+        bitsetMap.put(1+4+8,19); //e023
         gradeCoordinatesMap.put(19,3);
-        bitsetMap.put(1+4+16,20);
+        bitsetMap.put(1+4+16,20); //e024
         gradeCoordinatesMap.put(20,4);
-        bitsetMap.put(1+8+16,21);
+        bitsetMap.put(1+8+16,21); //e034
         gradeCoordinatesMap.put(21,5);
-        bitsetMap.put(2+4+8,22); 
+        bitsetMap.put(2+4+8,22); //e123
         gradeCoordinatesMap.put(22,6);
         bitsetMap.put(2+4+16,23); // e124
         gradeCoordinatesMap.put(23,7);
@@ -183,18 +183,18 @@ public class CGA1Metric {
      * @return origin base vector.
      */
     public static iCGAMultivector createOrigin(double scale){
-        return CGA1Multivector1a.createBasisVector(0, scale);
+        return CGA1Multivector.createBasisVector(0, scale);
     }
     public static iCGAMultivector createEx(double scale){
-        return CGA1Multivector1a.createBasisVector(1, scale);
+        return CGA1Multivector.createBasisVector(1, scale);
     }
     public static iCGAMultivector createEy(double scale){
-        return CGA1Multivector1a.createBasisVector(2, scale);
+        return CGA1Multivector.createBasisVector(2, scale);
     }
     public static iCGAMultivector createEz(double scale){
-        return CGA1Multivector1a.createBasisVector(3, scale);
+        return CGA1Multivector.createBasisVector(3, scale);
     }
     public static iCGAMultivector createBasisInf(double scale){
-        return CGA1Multivector1a.createBasisVector(4, scale);
+        return CGA1Multivector.createBasisVector(4, scale);
     }
 }

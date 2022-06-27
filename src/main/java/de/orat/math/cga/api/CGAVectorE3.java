@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -9,13 +10,12 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGAVectorE3 extends CGABlade implements iCGAVector {
     
-    
     public CGAVectorE3(CGAMultivector m){
         super(m);
         // TODO test dass e0, einf nicht vorhanden ist!!!
     }
     
-    public static CGAVectorE3 createCGAVectorE3(Vector3d t){
-        return new CGAVectorE3(createE3(t));
+    public CGAVectorE3(Tuple3d t){
+        this(createE3(t));
     }
 }

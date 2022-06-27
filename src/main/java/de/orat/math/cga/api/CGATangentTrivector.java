@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGATangentTrivector extends CGABlade implements iCGAQuadvector {
+public class CGATangentTrivector extends CGATangent implements iCGAQuadvector {
     
     public CGATangentTrivector(CGAMultivector m){
         super(m);

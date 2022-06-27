@@ -1,5 +1,7 @@
 package de.orat.math.cga.api;
 
+import static de.orat.math.cga.api.CGAMultivector.createInf;
+import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -20,7 +22,7 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGATangentVector extends CGABlade implements iCGABivector {
+public class CGATangentVector extends CGATangent implements iCGABivector {
      
     public CGATangentVector(CGAMultivector m){
         super(m);

@@ -13,8 +13,8 @@ public class CGATrivector extends CGAMultivector implements iCGATrivector {
     }
     
     public CGATrivector(Vector3d a, Vector3d b, Vector3d c){
-        this(CGAVectorE3.createCGAVectorE3(a).op(
-                CGAVectorE3.createCGAVectorE3(b).op(
-                CGAVectorE3.createCGAVectorE3(c))));
+        this((new CGAVectorE3(a)).op(
+                (new CGAVectorE3(b)).op(
+                (new CGAVectorE3(c)))));
     }
 }

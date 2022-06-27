@@ -5,11 +5,16 @@ import static de.orat.math.cga.api.CGAMultivector.createEy;
 import static de.orat.math.cga.api.CGAMultivector.createEz;
 import org.jogamp.vecmath.Vector3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
+import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
  * square to 0. Planes are grade 1.
  * 
+ * Planes π = n + δ ∞ are combination of a Euclidean normal vector n plus a
+ * weighted infinity ∞ representing the distance from Origin (sometimes called 
+ * the Hessian distance). 
+ *
  * These other kinds of planes enable different kinds of transformations – 
  * namely timelike and lightlike depending upon whether they square to a 
  * positive term, or to zero, respectively.
@@ -28,7 +33,9 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
     public CGAPlane(CGAMultivector m){
         super(m);
     }
-    
+    CGAPlane(iCGAMultivector m){
+        super(m);
+    }
     /**
      * Create plane in inner product null space representation (grade 1 multivector).
      * 
@@ -42,5 +49,10 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
             .add(createEy(n.y))
             .add(createEz(n.z))
             .add(createInf(d)));
+    }
+    
+    @Override
+    public CGADualPlane dual(){
+        return new CGADualPlane(impl.dual());
     }
 }

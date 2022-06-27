@@ -3,28 +3,28 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
+import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  *
- * Dual plane in outer product null space representation (grade 4 multivector).
+ * (Dual) plane in outer product null space representation (grade 4 multivector).
  * 
- * Dual Planes π = n + δ ∞ are combination of a Euclidean normal vector n plus a
- * weighted infinity ∞ representing the distance from Origin (sometimes called 
- * the Hessian distance). 
- * 
- * iven two null points p and q, we can construct the dual plane in between them 
+ * TODO gehört der folgende Text und die impl der Methode nicht nach CGAPlane?
+ * Given two null points p and q, we can construct the dual plane in between them 
  * by simple substraction: π = p − q : subtracting one normalized point from a
  * nother eliminates the o blade and returns a vector of the form π = n + δ ∞ #
  * which represents a dual plane with normal n at distance δ from the origin.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPlane extends CGABlade implements iCGAQuadvector {
+public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
     
     public CGADualPlane(CGAMultivector m){
         super(m);
     }
-    
+    CGADualPlane(iCGAMultivector impl){
+        super(impl);
+    }
     /**
      * Create plane in outer product null space representation (grade 4 multivector).
      * 
@@ -48,7 +48,7 @@ public class CGADualPlane extends CGABlade implements iCGAQuadvector {
     }
     
     /**
-     * Create dual plane from a result on the plane an its normal vector (in outer product
+     * Create dual plane from a point on the plane an its normal vector (in outer product
      * null space representation).
      * 
      * @param p result on the plane.
@@ -62,5 +62,9 @@ public class CGADualPlane extends CGABlade implements iCGAQuadvector {
         CGAMultivector cp = new CGAPoint(p);
         CGAMultivector cn = new CGAPoint(n);
         return new CGAMultivector(cp.ip(cn.op(createInf(1d))).impl);
+    }
+    
+    public CGAPlane undual(){
+        return new CGAPlane(impl.undual());
     }
 }

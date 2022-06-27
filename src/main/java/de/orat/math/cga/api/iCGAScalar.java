@@ -6,6 +6,10 @@ package de.orat.math.cga.api;
  */
 public interface iCGAScalar extends iCGABlade {
     
+    default boolean isScalar(){
+        return true;
+    }
+    
     @Override
     default void testGrade(){
          if (grade() != 0) throw new IllegalArgumentException("The given multivector is not not grade 0!");

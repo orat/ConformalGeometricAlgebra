@@ -7,6 +7,10 @@ package de.orat.math.cga.api;
 
 interface iCGATrivector extends iCGABlade {
      
+    default boolean isTrivector(){
+        return true;
+    }
+    
     @Override
     default void testGrade(){
         if (grade() != 3) throw new IllegalArgumentException("The given multivector m is not of grade 3!");

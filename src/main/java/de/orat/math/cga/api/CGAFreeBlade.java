@@ -8,6 +8,9 @@ package de.orat.math.cga.api;
  * A free vector does not have a position. Given the normal vector n, it can be 
  * calculated as follows: n ∧ e ∞ .
  * 
+ * TODO
+ * ist das tangent/flat/round/etc.?
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAFreeBlade extends CGABlade implements iCGABivector {

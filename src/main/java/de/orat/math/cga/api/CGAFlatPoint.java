@@ -3,6 +3,8 @@ package de.orat.math.cga.api;
 /**
  * Flat points are null vectors wedged with Infinity: p ∧ ∞. 
  * 
+ * Flat points are blades with grade 2. 
+ * 
  * As Dorst et al explain, they are the result of an intersection between a line 
  * and a plane, and they are useful for 
  * describing potential elements within the algebra. For instance, given a dual 
@@ -15,11 +17,9 @@ package de.orat.math.cga.api;
  * circle κ, the contraction with a point q'κ returns a direct plane that goes 
  * through the circle κ and the point q.
  * 
- * grade 2 multivector
- * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAFlatPoint extends CGABlade implements iCGABivector {
+public class CGAFlatPoint extends CGAFlat implements iCGABivector {
     
     public CGAFlatPoint(CGAMultivector m){
         super(m);

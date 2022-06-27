@@ -2,6 +2,7 @@ package de.orat.math.cga.spi;
 
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
+import de.orat.math.ga.basis.Multivector;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
@@ -228,7 +229,12 @@ public interface iCGAMultivector {
         return gp(conjugate()).scalarPart();
     }
     
-    public iCGAMultivector extractGrade(int grade);
+    //public iCGAMultivector extractGrade(int grade);
+    public iCGAMultivector extractGrade(int[] G);
+    
+    default iCGAMultivector extractGrade(int g) {
+        return extractGrade(new int[]{g});
+    }
     
     /**
      * Get the grade of the multivector if it is homogenious, else -1

@@ -4,7 +4,7 @@ package de.orat.math.cga.api;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPoint extends CGABlade implements iCGAQuadvector {
+public class CGADualPoint extends CGADualRound implements iCGAQuadvector {
     
     public CGADualPoint(CGAMultivector m){
         super(m);
@@ -22,5 +22,9 @@ public class CGADualPoint extends CGABlade implements iCGAQuadvector {
     public CGADualPoint(CGASphere sphere1, CGASphere sphere2, 
                         CGASphere sphere3, CGASphere sphere4){
         this(sphere1.op(sphere2).op(sphere3).op(sphere4));
+    }
+    
+    public CGAPoint undual(){
+        return new CGAPoint(impl.undual());
     }
 }
