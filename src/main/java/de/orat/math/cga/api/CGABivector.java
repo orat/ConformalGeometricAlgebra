@@ -3,7 +3,9 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
+ * FIXME
+ * ist CGABivector == CGAFreeBivector
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGABivector extends CGABlade implements iCGABivector {

@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
-import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
@@ -11,7 +10,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * have a weight of 1 (grade 1 multivector). 
  * 
  * In CGA a point can be represented as a round or a flat. The round point is a 
- * dual sphere with radius 0. The round point is a blade with grade 1 
+ * sphere with radius 0. The round point is a blade with grade 1.
  *
  * The round point is used more often in geometric expressions than the flat 
  * point, since it has nice perpendicularity properties. For example, given 
@@ -19,7 +18,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * that is perpendicular to those three points: P ∧ Q ∧ R. This is the
  * circle passing through P, Q and R.
  *
- * They can also be considered as dual spheres with zero radius. By
+ * They can also be considered as spheres with zero radius. By
  * adding to or subtracting from the weight of the ∞ basis, we can create imaginary or
  * real dual spheres of the from σ = p ± δ ∞ where p is the homogenous center point
  * and δ is the radius of the sphere: by adding δ we create imaginary spheres with a
@@ -34,12 +33,12 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPoint extends CGARound implements iCGAVector {
+public class CGARoundPoint extends CGASphere {
     
-    public CGAPoint(CGAMultivector m){
+    public CGARoundPoint(CGAMultivector m){
         super(m);
     }
-    CGAPoint(iCGAMultivector m){
+    CGARoundPoint(iCGAMultivector m){
         super(m);
     }
     
@@ -51,8 +50,22 @@ public class CGAPoint extends CGARound implements iCGAVector {
      * 
      * @param p euclidian normalized point
      */
-    public CGAPoint(Tuple3d p){
+    public CGARoundPoint(Tuple3d p){
         this(create(p, 1d));
+    }
+    
+    /**
+     * A conformal point (grade 1 multivector) by up-projecting an 
+     * euclidian vector into a conformal vector.
+     * 
+     * Inner and outer product null space representation is identical?.<p>
+     * 
+     * @param p euclidian point
+     * @param weight
+     */
+    public CGARoundPoint(Tuple3d p, double weight){
+        this(create(p, weight));
+        if (weight == 1d) isNormalized=true;
     }
     
     /**
@@ -79,13 +92,13 @@ public class CGAPoint extends CGARound implements iCGAVector {
      * @param p second point to determine the distance to
      * @return squared distance to the given point
      */
-    public double distSquare(CGAPoint p){
+    public double distSquare(CGARoundPoint p){
         return -2*(this.normalize()).ip(p.normalize()).scalarPart();
     }
    
     /*public double decomposeSquaredWeight(){
         CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
-        CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
+        CGARoundPoint probePoint = new CGARoundPoint(new Point3d(0d,0d,0d));
         return CGAMultivector.squaredWeight(attitude, probePoint);
     }*/
     
@@ -100,7 +113,9 @@ public class CGAPoint extends CGARound implements iCGAVector {
      * @return normalized point
      */
     @Override
-    public CGAPoint normalize(){
-        return new CGAPoint(this.div(createInf(1d).ip(this).gp(-1d)));
+    public CGARoundPoint normalize(){
+        CGARoundPoint result = new CGARoundPoint(this.div(createInf(1d).ip(this).gp(-1d)));
+        result.isNormalized = true;
+        return result;
     }
 }

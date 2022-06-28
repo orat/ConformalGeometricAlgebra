@@ -8,7 +8,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGACircle extends CGAFlat implements iCGABivector {
+public class CGACircle extends CGARound implements iCGABivector {
     
     public CGACircle(CGAMultivector m){
         super(m);

@@ -8,7 +8,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPointPair extends CGAFlat implements iCGATrivector  {
+public class CGAPointPair extends CGARound implements iCGATrivector  {
     
     public CGAPointPair(CGAMultivector m){
         super(m);

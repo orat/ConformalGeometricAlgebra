@@ -1,6 +1,8 @@
 package de.orat.math.cga.api;
 
 /**
+ * All vectors seems to be weighted spheres.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 interface iCGAVector extends iCGABlade {

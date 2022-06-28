@@ -8,7 +8,10 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * DualFlatPoints?, DualPointPairs, DualLines, DualPlanes, DualCircles all in inner product null space representation.
+ * DualFlatPoints, DualPointPairs?, DualLines, DualPlanes, DualCircles? 
+ * 
+ * all in inner product null space representation.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGADualFlat extends CGAMultivector {
@@ -34,7 +37,7 @@ class CGADualFlat extends CGAMultivector {
     @Override
     public Point3d location(Point3d probe){
         // Determine a normalized dual sphere as location
-        CGAMultivector probeCGA = new CGAPoint(probe);
+        CGAMultivector probeCGA = new CGARoundPoint(probe);
         CGAMultivector m = probeCGA.ip(this).div(this);
         System.out.println("location="+m.toString());
         // the euclidian part is the location in euclidian space

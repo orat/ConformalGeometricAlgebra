@@ -6,7 +6,7 @@ import de.orat.math.cga.api.CGALine;
 import de.orat.math.cga.api.CGALinePair;
 import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.api.CGAPlane;
-import de.orat.math.cga.api.CGAPoint;
+import de.orat.math.cga.api.CGARoundPoint;
 import de.orat.math.cga.api.CGASphere;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA2_METRIC;
@@ -75,6 +75,12 @@ public class Test2 {
         System.out.println("CGA CGA2_METRIC: "+sb.toString());
     }
     
+    public void testBasisBlades(){
+        System.out.println("------------------Basis blades--------------");
+        CGAMultivector m = CGAMultivector.createOrigin(1d).ip(CGAMultivector.createInf(1d));
+        System.out.println("einf*e0="+m.toString());
+        // ist -1 also korrekt!!!!
+    }
     /**
      * n=(0.0,0.0, 1.0)
      * plane=1.0*e3 + 2.0*ei
@@ -91,7 +97,7 @@ public class Test2 {
         System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
         System.out.println("plane="+plane.toString());
         
-        //CGAPoint cp = new CGAPoint(new Point3d(0.0d,0.0d,2.0d));
+        //CGAPoint cp = new CGARoundPoint(new Point3d(0.0d,0.0d,2.0d));
         //System.out.println("probe="+cp.toString());
         FlatAndDirectionParameters flat = plane.decompose(new Point3d(0.1d,0.1d,0d));
         System.out.println("location2=("+String.valueOf(flat.location().x)+", "+
@@ -118,7 +124,7 @@ public class Test2 {
         CGACircle circle = new CGACircle(sphere1.op(sphere2));
         System.out.println("circle="+circle.toString());
         
-        RoundAndTangentParameters decomposition = circle.decompose();
+        RoundAndTangentParameters/*FlatAndDirectionParameters*/ decomposition = circle.decompose();
         Vector3d attitude = decomposition.attitude();
         Point3d location = decomposition.location();
         double squaredSize = decomposition.squaredSize();
@@ -178,13 +184,13 @@ norm(sphere) = 1.9999999999999998
         System.out.println("norm(sphere) = "+String.valueOf(sphere.norm()));
     }
     
-    // scheint zu funktionieren
     public void testPoint(){
         System.out.println("--------------- point -------");
         Point3d p = new Point3d(0.02,0.02,1);
         System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
-        CGAPoint cp = new CGAPoint(p);
+        CGARoundPoint cp = new CGARoundPoint(p, 2d);
         System.out.println("cp="+cp.toString());
+        System.out.println("weight="+String.valueOf(cp.squaredWeight()));
         
         RoundAndTangentParameters decomposed = cp.decompose();
         Vector3d a1 = decomposed.attitude();
@@ -200,13 +206,13 @@ norm(sphere) = 1.9999999999999998
         // weight sollte auch 1 sein
         // weight=0.9999999999999976
         //CGAMultivector attitude = cp.determineDirectionFromTangentAndRoundObjectsAsMultivector();
-        //CGAPoint probePoint = new CGAPoint(new Point3d(0d,0d,0d));
+        //CGAPoint probePoint = new CGARoundPoint(new Point3d(0d,0d,0d));
         //double weight = CGAMultivector.squaredWeight(attitude, probePoint);
         double weight = cp.squaredWeight();
         System.out.println("weight="+String.valueOf(weight));
         Point3d p2 = new Point3d(2.02,0.02,1);
         System.out.println("p2=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
-        CGAPoint cp2 = new CGAPoint(p2);
+        CGARoundPoint cp2 = new CGARoundPoint(p2);
         System.out.println("cp2="+cp.toString());
         System.out.println("distSquare="+String.valueOf(cp2.distSquare(cp)));
         
@@ -221,10 +227,10 @@ norm(sphere) = 1.9999999999999998
         System.out.println("distsquare="+String.valueOf(p2.distanceSquared(p1)));
         
         // die beiden Multivektoren brauchen scheinbar nicht normalisiert zu werden
-        CGAPoint cp1 = new CGAPoint(p1);
+        CGARoundPoint cp1 = new CGARoundPoint(p1);
         System.out.println("cp1="+cp1.toString());
         //System.out.println("cp1.unit="+cp1.unit().toString(CGA1Metric.baseVectorNames));
-        CGAPoint cp2 = new CGAPoint(p2);
+        CGARoundPoint cp2 = new CGARoundPoint(p2);
         System.out.println("cp2="+cp2.toString());
         
         double result = CGA1Metric.squareDistanceBetweenPoints(cp1, cp2);
@@ -239,12 +245,12 @@ norm(sphere) = 1.9999999999999998
         
         Point3d p1 = new Point3d(0.02,0.02,1);
         System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
-        CGAPoint cp1 = new CGAPoint(p1);
+        CGARoundPoint cp1 = new CGARoundPoint(p1);
         System.out.println("cp1="+cp1);
         
         Point3d p2 = new Point3d(1,0.02,1);
         System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
-        CGAPoint cp2 = new CGAPoint(p2);
+        CGARoundPoint cp2 = new CGARoundPoint(p2);
         System.out.println("cp2="+cp2);
         
         Vector3d n = new Vector3d(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z);
@@ -282,10 +288,10 @@ norm(sphere) = 1.9999999999999998
         Multivector ni = Multivector.createBasisVector(4);*/
         
         Point3d p1 = new Point3d(0.02,0.02,1);
-        CGAPoint cp1 = new CGAPoint(p1);
+        CGARoundPoint cp1 = new CGARoundPoint(p1);
         
         Point3d p2 = new Point3d(1,0.02,1);
-        CGAPoint cp2 = new CGAPoint(p2);
+        CGARoundPoint cp2 = new CGARoundPoint(p2);
         
         Vector3d n1 = new Vector3d(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z);
         System.out.println("n1=("+String.valueOf(n1.x)+","+String.valueOf(n1.y)+","+String.valueOf(n1.z)+")");

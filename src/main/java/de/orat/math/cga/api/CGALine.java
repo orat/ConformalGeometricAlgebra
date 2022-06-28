@@ -35,7 +35,7 @@ public class CGALine extends CGAFlat implements iCGABivector {
         this(pointPair.op(createInf(1d)));
     }
      
-    public CGALine(CGAPoint point, CGAAttitudeVector direction){
+    public CGALine(CGARoundPoint point, CGAAttitudeVector direction){
         this(point.op(direction));
     }
    

@@ -8,7 +8,7 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPointPair extends CGADualFlat implements iCGABivector {
+public class CGADualPointPair extends CGADualRound implements iCGABivector {
     
     public CGADualPointPair(CGAMultivector m){
         super(m);
@@ -23,7 +23,7 @@ public class CGADualPointPair extends CGADualFlat implements iCGABivector {
      * @param point1
      * @param point2
      */
-    public CGADualPointPair(CGAPoint point1, CGAPoint point2){
+    public CGADualPointPair(CGARoundPoint point1, CGARoundPoint point2){
         this(point1.op(point2));
     }
     
@@ -34,7 +34,7 @@ public class CGADualPointPair extends CGADualFlat implements iCGABivector {
      * @param point2
      */
     public CGADualPointPair(Point3d point1, Point3d point2){
-        this((new CGAPoint(point1)).op(new CGAPoint(point2)));
+        this((new CGARoundPoint(point1)).op(new CGARoundPoint(point2)));
     }
     
     public CGAPointPair undual(){

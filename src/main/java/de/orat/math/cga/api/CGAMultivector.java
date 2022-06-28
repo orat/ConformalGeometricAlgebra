@@ -54,11 +54,15 @@ public class CGAMultivector {
     }
     /**
      * Inf encodes the metric of an Euclidean space (projectively represented space). 
+     * 
      * For a geometrical CGA-round point this factor represents the distance from 
      * that point to the origin.
      * 
+     * This basis blade is also called "reciprocal null vector" together with the
+     * basis vector representing the origin (createOrigin()).
+     * 
      * @param scale
-     * @return 
+     * @return base vector representing the point at infinity
      */
     public static CGAMultivector createInf(double scale){
         return new CGAMultivector(defaultInstance.impl.createInf(scale));
@@ -145,7 +149,7 @@ public class CGAMultivector {
         // see errata, dual tangend/round formula Dorst2007
         CGAMultivector einf = CGAMultivector.createInf(1d);
         CGAMultivector einfM = CGAMultivector.createInf(-1d);
-        CGAMultivector result = einfM.ip(this.undual()).op(einf);
+        CGAMultivector result = einfM.ip(dual()).op(einf);
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;
     }
@@ -163,7 +167,7 @@ public class CGAMultivector {
         return squaredWeight(new Point3d(0d,0d,0d));
     }
     public double squaredWeight(Point3d probePoint){
-        CGAPoint probePointCGA = new CGAPoint(probePoint);
+        CGARoundPoint probePointCGA = new CGARoundPoint(probePoint);
         System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
         return squaredWeight(attitudeIntern(), probePointCGA);
     } 
@@ -430,6 +434,8 @@ public class CGAMultivector {
     }
     public CGAMultivector normalize(){
         return new CGAMultivector(impl.normalize());
+        // alternativ
+        //return div(createInf(-1d).ip(this));
     }
     public CGAMultivector gradeInversion(){
         return new CGAMultivector(impl.gradeInversion());

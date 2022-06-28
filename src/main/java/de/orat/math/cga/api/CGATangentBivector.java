@@ -30,8 +30,8 @@ public class CGATangentBivector extends CGATangent implements iCGATrivector {
      * @return bivector representing a tangend vector
      */
     private static CGATangentBivector createTangentBivector(Point3d p, Vector3d u){
-        CGAMultivector cp = new CGAPoint(p);
-        return new CGATangentBivector(cp.ip(cp.op(new CGAPoint(u)).op(createInf(1d))));
+        CGAMultivector cp = new CGARoundPoint(p);
+        return new CGATangentBivector(cp.ip(cp.op(new CGARoundPoint(u)).op(createInf(1d))));
     }
     
 }

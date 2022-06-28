@@ -33,7 +33,7 @@ class CGAFlat extends CGABlade {
     }   
     @Override
     public Point3d location(Point3d probe){
-        CGAMultivector probeCGA = new CGAPoint(probe);
+        CGAMultivector probeCGA = new CGARoundPoint(probe);
         CGAMultivector m = probeCGA.op(this).div(this);//.extractGrade(1);
         // location_cga=2.0000000000000004*eo + 0.0*eo^e3^ei
         System.out.println("location_cga="+m.toString());

@@ -6,7 +6,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Rounds are points, circle, spheres and point-pairs, all in inner product
+ * Rounds are RoundPoints, circle, spheres and point-pairs, all in inner product
  * null space representation.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

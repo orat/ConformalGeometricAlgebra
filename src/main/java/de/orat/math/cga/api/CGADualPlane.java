@@ -6,8 +6,7 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- *
- * (Dual) plane in outer product null space representation (grade 4 multivector).
+  * (Dual) plane in outer product null space representation (grade 4 multivector).
  * 
  * TODO gehört der folgende Text und die impl der Methode nicht nach CGAPlane?
  * Given two null points p and q, we can construct the dual plane in between them 
@@ -32,7 +31,7 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
      * @param p2 second point in inner product null space representation
      * @param p3 third point in inner product null space representation
      */
-    public CGADualPlane(CGAPoint p1, CGAPoint p2, CGAPoint p3){
+    public CGADualPlane(CGARoundPoint p1, CGARoundPoint p2, CGARoundPoint p3){
         this(p1.op(p2).op(p3).op(createInf(1d)));
     }
     
@@ -43,7 +42,7 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
      * @param p1 point 1
      * @param p2 point 2
      */
-    public CGADualPlane(CGAPoint p1, CGAPoint p2){
+    public CGADualPlane(CGARoundPoint p1, CGARoundPoint p2){
         this(createInf(1d).op((p1.op(p2)).dual()));
     }
     
@@ -59,8 +58,8 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
     }
     
     private static CGAMultivector create(Point3d p, Vector3d n){
-        CGAMultivector cp = new CGAPoint(p);
-        CGAMultivector cn = new CGAPoint(n);
+        CGAMultivector cp = new CGARoundPoint(p);
+        CGAMultivector cn = new CGARoundPoint(n);
         return new CGAMultivector(cp.ip(cn.op(createInf(1d))).impl);
     }
     

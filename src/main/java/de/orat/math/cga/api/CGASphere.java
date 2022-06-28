@@ -7,9 +7,17 @@ import de.orat.math.cga.spi.iCGAMultivector;
 /**
  * Sphere in inner product null space representation (grade 1 multivector).
  * 
+ * A sphere with radius=0 is a point.
+ * 
+ * TODO
+ * sollte dann nicht CGAPoint von CGASphere erben und die CGASphere-Konstruktoren
+ * so überschreiben, dass nur noch r=0 erlaubt ist?
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGASphere extends CGARound implements iCGAVector {
+    
+    boolean isNormalized = false;
     
     public CGASphere(CGAMultivector m){
         super(m);
@@ -25,13 +33,28 @@ public class CGASphere extends CGARound implements iCGAVector {
      * 
      * Dorst2007 page 363 == Hildenbrand1998 page 29
      * 
-     * @param location multivector representing a location
+     * @param location multivector representing a location as normalized point
      * @param r radius of the sphere to CGAMultivector
      */
-    public CGASphere(CGAPoint location, double r){
+    public CGASphere(CGARoundPoint location, double r){
         this(location.sub(createInf(0.5*r*r)));
+        isNormalized = true;
     }
-    
+    /**
+     * Create sphere in inner product null space representation 
+     * (grade 1 multivector).
+     * 
+     * @param location
+     * @param r
+     * @param weight 
+     */
+    public CGASphere(CGARoundPoint location, double r, double weight){
+        this(location.sub(createInf(0.5*r*r)));
+        if (weight != 1) {
+            isNormalized = false;
+            gp(weight);
+        }
+    }
     /**
      * Create (dual, real) sphere in inner product null space representation 
      * (grade 1 multivector).
@@ -44,11 +67,17 @@ public class CGASphere extends CGARound implements iCGAVector {
      *          sphere. Use the method createImaginarySphere() instead.)
      */
     public CGASphere(Point3d o, double r){
-        this(new CGAPoint(o), r);
+        this(new CGARoundPoint(o), r);
         if (r < 0) throw new IllegalArgumentException("Negative radius is not allowed!");
+        isNormalized = true;
     }
+    
     @Override
     public CGADualSphere dual(){
         return new CGADualSphere(impl.dual());
+    }
+    
+    public boolean isNormalized(){
+        return isNormalized;
     }
 }
