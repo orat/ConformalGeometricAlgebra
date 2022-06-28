@@ -9,10 +9,6 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * A sphere with radius=0 is a point.
  * 
- * TODO
- * sollte dann nicht CGAPoint von CGASphere erben und die CGASphere-Konstruktoren
- * so überschreiben, dass nur noch r=0 erlaubt ist?
- * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGASphere extends CGARound implements iCGAVector {
@@ -37,8 +33,14 @@ public class CGASphere extends CGARound implements iCGAVector {
      * @param r radius of the sphere to CGAMultivector
      */
     public CGASphere(CGARoundPoint location, double r){
-        this(location.sub(createInf(0.5*r*r)));
-        isNormalized = true;
+        this(create(location, r));
+    }
+    private static CGAMultivector create(CGARoundPoint location, double r){
+        if (!location.isNormalized()) throw new IllegalArgumentException("The given location is not normalized!");
+        CGARoundPoint result = new CGARoundPoint(location);
+        result.isNormalized = true;
+        result.sub(createInf(0.5*r*r));
+        return result;
     }
     /**
      * Create sphere in inner product null space representation 
@@ -53,7 +55,7 @@ public class CGASphere extends CGARound implements iCGAVector {
         if (weight != 1) {
             isNormalized = false;
             gp(weight);
-        }
+        } else isNormalized = true;
     }
     /**
      * Create (dual, real) sphere in inner product null space representation 
@@ -68,7 +70,7 @@ public class CGASphere extends CGARound implements iCGAVector {
      */
     public CGASphere(Point3d o, double r){
         this(new CGARoundPoint(o), r);
-        if (r < 0) throw new IllegalArgumentException("Negative radius is not allowed!");
+        //if (r < 0) throw new IllegalArgumentException("Negative radius is not allowed!");
         isNormalized = true;
     }
     

@@ -52,6 +52,7 @@ public class CGARoundPoint extends CGASphere {
      */
     public CGARoundPoint(Tuple3d p){
         this(create(p, 1d));
+        isNormalized = true;
     }
     
     /**
@@ -77,11 +78,12 @@ public class CGARoundPoint extends CGASphere {
      */
     private static CGAMultivector create(Tuple3d p, double weight){
         // old version
-        return createOrigin(1d)
+        CGAMultivector result = (createOrigin(1d)
                 .add(createEx(p.x))
                 .add(createEy(p.y))
                 .add(createEz(p.z))
-                .add(createInf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z))).gp(weight);
+                .add(createInf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z)))).gp(weight);
+        return result;
         //CGAVectorE3 x = new CGAVectorE3(p);
         //return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createInf(1d))).add(createOrigin(1d));
     }

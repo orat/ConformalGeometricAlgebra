@@ -41,6 +41,18 @@ class CGARound extends CGABlade  {
     }
         
     /**
+     * following Hildenbrand1998
+     * 
+     * @return location of the round
+     */
+    public Point3d location2(){
+        CGAMultivector result = this.gp(CGAMultivector.createInf(1d)).gp(this);
+        double[] vector = result.impl.extractCoordinates(1);
+        int index = result.impl.getEStartIndex();
+        return new Point3d(vector[index++], vector[index++], vector[index]);
+    }
+    
+    /**
      * Squared size (=squared radius only for round, - squared radius for dual round).
      * 
      * @return squared size
@@ -49,7 +61,8 @@ class CGARound extends CGABlade  {
         return squaredSize(this);
     }
     static double squaredSize(CGAMultivector m){
-        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr().gp(2d));
+        //gp(2) only in the Hildebrand2004 paper but not in Dorst2007 p.407
+        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr().gp(2d)).gp(-1d);
         System.out.println("squaredSize/radiusSquared="+result.toString());
         return result.scalarPart();
     }
@@ -57,21 +70,4 @@ class CGARound extends CGABlade  {
        return new RoundAndTangentParameters(attitude(), 
                 location(), squaredSize());
     }
-    
-    
-    /*
-     /**
-     * Decompose round object.
-     * 
-     * Dorst2007
-     * 
-     * @return attitude, location and squared size for multivectors corresponding to rounds in
-     * inner product null space representaton
-     */
-    /*protected RoundAndTangentParameters decomposeRound(){
-        // (-) because the radius for dual round corresponding to Dorst2007 is needed to
-        // get the value corresponding to inner product null space representation
-        return new RoundAndTangentParameters(attitudeFromTangentAndRound(), 
-                determineLocationFromTangentAndRound(), -roundSquaredSize());
-    }*/
 }

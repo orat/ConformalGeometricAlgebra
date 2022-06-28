@@ -143,7 +143,7 @@ location1=-1.0000000000000004*eo - 0.02000000000000001*e1 - 0.02000000000000001*
 location=1.4996000000000014*eo + 0.02999200000000003*e1 + 0.02999200000000003*e2 + 1.4996000000000014*e3 - 0.12400008000000018*ei
 radius2 = 2.061455835083547
 radius2squared = 4.2496001600000035
-weight=0.9999999999999989
+squaredWeight=0.9999999999999989
 location = (0.02999200000000003, 0.02999200000000003, 1.4996000000000014)
 -einf*sphere = 0.9999999999999996
 norm(sphere) = 1.9999999999999998
@@ -157,20 +157,20 @@ norm(sphere) = 1.9999999999999998
         CGASphere sphere = new CGASphere(p, radius);
         System.out.println("sphere="+sphere.toString());
         
-        // radius = 2.061455835083547 das ist auch falsch
+        // radius = 1.4576694001041532 das ist auch falsch, sollte 2 sein
         RoundAndTangentParameters rp = sphere.decompose();
         System.out.println("radius = "+String.valueOf(Math.sqrt(Math.abs(rp.squaredSize()))));
+        System.out.println("radius2squared = "+String.valueOf(Math.abs(rp.squaredSize())));
         
-        // radius = 1.7318198520631412 das ist falsch
-        RoundAndTangentParameters rp2 = sphere.decompose();
-        System.out.println("radius2 = "+String.valueOf(Math.sqrt(Math.abs(rp2.squaredSize()))));
-        System.out.println("radius2squared = "+String.valueOf(Math.abs(rp2.squaredSize())));
+        // nach Hildenbrand1998
+        CGAMultivector m = sphere.gp(CGAMultivector.createInf(1d)).gp(sphere);
+        System.out.println("sphere center from sandwhich product = "+m.toString());
         
-        // weight bestimmen
+        // squaredWeight bestimmen
         double weight = //CGAMultivector.decomposeWeight(sphere.determineDirectionFromTangentAndRoundObjectsAsMultivector(), 
                 //CGAMultivector.createOrigin(1d));
                 sphere.squaredWeight();
-        // weight=0.9999999999999989 richtig
+        // squaredWeight=0.9999999999999989 richtig
         System.out.println("weight="+String.valueOf(weight));
         
         // origin = (0.02000000000000001, 0.02000000000000001, 1.0000000000000004) stimmt
@@ -190,32 +190,28 @@ norm(sphere) = 1.9999999999999998
         System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
         CGARoundPoint cp = new CGARoundPoint(p, 2d);
         System.out.println("cp="+cp.toString());
-        System.out.println("weight="+String.valueOf(cp.squaredWeight()));
+        // squared squaredWeight = 4, korrekt 
+        System.out.println("squaredWeight="+String.valueOf(cp.squaredWeight()));
         
         RoundAndTangentParameters decomposed = cp.decompose();
         Vector3d a1 = decomposed.attitude();
         System.out.println("attitude=("+String.valueOf(a1.x)+", "+String.valueOf(a1.y)+", "+String.valueOf(a1.z)+")");
         Point3d p1 = decomposed.location();
         System.out.println("location=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
-        // location=(-0.010008000000000005,-0.010008000000000005,-0.5004000000000002)
-        // falsch, sollte 0.02,0.02, 1.0 sein
         // sollte aber 0 sein.
-        // squaredSize=-2.2512001600000007
         double squaredSize = decomposed.squaredSize();
         System.out.println("squaredSize="+String.valueOf(squaredSize));
-        // weight sollte auch 1 sein
-        // weight=0.9999999999999976
         //CGAMultivector attitude = cp.determineDirectionFromTangentAndRoundObjectsAsMultivector();
         //CGAPoint probePoint = new CGARoundPoint(new Point3d(0d,0d,0d));
-        //double weight = CGAMultivector.squaredWeight(attitude, probePoint);
-        double weight = cp.squaredWeight();
-        System.out.println("weight="+String.valueOf(weight));
+        //double squaredWeight = CGAMultivector.squaredWeight(attitude, probePoint);
+        double squaredWeight = cp.squaredWeight();
+        System.out.println("squaredWeight="+String.valueOf(squaredWeight));
         Point3d p2 = new Point3d(2.02,0.02,1);
-        System.out.println("p2=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
+        System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
         CGARoundPoint cp2 = new CGARoundPoint(p2);
-        System.out.println("cp2="+cp.toString());
+        System.out.println("cp2="+cp2.toString());
         System.out.println("distSquare="+String.valueOf(cp2.distSquare(cp)));
-        
+        // Abstände scheinen zu stimmen
     }
     
     // scheint zu funktionieren

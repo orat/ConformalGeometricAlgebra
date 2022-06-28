@@ -156,12 +156,18 @@ public class CGAMultivector {
     protected CGAMultivector attitudeFromDualTangentAndDualRound(){
         // see errata, dual tangend/round formula Dorst2007
         CGAMultivector einf = CGAMultivector.createInf(1d);
-        CGAMultivector result = einf.ip(this).op(einf).gp(-1d);
+        CGAMultivector result = (einf.ip(this)).gp(-1d).op(einf);
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;
     }
+    /**
+     * Determines location from tangent and round objects and also from its dual.
+     * 
+     * @return location
+     */
     protected CGAMultivector locationFromTangendAndRound(){
-        return this.div(CGAMultivector.createInf(1d).ip(this));
+        // corresponds to the errata of the book Dorst2007
+        return this.div(CGAMultivector.createInf(-1d).ip(this));
     }
     public double squaredWeight(){
         return squaredWeight(new Point3d(0d,0d,0d));

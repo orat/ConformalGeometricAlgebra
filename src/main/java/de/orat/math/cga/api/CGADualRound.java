@@ -27,9 +27,9 @@ class CGADualRound extends CGAMultivector {
     /**
      * Squared size or (-)radius squared.
      * 
-     * @return 
+     * @return squared size
      */
     public double squaredSize(){
-        return CGARound.squaredSize(this);
+        return -CGARound.squaredSize(this);
     }
 }

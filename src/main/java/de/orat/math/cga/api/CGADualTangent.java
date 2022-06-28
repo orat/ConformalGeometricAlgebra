@@ -8,9 +8,9 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGATangent extends CGAMultivector {
+class CGADualTangent extends CGAMultivector {
     
-    CGATangent(CGAMultivector m){
+    CGADualTangent(CGAMultivector m){
         super(m.impl);
     }
     
@@ -21,7 +21,7 @@ class CGATangent extends CGAMultivector {
     }
     @Override
     protected CGAMultivector attitudeIntern(){
-        return attitudeFromTangentAndRound();
+        return attitudeFromDualTangentAndDualRound();
     }
     @Override
     public Point3d location(Point3d probe){
@@ -51,7 +51,7 @@ class CGATangent extends CGAMultivector {
     }
     
     @Override
-    public CGATangent inverse(){
+    public CGADualTangent inverse(){
         throw new RuntimeException("A tangent has no inverse!");
     }
 }
