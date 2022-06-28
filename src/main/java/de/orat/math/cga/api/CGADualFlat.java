@@ -8,7 +8,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
+ * DualFlatPoints?, DualPointPairs, DualLines, DualPlanes, DualCircles all in inner product null space representation.
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGADualFlat extends CGAMultivector {

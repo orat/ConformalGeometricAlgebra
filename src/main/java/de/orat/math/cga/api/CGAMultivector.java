@@ -152,7 +152,7 @@ public class CGAMultivector {
     protected CGAMultivector attitudeFromDualTangentAndDualRound(){
         // see errata, dual tangend/round formula Dorst2007
         CGAMultivector einf = CGAMultivector.createInf(1d);
-        CGAMultivector result = (new CGAScalar(-1)).gp(einf.ip(this).op(einf));
+        CGAMultivector result = einf.ip(this).op(einf).gp(-1d);
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;
     }

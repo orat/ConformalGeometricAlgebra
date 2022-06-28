@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
-import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 
 /**
  *
@@ -9,7 +8,7 @@ import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGACircle extends CGARound implements iCGABivector {
+public class CGACircle extends CGAFlat implements iCGABivector {
     
     public CGACircle(CGAMultivector m){
         super(m);

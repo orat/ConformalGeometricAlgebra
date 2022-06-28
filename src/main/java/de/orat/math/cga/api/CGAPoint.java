@@ -47,24 +47,28 @@ public class CGAPoint extends CGARound implements iCGAVector {
      * A conformal point (grade 1 multivector) by up-projecting an 
      * euclidian vector into a conformal vector.
      * 
-     * Inner and outer product null space representation is identical.<p>
+     * Inner and outer product null space representation is identical?.<p>
      * 
-     * Multiplication of the multivector by double alpha possible.<p>
-     *
-     * 
-     * @param p euclidian point
+     * @param p euclidian normalized point
      */
     public CGAPoint(Tuple3d p){
-        this(create(p));
+        this(create(p, 1d));
     }
     
-    private static CGAMultivector create(Tuple3d p){
+    /**
+     * Create point with given weight.
+     * 
+     * @param p euclidian point/vector
+     * @param weight
+     * @return normalized point
+     */
+    private static CGAMultivector create(Tuple3d p, double weight){
         // old version
         return createOrigin(1d)
                 .add(createEx(p.x))
                 .add(createEy(p.y))
                 .add(createEz(p.z))
-                .add(createInf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z)));
+                .add(createInf(0.5*(p.x*p.x+p.y*p.y+p.z*p.z))).gp(weight);
         //CGAVectorE3 x = new CGAVectorE3(p);
         //return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createInf(1d))).add(createOrigin(1d));
     }
@@ -97,6 +101,6 @@ public class CGAPoint extends CGARound implements iCGAVector {
      */
     @Override
     public CGAPoint normalize(){
-        return new CGAPoint(this.div((new CGAScalar(-1d)).gp(createInf(1d)).ip(this)));
+        return new CGAPoint(this.div(createInf(1d).ip(this).gp(-1d)));
     }
 }

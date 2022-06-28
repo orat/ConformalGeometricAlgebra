@@ -20,7 +20,7 @@ public class CGARotor extends CGAMultivector {
     }
     
     public CGARotor(CGABivector B, double theta){
-        this((new CGAScalar(-theta/2d)).gp(B).exp());
+        this(B.gp(-1d).exp());
     }
     
     /**

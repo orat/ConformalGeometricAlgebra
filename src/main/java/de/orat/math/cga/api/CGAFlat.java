@@ -7,7 +7,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
+ * FlatPoints, PointPairs, Lines, Planes, all in inner product null space representation.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGAFlat extends CGABlade {

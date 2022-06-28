@@ -6,7 +6,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Rounds are points, circle, spheres and point-pairs.
+ * Rounds are points, circle, spheres and point-pairs, all in inner product
+ * null space representation.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -34,7 +35,6 @@ class CGARound extends CGABlade  {
     @Override
     public Point3d location(){
         CGAMultivector result = locationFromTangendAndRound();
-        //TODO
         double[] vector = result.impl.extractCoordinates(1);
         int index = result.impl.getEStartIndex();
         return new Point3d(vector[index++], vector[index++], vector[index]);
@@ -49,7 +49,7 @@ class CGARound extends CGABlade  {
         return squaredSize(this);
     }
     static double squaredSize(CGAMultivector m){
-        CGAMultivector result = m.gp(m.gradeInversion()).div((new CGAScalar(2d)).gp((createInf(1d).ip(m)).sqr()));
+        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr().gp(2d));
         System.out.println("squaredSize/radiusSquared="+result.toString());
         return result.scalarPart();
     }
