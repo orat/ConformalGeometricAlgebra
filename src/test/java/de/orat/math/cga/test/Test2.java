@@ -2,6 +2,7 @@ package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGACircle;
 import de.orat.math.cga.api.CGADualLine;
+import de.orat.math.cga.api.CGADualSphere;
 import de.orat.math.cga.api.CGALine;
 import de.orat.math.cga.api.CGALinePair;
 import de.orat.math.cga.api.CGAMultivector;
@@ -133,7 +134,7 @@ public class Test2 {
         System.out.println("location = "+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+String.valueOf(location.z));
     }
     /**
-     * p=(0.02,0.02,1.0)
+     * p1=(0.02,0.02,1.0)
 radius=2.0
 sphere=1.0*eo + 0.02*e1 + 0.02*e2 + 1.0*e3 - 1.4996*ei
 location1=-1.0000000000000004*eo - 0.02000000000000001*e1 - 0.02000000000000001*e2 - 1.0000000000000004*e3 + 1.4996000000000007*ei
@@ -150,11 +151,26 @@ norm(sphere) = 1.9999999999999998
      */
     public void testSphere(){
         System.out.println("----------------- sphere -----");
-        Point3d p = new Point3d(0.02,0.02,1);
-        System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
+        Point3d p1 = new Point3d(1.0,0.0,1d);
+        System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        CGARoundPoint cgaPoint = new CGARoundPoint(p1);
+        System.out.println("p_cga="+cgaPoint.toString());
+        Point3d p2 = new Point3d(0,1,1);
+        Point3d p3 = new Point3d(0,0,0);
+        Point3d p4 = new Point3d(0,-1,1);
+        CGADualSphere cgaDualSphere = new CGADualSphere(p1,p2,p3,p4);
+        System.out.println("cgaDualSphere="+cgaDualSphere.toString());
+        CGASphere cgaSphere = cgaDualSphere.undual();
+        System.out.println("cgaSphere="+cgaSphere.toString());
+        RoundAndTangentParameters rp1 = cgaDualSphere.decompose(); // squaredSize=-0.5
+        System.out.println("radius = "+String.valueOf(Math.sqrt(Math.abs(rp1.squaredSize())))); // 0.707
+        System.out.println("radius2squared = "+String.valueOf(Math.abs(rp1.squaredSize()))); // 0.5
+        System.out.println("location1 = ("+String.valueOf(rp1.location().x)+", "+
+                String.valueOf(rp1.location().y)+", "+String.valueOf(rp1.location().z)+")");
         double radius = 2d;
-        System.out.println("radius="+String.valueOf(radius));
-        CGASphere sphere = new CGASphere(p, radius);
+        System.out.println("radius1="+String.valueOf(radius));
+        
+        CGASphere sphere = new CGASphere(p1, radius);
         System.out.println("sphere="+sphere.toString());
         
         // radius = 1.4576694001041532 das ist auch falsch, sollte 2 sein
@@ -180,7 +196,7 @@ norm(sphere) = 1.9999999999999998
         // Dorst2007: -einf*P = 1 stimmt? soll das die Normierung sein?
         System.out.println("-einf*sphere = "+
                 String.valueOf(-CGAMultivector.createInf(1d).scp(sphere)));
-        // norm(p) = 2 ist sollte das nicht 1 sein?
+        // norm(p1) = 2 ist sollte das nicht 1 sein?
         System.out.println("norm(sphere) = "+String.valueOf(sphere.norm()));
     }
     

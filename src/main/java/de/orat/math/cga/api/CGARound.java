@@ -34,7 +34,7 @@ class CGARound extends CGABlade  {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangendAndRound();
+        CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
         double[] vector = result.impl.extractCoordinates(1);
         int index = result.impl.getEStartIndex();
         return new Point3d(vector[index++], vector[index++], vector[index]);
@@ -60,10 +60,18 @@ class CGARound extends CGABlade  {
     public double squaredSize(){
         return squaredSize(this);
     }
-    static double squaredSize(CGAMultivector m){
-        //gp(2) only in the Hildebrand2004 paper but not in Dorst2007 p.407
-        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr().gp(2d)).gp(-1d);
-        System.out.println("squaredSize/radiusSquared="+result.toString());
+    /**
+     * Determination of the squared size. This is the radiusSquared for a sphere.
+     * 
+     * ok für dualSphere
+     * 
+     * @param m round or dual round object represented by a multivector
+     * @return squared size/radius squared
+     */
+    static double squaredSize(CGABlade m){
+        //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in Dorst2007 p.407
+        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr()).gp(-1d);
+        //System.out.println("squaredSize/radiusSquared="+result.toString());
         return result.scalarPart();
     }
     public RoundAndTangentParameters decompose(){

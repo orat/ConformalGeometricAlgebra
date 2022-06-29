@@ -169,11 +169,27 @@ public class CGAMultivector {
     /**
      * Determines location from tangent and round objects and also from its dual.
      * 
-     * @return location
+     * @return location represented by a normalized sphere
+     */
+    protected CGAMultivector locationFromTangendAndRoundAsNormalizedSphere(){
+        // corresponds to the errata of the book Dorst2007
+        CGAMultivector inf = createOrigin(1d).gp(2d); //createInf(1d);
+        
+        CGAMultivector result = this.div(inf.ip(this)).gp(-1d);
+        System.out.println("locationFromTangentAndRound="+result.toString());
+        return result;
+    }
+    /**
+     * Determines location from tangend and round objects and also from its dual.
+     * 
+     * @return location in the euclidian part directly.
      */
     protected CGAMultivector locationFromTangendAndRound(){
         // corresponds to the errata of the book Dorst2007
-        return this.div(CGAMultivector.createInf(-1d).ip(this));
+        CGAMultivector inf = createInf(1d);
+        CGAMultivector result = (this.gp(inf).gp(this)).div((inf.ip(this)).sqr()).gp(-0.5d);
+        System.out.println("locationFromTangentAndRound2="+result.toString());
+        return result;
     }
     public double squaredWeight(){
         return squaredWeight(new Point3d(0d,0d,0d));
@@ -189,6 +205,11 @@ public class CGAMultivector {
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not implemented. Available for derivative classes only!");
     }
+    /**
+     * Determination of location based on default probe point at (0,0,0).
+     * 
+     * @return location based on probe point = (0,0,0)
+     */
     public Point3d location(){
         return location(new Point3d(0d,0d,0d));
     }

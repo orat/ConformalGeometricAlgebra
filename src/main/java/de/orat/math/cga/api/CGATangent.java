@@ -29,7 +29,7 @@ class CGATangent extends CGAMultivector {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangendAndRound();
+        CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
         System.out.println("location="+result.toString());
         double[] vector = result.impl.extractCoordinates(1);
         int index = result.impl.getEStartIndex();

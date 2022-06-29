@@ -57,6 +57,7 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
         this((new CGARoundPoint(p1)).op((new CGARoundPoint(p2))).op((new CGARoundPoint(p3))).op((new CGARoundPoint(p4))));
     }
     
+    @Override
     public CGASphere undual(){
         return new CGASphere(impl.undual());
     }
