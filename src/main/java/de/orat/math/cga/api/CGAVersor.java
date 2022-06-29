@@ -16,6 +16,9 @@ public class CGAVersor extends CGAMultivector {
         super(impl);
     }
     
+    public CGAMultivector transform(CGAMultivector m){
+         return this.gp(m).gp(this.reverse());
+    }
     public boolean isVersor(){
        return true;
     }

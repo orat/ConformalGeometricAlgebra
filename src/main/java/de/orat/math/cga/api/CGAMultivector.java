@@ -9,6 +9,12 @@ import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
+ * Containment:
+ * x element of A, grade>=1 => x^A=0=x.A*
+ * 
+ * Perpendicularity:
+ * grade(A)<=grade(B),A upright B => A.B=0=A^B*
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAMultivector {
@@ -265,19 +271,29 @@ public class CGAMultivector {
      * implementation that works even if the pseudoscalar of the subspace in 
      * consideration is degenerate. 
      * 
-     * It is defined for any k-vector x of an 
-     * n-dimensional subspace as the n-k vector y containing all the basis
-     * vectors that are not in x. For non-degenerate metrics, you can use 
-     * multiplication with the pseudoscalar if so desired (although it will be 
-     * less efficient). This is not possible for CGA because of its degenerate
-     * metric.
+     * Keep in mind: Different to PGA direct and dual objects transform the same 
+     * way!
      * 
-     * @return the dual of this multivector
+     * It is defined for any k-vector x of an n-dimensional subspace as the n-k 
+     * vector y containing all the basis vectors that are not in x. For 
+     * non-degenerate metrics, you can use multiplication with the pseudoscalar 
+     * if so desired (although it will be less efficient). This is not possible 
+     * for CGA because of its degenerate metric.
+     * 
+     * @return the dual of this multivector (representing a direct/non-dual object)
+     * with the correct sign
      */
     public CGAMultivector dual(){
         throw new RuntimeException("dual() is implemented only for derivative objects!");
         //return new CGAMultivector(impl.dual());
     }
+    /**
+     * This method is needed, because twice application of the dual operation can 
+     * produce a sign, depending on the dimensionality. This is the case for CGA.
+     * 
+     * @return the undual of the multivector (representing a dual object) with 
+     * the correct sign.
+     */
     public CGAMultivector undual(){
         throw new RuntimeException("undual() is implemented only for derivative objects!");
         //return new CGAMultivector(impl.undual());
@@ -373,6 +389,14 @@ public class CGAMultivector {
      * any extensions or modifications. The geometric meaning is usually 
      * formulated as the dot product between x and y gives the orthogonal
      * complement in y of the projection of x onto y.<p>
+     * 
+     * It can be used for determination of:
+     * - the Euclidian distance bewtween two points
+     * - the distance between a point an plane
+     * - the decision whether a point is inside or outside of a sphere
+     * 
+     * The inner product is identical to the scalar product if the arguments
+     * are Euclid vectors.
      * 
      * @param y right side argument of the inner product
      * @return inner product of this with a 'y'

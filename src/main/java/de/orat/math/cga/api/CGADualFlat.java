@@ -12,6 +12,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * all in inner product null space representation.
  * 
+ * A dual flat point has "hairs" extending to infinity
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGADualFlat extends CGAMultivector {

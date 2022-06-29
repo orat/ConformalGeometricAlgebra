@@ -11,17 +11,26 @@ import org.jogamp.vecmath.Quat4d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGARotor extends CGAMultivector {
+public class CGARotor extends CGAVersor {
     
     public CGARotor(CGAMultivector m){
         super(m.impl);
         //TODO
-        // test auf o,2 blades
+        // test auf 0,2 blades
     }
     
+    /**
+     * 
+     * @param B normalized bivector representing the rotation axis
+     * @param theta 
+     */
     public CGARotor(CGABivector B, double theta){
-        this(B.gp(-1d).exp());
+        this(B.gp(-theta/2d).exp());
     }
+    
+    /*public CGAMultivector rotate(CGAMultivector m){
+        return transform(m);
+    }*/
     
     /**
      * Decompose rotation around origin.

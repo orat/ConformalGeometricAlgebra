@@ -13,14 +13,19 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGATranslator extends CGAMultivector {
+public class CGATranslator extends CGAVersor {
     
     public CGATranslator(CGAMultivector m){
         super(m.impl);
         // test auf blades 0,2
     }
     
+    /*public CGAMultivector translate(CGAMultivector m){
+        return transform(m);
+    }*/
+    
     public CGATranslator(Vector3d d){
-        this((new CGAScalar(1d)).sub(createE3(d).gp(-0.5d).gp(createInf(1d))));
+        this(createInf(1d).gp(createE3(d)).gp(0.5).exp());
+        //this((new CGAScalar(1d)).sub(createE3(d).gp(-0.5d).gp(createInf(1d))));
     }
 }

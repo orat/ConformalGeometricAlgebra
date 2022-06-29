@@ -5,7 +5,10 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
+ * Describes what a sphere and a plane have in common at their point of intersection.
+ * 
+ * This is an infinitesimal circle in a well defined plane.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGATangentBivector extends CGATangent implements iCGATrivector {

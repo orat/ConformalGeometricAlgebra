@@ -57,6 +57,16 @@ public class CGASphere extends CGARound implements iCGAVector {
             gp(weight);
         } else isNormalized = true;
     }
+    
+    /**
+     * Determines a sphere from the center and a point on the sphere.
+     * 
+     * @param location
+     * @param pointOnSphere point on the sphere
+     */
+    public CGASphere(CGARoundPoint location, CGARoundPoint pointOnSphere){
+        this(pointOnSphere.ip(location.op(createInf(1d))));
+    }
     /**
      * Create (dual, real) sphere in inner product null space representation 
      * (grade 1 multivector).
