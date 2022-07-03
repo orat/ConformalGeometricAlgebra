@@ -162,11 +162,11 @@ norm(sphere) = 1.9999999999999998
         System.out.println("cgaDualSphere="+cgaDualSphere.toString());
         CGASphere cgaSphere = cgaDualSphere.undual();
         System.out.println("cgaSphere="+cgaSphere.toString());
-        RoundAndTangentParameters rp1 = cgaDualSphere.decompose(); // squaredSize=-0.5
-        System.out.println("radius = "+String.valueOf(Math.sqrt(Math.abs(rp1.squaredSize())))); // 0.707
-        System.out.println("radius2squared = "+String.valueOf(Math.abs(rp1.squaredSize()))); // 0.5
+        RoundAndTangentParameters rp1 = cgaDualSphere.decompose(); 
+        System.out.println("radius = "+String.valueOf(Math.sqrt(Math.abs(rp1.squaredSize())))); 
+        System.out.println("radius2squared = "+String.valueOf(Math.abs(rp1.squaredSize()))); 
         System.out.println("location1 = ("+String.valueOf(rp1.location().x)+", "+
-                String.valueOf(rp1.location().y)+", "+String.valueOf(rp1.location().z)+")");
+                String.valueOf(rp1.location().y)+", "+String.valueOf(rp1.location().z)+")"); // location1 = (0.0, 0.0, -1.6225927682921321E31)
         double radius = 2d;
         System.out.println("radius1="+String.valueOf(radius));
         
@@ -249,6 +249,55 @@ norm(sphere) = 1.9999999999999998
         System.out.println("distsquare="+result);
     }
     
+    public void testLine1(){
+        System.out.println("-------------- line1 --------");
+        Point3d p1 = new Point3d(1d,1d,0d);
+        double weight1 = 2d;
+        CGARoundPoint cp1 = new CGARoundPoint(p1, weight1);
+        System.out.println("cp1="+cp1); // stimmt
+        
+        Point3d p2 = new Point3d(1d,0d,1d);
+        double weight2 = -1d;
+        CGARoundPoint cp2 = new CGARoundPoint(p2, weight2);
+        System.out.println("cp2="+cp2); // stimmt
+        
+        System.out.println("distSquare="+String.valueOf(cp2.distSquare(cp1))); // 2 stimmt
+        
+        CGADualLine ldual = new CGADualLine(cp1, cp2);
+        System.out.println("dual line="+String.valueOf(ldual.toString()));
+        // dual line=2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei
+        // sollte p1 ∧ p2 ∧ ∞ = −2(o + (e1 + e2 )) ∧ (e3 − e2 ) ∧ ∞. sein
+        // stimmt
+        
+        // the weight is -2, and the conformal direction is −2(e3 − e2 ) ∧ ∞.
+        FlatAndDirectionParameters decomposition = ldual.decompose(new Point3d(0d,0d,0d));
+        Vector3d attitude = decomposition.attitude();
+        // attitude_cga=-1.1102230246251565E-16*eo^e2 - 2.220446049250313E-16*e1^e2 + 
+        // 1.1102230246251565E-16*eo^e3 + 2.220446049250313E-16*e1^e3 + 
+        // 2.220446049250313E-16*e2^e3 - 1.9999999999999991*e2^ei + 1.9999999999999991*e3^ei
+
+        System.out.println("attitude="+String.valueOf(attitude.x)+","+String.valueOf(attitude.y)+","+
+                String.valueOf(attitude.z));
+        // attitude=0.0,1.9999999999999991,-1.9999999999999991
+        // stimmt
+        
+        Point3d location = decomposition.location();
+        System.out.println("location="+String.valueOf(location.x)+","+String.valueOf(location.y)+","+
+                String.valueOf(location.z));
+        // location=-4.6259292692714784E-17,8.789265611615823E-17,-4.39463280580791E-16
+        // vermutlich falsch
+        
+        System.out.println("squaredWeight="+ldual.squaredWeight());
+        // squaredWeight=7.999999999999988
+        // vermutlich falsch, sollte doch 4 sein oder?
+        
+        CGALine line = ldual.undual();
+        Vector3d direction = line.attitude();
+        double squaredWeight = line.squaredWeight();
+        System.out.println("weight="+String.valueOf(squaredWeight));
+        System.out.println("attitude=("+String.valueOf(direction.x)+","+
+                String.valueOf(direction.y)+","+String.valueOf(direction.z)+")");
+    }
     /**
      * @Test2
      */

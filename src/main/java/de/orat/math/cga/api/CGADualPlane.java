@@ -63,6 +63,7 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
         return new CGAMultivector(cp.ip(cn.op(createInf(1d))).impl);
     }
     
+    @Override
     public CGAPlane undual(){
         return new CGAPlane(impl.undual());
     }

@@ -1,6 +1,7 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Point3d;
 
 /**
  * 
@@ -59,4 +60,41 @@ public class CGALine extends CGAFlat implements iCGABivector {
         // 3. Richtung ungleich 0, d.h. einf leftcontraction this != 0
         return true;
     }*/
+    
+    private double weight(){
+        // local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
+        return Math.abs((createOrigin(1d).ip(this.op(createInf(1d)))).gp(createE3()).scalarPart());
+    }
+    @Override
+    public double squaredWeight(){
+        return Math.pow(weight(),2d);
+    }
+    /**
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @return attitude
+     */
+    @Override
+    protected CGAMultivector attitudeIntern(){
+        // blade = blade / weight
+	// local normal = ( no .. ( blade ^ ni ) ) * i
+        return createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d))).gp(createE3());
+    }
+    
+    /**
+     * Determine a point on the line which has the closest distance to the origin.
+     * 
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * 
+     * TODO
+     * möglicherweise geht das für alle flats?
+     */
+    @Override
+    public Point3d location(){
+        // local center = ( no .. blade ) * normal * i
+        return new Point3d((createOrigin(1d).ip(this.gp(1d/weight())).
+                gp(attitudeIntern())).gp(createE3()).extractEuclidianVector());
+    }
 }

@@ -7,7 +7,9 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * FlatPoints, PointPairs, Lines, Planes, all in inner product null space representation.
+ * FlatPoints, Lines, Planes, all in inner product null space representation.
+ * 
+ * A flat is a round containing inf in its formula.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -29,12 +31,16 @@ class CGAFlat extends CGABlade {
     @Override
     protected CGAMultivector attitudeIntern(){
         // Sign of all coordinates changes according to errato to the book Dorst2007
+        // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
+        // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         return createInf(-1d).op(this);
     }   
+    CGAMultivector locationIntern(Point3d probe){
+        return new CGARoundPoint(probe).op(this).div(this);//.extractGrade(1);
+    }
     @Override
     public Point3d location(Point3d probe){
-        CGAMultivector probeCGA = new CGARoundPoint(probe);
-        CGAMultivector m = probeCGA.op(this).div(this);//.extractGrade(1);
+        CGAMultivector m = locationIntern(probe);
         // location_cga=2.0000000000000004*eo + 0.0*eo^e3^ei
         System.out.println("location_cga="+m.toString());
         return new Point3d(m.extractEuclidianVector());

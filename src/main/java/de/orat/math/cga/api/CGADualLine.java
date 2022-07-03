@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
@@ -46,13 +45,14 @@ public class CGADualLine extends CGADualFlat implements iCGATrivector {
      * @param p1 first point in inner product null space representation
      * @param p2 seconds point in inner product null space representation
      * 
-     * Be careful: The representation is called dual in Hildenbrand213 but not
+     * Be careful: The representation is called dual in Hildenbrand2013 but not
      * in Dorst2007.
      */
     public CGADualLine(CGARoundPoint p1, CGARoundPoint p2){
         this(p1.op(p2).op(createInf(1d)));
     }
     
+    @Override
     public CGALine undual(){
         return new CGALine(impl.undual());
     }

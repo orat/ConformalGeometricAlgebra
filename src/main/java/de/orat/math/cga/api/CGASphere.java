@@ -92,4 +92,8 @@ public class CGASphere extends CGARound implements iCGAVector {
     public boolean isNormalized(){
         return isNormalized;
     }
+    @Override
+    public boolean isImaginary(){
+        throw new RuntimeException("not yet implemented!");
+    }
 }

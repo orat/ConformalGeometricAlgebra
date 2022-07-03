@@ -173,9 +173,10 @@ public class CGAMultivector {
      */
     protected CGAMultivector locationFromTangendAndRoundAsNormalizedSphere(){
         // corresponds to the errata of the book Dorst2007
-        CGAMultivector inf = createOrigin(1d).gp(2d); //createInf(1d);
+        // mit inf = createOrigin(1d).gp(2d); funktioniert es gar nicht
+        CGAMultivector inf = createInf(1d);
         
-        CGAMultivector result = this.div(inf.ip(this)).gp(-1d);
+        CGAMultivector result = (this.div(inf.ip(this))).gp(-1d);
         System.out.println("locationFromTangentAndRound="+result.toString());
         return result;
     }
@@ -222,8 +223,10 @@ public class CGAMultivector {
      * @return squared weight
      */
     protected static double squaredWeight(CGAMultivector attitude, CGAMultivector probePoint){
-        CGAMultivector A = probePoint.ip(attitude);
-        return A.reverse().gp(A).scalarPart();
+        return probePoint.ip(attitude).sqr().scalarPart();
+        // liefert gleiches Ergebnis
+        // CGAMultivector A = probePoint.ip(attitude);
+        //return A.reverse().gp(A).scalarPart();
     }
     
     /**

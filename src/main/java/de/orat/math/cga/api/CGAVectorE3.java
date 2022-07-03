@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import org.jogamp.vecmath.Tuple3d;
-import org.jogamp.vecmath.Vector3d;
 
 /**
  * Multivector which conains only the blades e1,e2 and e3 (element of grade 1).

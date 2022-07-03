@@ -5,7 +5,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
+ * Tangents are created from touching objects.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGATangent extends CGAMultivector {

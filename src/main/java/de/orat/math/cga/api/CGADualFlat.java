@@ -1,9 +1,9 @@
 package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createInf;
-import static de.orat.math.cga.api.CGAMultivector.squaredWeight;
 import de.orat.math.cga.spi.iCGAMultivector;
 import de.orat.math.cga.util.Decomposition3d;
+import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -29,11 +29,10 @@ class CGADualFlat extends CGAMultivector {
         System.out.println("attitude_cga="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
     }
+    // scheint bei dualline so zu stimmen
     @Override
     protected CGAMultivector attitudeIntern(){
-        return createInf(1d).ip(this);
-        // Conversion formula von Dorst nach Hilenbrand
-        //return createOrigin(2d).ip(this);
+        return createInf(-1d).ip(this);
     } 
     @Override
     public Point3d location(Point3d probe){
@@ -45,8 +44,8 @@ class CGADualFlat extends CGAMultivector {
         return new Point3d(m.extractEuclidianVector());
     }
     
-    public Decomposition3d.FlatAndDirectionParameters decompose(Point3d probePoint){
-        return new Decomposition3d.FlatAndDirectionParameters(attitude(), location(probePoint));
+    public FlatAndDirectionParameters decompose(Point3d probePoint){
+        return new FlatAndDirectionParameters(attitude(), location(probePoint));
     }
     
     /*public CGAFlat undual(){

@@ -6,6 +6,9 @@ import org.jogamp.vecmath.Point3d;
 /**
  * Dual point pair in outer product null space (grade 2 multivector).
  * 
+ * Point pairs are the only rounds for which one can retrieve the points that 
+ * constituted them.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGADualPointPair extends CGADualRound implements iCGABivector {

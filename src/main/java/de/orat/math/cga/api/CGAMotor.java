@@ -3,8 +3,11 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * A motor is no blade because it contains blades of grade 0, 2 and 4 
- * all together.
+ * A motor/screw is no blade because it contains blades of grade 0, 2 and 4 
+ * all together. 
+ * 
+ * It describes a rotation around a rotation axis combined with a
+ * translation in direction of this axis.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
