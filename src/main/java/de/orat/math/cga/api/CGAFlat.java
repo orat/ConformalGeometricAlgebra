@@ -43,7 +43,7 @@ class CGAFlat extends CGABlade {
         CGAMultivector m = locationIntern(probe);
         // location_cga=2.0000000000000004*eo + 0.0*eo^e3^ei
         System.out.println("location_cga="+m.toString());
-        return new Point3d(m.extractEuclidianVector());
+        return m.extractE3ToPoint3d();
     }
     public FlatAndDirectionParameters decompose(Point3d probePoint){
         return new FlatAndDirectionParameters(attitude(), location(probePoint));

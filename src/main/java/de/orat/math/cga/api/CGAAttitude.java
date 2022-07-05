@@ -20,7 +20,7 @@ class CGAAttitude extends CGAMultivector {
     
     public Vector3d attitude(){
         CGAMultivector attitude = attitudeIntern();
-        return attitude.extractEuclidianVector();
+        return attitude.extractE3ToVector3d();
     }
     @Override
     protected CGAMultivector attitudeIntern(){

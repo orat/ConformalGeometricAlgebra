@@ -126,6 +126,6 @@ public class CGALine extends CGAFlat implements iCGABivector {
     public Point3d location(){
         // local center = ( no .. blade ) * normal * i
         return new Point3d((createOrigin(1d).ip(this.gp(1d/weight())).
-                gp(attitudeIntern())).gp(createE3Pseudoscalar()).extractEuclidianVector());
+                gp(attitudeIntern())).gp(createE3Pseudoscalar()).extractE3ToPoint3d());
     }
 }

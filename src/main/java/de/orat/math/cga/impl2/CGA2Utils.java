@@ -1,5 +1,6 @@
 package de.orat.math.cga.impl2;
 
+import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.util.Decomposition3d;
 import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import de.orat.math.cga.util.Decomposition3d.LinePairParameters;
@@ -73,18 +74,8 @@ public class CGA2Utils {
         System.out.println("l: dx="+String.valueOf(d.x)+", dy="+String.valueOf(d.y)+", dz="+String.valueOf(d.z));
     }*/
     
-   /**
-      * Decompose l2l1 into angle, distance, direction.A Covariant approach to Geometry using Geometric Algebra.
-      * 
-      * Technical report. Universit of Cambridge Departement of Engineering, 
-      * Cambridge, UK (2004). 
-      * A. Lasenby, J. Lasenby, R. Wareham
-      * Formula 5.22, page 46
-      * 
-      * @param l2l1
-      * @return parameters describing a line in 3d space
-      */
-    public static LinePairParameters decomposeLinePair(CGA2Multivector l2l1){
+  
+    /*public static LinePairParameters decomposeLinePair(CGAMultivector l2l1){
         
         System.out.println("l2l1:"+l2l1.toString());
         
@@ -96,8 +87,9 @@ public class CGA2Utils {
         System.out.println("dx="+String.valueOf(d.x)+", dy="+String.valueOf(d.y)+", dz="+String.valueOf(d.z));
      
         // Vektoren
-        double[] vectors = l2l1.extractCoordinates(1);
-        org.jogamp.vecmath.Vector3d d2 = new org.jogamp.vecmath.Vector3d(vectors[0], vectors[1], vectors[2]);
+        //double[] vectors = l2l1.extractCoordinates(1);
+        //org.jogamp.vecmath.Vector3d d2 = new org.jogamp.vecmath.Vector3d(vectors[0], vectors[1], vectors[2]);
+        Vector3d d2 = l2l1.extractE3ToVector3d();
         // identisch zu dx,dy,dz wo ist der sin(theta) faktor?
         System.out.println("d2x="+String.valueOf(d.x)+", d2y="+String.valueOf(d.y)+", d2z="+String.valueOf(d.z));
         
@@ -112,14 +104,26 @@ public class CGA2Utils {
         Point3d p = null;
         Vector3d dir = null;
         return new Decomposition3d.LinePairParameters(alpha, p, dir);
-    }
+    }*/
     
+     /**
+      * Decompose l2l1 into angle, distance, direction.A Covariant approach to 
+      * Geometry using Geometric Algebra.Technical report.Universit of Cambridge 
+      * Departement of Engineering, Cambridge, UK (2004).
+      * 
+      * A. Lasenby, J. Lasenby, R. Wareham
+      * Formula 5.22, page 46
+      * 
+      * @param l1
+      * @param l2
+      */
     public static void decompose2(CGA2Multivector l1, CGA2Multivector l2){
-        CGA2Multivector l1l2 = (CGA2Multivector) l1.gp(l2);
+        CGAMultivector l1l2 = (CGAMultivector) l1.gp(l2);
       
-        double costheta = l1l2.extractCoordinates(0)[0];
+        double costheta = l1l2.scalarPart();//extractCoordinates(0)[0];
         System.out.println("theta="+String.valueOf(Math.acos(costheta)*180/Math.PI));
-        org.jogamp.vecmath.Vector3d d = new org.jogamp.vecmath.Vector3d(l1l2.extractCoordinates(1));
+        //org.jogamp.vecmath.Vector3d d = new org.jogamp.vecmath.Vector3d(l1l2.extractCoordinates(1));
+        Vector3d d = l1l2.extractE3ToVector3d();
         d.scale(1d/costheta);
         System.out.println("d="+String.valueOf(d.length()));
         d.normalize();

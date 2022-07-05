@@ -92,7 +92,18 @@ public class CGAMultivector {
     public static CGAMultivector createE3Pseudoscalar(){
         return createEx(1d).op(createEy(1d)).op(createEz(1d));
     }
-      
+    
+    public Vector3d extractE3ToVector3d(){
+        double[] vector = impl.extractCoordinates(1);
+        int index = impl.getEStartIndex();
+        return new Vector3d(vector[index++], vector[index++], vector[index]);
+    }
+    public Point3d extractE3ToPoint3d(){
+        double[] vector = impl.extractCoordinates(1);
+        int index = impl.getEStartIndex();
+        return new Point3d(vector[index++], vector[index++], vector[index]);
+    }
+    
     // Create conformal algebra primitives
     
     //TODO
@@ -513,10 +524,5 @@ public class CGAMultivector {
         double[] coordinates = impl.extractCoordinates(2);
         //FIXME indizes hängen von der impl ab
         return new Vector3d(coordinates[12-6], coordinates[14-6], coordinates[15-6]);
-    }
-    protected Vector3d extractEuclidianVector(){
-        double[] coordinates = impl.extractCoordinates(1);
-        int index = impl.getEStartIndex();
-        return new Vector3d(coordinates[index++], coordinates[index++], coordinates[index]);
     }
 }

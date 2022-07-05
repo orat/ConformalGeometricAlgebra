@@ -20,7 +20,7 @@ class CGADualRound extends CGABlade {
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
         System.out.println("attitude(dualRound/dualTangent)="+result.toString());
-        return result.extractEuclidianVector();
+        return result.extractE3ToVector3d();
     }
     @Override
     protected CGAMultivector attitudeIntern(){
@@ -46,9 +46,10 @@ class CGADualRound extends CGABlade {
     @Override
     public Point3d location(){
         CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere(); //locationFromTangendAndRound();
-        double[] vector = result.impl.extractCoordinates(1);
-        int index = result.impl.getEStartIndex();
-        return new Point3d(vector[index++], vector[index++], vector[index]);
+        return extractE3ToPoint3d();
+        //double[] vector = result.impl.extractCoordinates(1);
+        //int index = result.impl.getEStartIndex();
+        //return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     public Decomposition3d.RoundAndTangentParameters decompose(){
        return new RoundAndTangentParameters(attitude(), 

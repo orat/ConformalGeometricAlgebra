@@ -111,7 +111,7 @@ public class CGAPointPair extends CGARound implements iCGATrivector  {
         // local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) ) * i
         CGAMultivector no_ni = createOrigin(1d).op(createInf(1d));
         CGAMultivector result = attitudeIntern().gp(no_ni.ip(this.op(no_ni))).gp(createE3Pseudoscalar());
-        return new Point3d(result.extractEuclidianVector());
+        return result.extractE3ToPoint3d();
     }
     
     @Override

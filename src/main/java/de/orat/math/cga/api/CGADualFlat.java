@@ -41,7 +41,7 @@ class CGADualFlat extends CGAMultivector {
         CGAMultivector m = probeCGA.ip(this).div(this);
         System.out.println("location="+m.toString());
         // the euclidian part is the location in euclidian space
-        return new Point3d(m.extractEuclidianVector());
+        return m.extractE3ToPoint3d();
     }
     
     public FlatAndDirectionParameters decompose(Point3d probePoint){

@@ -4,6 +4,7 @@ import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Point3d;
 
 /**
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
@@ -42,6 +43,9 @@ public class CGARoundPoint extends CGASphere {
         super(m);
     }
     
+    
+    // composition
+    
     /**
      * A conformal point (grade 1 multivector) by up-projecting an 
      * euclidian vector into a conformal vector.
@@ -72,7 +76,7 @@ public class CGARoundPoint extends CGASphere {
     /**
      * Create point with given weight.
      * 
-     * mplementation looks indentical to
+     * implementation looks indentical to
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @param p euclidian point/vector
@@ -90,22 +94,41 @@ public class CGARoundPoint extends CGASphere {
         //CGAVectorE3 x = new CGAVectorE3(p);
         //return x.add((new CGAMultivector(0.5)).gp(x.gp(x)).gp(createInf(1d))).add(createOrigin(1d));
     }
-    
-    /**
-     * Determine squared distance.
-     * 
-     * @param p second point to determine the distance to
-     * @return squared distance to the given point
-     */
-    public double distSquare(CGARoundPoint p){
-        return -2*(this.normalize()).ip(p.normalize()).scalarPart();
-    }
    
-    /*public double decomposeSquaredWeight(){
+   
+    
+    // decomposition
+    
+    @Override
+    public double squaredWeight(){
+        return Math.pow(weight(),2);
+    }
+    /**
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @return weight
+     */
+    private double weight(){
+        return this.gp(-1d).ip(createInf(1d)).scalarPart();
+    }
+    /*public double squaredWeight(){
         CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
         CGARoundPoint probePoint = new CGARoundPoint(new Point3d(0d,0d,0d));
         return CGAMultivector.squaredWeight(attitude, probePoint);
     }*/
+    
+    /**
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @return localisation
+     */
+    public Point3d localisation(){
+        // local blade = weight * ( no + center + 0.5 * ( center .. center ) * ni )
+        CGAMultivector result = createOrigin(1d).add(this).add(this.ip(this)).gp(createInf(0.5d));
+        return result.extractE3ToPoint3d();
+    }
     
     
     /**
@@ -123,5 +146,15 @@ public class CGARoundPoint extends CGASphere {
         CGARoundPoint result = new CGARoundPoint(this.div(createInf(1d).ip(this).gp(-1d)));
         result.isNormalized = true;
         return result;
+    }
+    
+    /**
+     * Determine squared distance.
+     * 
+     * @param p second point to determine the distance to
+     * @return squared distance to the given point
+     */
+    public double distSquare(CGARoundPoint p){
+        return -2*(this.normalize()).ip(p.normalize()).scalarPart();
     }
 }

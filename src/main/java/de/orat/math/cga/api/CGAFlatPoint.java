@@ -82,6 +82,6 @@ public class CGAFlatPoint extends CGAFlat implements iCGABivector {
         // blade = blade / weight
 	// local center = ( no .. blade ) * i
         CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight()))).gp(createE3Pseudoscalar());
-        return new Point3d(result.extractEuclidianVector());
+        return result.extractE3ToPoint3d();
     }
 }

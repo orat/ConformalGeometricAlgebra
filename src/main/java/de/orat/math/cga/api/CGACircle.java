@@ -88,7 +88,7 @@ public class CGACircle extends CGARound implements iCGABivector {
     @Override
     public Point3d location(){
         // local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) )
-        return new Point3d(locationIntern().extractEuclidianVector());
+        return new Point3d(locationIntern().extractE3ToVector3d());
     }
     /**
      * Determine a point on the line which has the closest distance to the origin.Implementation following:

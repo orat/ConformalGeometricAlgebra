@@ -44,7 +44,7 @@ abstract class CGARound extends CGABlade  {
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
         System.out.println("attitude="+result.toString());
-        return result.extractEuclidianVector();
+        return result.extractE3ToVector3d();
     }
     @Override
     protected CGAMultivector attitudeIntern(){
@@ -59,9 +59,10 @@ abstract class CGARound extends CGABlade  {
         CGAMultivector location = location3(weight());
         System.out.println("location lua="+location.toString());
         CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
-        double[] vector = result.impl.extractCoordinates(1);
-        int index = result.impl.getEStartIndex();
-        return new Point3d(vector[index++], vector[index++], vector[index]);
+        return extractE3ToPoint3d();
+        //double[] vector = result.impl.extractCoordinates(1);
+        //int index = result.impl.getEStartIndex();
+        //return new Point3d(vector[index++], vector[index++], vector[index]);
     }
         
     /**
@@ -71,9 +72,10 @@ abstract class CGARound extends CGABlade  {
      */
     public Point3d location2(){
         CGAMultivector result = this.gp(CGAMultivector.createInf(1d)).gp(this);
-        double[] vector = result.impl.extractCoordinates(1);
-        int index = result.impl.getEStartIndex();
-        return new Point3d(vector[index++], vector[index++], vector[index]);
+        return extractE3ToPoint3d();
+        //double[] vector = result.impl.extractCoordinates(1);
+        //int index = result.impl.getEStartIndex();
+        //return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     
     /**
