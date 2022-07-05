@@ -59,6 +59,30 @@ public class CGASphere extends CGARound implements iCGAVector {
     }
     
     /**
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @param point
+     * @param radius
+     * @param sign 
+     * @param weight 
+     */
+    public CGASphere(Point3d point, double radius, boolean sign, double weight){
+       this(createCGASphere(point, radius, sign, weight));
+    }
+    private static CGAMultivector createCGASphere(Point3d point, double radius, boolean sign, double weight){
+        // local blade = weight * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
+        CGAMultivector c = createE3(point);
+        CGAMultivector sr2;
+        if (sign){
+            sr2 = new CGAScalar(-radius*radius);
+        } else {
+            sr2 = new CGAScalar(radius*radius);
+        }
+        return createOrigin(1d).add(c).add(c.ip(c).sub(sr2).gp(createInf(0.5d))).gp(weight);
+    }
+    
+    /**
      * Determines a sphere from the center and a point on the sphere.
      * 
      * @param location

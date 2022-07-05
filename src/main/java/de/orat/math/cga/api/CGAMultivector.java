@@ -89,7 +89,9 @@ public class CGAMultivector {
     public static CGAVectorE3 createE3(Tuple3d v){
         return new CGAVectorE3(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
-    
+    public static CGAMultivector createE3Pseudoscalar(){
+        return createEx(1d).op(createEy(1d)).op(createEz(1d));
+    }
       
     // Create conformal algebra primitives
     

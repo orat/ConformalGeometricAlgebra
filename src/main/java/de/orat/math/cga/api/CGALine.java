@@ -2,13 +2,15 @@ package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
 
 /**
- * 
  * Generates the motor algebra. 
  * 
  * There are many ways of finding a line: e.g. 
- * the central axis l of a circle σ can be found by contraction with infinity: ∞⌋σ = l.
+ * the central axis l of a circle σ can be found by contraction with infinity: 
+ * 
+ * ∞⌋σ = l.
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -39,7 +41,35 @@ public class CGALine extends CGAFlat implements iCGABivector {
     public CGALine(CGARoundPoint point, CGAAttitudeVector direction){
         this(point.op(direction));
     }
-   
+    /**
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @param c
+     * @param direction
+     * @param weight 
+     */
+    public CGALine(Point3d c, Vector3d direction, double weight){
+        // local blade = weight * ( normal + ( center ^ normal ) * ni ) * i
+        this(createE3(direction).add(createE3(c).op(createE3(direction)).gp(createInf(1d))).
+                gp(createE3Pseudoscalar()).gp(weight));
+    }
+    
+    public CGALine(CGABivector B, double d){
+        this(B.add(createInf(d)));
+    }
+    
+    /**
+     * 
+     * @param a together with b to create a bivector: a^b
+     * @param b together with a to create a bivector: a^b
+     * @param d 
+     */
+    public CGALine(Vector3d a, Vector3d b, double d){
+        this((CGABivector) createE3(a).op(createE3(b)), d);
+    }
+    
+    
     @Override
     public CGADualLine dual(){
         return new CGADualLine(impl.dual());
@@ -63,7 +93,8 @@ public class CGALine extends CGAFlat implements iCGABivector {
     
     private double weight(){
         // local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
-        return Math.abs((createOrigin(1d).ip(this.op(createInf(1d)))).gp(createE3()).scalarPart());
+        return Math.abs((createOrigin(1d).ip(this.op(createInf(1d)))).
+                gp(createE3Pseudoscalar()).scalarPart());
     }
     @Override
     public double squaredWeight(){
@@ -79,7 +110,7 @@ public class CGALine extends CGAFlat implements iCGABivector {
     protected CGAMultivector attitudeIntern(){
         // blade = blade / weight
 	// local normal = ( no .. ( blade ^ ni ) ) * i
-        return createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d))).gp(createE3());
+        return createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar());
     }
     
     /**
@@ -95,6 +126,6 @@ public class CGALine extends CGAFlat implements iCGABivector {
     public Point3d location(){
         // local center = ( no .. blade ) * normal * i
         return new Point3d((createOrigin(1d).ip(this.gp(1d/weight())).
-                gp(attitudeIntern())).gp(createE3()).extractEuclidianVector());
+                gp(attitudeIntern())).gp(createE3Pseudoscalar()).extractEuclidianVector());
     }
 }

@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createE3;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Point3d;
@@ -34,6 +33,18 @@ public class CGAFlatPoint extends CGAFlat implements iCGABivector {
         super(m);
     }
    
+    /**
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @param c location
+     * @param weight weight
+     */
+    public CGAFlatPoint(Point3d c, double weight){
+        // local blade = weight * ( 1 - center ^ ni ) * i
+        this((new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createPseudoscalar()).gp(weight));
+    }
+    
     public CGAFlatPoint(CGARoundPoint p){
         this(p.op(createInf(1d)));
     }
@@ -46,7 +57,7 @@ public class CGAFlatPoint extends CGAFlat implements iCGABivector {
      */
     private double weight(){
         // local weight = -( no .. ( blade ^ ni ) ) * i
-        return createOrigin(1d).ip(this.op(createInf(1d))).gp(createE3()).scalarPart();
+        return createOrigin(1d).ip(this.op(createInf(1d))).gp(createE3Pseudoscalar()).scalarPart();
     }
     /**
      * Determination the squared weight from this flat point.Implementation following:
@@ -70,7 +81,7 @@ public class CGAFlatPoint extends CGAFlat implements iCGABivector {
     public Point3d location(){
         // blade = blade / weight
 	// local center = ( no .. blade ) * i
-        CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight()))).gp(createE3());
+        CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight()))).gp(createE3Pseudoscalar());
         return new Point3d(result.extractEuclidianVector());
     }
 }

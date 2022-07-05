@@ -3,6 +3,7 @@ package de.orat.math.cga.api;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  *
@@ -18,6 +19,21 @@ public class CGACircle extends CGARound implements iCGABivector {
     protected CGACircle(iCGAMultivector impl){
         super(impl);
     }
+    
+    /**
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @param center
+     * @param normal
+     * @param radius
+     * @param weight
+     * @param sign 
+     */
+    public CGACircle(Point3d center, Vector3d normal, double radius, double weight, boolean sign){
+        this((new CGASphere(center, radius, sign, 1d)).op(new CGAPlane(center, normal, 1d)).gp(weight));
+    }
+    
     /**
      * Create a circle by intersection of two spheres.
      * 

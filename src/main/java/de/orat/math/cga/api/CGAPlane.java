@@ -57,7 +57,7 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
      * Notice: The sign of the weight is lost in this decomposition and therefor
      * can not be recovered in decomposition.
      * 
-     * Implementation following:
+     * looks identical to 
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @param o point in the plane
@@ -68,7 +68,7 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
         this(createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
-            .add(createInf(o.x*n.x+o.y*n.y+o.z*n.z)));
+            .add(createInf(o.x*n.x+o.y*n.y+o.z*n.z)).gp(weight));
     }
     
     @Override

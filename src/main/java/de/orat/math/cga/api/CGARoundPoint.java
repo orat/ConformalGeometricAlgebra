@@ -72,6 +72,9 @@ public class CGARoundPoint extends CGASphere {
     /**
      * Create point with given weight.
      * 
+     * mplementation looks indentical to
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
      * @param p euclidian point/vector
      * @param weight
      * @return normalized point
@@ -103,6 +106,7 @@ public class CGARoundPoint extends CGASphere {
         CGARoundPoint probePoint = new CGARoundPoint(new Point3d(0d,0d,0d));
         return CGAMultivector.squaredWeight(attitude, probePoint);
     }*/
+    
     
     /**
      * Normalized round points can be multiplied by scalar factor and 
