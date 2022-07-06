@@ -20,6 +20,9 @@ public class CGACircle extends CGARound implements iCGABivector {
         super(impl);
     }
     
+    
+    // composition
+    
     /**
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
@@ -43,10 +46,10 @@ public class CGACircle extends CGARound implements iCGABivector {
     public CGACircle(CGASphere sphere1, CGASphere sphere2){
         this(sphere1.op(sphere2));
     }
-    @Override
-    public CGADualCircle dual(){
-        return new CGADualCircle(impl.dual());
-    }
+   
+    
+    // decomposition
+    
     /**
      * Determination the weight from this flat point.
      * 
@@ -55,7 +58,7 @@ public class CGACircle extends CGARound implements iCGABivector {
      */
     private double weight(){
         // local weight = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
-        return (createOrigin(1d).op(createInf(1d).ip(this.op(createInf(1d))))).scalarPart();
+        return Math.abs(createOrigin(1d).op(createInf(1d).ip(this.op(createInf(1d)))).scalarPart());
     }
     /**
      * Determination the squared weight from this flat point.Implementation following:
@@ -119,6 +122,12 @@ public class CGACircle extends CGARound implements iCGABivector {
         CGAMultivector no_ni = o.op(inf);
         CGAMultivector result = center.sqr().sub((no_ni.ip(o.op(this)).add((o.ip(normal).gp(center))))).gp(2d).gp(normal);
         return result.scalarPart();
+    }
+    
+    
+    @Override
+    public CGADualCircle dual(){
+        return new CGADualCircle(impl.dual());
     }
     
     @Override

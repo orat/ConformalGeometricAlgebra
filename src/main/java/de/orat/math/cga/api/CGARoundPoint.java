@@ -99,19 +99,7 @@ public class CGARoundPoint extends CGASphere {
     
     // decomposition
     
-    @Override
-    public double squaredWeight(){
-        return Math.pow(weight(),2);
-    }
-    /**
-     * implementation follows
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
-     * @return weight
-     */
-    private double weight(){
-        return this.gp(-1d).ip(createInf(1d)).scalarPart();
-    }
+   
     /*public double squaredWeight(){
         CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
         CGARoundPoint probePoint = new CGARoundPoint(new Point3d(0d,0d,0d));
@@ -124,6 +112,7 @@ public class CGARoundPoint extends CGASphere {
      *
      * @return localisation
      */
+    @Override
     public Point3d localisation(){
         // local blade = weight * ( no + center + 0.5 * ( center .. center ) * ni )
         CGAMultivector result = createOrigin(1d).add(this).add(this.ip(this)).gp(createInf(0.5d));

@@ -21,6 +21,10 @@ public class CGASphere extends CGARound implements iCGAVector {
     CGASphere(iCGAMultivector impl){
         super(impl);
     }
+    
+    
+    // composition
+    
     /**
      * Create sphere in inner product null space representation 
      * (grade 1 multivector).
@@ -107,6 +111,50 @@ public class CGASphere extends CGARound implements iCGAVector {
         //if (r < 0) throw new IllegalArgumentException("Negative radius is not allowed!");
         isNormalized = true;
     }
+    
+    
+    // decomposition
+    
+    // CGARoundPoint extends CGASphere und für beide gelten die gleichen 
+    // weight Formeln
+    @Override
+    public double squaredWeight(){
+        return Math.pow(weight(),2);
+    }
+    /**
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @return weight
+     */
+    private double weight(){
+        return this.gp(-1d).ip(createInf(1d)).scalarPart();
+    }
+    
+    /**
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @return localisation
+     */
+    public Point3d localisation(){
+        //lade = blade / weight
+	//local center = no_ni .. ( blade ^ no_ni )
+	//local radius_squared = ( center .. center ) + 2 * ( no .. blade )
+	//radius_squared = radius_squared:tonumber()
+	//local imaginary = false
+	//if radius_squared < 0 then
+	//	imaginary = true
+	//	radius_squared = -radius_squared
+	//end
+	//local radius = math.sqrt( radius_squared )
+        
+        CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
+        return no_inf.ip((this.gp(1d/weight())).op(no_inf)).extractE3ToPoint3d();
+    }
+    
+    
+    // others
     
     @Override
     public CGADualSphere dual(){

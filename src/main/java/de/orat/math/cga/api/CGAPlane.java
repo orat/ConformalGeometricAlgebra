@@ -37,6 +37,10 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
     CGAPlane(iCGAMultivector m){
         super(m);
     }
+    
+    
+    // composition 
+    
     /**
      * Create plane in inner product null space representation (grade 1 multivector).
      * 
@@ -70,6 +74,54 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
             .add(createEz(n.z))
             .add(createInf(o.x*n.x+o.y*n.y+o.z*n.z)).gp(weight));
     }
+    
+    
+    // decomposition 
+    
+    @Override
+    public double squaredWeight(){
+        return Math.pow(weight(),2);
+    }
+    /**
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * The sign in lost in composition of the plane and unreoverable.
+     * 
+     * @return weight wihout sign (aloways positive)
+     */
+    private double weight(){
+        // local weight = ( #( no .. ( blade ^ ni ) ) ):tonumber()
+        return Math.abs(createOrigin(1d).ip(this.op(createInf(1d))).scalarPart());
+    }
+    
+    /**
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @return attitude/normal/direction
+     */
+    @Override
+    protected CGAMultivector attitudeIntern(){
+        //blade = blade / weight
+	//local normal = no .. ( blade ^ ni )
+        return createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d)));
+    }
+    
+    /**
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * @return localisation
+     */
+    public Point3d localisation(){
+        // local center = -( no .. blade ) * normal
+        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight())).gp(attitudeIntern()).gp(-1d);
+        return result.extractE3ToPoint3d();
+    }
+    
+    
+    // others 
     
     @Override
     public CGADualPlane dual(){
