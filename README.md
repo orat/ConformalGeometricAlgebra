@@ -13,3 +13,7 @@ This repository includes code to decompose multivectors into geometric 3d parame
 The project is used to learn about different possibilities to implement CGA and to find a good api as a basis to integrate CGA based on a DSL into the Java virtual machine ([see here](https://github.com/MobMonRob/DSL4GeometricAlgebra)). The overall aim is to integrate CGA polyglott into the Java VM, supported by a complete development tool chain with syntax-highlighting and debugging etc. This work will be done based on the [Netbeans IDE](https://netbeans.apache.org/).
 
 The code is in very early experimetal status.
+
+## Metric
+
+The origin is defined as e0=0.5(e5-e4) and the point at infinity as einf=e4+e4. This corresponds to ganja.js, the book Hildenbrand2009 and the papers Klepper2016.
