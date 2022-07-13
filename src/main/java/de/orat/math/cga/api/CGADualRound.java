@@ -39,7 +39,7 @@ class CGADualRound extends CGABlade {
         return -CGARound.squaredSize(this);
     }
     
-     @Override
+    @Override
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");
     }

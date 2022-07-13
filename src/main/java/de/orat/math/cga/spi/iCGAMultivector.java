@@ -210,6 +210,20 @@ public interface iCGAMultivector {
         else return this.gp(1d / Math.sqrt(Math.abs(s)));
     }
     
+    /** 
+     * Magnitude (modulus).This is sqrt(abs(~M*M))``.
+     *
+     * following
+     * https://github.com/pygae/clifford/blob/master/clifford/_multivector.py
+     * 
+     * The abs inside the sqrt is need for spaces of mixed signature.
+     * 
+     * @return absolute value
+     */
+    default double abs2(){
+        return Math.sqrt(Math.abs(squaredNorm()));
+    }
+    
     /**
      * @return 
      */
@@ -221,11 +235,15 @@ public interface iCGAMultivector {
         return result;
     }
     /**
-     * Calculate the squared euclidean norm. 
-     * 
+     * Calculate the squared euclidean norm, also called magnitude 
+     * (modulus) squared.
+     *
+     * Note: this may be negative
+     *
      * @return squared euclidean norm
      */
     default double squaredNorm(){
+        //TODO warum nicht reverse statt conjugate?
         return gp(conjugate()).scalarPart();
     }
     

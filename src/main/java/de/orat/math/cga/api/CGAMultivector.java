@@ -16,6 +16,8 @@ import org.jogamp.vecmath.Vector3d;
  * grade(A)<=grade(B),A upright B => A.B=0=A^B*
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
+ * 
+ * https://github.com/pygae/clifford/blob/master/clifford/_multivector.py
  */
 public class CGAMultivector {
     
@@ -182,6 +184,7 @@ public class CGAMultivector {
     /**
      * Determines location from tangent and round objects and also from its dual.
      * 
+     * scheint für CGARound zu stimmen
      * @return location represented by a normalized sphere
      */
     protected CGAMultivector locationFromTangendAndRoundAsNormalizedSphere(){
@@ -499,11 +502,26 @@ public class CGAMultivector {
     public int grade(){
         return impl.grade();
     }
+    /**
+     * Multivectors can have a negative squared-magnitude.  So, without 
+     * introducing formally imaginary numbers, we can only fix the normalized 
+     * multivector's magnitude to +-1.
+     * 
+     * @return 
+     */
     public CGAMultivector normalize(){
         return new CGAMultivector(impl.normalize());
         // alternativ
         //return div(createInf(-1d).ip(this));
+        // or
+        // this.div(abs(this)
+        // https://github.com/pygae/clifford/blob/master/clifford/cga.py
+        // return div(this.negate().ip(createInf(1d)
     }
+    public CGAMultivector negate(){
+        return this.gp(-1);
+    }
+    
     public CGAMultivector gradeInversion(){
         return new CGAMultivector(impl.gradeInversion());
     }

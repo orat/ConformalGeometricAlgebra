@@ -207,14 +207,14 @@ norm(sphere) = 1.9999999999999998
         CGARoundPoint cp = new CGARoundPoint(p, 2d);
         System.out.println("cp="+cp.toString());
         // squared squaredWeight = 4, korrekt 
-        System.out.println("squaredWeight="+String.valueOf(cp.squaredWeight()));
+        System.out.println("squaredWeight1(sollte 4 sein)="+String.valueOf(cp.squaredWeight()));
         
         RoundAndTangentParameters decomposed = cp.decompose();
         Vector3d a1 = decomposed.attitude();
         System.out.println("attitude=("+String.valueOf(a1.x)+", "+String.valueOf(a1.y)+", "+String.valueOf(a1.z)+")");
-        Point3d p1 = decomposed.location();
+        Point3d p1 = decomposed.location(); // ok
         System.out.println("location=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
-        // sollte aber 0 sein.
+        // 2.251 sollte aber 0 sein.
         double squaredSize = decomposed.squaredSize();
         System.out.println("squaredSize="+String.valueOf(squaredSize));
         //CGAMultivector attitude = cp.determineDirectionFromTangentAndRoundObjectsAsMultivector();

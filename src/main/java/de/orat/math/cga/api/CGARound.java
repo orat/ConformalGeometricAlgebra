@@ -6,12 +6,12 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Rounds are RoundPoints, circle, spheres and point-pairs, all in inner product
+ * Rounds are RoundPoints, circles, spheres, hyperspheres and point-pairs, all in inner product
  * null space representation.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGARound extends CGABlade  {
+abstract class CGARound extends CGABlade {
     
     CGARound(CGAMultivector m){
         super(m);
@@ -54,12 +54,13 @@ abstract class CGARound extends CGABlade  {
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");
     }
+    // für eine CGARound scheint das jetzt zu stimmen
     @Override
     public Point3d location(){
         CGAMultivector location = location3(weight());
-        System.out.println("location lua="+location.toString());
+        System.out.println("location lua="+location.toString()); // scheint für CGAPoint zu stimmen
         CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
-        return extractE3ToPoint3d();
+        return result.extractE3ToPoint3d();
         //double[] vector = result.impl.extractCoordinates(1);
         //int index = result.impl.getEStartIndex();
         //return new Point3d(vector[index++], vector[index++], vector[index]);
@@ -104,13 +105,16 @@ abstract class CGARound extends CGABlade  {
      * Implementation following the formulae from CGAUtil Math, Spencer T
      * Parkin 2013.
      * 
+     * scheint für CGAPoint zu stimmen
+     * 
      * @return location of the round
      */
     private CGAMultivector location3(double weight){
         CGAMultivector normalizedRound = new CGAMultivector(this.impl);
-        normalizedRound.gp(1d/weight);
-        System.out.println("normalizedRound(location)"+normalizedRound.toString());
-        CGAMultivector e0_einf = createOrigin(1d).op(createOrigin(1d));
+        normalizedRound = normalizedRound.gp(1d/weight);
+        System.out.println("weight="+String.valueOf(weight));
+        System.out.println("normalizedRound(location)="+normalizedRound.toString());
+        CGAMultivector e0_einf = createOrigin(1d).op(createInf(1d));
 	return e0_einf.ip(normalizedRound.op(e0_einf));
     }
     
@@ -125,17 +129,25 @@ abstract class CGARound extends CGABlade  {
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.
      * 
-     * ok für dualSphere
+     * ok für dualSphere, hint: CGADualRound ruft diese Methode auf uns switched nur das Vorzeichen
+     * falsch für CGARoundPoint
      * 
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius squared
      */
     static double squaredSize(CGABlade m){
-        //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in Dorst2007 p.407
+        //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in 
+        // Dorst2007 p.407 - Formel für Round in Dorst also DualRound in meine Notation
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr()).gp(-1d);
         //System.out.println("squaredSize/radiusSquared="+result.toString());
+        
+        // https://github.com/pygae/clifford/blob/master/clifford/cga.py
+        // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
+        // also nicht squaredSize bestimmt werden kann
+        
         return result.scalarPart();
     }
+    
     public RoundAndTangentParameters decompose(){
        return new RoundAndTangentParameters(attitude(), 
                 location(), squaredSize());
