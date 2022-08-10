@@ -1,0 +1,435 @@
+/**
+ * This file is used to show the inverse kinematics for the UR5 robot.
+ * 
+ * The mathematics follows
+ * "Inverse Kinematics for Industrial Robots using Conformal Geometric Algebra"
+ * by A. Kleppe and O. Egeland
+ */
+
+// Denavit-Hartenberg parameters
+
+// product typ?
+type DH {
+    CGAScalar d1,
+    CGAScalar a1,
+    CGAScalar alpha1,
+
+    CGAScalar d2,
+    CGAScalar a2,
+    CGAScalar alpha2,
+
+    CGAScalar d3,
+    CGAScalar a3,
+    CGAScalar alpha3,
+
+    CGAScalar d4,
+    CGAScalar a4,
+    CGAScalar alpha4,
+
+    CGAScalar d5,
+    CGAScalar a5,
+    CGAScalar alpha5
+
+    CGAScalar d6,
+    CGAScalar a6,
+    CGAScalar alpha6
+}
+
+function DH set_dhUR5e() {
+    CGAScalar d1 = 0.0892;
+    CGAScalar a1 = 0.0;
+    CGAScalar alpha1 = π/2.0;
+
+    CGAScalar d2 = 0.0;
+    CGAScalar a2 = -0.425;
+    CGAScalar alpha1 = 0.0;
+
+    CGAScalar a3 = -0.39243;
+
+    CGAScalar d4 = 0.109;
+    CGAScalar alpha4 = π/2.0;
+
+    CGAScalar d5 = 0.093;
+    CGAScalar alpha5 = π/2.0;
+
+    CGAScalar d6 = 0.082;
+
+    return {d1, a1, alpha1, d2, a2, alpha2, 0.0, a3, 0.0,
+            d4, 0.0, alpha4], d5, 0.0, alpha5, d6, 0.0, 0.0};
+}
+
+// Base plane
+// hier würde ich gerne die Klammer weglassen geht das?
+:Base = ε₀∧ε₁∧ε₂∧(100εᵢ);
+
+// Set the configurations of the robot
+
+// ergibt +1 oder -1 für jeden Parameter...
+/*set_configurations = {
+    k_ud = 2*(CheckBox("Elbow up/Down",0)-0.5);
+    k_fn = 2*(CheckBox("Wrist flip/no flip",1)-0.5);
+    k_lr = 2*(CheckBox("Wrist left/right",1)-0.5);
+    k = [k_ud, k_fn, k_lr]
+}*/
+
+type Configuration {CGAScalar ud, CGAScalar fn, CGAScalar lr};
+
+function Configuration set_configuration(){
+    // -1 ist der default Wert
+    return {2*(checkbox("Elbow up/Down", 0)-0.5),
+            2*(checkBox("Wrist flip/no flip",1)-0.5),
+            2*(checkBox("Wrist left/right",1)-0.5)};
+}
+
+// Set the position of the end-effector
+/*set_position = {
+    pos_x = Slider("X", -1, 1, 0.01, 0.48543);
+    pos_y = Slider("Y", -1, 1, 0.01, -0.109);
+    pos_z = Slider("Z", -1, 1, 0.01, 0.4322);
+
+    VecE3(pos_x, pos_y, pos_z)
+}*/
+
+// in Clucalc VecE3 Create vector in E3 at (1,2,0) 
+// besser einen CGAVectorE3 zurückgeben
+function CGAVectorE3 setPosition(){
+    return createVecE3(slider("X", -1, 1, 0.01, 0.48543),
+                       slider("Y", -1, 1, 0.01, -0.109),
+                       slider("Z", -1, 1, 0.01, 0.4322));
+}
+
+// Set the rotation of the end-effector
+
+/*
+set_rotation = {
+    roll = Slider("Roll", -Pi, Pi, 0.01, 0);
+    pitch = Slider("Pitch", -Pi, Pi, 0.01, -Pi);
+    yaw = Slider("Yaw", -Pi, Pi, 0.01, 0);
+
+    Rx = Matrix([[1,0,0],[0,cos(roll),-sin(roll)],[0,sin(roll),cos(roll)]]);
+    Ry = Matrix([[cos(pitch),0,sin(pitch)],[0,1,0],[-sin(pitch),0,cos(pitch)]]);
+    Rz = Matrix([[cos(yaw),-sin(yaw),0],[sin(yaw),cos(yaw),0],[0,0,1]]);
+    R = Rz*Ry*Rx;
+
+    n_e = VecE3(R(1,1),R(2,1),R(3,1));
+    s_e = VecE3(R(1,2),R(2,2),R(3,2));
+    a_e = VecE3(R(1,3),R(2,3),R(3,3));
+
+    rot = [n_e, s_e, a_e]
+}
+*/
+
+/**
+  * Creates a Motor represented by a multivecor based on dh parameters.
+  *
+  */
+function MVec setRotation(Scalar d, Scalar, r, Scalar alpha, Scalar theta){
+    MVec Rz = cos(-0.5 theta)+sin(-0.5 theta) ε₁∧ε₂;
+    MVec Tz = 1-0.5 d ε₃∧εᵢ;
+    MVec Tx = 1-0.5 r ε₁∧εᵢ;
+    MVec Rx = cos(-0.5 alpha)+sin(-0.5 a alpha) ε₂∧ε₃;
+    return Rz Tz Tx Rx;
+}
+
+type Rotation {VecE3 n_e, VecE3 s_e, VecE3 a_e};
+
+function Rotation set_rotation(){
+    Scalar roll  = slider("Roll",  -π, π, 0.01, 0);
+    Scalar pitch = slider("Pitch", -π, π, 0.01, -π);
+    Scalar yaw   = slider("Yaw",   -π, π, 0.01, 0);
+
+// soll ich wirklich Matrix-Multiplikation implementieren?
+// ich könnte den folgenden Code doch auch mit exp() als Rotoren implementieren
+//TODO
+    Rx = Matrix([[1,0,0],[0,cos(roll),-sin(roll)],[0,sin(roll),cos(roll)]]);
+    Ry = Matrix([[cos(pitch),0,sin(pitch)],[0,1,0],[-sin(pitch),0,cos(pitch)]]);
+    Rz = Matrix([[cos(yaw),-sin(yaw),0],[sin(yaw),cos(yaw),0],[0,0,1]]);
+    R = Rz*Ry*Rx;
+
+    return {VecE3(R(1,1),R(2,1),R(3,1)),
+            VecE3(R(1,2),R(2,2),R(3,2)),
+            VecE3(R(1,3),R(2,3),R(3,3))};
+
+    //rot = [n_e, s_e, a_e]
+}
+
+
+
+// Calculate the inverse kinematics of the UR5 robot
+
+/*ik_ur5 = {
+
+    // Start of Section 5
+
+    // The input parameters to the inverse kinematics are the
+    // position vector p_e, the approach vector a_e, the slide
+    // vector s_e and the normal vector n_e of the end-effector.
+    // T_06 = (n_e 0, s_e 0, a_e 0, p_e 1)
+
+    k = _P(1);
+    p = _P(2);
+    r = _P(3);
+    param = ::dh_parameters();
+    X_0 = e0;
+    X_e = VecN3(p);
+    X_5 = VecN3(p - param(6)(1)*r(3));
+    S_c = SphereN3(X_5, param(4)(1));
+    K_0 = e0 - ((S_c*).e0)*einf;
+    C_5k = S_c.K_0;
+    Q_c = (X_5^e1^e2^einf).(C_5k*);
+    X_c = (Q_c + k(3)*sqrt(abs(Q_c.Q_c)))/(-einf.Q_c);
+    P_c = e0^e3^X_c^einf;
+
+    // Section 5.1: Find X_3 and X_4
+    P_cpar = (P_c*)+(X_5.(P_c*))*einf;
+    P_56perp = ((X_5^X_e)*)^einf;
+    n_56perp = -::normalize(P_56perp.e0.einf);
+    P_cperp = X_5^n_56perp^einf;
+    L_45 = P_cpar.P_cperp;
+    S_5 = SphereN3(X_5,param(5)(1));
+    Q_4 = (L_45*).S_5;
+    X_4 = (Q_4 + k(2)*sqrt(abs(Q_4.Q_4)))/(-einf.Q_4);
+    S_4 = SphereN3(X_4,param(4)(1));
+    L_34 = X_4^(P_c*)^einf;
+    Q_3 = (S_4*).L_34;
+    X_3 = (Q_3 - k(3)*sqrt(abs(Q_3.Q_3)))/(-einf.Q_3);
+
+    // Section 5.2: X_1 and X_2
+    X_1 = VecN3(0,0,param(1)(1));
+    S_1 = SphereN3(X_1, param(2)(2));
+    S_3 = SphereN3(X_3, param(3)(2));
+    C_2 = (S_1*)^(S_3*);
+    Q_2 = C_2.P_c;
+    X_2 = (Q_2 - k(1)*sqrt(abs(Q_2.Q_2)))/(-einf.Q_2);
+    // vermutlich sind das Ursprünge der Koordindatensysteme für alle 6 Achsen?
+    X = [X_0,X_1,X_2,X_3,X_4,X_5,X_e]
+}*/
+
+// TODO
+// besser wäre es doch für jedes Gelenk einen Rotor zurückzubekommen
+// oder sind das hier die Ursprünge der Koordinatensysteme?
+type X {X0, X1, X2, X3, X4, X5, Xe};
+
+/**
+  * Inverse kinematics.
+  *
+  * @param k configuration
+  * @param p position
+  * @param r rotation sollte besser ein rotor sein, statt 3 richtungen oder?
+  * @param dh parameters
+  */
+function X ik(Configuration k, CGAVectorE3 p, Rotation r, DH dh){
+    CGAMVec X0 = ε₀; //FIXME wer braucht das?
+
+    // section 5
+    CGAPoint Xe = CGAPoint(p); 
+    CGAPoint X5 = CGAPoint(p-dh.d6 r.ae);
+    CGADualSphere Sc = CGASphere(X5, dh.d4); //FIXME stimmt nicht mit Formel 43 im paper überein
+    CGASphere K0 = ε₀-((Sc*)⋅ε₀)εᵢ; 
+    CGADualSphere C5k = Sc⋅K0; //FIXME im paper steht da aber ein wedge product
+    CGASphere Qc = (X5∧ε₁∧ε₂∧εᵢ)⋅(C5k*);
+    CGAPoint Xc = (Qc + k.lr sqrt(abs(Qc⋅Qc)))/(-εᵢ⋅Qc);
+    CGAPlane Pc = ε₀∧ε₃^Xc^εᵢ;
+
+    // Section 5.1: Find X_3 and X_4
+    Pcpar = (Pc*)+(X5⋅(Pc*))*εᵢ;
+    P_56perp = ((X_5^X_e)*)^εᵢ;
+    n_56perp = -::normalize(P_56perp.e0.einf);
+    P_cperp = X_5^n_56perp^einf;
+    L_45 = P_cpar.P_cperp;
+    S_5 = SphereN3(X_5,param(5)(1));
+    Q_4 = (L_45*).S_5;
+    X_4 = (Q_4 + k(2)*sqrt(abs(Q_4.Q_4)))/(-einf.Q_4);
+    S_4 = SphereN3(X_4,param(4)(1));
+    L_34 = X_4^(P_c*)^einf;
+    Q_3 = (S_4*).L_34;
+    X_3 = (Q_3 - k(3)*sqrt(abs(Q_3.Q_3)))/(-einf.Q_3);
+
+    // Section 5.2: X_1 and X_2
+    X_1 = VecN3(0,0,param(1)(1)); 
+    Sphere S_1 = SphereN3(X_1, param(2)(2));
+    Sphere S_3 = SphereN3(X_3, param(3)(2));
+    Circle C_2 = (S_1*)^(S_3*);
+    PointPair Q_2 = C_2.P_c;
+    X_2 = (Q_2 - k(1)*sqrt(abs(Q_2.Q_2)))/(-einf.Q_2);
+    // vermutlich sind das Ursprünge der Koordindatensysteme für alle 6 Achsen?
+    X = [X_0,X_1,X_2,X_3,X_4,X_5,X_e]
+}
+
+// Find the angles of the UR5
+
+// These are calculated using Table 4
+
+/*find_angles = {
+    k = _P(1);
+    p = _P(2);
+    r = _P(3);
+    X = _P(4);
+    P_c = ::normalize(e0^e3^X(4)^einf);
+    // vermutlich sind das die Vektoren ???
+    L_01 = X(1)^X(2)^εᵢ;
+    L_12 = X(2)^X(3)^εᵢ;
+    L_23 = X(3)^X(4)^εᵢ;
+    L_45 = X(5)^X(6)^εᵢ;
+    a_1 = e2;
+    b_1 = -k(3)*P_c*;
+    N_1 = e1^e2;
+    theta_1 = ::atan2(a_1.b_1, (a_1^b_1)/N_1);
+    a_2 = (L_01.e0).εᵢ;
+    b_2 = (L_12.e0).εᵢ;
+    N_2 = ::normalize(-k(3)*(P_c.e0).einfεᵢ);
+    theta_2 = ::atan2(a_2.b_2, (a_2^b_2)/N_2) - (Pi/2);
+    a_3 = b_2;
+    b_3 = (L_23.e0).εᵢ;
+    N_3 = N_2;
+    theta_3 = ::atan2(a_3.b_3, (a_3^b_3)/N_3);
+    a_4 = b_3;
+    b_4 = (L_45.e0).einfεᵢ;
+    N_4 = N_2;
+    theta_4 = ::atan2(a_4.b_4, (a_4^b_4)/N_4) - (Pi/2);
+    a_5 = k(3)*P_c*;
+    b_5 = (((VecN3(r(3))-e0)^einf).e0);
+    N_5 = ::normalize(-((L_45*)^einf).e0);
+    theta_5 = ::atan2(a_5.b_5, (a_5^b_5)/N_5);
+    a_6 = (L_45.einf).e0;
+    b_6 = (((VecN3(r(2))-e0)^einf).e0);
+    N_6 = -(((VecN3(r(2))-e0)^einf).e0)^(((VecN3(r(1))-e0)^einf).e0);
+    theta_6 = ::atan2(a_6.b_6, (a_6^b_6)/N_6);
+    theta = [theta_1, theta_2, theta_3, theta_4, theta_5, theta_6]
+}*/
+
+type Angles {Scalar theta1, Scalar theta2, Scalar theta3, Scalar theta4,
+               Scalar theta5, Scalar theta6};
+
+function Angles find_angles(K k, P p, R r, X x){
+    CGAPoint Pc = ::normalize(ε₀^e3^X(4)^εᵢ);
+    // vermutlich sind das die Vektoren ???
+    L01 = X.X1^X.X2^εᵢ;
+    L12 = X.X2^X.X3^εᵢ;
+    L23 = X.X3^X.X4^εᵢ;
+    L45 = X.X5^X.X6^εᵢ;
+    a1 = e2;
+    b1 = -k(3)*Pc*;
+    N1 = e1^e2;
+    Scalar theta1 = ::atan2(a_1.b_1, (a_1^b_1)/N_1);
+    a2 = (L01.ε₀).εᵢ;
+    b2 = (L12.ε₀).εᵢ;
+    N2 = ::normalize(-k(3)*(P_c.e0).εᵢ);
+    Scalar theta2 = ::atan2(a_2.b_2, (a_2^b_2)/N_2) - (Pi/2);
+    a3 = b2;
+    b3 = (L23.e0).εᵢ;
+    N3 = N2;
+    Scalar theta3 = ::atan2(a_3.b_3, (a_3^b_3)/N_3);
+    a_4 = b_3;
+    b_4 = (L_45.e0).εᵢ;
+    N_4 = N_2;
+    Scalar theta4 = ::atan2(a_4.b_4, (a_4^b_4)/N_4) - (Pi/2);
+    a_5 = k(3)*P_c*;
+    b_5 = (((VecN3(r(3))-e0)^εᵢ).e0);
+    N_5 = ::normalize(-((L_45*)^εᵢ).e0);
+    Scalar theta_5 = ::atan2(a_5.b_5, (a_5^b_5)/N_5);
+    a_6 = (L_45.εᵢ).e0;
+    b_6 = (((VecN3(r(2))-e0)^εᵢ).e0);
+    N_6 = -(((VecN3(r(2))-e0)^εᵢ).e0)^(((VecN3(r(1))-e0)^εᵢ).e0);
+    Scalar theta_6 = ::atan2(a_6.b_6, (a_6^b_6)/N_6);
+    return {theta1, theta2, theta3, theta4, theta5, theta6}
+}
+
+
+// Normalize a multivector
+
+/*normalize = {
+    _P(1)/(sqrt(abs(_P(1)*_P(1)~)))
+}*/
+
+// atan2 function
+// TODO
+// vielleicht gibts eine kompakterer Schreibweise für if-else-statements
+// 
+function Scalar atan2(Scalar x, Scalar y){
+    Scalar angle = 0.0;
+    if (x > 0){
+        angle = atan(y/x);
+    } else if (x < 0 && y >= 0){
+        angle = atan(y/x) + 3.1415;
+    } else if(x < 0 && y < 0){
+        angle = atan(y/x) - 3.1415;
+    } else if(x == 0 && y > 0){
+        angle = Pi/2;
+    } else if(x == 0 && y < 0){
+        angle = -Pi/2;
+    }
+    return angle
+}
+
+
+// Forward kinematics
+
+/*forward_kinematics = {
+
+theta = _P(1);
+param = ::dh_parameters();
+T01 = ::LinkDH2T([param(1)(2),param(1)(3),param(1)(1), theta(1)]);
+T12 = ::LinkDH2T([param(2)(2),param(2)(3),param(2)(1), theta(2)]);
+T23 = ::LinkDH2T([param(3)(2),param(3)(3),param(3)(1), theta(3)]);
+T34 = ::LinkDH2T([param(4)(2),param(4)(3),param(4)(1), theta(4)]);
+T45 = ::LinkDH2T([param(5)(2),param(5)(3),param(5)(1), theta(5)]);
+T56 = ::LinkDH2T([param(6)(2),param(6)(3),param(6)(1), theta(6)]);
+T = T01*T12*T23*T34*T45*T56
+
+}*/
+
+// Link function for DH-table
+
+/*LinkDH2T = {
+    a = _P(1)(1); alpha = _P(1)(2); d = _P(1)(3); theta = _P(1)(4);
+    T = Matrix([
+    [cos(theta),-sin(theta)*cos(alpha),sin(theta)*sin(alpha),a*cos(theta)],
+    [sin(theta),cos(theta)*cos(alpha),-cos(theta)*sin(alpha),a*sin(theta)],
+    [0,sin(alpha),cos(alpha),d],
+    [0,0,0,1]])
+}*/
+
+
+// Draw the robot
+
+function void draw_robot(X x){
+    //:_P(1);
+    :Color(1,0.5,0,0.5);
+    count = Size(_P(1));
+    radius = 0.008;
+    i = 1;
+
+    loop {
+
+        if (i > count-1) break;
+
+        br =_P(1)(i+1)-_P(1)(i);
+        br = VecN3(br(2),br(3),br(4));
+        DrawSphere(_P(1)(i+1),radius);
+        DrawCylinder(_P(1)(i),br,radius);
+        i = i + 1;
+    }
+}
+
+// Here the script begins
+
+// der index 3 in den Klammern soll die array-length festlegen die erwartet wird
+// das n in den Klammern bedeutet beliebige Länge, aber beide arrays gleich lang
+// da der gleich Buchstabe verwendet wird. Bei verschiedenen Längen n1, n2, ...
+// verwenden? oder aber diese Festlegungen verwerfen und statt dessen die Tests
+// selbst implementieren? Nein, besser nicht, ist unnötig aufwändig
+main(Tuple3d[n] positionTCP, Quad4d[n] orientationTCP, 
+    double[3] d, double[3] a, double[3] alpha){
+    
+    K k = set_configuration();
+    Position p = set_position();
+    Rotation r = set_rotation();
+    DH dh = set_dhUR5e();
+    X x = ik_ur5(k, p, r, dh);
+
+    Thetas thetas = find_angles(k,p,r,X);
+    T = forward_kinematics(theta);
+
+    draw_robot(X);
+}
