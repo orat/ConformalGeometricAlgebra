@@ -55,6 +55,7 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
             .add(createEz(n.z))
             .add(createInf(d)));
     }
+   
     /**
      * Composition of a plane based on a point and a normal vector and the weight. 
      * 

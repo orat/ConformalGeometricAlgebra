@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.util.Decomposition3d.MotorParameters;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -23,5 +24,35 @@ public class CGAMotor extends CGAVersor {
     
     public CGAMotor(CGABivector B, Vector3d d){
         this(B.add(createE3(d).gp(createInf(1d))));
+    }
+    
+    public MotorParameters decompose(){
+        double cosAlpha = scalarPart();
+        
+        double[] bivector = impl.extractCoordinates(2);
+        
+        double a = bivector[4];
+        double b = bivector[1];
+        double c = bivector[0];
+        
+        double d1 = a/cosAlpha;
+        Vector3d dir = new Vector3d(d1,bivector[5]/cosAlpha,bivector[7]/cosAlpha);
+        
+        //double sinAlpha = bivector[4]/d1; // e23/d1 or e13/d2 or e12/d3
+        
+        double[] quadvector = impl.extractCoordinates(4);
+        double q = quadvector[0];
+        
+        double sinAlpha;
+        if (q != 0){
+            sinAlpha = (Math.pow(a,2)-Math.pow(b,2)+Math.pow(c,2))/q;
+        } else {
+            sinAlpha = Double.NaN;
+        }
+        
+        double alpha = Math.atan2(sinAlpha,cosAlpha);
+        double d = Double.NaN;
+        dir.scale(d);
+        return new MotorParameters(dir, alpha);
     }
 }

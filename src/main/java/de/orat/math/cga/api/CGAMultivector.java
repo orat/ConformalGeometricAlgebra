@@ -507,7 +507,7 @@ public class CGAMultivector {
      * introducing formally imaginary numbers, we can only fix the normalized 
      * multivector's magnitude to +-1.
      * 
-     * @return 
+     * @return the normalised multivector so that X*~X is +- 1
      */
     public CGAMultivector normalize(){
         return new CGAMultivector(impl.normalize());

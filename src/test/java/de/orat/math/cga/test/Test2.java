@@ -1,11 +1,15 @@
 package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGACircle;
+import de.orat.math.cga.api.CGADualCircle;
 import de.orat.math.cga.api.CGADualLine;
+import de.orat.math.cga.api.CGADualPlane;
 import de.orat.math.cga.api.CGADualSphere;
 import de.orat.math.cga.api.CGALine;
 import de.orat.math.cga.api.CGALinePair;
 import de.orat.math.cga.api.CGAMultivector;
+import static de.orat.math.cga.api.CGAMultivector.createInf;
+import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.api.CGAPlane;
 import de.orat.math.cga.api.CGARoundPoint;
 import de.orat.math.cga.api.CGASphere;
@@ -76,6 +80,109 @@ public class Test2 {
         System.out.println("CGA CGA2_METRIC: "+sb.toString());
     }
     
+    // alles korrekt
+    public void testGanjaCreatePointsCircleLineExample(){
+        System.out.println("------------------Ganja.js expample: creation of points, circle, line --------------");
+        CGARoundPoint p1 = new CGARoundPoint(new Vector3d(1d,0d,0d));
+        // p1=1.0*eo + 1.0*e1 + 0.5*ei (korrekt)
+        System.out.println("p1="+p1.toString());
+        CGARoundPoint p2 = new CGARoundPoint(new Vector3d(0d,1d,0d));
+        // p2=1.0*eo + 1.0*e2 + 0.5*ei (korrekt)
+        System.out.println("p2="+p2.toString());
+        CGARoundPoint p3 = new CGARoundPoint(new Vector3d(0d,0d,1d));
+        // p3=1.0*eo + 1.0*e3 + 0.5*ei (korrekt)
+        System.out.println("p3="+p3.toString());
+        
+        CGADualCircle c = new CGADualCircle(p1,p2,p3);
+        // c=1.0*eo^e1^e2 - 1.0*eo^e1^e3 + 1.0*eo^e2^e3 + 1.0*e1^e2^e3 
+        // + 0.5*e1^e2^ei - 0.5*e1^e3^ei + 0.5*e2^e3^ei (korrekt)
+        System.out.println("c="+c.toString());
+        
+        CGADualLine l = new CGADualLine(p1,p2);
+        // l=-1.0*eo^e1^ei + 1.0*eo^e2^ei + 1.0*e1^e2^ei (korrekt)
+        System.out.println("l="+l.toString());
+    }
+    
+    // alles korrekt!
+    public void testGanjaCreatePointsPlaneSphereExample(){
+        System.out.println("------------------Ganja.js expample: creation of points, plane, sphere --------------");
+        CGARoundPoint p1 = new CGARoundPoint(new Vector3d(1d,0d,0d));
+        // p1=1.0*eo + 1.0*e1 + 0.5*ei (korrekt)
+        System.out.println("p1="+p1.toString());
+        CGARoundPoint p2 = new CGARoundPoint(new Vector3d(0d,1d,0d));
+        // p2=1.0*eo + 1.0*e2 + 0.5*ei (korrekt)
+        System.out.println("p2="+p2.toString());
+        CGARoundPoint p3 = new CGARoundPoint(new Vector3d(0d,0d,-1d));
+        // p3=1.0*eo - 1.0*e3 + 0.5*ei (korrekt)
+        System.out.println("p3="+p3.toString());
+        CGARoundPoint p4 = new CGARoundPoint(new Vector3d(0d,-1d,-0d));
+        // p4=1.0*eo - 1.0*e2 + 0.5*ei (korrekt)
+        System.out.println("p4="+p4.toString());
+        
+        CGADualSphere s = new CGADualSphere(p1,p2,p3,p4);
+        // s=2.0*eo^e1^e2^e3 - 1.0*e1^e2^e3^ei (korrekt)
+        System.out.println("s="+s.toString());
+        
+        CGADualPlane p = new CGADualPlane(p1,p2,p3);
+        // p=1.0*eo^e1^e2^ei + 1.0*eo^e1^e3^ei - 1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei (korrekt)
+        System.out.println("p="+p.toString());
+    }
+    
+    
+    public void testGanjaDualSpherePlane(){
+         System.out.println("------------------Ganja.js expample: creation of dual sphere and plane --------------");
+        // We start by defining a null basis, and upcasting for points
+        //var ni = 1e4+1e5, no = .5e5-.5e4, nino = ni^no;
+        //var up = (x)=> no + x + .5*x*x*ni;
+
+        CGARoundPoint p1 = new CGARoundPoint(new Vector3d(1d,0.5d,0d));
+        System.out.println("p1="+p1.toString());
+        CGARoundPoint p2 = new CGARoundPoint(new Vector3d(0d,1d,0.5d));
+        System.out.println("p2="+p2.toString());
+        
+        // The distance between two points.
+        //var d = (a,b)=>((a<<b).Length*2)**.5;
+        
+        // The duality operator can be used to produce a sphere from a point.
+        // var s = ()=>!(p1 - .3**2*.5*ni);
+        // ganja.js: -1.08e1234 - 0.07e1235 - 0.5e1345 + e2345
+        // s=-eo^e1^e2^e3 + 0.5*eo^e1^e3^ei 
+        //   -eo^e2^e3^ei - 0.625*e1^e2^e3^ei
+        // scheint so ungefähr zu passen, ist noch nicht 100% überprüft
+        CGADualSphere s = (new CGASphere(p1, Math.pow(0.3,2d))).dual();
+        System.out.println("s="+s.toString());
+        
+        CGAMultivector inf_no = createInf(1d).op(createOrigin(1d));
+        // Planes also have a direct dual representation. (but start from vector not point)
+        // var p = ()=>!(d(p2,no)*ni + (p2^nino*nino).Normalized);
+        
+        CGAMultivector n = ((new CGARoundPoint(p2)).op(inf_no).gp(inf_no)).normalize();
+        // n=-0.8944271909999159*e2 - 0.4472135954999579*e3
+        System.out.println("n="+n.toString());
+        CGADualPlane p = (new CGAPlane((CGAMultivector.createInf(Math.sqrt(p2.distSquare(
+                new CGARoundPoint(CGAMultivector.createOrigin(1d)))))).add(
+                        n))).dual();
+        // java p=-2.220446049250313E-16*eo^e1^e2^e3 + 0.44721359549995776*eo^e1^e2^ei 
+        // - 0.8944271909999155*eo^e1^e3^ei - 1.1180339887498945*e1^e2^e3^ei
+        // ganja.js p= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
+        System.out.println("p="+p.toString());
+       
+        
+        double d = p2.distSquare(new CGARoundPoint(CGAMultivector.createOrigin(1d)));
+        // d=1.2500000000000007
+        System.out.println("d="+String.valueOf(d));
+        // vermutlich brauche ich n als CGAAttitude und dann einen passenden Konstruktor
+        //TODO
+        //CGAPlane pa = CGAPlane(n, d);
+        
+        // p= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
+
+        // c=-1.11e123-0.48e124-0.03e125-0.40e134+0.48e135+0.22e145-1.11e234
+        // -1.11e235-0.44e245-0.89e345
+        // You can use the regressive product to calculate intersections..
+        //var c = ()=>s&p;
+    
+    }
     public void testBasisBlades(){
         System.out.println("------------------Basis blades--------------");
         CGAMultivector m = CGAMultivector.createOrigin(1d).ip(CGAMultivector.createInf(1d));
