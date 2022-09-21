@@ -167,9 +167,8 @@ public class Test2 {
         // ganja.js p= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
         System.out.println("p="+p.toString());
        
-        
         double d = p2.distSquare(new CGARoundPoint(CGAMultivector.createOrigin(1d)));
-        // d=1.2500000000000007
+        // java d=1.2500000000000007
         System.out.println("d="+String.valueOf(d));
         // vermutlich brauche ich n als CGAAttitude und dann einen passenden Konstruktor
         //TODO
@@ -181,6 +180,9 @@ public class Test2 {
         // -1.11e235-0.44e245-0.89e345
         // You can use the regressive product to calculate intersections..
         //var c = ()=>s&p;
+        
+        CGADualCircle c = new CGADualCircle(s.vee(p));
+        System.out.println("c="+c.toString());
     
     }
     public void testBasisBlades(){

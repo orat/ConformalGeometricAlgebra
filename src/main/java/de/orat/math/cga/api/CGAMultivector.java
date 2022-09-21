@@ -324,8 +324,8 @@ public class CGAMultivector {
      * with the correct sign
      */
     public CGAMultivector dual(){
-        throw new RuntimeException("dual() is implemented only for derivative objects!");
-        //return new CGAMultivector(impl.dual());
+        //throw new RuntimeException("dual() is implemented only for derivative objects!");
+        return new CGAMultivector(impl.dual());
     }
     /**
      * This method is needed, because twice application of the dual operation can 
@@ -335,8 +335,8 @@ public class CGAMultivector {
      * the correct sign.
      */
     public CGAMultivector undual(){
-        throw new RuntimeException("undual() is implemented only for derivative objects!");
-        //return new CGAMultivector(impl.undual());
+        //throw new RuntimeException("undual() is implemented only for derivative objects!");
+        return new CGAMultivector(impl.undual());
     }
     
     

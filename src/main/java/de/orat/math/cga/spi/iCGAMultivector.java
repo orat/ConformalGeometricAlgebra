@@ -171,14 +171,18 @@ public interface iCGAMultivector {
     /**
      * Computes the dual of this element.
      * 
+     * It is defined for any k-vector x of an n-dimensional subspace as the n-k 
+     * vector y containing all the basis vectors that are not in x. For 
+     * non-degenerate metrics, you can use multiplication with the pseudoscalar 
+     * if so desired (although it will be less efficient). This is not possible 
+     * for CGA because of its degenerate metric.
+     * 
      * @return a new element that is the dual of this element.
      */
-    default iCGAMultivector dual(){
-       return gp(createPseudoScalar().reverse());
-    }
+    public /*default*/ iCGAMultivector dual();//{
+    //   return gp(createPseudoScalar().reverse());
+    //}
     
-    //TODO
-    // implement default implementation
     public iCGAMultivector undual();
 
     public double scalarPart();
