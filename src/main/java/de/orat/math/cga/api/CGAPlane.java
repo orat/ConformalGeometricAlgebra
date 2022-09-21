@@ -46,6 +46,8 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
      * 
      * Be careful: This corresponds to dual plane in Dorst2007.
      * 
+     * Successful tested!!!
+     * 
      * @param n normal vector of the plane
      * @param d distance of the plane to the origin
      */

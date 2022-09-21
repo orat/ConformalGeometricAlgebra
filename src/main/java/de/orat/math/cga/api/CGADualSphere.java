@@ -35,6 +35,8 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
      * Create dual sphere in outer product null space representation 
      * (grade 4 multivector).
      * 
+     * Successfull tested!!!
+     * 
      * @param p1 multivector representing a point on the sphere
      * @param p2 multivector representing a point on the sphere
      * @param p3 multivector representing a point on the sphere

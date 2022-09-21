@@ -1,8 +1,6 @@
 package de.orat.math.cga.spi;
 
-import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
-import de.orat.math.ga.basis.Multivector;
 import org.jogamp.vecmath.Tuple3d;
 
 /**

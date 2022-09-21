@@ -52,6 +52,8 @@ public class CGARoundPoint extends CGASphere {
      * 
      * Inner and outer product null space representation is identical?.<p>
      * 
+     * Successfull tested!!
+     * !
      * @param p euclidian normalized point
      */
     public CGARoundPoint(Tuple3d p){

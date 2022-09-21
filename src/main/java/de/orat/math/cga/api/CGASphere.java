@@ -41,9 +41,9 @@ public class CGASphere extends CGARound implements iCGAVector {
     }
     private static CGAMultivector create(CGARoundPoint location, double r){
         if (!location.isNormalized()) throw new IllegalArgumentException("The given location is not normalized!");
-        CGARoundPoint result = new CGARoundPoint(location);
-        result.isNormalized = true;
-        result.sub(createInf(0.5*r*r));
+        //CGARoundPoint result = new CGARoundPoint(location);
+        CGAMultivector result = location.sub(createInf(0.5*r*r));
+        //result.isNormalized = true;
         return result;
     }
     /**

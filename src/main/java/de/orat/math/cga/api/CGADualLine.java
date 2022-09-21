@@ -30,6 +30,8 @@ public class CGADualLine extends CGADualFlat implements iCGATrivector {
      * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
      * Hildenbrand2013.
      * 
+     * Successfull tested!!!
+     * 
      * @param p1 first point on the line
      * @param p2 second point on the line or direction of the line
      * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))

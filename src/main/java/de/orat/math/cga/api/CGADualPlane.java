@@ -27,6 +27,8 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
     /**
      * Create plane in outer product null space representation (grade 4 multivector).
      * 
+     * Successfull tested!!!
+     * 
      * @param p1 first point in inner product null space representation
      * @param p2 second point in inner product null space representation
      * @param p3 third point in inner product null space representation
