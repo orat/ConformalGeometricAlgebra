@@ -154,4 +154,16 @@ abstract class CGARound extends CGABlade {
     }
     
     public abstract boolean isImaginary();
+    
+    /**
+     * Project point on round.
+     * 
+     * @param point
+     * @return projected point
+     */
+    //(point,sphere)=>-point^ni<<sphere<<sphere
+    public CGARoundPoint project(CGARoundPoint point){
+        return new CGARoundPoint(point.negate().op(CGAMultivector.createInf(1d)).
+                lc(this).lc(this));
+    }
 }

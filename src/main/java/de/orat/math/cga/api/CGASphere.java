@@ -39,13 +39,14 @@ public class CGASphere extends CGARound implements iCGAVector {
     public CGASphere(CGARoundPoint location, double r){
         this(create(location, r));
     }
+    // (P,r)=>!(P-r**2*.5*ni),
     private static CGAMultivector create(CGARoundPoint location, double r){
         if (!location.isNormalized()) throw new IllegalArgumentException("The given location is not normalized!");
-        //CGARoundPoint result = new CGARoundPoint(location);
-        CGAMultivector result = location.sub(createInf(0.5*r*r));
-        //result.isNormalized = true;
+        CGARoundPoint result = new CGARoundPoint(location.sub(createInf(0.5*r*r)));
+        result.isNormalized = true;
         return result;
     }
+    
     /**
      * Create sphere in inner product null space representation 
      * (grade 1 multivector).

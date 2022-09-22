@@ -172,9 +172,9 @@ public class Test2 {
         CGADualPlane p = (new CGAPlane((CGAMultivector.createInf(Math.sqrt(p2.distSquare(
                 new CGARoundPoint(CGAMultivector.createOrigin(1d)))))).add(
                         n))).dual();
-        // java p=-2.220446049250313E-16*eo^e1^e2^e3 + 0.44721359549995776*eo^e1^e2^ei 
-        // - 0.8944271909999155*eo^e1^e3^ei - 1.1180339887498945*e1^e2^e3^ei
+        // java p=-0.447*eo^e1^e2^ei - 0.89*eo^e1^e3^ei - 1.118*e1^e2^e3^ei
         // ganja.js p= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
+        // TODO
         System.out.println("p="+p.toString());
        
         double d = p2.distSquare(new CGARoundPoint(CGAMultivector.createOrigin(1d)));
@@ -189,13 +189,12 @@ public class Test2 {
         // You can use the regressive product to calculate intersections..
         //var c = ()=>s&p;
         CGADualCircle c = new CGADualCircle(s.vee(p));
-        // ganja.js: c=-1.11e123 - 0.48e124 - 0.03e125 - 0.40e134 + 0.48e135 + 0.22e145 - 1.11e234
-        // -1.11e235-0.44e245-0.89e345
-        // java: c=0.447213595499957*eo^e1^e2 - 0.8944271909999141*eo^e1^e3 + 
-        // 3.330669073875467E-16*eo^e2^e3 - 1.1180339887498922*e1^e2^e3 + 
-        // 0.2236067977499784*eo^e1^ei - 0.4472135954999568*eo^e2^ei 
-        // - 0.279508497187473*e1^e2^ei + 0.8944271909999136*eo^e3^ei + 
-        // 1.1180339887498922*e1^e3^ei - 1.118033988749892*e2^e3^ei
+        // ganja.js: c=-1.11e123 - 0.48e124 - 0.03e125 - 0.40e134 + 0.48e135 + 
+        // 0.22e145 - 1.11e234 -1.11e235-0.44e245-0.89e345
+        // java: c=0.447*eo^e1^e2 - 0.89*eo^e1^e3 - 1.118*e1^e2^e3 
+        // + 0.2236*eo^e1^ei - 0.4472135954999568*eo^e2^ei - 0.259*e1^e2^ei 
+        // + 0.894*eo^e3^ei + 1.0777*e1^e3^ei - 1.1180*e2^e3^ei
+        // TODO
         System.out.println("c="+c.toString());
     }
     
@@ -210,32 +209,29 @@ public class Test2 {
         
         //S  = ()=>!(p-.5*ni),                 // main dual sphere around point 
         CGADualSphere S = (new CGASphere(p, 1d)).dual();
-        // java: S=-eo^e1^e2^e3 - 5.551115123125783E-17*e1^e2^e3^ei
-        // ganja.js e1235 = 0.5e123i-e0123
-        //FIXME nur der erste Summand stimmt
+        // java: S=-eo^e1^e2^e3 + 0.49*e1^e2^e3^ei
+        // ganja.js e1235 = 0.5e123i-e0123 (korrekt)
         System.out.println("S="+S.toString());
         
         //S2 = !(up(-1.4e1)-0.125*ni),         // left dual sphere
-        //FIXME der Konstruktor scheint nicht zu stimmen, up() macht vermutlich was anderes...
-        // oder dual() funktioniert nicht richtig
         CGADualSphere S2 = (new CGASphere(new CGARoundPoint(new Vector3d(-1.4,0d,0d)), 0.5d)).dual();
-        // ganja.js: -1.35e1234-0.35e1235-1.39e2345 = -0.85e123i + 1.4e023i
-        // java: S2=-eo^e1^e2^e3 + 1.4*eo^e2^e3^ei - 0.98*e1^e2^e3^ei
-        //FIXME stimmt nur in einer Komponente überein
+        // ganja.js: -1.35e1234-0.35e1235-1.39e2345 = -0.85e123i - e0123 +1.4e023i
+        // java: S2=-eo^e1^e2^e3 + 1.399*eo^e2^e3^ei - 0.85*e1^e2^e3^ei (korrekt)
         System.out.println("S2="+S2.toString());
         
         CGAPlane plane = new CGAPlane(new Vector3d(0d,0d,1d), 0d);
         System.out.println("plane="+plane.toString());
         //C  = !(up(1.4e1)-.125*ni)&!(1e3),    // right circle
         CGADualCircle C = new CGADualCircle(S2.vee(plane.dual()));
-        //TODO solange S2 falsch ist brauche ich C nicht zu überprüfen
+        // ganja.js: 1.35e124+0.35e125+1.39e245 = 1.3e02i + 0.85e12i -e012 (korrekt)
+        // java: C=-eo^e1^e2 - 1.34*eo^e2^ei + 0.85*e1^e2^ei
         System.out.println("C="+C.toString());
         
         //L  = up(.9e2)^up(.9e2-1e1)^ni,       // top line
         // ganja.js: 0.89e124+0.89e125-e145 = -e01i+0.9e12i
         // java: l=-1.0*eo^e1^ei + 0.9*e1^e2^ei (korrekt)
-        CGADualLine l = new CGADualLine(new Point3d(0d,0.9d,0d), new Point3d(-1d,0.9d,0d));
-        System.out.println("l="+l.toString());
+        CGADualLine L = new CGADualLine(new Point3d(0d,0.9d,0d), new Point3d(-1d,0.9d,0d));
+        System.out.println("L="+L.toString());
         
         //P  = !(1e2-.9*ni),                   // bottom dual plane
         // ganja.js: 0.89e1234+0.89e1235-e1345 = e013i + 0.9e123i (korrekt)
@@ -252,41 +248,44 @@ public class Test2 {
         // The intersections of the big sphere with the other 4 objects.
         //var C1 = ()=>S&P sphere meets plane
         CGADualCircle C1 = new CGADualCircle(S.vee(P));
-        // ganja.js: 0.89e123+e135
-        // java: C1=eo^e1^e3 - 0.9*e1^e2^e3 - 4.930380657631324E-32*e1^e3^ei
-        //FIXME faktor von e13i ist falsch, sollte 0.5 sein
+        // ganja.js: 0.89e123+e135 = 0.89e123 + 0.5e13i + e013 (korrekt)
+        // java: C1=eo^e1^e3 + 0.9*e1^e2^e3 + 0.49*e1^e3^ei
         System.out.println("C1="+C1.toString());
         
         // C2 = ()=>S&L 
-        // ganja.js -0.89e12-e15
-        CGADualPointPair pp = new CGADualPointPair(S.vee(l));
-        // java: s&l=eo^e1 - 0.89*e1^e2 + 5.551115123125785E-17*e1^ei
-        // ganja.js: -0.89e12-e15 = 0.89e12-0.5e1i + e01
-        //FIXME e1i = 0.5 ist falsch, sollte 0 sein!!! 
-        // alle anderen stimmen ...
+        CGADualPointPair pp = new CGADualPointPair(S.vee(L));
+        // java: s&l=eo^e1 - 0.89*e1^e2 - 0.5*e1^ei
+        // ganja.js: -0.89e12-e15 = 0.89e12-0.5e1i + e01 (korrekt)
         System.out.println("s&l="+pp.toString());
         
         // C3 = ()=>S&S2 sphere meet sphere
-        // ganja.js: -1.35e123+1.39e235 = -1.35e123+0.7e23i+1.39e023
-        // java: s&s=1.4*eo^e2^e3 - 0.978*e1^e2^e3 - 1.4432899320127043E-16*e2^e3^ei
-
         CGADualCircle C3 = new CGADualCircle(S.vee(S2));
+        // ganja.js: -1.35e123+1.39e235 = -1.35e123+0.7e23i+1.39e023
+        // java: s&s=1.4*eo^e2^e3 - 1.35*e1^e2^e3 - 0.7*e2^e3^ei (korrekt)
         System.out.println("s&s="+C3.toString());
         
         // C4 = ()=>S&C 
         CGADualPointPair C4 = new CGADualPointPair(S.vee(C));
+        // java s&c=1.39*eo^e2 - 1.35*e1^e2 - 0.69*e2^ei
+        // ganja -1.35e12+1.39e25
+        // TODO
         System.out.println("s&c="+C4.toString());
         
         // C5 = ()=>C&P2;  circle meet plane
         CGADualPointPair C5 = new CGADualPointPair(C.vee(P2));
         // ganja.js: 1.7e12-1.02e24-2.02e25 = 1.7e12 
-        // java: c&p=eo^e2 + 1.7*e1^e2 + 3.36*e2^ei
+        // java: c&p=eo^e2 + 1.7*e1^e2 + 3.23*e2^ei
         //FIXME stimmt nur in einer Komponente überein
         //TODO vermutlich sind bereits der Ausgangs-circle oder plane flasch --> überprüfen
         System.out.println("c&p="+C5.toString());
         
         // For line meet plane its a bit more involved.
         //var lp = up(nino<<(P2&L^no));
+        CGARoundPoint lp = new CGARoundPoint(CGAMultivector.createInf(1d).
+                op(CGAMultivector.createOrigin(1d)).lc(P2.vee(L).op(
+                        CGAMultivector.createInf(1d))));
+        System.out.println("lp="+lp.toString());
+        //TODO
     }
     
     public void testGanjaExampleProjectReject(){
@@ -302,12 +301,46 @@ public class Test2 {
         // plane_through_point_tangent_to_x  = (point,x)=>point^ni<<x*point^ni;
 
         // Next we'll define some objects.
-        // var p  = up(.5e2),                         // point
+        // var p  = up(.5e2),                     // point
+        CGARoundPoint p = new CGARoundPoint(new Vector3d(0d,0.5d,0d));
+        // ganja.js: 0.5e2-0.37e4+0.62e5
+        System.out.println("p="+p.toString());
+        //TODO
+        
         // S  = sphere(up(-1.4e1),.5),            // left sphere
+        CGASphere S = new CGASphere(new Point3d(-1.4d,0d,0d),0.5);
+        System.out.println("S="+S.toString());
+        // ganja: -1.35e1234-0.35e1235-1.39e2345
+        //TODO
+        
         // C  = sphere(up(1.4e1),.5)&plane(1e3),  // right circle
+        CGACircle C = new CGACircle((new CGASphere(new Point3d(1.4d,0d,0d),0.5d)).
+                vee(new CGAPlane(new Vector3d(0d,0d,1d),0d)));
+        // ganja.js: 1.35e124+0.35e125+1.39e245
+        System.out.println("C="+C.toString());
+        //TODO
+        
         // L  = up(.9e2)^up(.9e2-1e1)^ni,         // top line
+        CGALine L = new CGALine((new CGARoundPoint(new Vector3d(0d,0.9d,0d))).
+                op(new CGARoundPoint(new Vector3d(-1d,0.9d,0d))).
+                op(CGAMultivector.createInf(1d)));
+        // ganja.js: 0.89e124+0.89e125-e145
+        System.out.println("L="+L.toString());
+        //TODO
+        
         // P  = plane(1e2,.9);                    // bottom plane
-      
+        CGAPlane P = new CGAPlane(new Vector3d(0d,1d,0d),0.9d);
+        // ganja.js: 0.89e1234+0.89e1235-e1345
+        System.out.println("P="+P.toString());
+        //TODO
+        
+        // project point on sphere
+        // var project_point_on_round            = (point,sphere)=>-point^ni<<sphere<<sphere
+        // ()=>project_point_on_round(p,S), "p on S"
+        CGARoundPoint pOnS = new CGARoundPoint(p.negate().
+                op(CGAMultivector.createInf(1d)).lc(S).lc(S));
+        System.out.println("P="+P.toString());
+        
         // Graph the items. (hex numbers are html5 colors, two extra first bytes = alpha)
         // document.body.appendChild(this.graph([ 
         //      0x00FF0000, p, "p",                                       // point 
