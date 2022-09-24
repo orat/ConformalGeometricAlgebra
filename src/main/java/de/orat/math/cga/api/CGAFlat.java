@@ -79,4 +79,5 @@ class CGAFlat extends CGABlade {
         return new Decomposition3d.FlatAndDirectionParameters(attitude.extractAttitudeFromEeinfRepresentation(), 
                new Point3d(locationCoord[index++], locationCoord[index++], locationCoord[index]));
     }*/
+    
 }

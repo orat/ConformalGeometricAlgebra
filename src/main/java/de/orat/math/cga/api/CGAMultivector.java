@@ -9,12 +9,6 @@ import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Containment:
- * x element of A, grade>=1 => x^A=0=x.A*
- * 
- * Perpendicularity:
- * grade(A)<=grade(B),A upright B => A.B=0=A^B*
- * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  * 
  * https://github.com/pygae/clifford/blob/master/clifford/_multivector.py
@@ -246,19 +240,6 @@ public class CGAMultivector {
     }
     
     /**
-     * Intersection of lines, planes and spheres.
-     * 
-     * FIXME
-     * ist das überhaupt so sinnvoll - besser meet oder vee verweden?
-     * 
-     * @param mv2 Line, Plane, Sphere
-     * @return 
-     */
-    /*public CGAMultivector intersect(CGAMultivector mv2){
-        return createPseudoscalar().gp(this).ip(mv2);
-    }*/
-    
-    /**
      * Computes the meet with the specified element in a common subspace.
      * 
      * @param mv the second element of the meet.
@@ -271,8 +252,10 @@ public class CGAMultivector {
     /**
      * Computes the meet with the specified element in a common subspace.
      * 
-     * @param mv1 the second element of the meet.
-     * @param mv2 the element representing a common subspace.
+     * Defined only on blades.
+     * 
+     * @param mv1 the second element (blade) of the meet.
+     * @param mv2 the element (blade) representing a common subspace.
      * @return a new element from the meet with the specified element.
      */
     public final CGAMultivector meet(CGAMultivector mv1, CGAMultivector mv2){
@@ -297,13 +280,30 @@ public class CGAMultivector {
     
     // monadic operators
     
+    // An Involution is an operation which maps an operand to itself when applied
+    // twice
+    
+    /**
+     * Reverse.
+     * 
+     * The reverse operation is the most needed involution operation.
+     * 
+     * @return the reverse of the object. 
+     */
     public CGAMultivector reverse(){
         return new CGAMultivector(impl.reverse());
     }
-    //FIXME ist das korrekt
-    public CGAMultivector sqr(){
-        //return gp(this);
-        return gp(this.reverse());
+    
+    /**
+     * Clifford conjugation.
+     * 
+     * The conjugation operation is the second most needed involution operation in 
+     * geometric algebra.
+     * 
+     * @return clifford conjugate of the object.
+     */
+    public CGAMultivector conjugate(){
+        return new CGAMultivector(impl.conjugate());
     }
     
     /**
@@ -324,7 +324,6 @@ public class CGAMultivector {
      * with the correct sign
      */
     public CGAMultivector dual(){
-        //throw new RuntimeException("dual() is implemented only for derivative objects!");
         return new CGAMultivector(impl.dual());
     }
     /**
@@ -335,14 +334,18 @@ public class CGAMultivector {
      * the correct sign.
      */
     public CGAMultivector undual(){
-        //throw new RuntimeException("undual() is implemented only for derivative objects!");
         return new CGAMultivector(impl.undual());
     }
-    
     
     public CGAMultivector inverse(){
         return new CGAMultivector(impl.generalInverse());
     }
+    
+    //FIXME ist das korrekt
+    public CGAMultivector sqr(){
+        //return gp(this);
+        return gp(this.reverse());
+    } 
     public double squaredNorm(){
         return impl.squaredNorm();
     }
@@ -435,7 +438,7 @@ public class CGAMultivector {
      * - the distance between a point an plane
      * - the decision whether a point is inside or outside of a sphere
      * 
-     * The inner product is identical to the scalar product if the arguments
+     * The inner product is identical to the scalar product, if the arguments
      * are Euclid vectors.
      * 
      * @param y right side argument of the inner product
@@ -463,7 +466,10 @@ public class CGAMultivector {
     public CGAMultivector op(CGAMultivector x){
          return new CGAMultivector(impl.op(x.impl));
     }
+    // a&b = !(!a^!b)
     public CGAMultivector vee(CGAMultivector x){
+        //FIXME muss hier nicht dual() statt undual() stehen?
+        // es scheint aber so zu funktionieren
         return dual().op(x.dual()).undual();
     }
     

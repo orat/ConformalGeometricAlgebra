@@ -6,7 +6,6 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
  * Circle in inner product null space represenation (grade 2 multivector).
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

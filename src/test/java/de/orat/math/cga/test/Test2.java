@@ -289,6 +289,9 @@ public class Test2 {
     }
     
     public void testGanjaExampleProjectReject(){
+        
+        System.out.println("------------------Ganja.js expample: project, reject --------------");
+        
         // We start by defining a null basis, and upcasting for points
         // var ni = 1e4+1e5, no = .5e5-.5e4, nino = ni^no,
         // up = (x)=>no+x+.5*x*x*ni,
@@ -300,46 +303,83 @@ public class Test2 {
         // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
         // plane_through_point_tangent_to_x  = (point,x)=>point^ni<<x*point^ni;
 
-        // Next we'll define some objects.
         // var p  = up(.5e2),                     // point
         CGARoundPoint p = new CGARoundPoint(new Vector3d(0d,0.5d,0d));
-        // ganja.js: 0.5e2-0.37e4+0.62e5
+        // ganja.js: 0.5e2-0.37e4+0.62e5 = e0 + 0.5e2 + 0.125ei (korrekt)
+        // java p=1.0*eo + 0.5*e2 + 0.125*ei
         System.out.println("p="+p.toString());
-        //TODO
         
         // S  = sphere(up(-1.4e1),.5),            // left sphere
-        CGASphere S = new CGASphere(new Point3d(-1.4d,0d,0d),0.5);
+        // sphere = (P,r)=>!(P-r**2*.5*ni)
+        CGADualSphere S = new CGADualSphere((new CGASphere(new Point3d(-1.4d,0d,0d),0.5)).dual());
+        // java S*=1.0*eo - 1.4*e1 + 0.85*ei
+        // java S=-eo^e1^e2^e3 + 1.34*eo^e2^e3^ei - 0.856*e1^e2^e3^ei
+        // ganja: -1.35e1234-0.35e1235-1.39e2345 = -0.8e123i-e0123+1.4e023i (korrekt)
         System.out.println("S="+S.toString());
-        // ganja: -1.35e1234-0.35e1235-1.39e2345
-        //TODO
         
+        // sphere = (P,r)=>!(P-r**2*.5*ni)
+        // plane  = (v,h=0)=>!(v-h*ni);
         // C  = sphere(up(1.4e1),.5)&plane(1e3),  // right circle
-        CGACircle C = new CGACircle((new CGASphere(new Point3d(1.4d,0d,0d),0.5d)).
-                vee(new CGAPlane(new Vector3d(0d,0d,1d),0d)));
+        CGADualSphere sphere = (new CGASphere(new Point3d(1.4d,0d,0d),0.5d)).dual();
+        System.out.println("sphere="+sphere.toString());
+        // sphere=-eo^e1^e2^e3 - 1.34*eo^e2^e3^ei - 0.8545*e1^e2^e3^ei
+        CGADualCircle C = new CGADualCircle(sphere.vee((
+                new CGAPlane(new Vector3d(0d,0d,1d),0d)).dual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245
+        // C=-eo^e1^e2 + 1.34*eo^e2^ei + 0.855*e1^e2^ei
         System.out.println("C="+C.toString());
         //TODO
         
         // L  = up(.9e2)^up(.9e2-1e1)^ni,         // top line
-        CGALine L = new CGALine((new CGARoundPoint(new Vector3d(0d,0.9d,0d))).
-                op(new CGARoundPoint(new Vector3d(-1d,0.9d,0d))).
-                op(CGAMultivector.createInf(1d)));
-        // ganja.js: 0.89e124+0.89e125-e145
+        CGADualLine L = new CGADualLine(new Point3d(0d,0.9d,0d), new Point3d(-1d,0.9d,0d));
+        // ganja.js: 0.89e124+0.89e125-e145 (grade3)
+        // java L=-1.0*eo^e1^ei + 0.9*e1^e2^ei
         System.out.println("L="+L.toString());
         //TODO
         
+        // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
+        // ()=>project_point_on_flat(~p,L),  "p on L",   // point on line
+        CGAMultivector pConjugate = new CGARoundPoint(p.conjugate());
+        // pConjugate=-1.0*eo - 0.5*e2 - 0.125*ei
+        System.out.println("pConjugate="+pConjugate.toString());
+        CGAMultivector pOnL = L.project(new CGARoundPoint(p.conjugate())); 
+        // ganja.js: 0.89e2-0.09e4+0.90e5
+        // java pOnL=-0.89*e2
+        System.out.println("pOnL="+pOnL.toString());
+        //TODO 
+        
+        // plane  = (v,h=0)=>!(v-h*ni);
         // P  = plane(1e2,.9);                    // bottom plane
-        CGAPlane P = new CGAPlane(new Vector3d(0d,1d,0d),0.9d);
+        CGADualPlane P = (new CGAPlane(new Vector3d(0d,1d,0d),0.9d)).dual();
         // ganja.js: 0.89e1234+0.89e1235-e1345
+        // java: P*=1.0*e2 + 0.9*ei
+        // java eo^e1^e3^ei - 0.9*e1^e2^e3^ei
         System.out.println("P="+P.toString());
         //TODO
         
         // project point on sphere
         // var project_point_on_round            = (point,sphere)=>-point^ni<<sphere<<sphere
         // ()=>project_point_on_round(p,S), "p on S"
-        CGARoundPoint pOnS = new CGARoundPoint(p.negate().
-                op(CGAMultivector.createInf(1d)).lc(S).lc(S));
-        System.out.println("P="+P.toString());
+        // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
+        //CGARoundPoint pOnS = S.project(p);
+        //System.out.println("POnS="+pOnS.toString());
+        //TODO
+        
+        //()=>project_point_on_round(~p,C), "p on C",   // point on circle
+        //CGARoundPoint pOnC = C.project(new CGARoundPoint(p.conjugate()));
+        //System.out.println("pOnC="+pOnC.toString());
+        //TODO
+        
+        // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
+        // ()=>project_point_on_flat(p,P),   "p on P",   // point on plane
+        //CGARoundPoint pOnP = new CGARoundPoint();
+        // TODO
+        
+        // ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S2
+        //TODO
+        
+        // ()=>plane_through_point_tangent_to_x(p,P),    // plane through p tangent to P
+        //TODO
         
         // Graph the items. (hex numbers are html5 colors, two extra first bytes = alpha)
         // document.body.appendChild(this.graph([ 

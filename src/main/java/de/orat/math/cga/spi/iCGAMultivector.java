@@ -92,6 +92,9 @@ public interface iCGAMultivector {
     /**
      * Computes the meet with the specified element in a common subspace.
      * 
+     * Da joint and meet vermutlich nur auf Blades definiert sind sollte ich 
+     * die Methoden vielleicht nach CGABlade verschieben.
+     * 
      * @param mv the second element of the meet.
      * @return a new element from the meet with the specified element.
      */

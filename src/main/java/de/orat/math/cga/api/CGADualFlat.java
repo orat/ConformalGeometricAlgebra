@@ -108,4 +108,24 @@ class CGADualFlat extends CGAMultivector {
         return new Decomposition3d.FlatAndDirectionParameters(attitude, 
                new Point3d(locationCoord[index++], locationCoord[index++], locationCoord[index]));
     }*/
+    
+    /**
+     * Since the geometric product between two vectors contains all the information 
+     * regarding their relative directions, it can be used to define projections.
+     * By multiplying the vector a with the square of a unit vector
+     * n, it can be decomposed into parts parallel and perpendicular to n.
+     *  
+     * A projection is defined as the perpendicular part.
+     * 
+     * @param point
+     * @return 
+     */
+    // (point,plane)=>up(-point<<plane<<plane^nino*nino)
+    // - hat 1
+    // * hat 2
+    // << und ^ hat 3
+    public CGARoundPoint project(CGARoundPoint point){
+        CGAMultivector nino = CGAMultivector.createInf(1d).op(CGAMultivector.createOrigin(1d));
+        return new CGARoundPoint(point.lc(this).lc(this).op(nino).gp(nino).negate());
+    }
 }

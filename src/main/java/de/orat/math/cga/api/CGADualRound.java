@@ -55,4 +55,21 @@ class CGADualRound extends CGABlade {
        return new RoundAndTangentParameters(attitude(), 
                 location(), squaredSize());
     }
+    
+    // var project_point_on_round = (point,sphere)=>-point^ni<<sphere<<sphere
+    // - hat 1
+    // << und ^ hat 3
+    /**
+     * Projection of a point onto a round (sphere or circle).
+     * 
+     * @param point if the round is a sphere or the conjugate of the point if the round is a circle
+     * 
+     * @return the projected point
+     */
+    public CGARoundPoint project(CGARoundPoint point){
+        CGAMultivector m = point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate();
+        System.out.println("project="+m.toString());
+        // vermutlich hat m grade 2 statt grade 1
+        return new CGARoundPoint(m);
+    }
 }
