@@ -336,7 +336,8 @@ public class CGAMultivector {
     public CGAMultivector undual(){
         return new CGAMultivector(impl.undual());
     }
-    
+    // cluscript: The inversion is obtained with the ! operator. If a multivector has no
+    // inverse then zero is returned
     public CGAMultivector inverse(){
         return new CGAMultivector(impl.generalInverse());
     }

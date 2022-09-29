@@ -283,8 +283,9 @@ public class Test2 {
         //var lp = up(nino<<(P2&L^no));
         CGARoundPoint lp = new CGARoundPoint(CGAMultivector.createInf(1d).
                 op(CGAMultivector.createOrigin(1d)).lc(P2.vee(L).op(
-                        CGAMultivector.createInf(1d))));
+                        CGAMultivector.createInf(1d))).extractE3ToPoint3d());
         System.out.println("lp="+lp.toString());
+        // ganja.js 1.7e1+0.89e2+1.35e4+2.34e5
         //TODO
     }
     
@@ -323,6 +324,7 @@ public class Test2 {
         CGADualSphere sphere = (new CGASphere(new Point3d(1.4d,0d,0d),0.5d)).dual();
         System.out.println("sphere="+sphere.toString());
         // sphere=-eo^e1^e2^e3 - 1.34*eo^e2^e3^ei - 0.8545*e1^e2^e3^ei
+        //TODO
         CGADualCircle C = new CGADualCircle(sphere.vee((
                 new CGAPlane(new Vector3d(0d,0d,1d),0d)).dual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245
@@ -333,47 +335,57 @@ public class Test2 {
         // L  = up(.9e2)^up(.9e2-1e1)^ni,         // top line
         CGADualLine L = new CGADualLine(new Point3d(0d,0.9d,0d), new Point3d(-1d,0.9d,0d));
         // ganja.js: 0.89e124+0.89e125-e145 (grade3)
-        // java L=-1.0*eo^e1^ei + 0.9*e1^e2^ei
+        // java L=-1.0*eo^e1^ei + 0.9*e1^e2^ei (korrekt)
         System.out.println("L="+L.toString());
-        //TODO
         
-        // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
-        // ()=>project_point_on_flat(~p,L),  "p on L",   // point on line
-        CGAMultivector pConjugate = new CGARoundPoint(p.conjugate());
-        // pConjugate=-1.0*eo - 0.5*e2 - 0.125*ei
-        System.out.println("pConjugate="+pConjugate.toString());
-        CGAMultivector pOnL = L.project(new CGARoundPoint(p.conjugate())); 
-        // ganja.js: 0.89e2-0.09e4+0.90e5
-        // java pOnL=-0.89*e2
-        System.out.println("pOnL="+pOnL.toString());
-        //TODO 
-        
+       
         // plane  = (v,h=0)=>!(v-h*ni);
         // P  = plane(1e2,.9);                    // bottom plane
         CGADualPlane P = (new CGAPlane(new Vector3d(0d,1d,0d),0.9d)).dual();
         // ganja.js: 0.89e1234+0.89e1235-e1345
         // java: P*=1.0*e2 + 0.9*ei
-        // java eo^e1^e3^ei - 0.9*e1^e2^e3^ei
+        // java eo^e1^e3^ei - 0.9*e1^e2^e3^ei (korrekt)
         System.out.println("P="+P.toString());
-        //TODO
         
         // project point on sphere
         // var project_point_on_round            = (point,sphere)=>-point^ni<<sphere<<sphere
         // ()=>project_point_on_round(p,S), "p on S"
-        // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
-        //CGARoundPoint pOnS = S.project(p);
-        //System.out.println("POnS="+pOnS.toString());
+        CGADualPointPair pOnS = S.project(p);
+        // ganja.js: 0.7e12-1.89e14-0.49e15+0.30e24+0.80e25-1.95e45
+        // java POnS=-1.4*eo^e1 - 0.5*eo^e2 + 0.7*e1^e2 + 1.96*eo^ei - 1.197*e1^ei + 0.557*e2^ei
+        System.out.println("POnS="+pOnS.toString());
         //TODO
         
         //()=>project_point_on_round(~p,C), "p on C",   // point on circle
-        //CGARoundPoint pOnC = C.project(new CGARoundPoint(p.conjugate()));
-        //System.out.println("pOnC="+pOnC.toString());
+        // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
+        CGADualPointPair pOnC = C.project(new CGARoundPoint(p.conjugate()));
+        // ganja.js -0.70e12 + 1.89e14+0.49e15+0.30e24+0.80e25-1.95e4
+        // java pOnC=1.4*eo^e1 - 0.5*eo^e2 - 0.7*e1^e2 + 1.96*eo^ei + 1.197*e1^ei + 0.553*e2^ei
+        System.out.println("pOnC="+pOnC.toString());
         //TODO
         
+        
         // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
+        
         // ()=>project_point_on_flat(p,P),   "p on P",   // point on plane
-        //CGARoundPoint pOnP = new CGARoundPoint();
-        // TODO
+        CGARoundPoint pOnP = P.project(p);
+        // ganja.js: -0.90e2-0.09e4+0.90e5 = e0-0.9e2+0.41ei
+        // java pOnP=1.0*eo - 0.899*e2 + 0.4049*ei (korrekt)
+        System.out.println("pOnP="+pOnP.toString());
+        
+        // ()=>project_point_on_flat(~p,L),  "p on L",   // point on line
+        CGARoundPoint pConjugate = new CGARoundPoint(p.conjugate());
+        // java pConjugate= -eo - 0.5*e2 - 0.125*ei
+        // ganja.js: pConjugate = -e0 - 0.5e2 - 0.125ei (korrekt)
+        System.out.println("pConjugate="+pConjugate.toString());
+        CGAMultivector pOnL = L.project(pConjugate); 
+        // ganja.js: 0.89e2-0.09e4+0.90e5 = e0 + 0.89e2 + 0.4ei 
+        // java pOnL=eo - 0.899*e2 + 0.4049*ei
+        //FIXME Das Vorzeichen bei e2 scheint falsch zu sein
+        System.out.println("pOnL="+pOnL.toString());
+        //TODO Da conjugate korrekt scheint muss wohl die project-impl für die
+        // Projektion auf Linien falsch sein, obowohl die Projektion auf Ebenen korrekt ist.
+        
         
         // ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S2
         //TODO
@@ -395,6 +407,27 @@ public class Test2 {
         //  0xE0FFFFFF, S                                             // spheres
   
     }
+    
+    // DefVarsE3(); // Define variables for E3
+    // ?M = 1 + e1 + e2^e3; // Define some multivector
+    // ?iM = !M; // Evaluate inverse of M
+    // ?"M * iM = " + M*iM; // Check that iM is inverse of M
+    // ?W = 1 + e1; // A non-invertible multivector
+    // ?iW = !W; // The inversion
+    //FIXME ist das wirklich für cga?
+    public void testInverse(){
+        // TODO
+        
+        /* output
+        M = 1 + 1^e1 + 1^e23
+        iM = 0.2 + 0.2^e1 + -0.6^e23 + 0.4^I
+        M * iM = 1
+        W = 1 + 1^e1
+        iW = 0
+        */
+    }
+    
+    
     public void testBasisBlades(){
         System.out.println("------------------Basis blades--------------");
         CGAMultivector m = CGAMultivector.createOrigin(1d).ip(CGAMultivector.createInf(1d));

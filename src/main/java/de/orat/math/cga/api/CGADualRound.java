@@ -63,13 +63,9 @@ class CGADualRound extends CGABlade {
      * Projection of a point onto a round (sphere or circle).
      * 
      * @param point if the round is a sphere or the conjugate of the point if the round is a circle
-     * 
-     * @return the projected point
+     * @return the projected point = -point^ni<<sphere<<sphere
      */
-    public CGARoundPoint project(CGARoundPoint point){
-        CGAMultivector m = point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate();
-        System.out.println("project="+m.toString());
-        // vermutlich hat m grade 2 statt grade 1
-        return new CGARoundPoint(m);
+    public CGADualPointPair project(CGARoundPoint point){
+        return new CGADualPointPair(point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate());
     }
 }

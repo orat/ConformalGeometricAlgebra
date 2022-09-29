@@ -2,17 +2,17 @@ package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
-import de.orat.math.cga.util.Decomposition3d;
 import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * DualFlatPoints, DualPointPairs?, DualLines, DualPlanes, DualCircles? 
+ * DualFlatPoints?, DualPointPairs?, DualLines, DualPlanes, DualCircles? 
  * 
- * all in inner product null space representation.
+ * All in inner product null space representation.
  * 
- * A dual flat point has "hairs" extending to infinity
+ * A dual flat point has "hairs" extending to infinity.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGADualFlat extends CGAMultivector {
@@ -112,20 +112,26 @@ class CGADualFlat extends CGAMultivector {
     /**
      * Since the geometric product between two vectors contains all the information 
      * regarding their relative directions, it can be used to define projections.
-     * By multiplying the vector a with the square of a unit vector
-     * n, it can be decomposed into parts parallel and perpendicular to n.
+     * 
+     * By multiplying the vector a with the square of a unit vector n, it can be 
+     * decomposed into parts parallel and perpendicular to n.
      *  
      * A projection is defined as the perpendicular part.
      * 
+     * Ported from ganja.js:
+     * (point,plane)=>up(-point<<plane<<plane^nino*nino)
+     * Precedences:
+     * - has 1
+     * * has 2
+     * << and ^ have 3
+     * 
      * @param point
-     * @return 
+     * @return the project of the given point onto the flat.
      */
-    // (point,plane)=>up(-point<<plane<<plane^nino*nino)
-    // - hat 1
-    // * hat 2
-    // << und ^ hat 3
     public CGARoundPoint project(CGARoundPoint point){
         CGAMultivector nino = CGAMultivector.createInf(1d).op(CGAMultivector.createOrigin(1d));
-        return new CGARoundPoint(point.lc(this).lc(this).op(nino).gp(nino).negate());
+        return new CGARoundPoint(point.lc(this).lc(this).op(nino).gp(nino).negate().extractE3ToPoint3d());
+        // kommt aufs gleiche raus
+        //return new CGARoundPoint(point.negate().lc(this).lc(this).op(nino).gp(nino).extractE3ToPoint3d());
     }
 }
