@@ -15,7 +15,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGADualFlat extends CGAMultivector {
+class CGADualFlat extends CGABlade {
     
     CGADualFlat(CGAMultivector m){
         super(m.impl);

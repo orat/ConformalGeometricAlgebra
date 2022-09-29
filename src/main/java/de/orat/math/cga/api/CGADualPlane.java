@@ -69,4 +69,30 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
     public CGAPlane undual(){
         return new CGAPlane(impl.undual());
     }
+    /**
+     * Plane through p tangent to this.
+     * 
+     * plane_through_point_tangent_to_x  = (point,x)=>point^ni<<x*point^ni;
+     * ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S2
+     * 
+     * Precedences:
+     * - has 1
+     * * has 2
+     * << and ^ have 3
+     * 
+     * @param p
+     * @return dual plane tangent to the the plane described by this which includes the given point.
+     */
+    public CGADualPlane tangent(CGARoundPoint p){
+        // ist nicht nur für die plane, sondern auch für die Kugel gültig. Das 
+        // führt zu unerwünschter Code-Dopplung. Wie kann ich das vermeiden?
+        // In eine Hilfsklasse auslagern? und dabei weiteres Argument einführen?
+        // Was haben Ebene und Kugel gemeinsame und unterscheiden sich von Circle,point,line?
+        //TODO
+        CGAMultivector m = p.op(CGAMultivector.createInf(1d)).lc(this.gp(p.op(CGAMultivector.createInf(1d))));
+        System.out.println("tangent="+m.toString());
+        // sollte grade 4 sein ist aber grade 2
+        //FIXME
+        return new CGADualPlane(m);
+    }
 }

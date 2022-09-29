@@ -351,19 +351,16 @@ public class Test2 {
         // var project_point_on_round            = (point,sphere)=>-point^ni<<sphere<<sphere
         // ()=>project_point_on_round(p,S), "p on S"
         CGADualPointPair pOnS = S.project(p);
-        // ganja.js: 0.7e12-1.89e14-0.49e15+0.30e24+0.80e25-1.95e45
-        // java POnS=-1.4*eo^e1 - 0.5*eo^e2 + 0.7*e1^e2 + 1.96*eo^ei - 1.197*e1^ei + 0.557*e2^ei
+        // ganja.js: 0.7e12-1.89e14-0.49e15+0.30e24+0.80e25-1.95e45 = 0.7e12-1.19e1i-1.44e01+0.55e2i-0.5e02+1.95e0i
+        // java POnS=-1.4*eo^e1 - 0.5*eo^e2 + 0.7*e1^e2 + 1.96*eo^ei - 1.197*e1^ei + 0.557*e2^ei (korrekt)
         System.out.println("POnS="+pOnS.toString());
-        //TODO
         
         //()=>project_point_on_round(~p,C), "p on C",   // point on circle
         // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
         CGADualPointPair pOnC = C.project(new CGARoundPoint(p.conjugate()));
-        // ganja.js -0.70e12 + 1.89e14+0.49e15+0.30e24+0.80e25-1.95e4
+        // ganja.js -0.70e12 + 1.89e14+0.49e15+0.30e24+0.80e25-1.95e4 = -0.7e12+1.19e1i-1.44e01+0.55e2i-0.5e02
         // java pOnC=1.4*eo^e1 - 0.5*eo^e2 - 0.7*e1^e2 + 1.96*eo^ei + 1.197*e1^ei + 0.553*e2^ei
-        System.out.println("pOnC="+pOnC.toString());
-        //TODO
-        
+        System.out.println("pOnC="+pOnC.toString()); // (korrekt)
         
         // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
         
@@ -387,10 +384,18 @@ public class Test2 {
         // Projektion auf Linien falsch sein, obowohl die Projektion auf Ebenen korrekt ist.
         
         
-        // ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S2
+        // ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S
+        CGADualPlane pToS = S.tangent(p);
+        // ganja.js 0.25e1234+0.25e1235+0.5e1345-1.39e2345
+        // java pToS=0.0724999999999999*e1^e3
+        System.out.println("pToS="+pToS.toString());
         //TODO
         
         // ()=>plane_through_point_tangent_to_x(p,P),    // plane through p tangent to P
+        CGADualPlane pToP = P.tangent(p);
+        System.out.println("pToP="+pToP.toString());
+        // java pToP=-0.19999999999999984*e1^e3
+        // ganja.js -0.5e1234-0.5e1235-e1345
         //TODO
         
         // Graph the items. (hex numbers are html5 colors, two extra first bytes = alpha)
