@@ -104,9 +104,12 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
     /**
      * 
      * @param P 
+     * 
+     * TODO normalize() hat uneindeutiges Vorzeichen, welches brauche ich hier und
+     * wie beschaffe ich mir das richtige? Was liefert ganja.js
      */
     public CGAPlane(CGARoundPoint P){
-        this(createInf(dist2Origin(P)).add(P.op(createNino()).gp(createNino())));
+        this(createInf(dist2Origin(P)).add(P.op(createNino()).gp(createNino()).normalize()));
     }
     private static double dist2Origin(CGARoundPoint P){
         return Math.sqrt((new CGARoundPoint(P)).distSquare(new CGARoundPoint(createOrigin(1d))));

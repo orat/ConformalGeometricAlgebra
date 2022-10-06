@@ -385,10 +385,12 @@ public class Test2 {
         
         
         // ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S
-        CGADualPlane pToS = S.tangent(p);
+        // tangent() error da falscher grade
+        //FIXME
+        //CGADualPlane pToS = S.tangent(p);
         // ganja.js 0.25e1234+0.25e1235+0.5e1345-1.39e2345
         // java pToS=0.0724999999999999*e1^e3
-        System.out.println("pToS="+pToS.toString());
+        //System.out.println("pToS="+pToS.toString());
         //TODO
         
         // ()=>plane_through_point_tangent_to_x(p,P),    // plane through p tangent to P

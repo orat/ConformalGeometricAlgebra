@@ -68,7 +68,7 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
      * Create a plane tangent to this dual sphere which includes a given point.
      * 
      * plane_through_point_tangent_to_x  = (point,x)=>point^ni<<x*point^ni;
-     * ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S2
+     * ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S
      * 
      * Precedences:
      * - has 1
@@ -88,7 +88,7 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
         System.out.println("tangent="+m.toString());
         // tangent=-0.69999*eo^e3 - 0.349997*e2^e3 - 0.69993*e3^ei - 0.49967*eo^e1^e3^ei + 1.39999988*eo^e2^e3^ei + 0.249983*e1^e2^e3^ei
         // woher kommen die grade2 Komponenten? Die sind vermutlich falsch?
-        //FIXME
+        //FIXME CGADualPlane muss grade 4 sein
         return new CGADualPlane(m);
     }
 }
