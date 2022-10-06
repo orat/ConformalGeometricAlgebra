@@ -77,7 +77,7 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
      * 
      * Precedences:
      * - has 1
-     * * has 2
+     * * has 2 (geometric product)
      * << and ^ have 3
      * 
      * @param p
@@ -89,7 +89,7 @@ public class CGADualPlane extends CGADualFlat implements iCGAQuadvector {
         // In eine Hilfsklasse auslagern? und dabei weiteres Argument einführen?
         // Was haben Ebene und Kugel gemeinsame und unterscheiden sich von Circle,point,line?
         //TODO
-        CGAMultivector m = p.op(CGAMultivector.createInf(1d)).lc(this.gp(p.op(CGAMultivector.createInf(1d))));
+        CGAMultivector m = p.op(CGAMultivector.createInf(1d)).lc(this).gp(p.op(CGAMultivector.createInf(1d)));
         System.out.println("tangent="+m.toString());
         // sollte grade 4 sein ist aber grade 2
         //FIXME

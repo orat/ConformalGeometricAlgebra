@@ -440,16 +440,25 @@ public class Test2 {
         // ist -1 also korrekt!!!!
     }
     /**
-     * n=(0.0,0.0, 1.0)
+     * Input:
+     * n=(0.0,0.0, 1.0), d=2
+     * 
      * plane=1.0*e3 + 2.0*ei
      * probe=1.0*eo + 0.5*e1 + 0.5*e2 + 0.5*e3 + 0.375*ei
      * attitude=-5.551115123125783E-17*eo^e1^e2 + 0.9999999999999996*e1^e2^ei
      * location=(2.500000000000001, 2.500000000000001, 1.2500000000000004)
      * n=(0.0, 0.0, 0.9999999999999996)
+     * 
+     * aktueller Output
+     * plane=2.0*e3 + 2.0*ei
+attitude_cga=Infinity*e3
+location_cga=2.0000000000000004*eo + 0.20000000000000007*e1 + 0.20000000000000007*e2 - 0.010000000000000004*e3 + 0.010000000000000004*ei
+location2=(0.20000000000000007, 0.20000000000000007, -0.010000000000000004)
+nn=(0.0, 0.0, 0.0)
      */
     public void testPlane(){
         System.out.println("---------------------- plane ----");
-        Vector3d n = new Vector3d(0d,0d,2d);
+        Vector3d n = new Vector3d(0d,0d,1d);
         double d = 2d;
         CGAPlane plane = new CGAPlane(n, d);
         System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));

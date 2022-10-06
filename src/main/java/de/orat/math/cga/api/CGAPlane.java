@@ -48,6 +48,8 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
      * 
      * Successful tested!!!
      * 
+     * TODO n muss vermutlich normalisiert sein, oder?
+     * 
      * @param n normal vector of the plane
      * @param d distance of the plane to the origin
      */
@@ -67,17 +69,51 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
      * looks identical to 
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
-     * @param o point in the plane
+     * @param P point in the plane
      * @param n normal vector
      * @param weight 
      */
-    public CGAPlane(Point3d o, Vector3d n, double weight){
+    public CGAPlane(Point3d P, Vector3d n, double weight){
         this(createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
-            .add(createInf(o.x*n.x+o.y*n.y+o.z*n.z)).gp(weight));
+            .add(createInf(P.x*n.x+P.y*n.y+P.z*n.z)).gp(weight));
     }
     
+    /**
+     * Definition of a plane by only a single point laying in the plane. The normal
+     * vector of the plane is defined implicit by the direction from the origin to the
+     * given point P.
+     * 
+     * ! 5
+     * * 2
+     * ^ 3
+     * 
+     * DualPlane (grade 3) = !(d(P2,no)*ni + (P2^nino*nino).normalized())
+     * Hier also ohne den dual operator !
+     * P2 ist grade 1
+     * 
+     * Diese Implementierung ist umständlich, da sie den Point3d erst in einen
+     * CGAPoint up-projeziert und dann intern das wieder rückgängig macht etc.
+     * 
+     * @param P
+     */
+    public CGAPlane(Point3d P){
+        this(new CGARoundPoint(P));
+    }
+    /**
+     * 
+     * @param P 
+     */
+    public CGAPlane(CGARoundPoint P){
+        this(createInf(dist2Origin(P)).add(P.op(createNino()).gp(createNino())));
+    }
+    private static double dist2Origin(CGARoundPoint P){
+        return Math.sqrt((new CGARoundPoint(P)).distSquare(new CGARoundPoint(createOrigin(1d))));
+    }
+    private static CGAMultivector createNino(){
+        return createInf(1d).op(createOrigin(1d));
+    }
     
     // decomposition 
     
