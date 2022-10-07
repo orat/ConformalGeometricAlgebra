@@ -6,17 +6,17 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Dual sphere (inner product null space representation) as a multivector 
+ * Dual sphere (outer product null space representation) as a multivector 
  * of grade 4.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
+public class CGASphereOPNS extends CGARoundOPNS implements iCGAQuadvector {
     
-    public CGADualSphere(CGAMultivector m){
+    public CGASphereOPNS(CGAMultivector m){
         super(m);
     }
-    CGADualSphere(iCGAMultivector impl){
+    CGASphereOPNS(iCGAMultivector impl){
         super(impl);
     }
     /**
@@ -27,8 +27,8 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
      * @param o origin of the sphere
      * @param p point on the sphere
      */
-    public CGADualSphere(Point3d o, Point3d p){
-        this((new CGARoundPoint(p)).ip(createInf(1d).op((new CGARoundPoint(o)))));
+    public CGASphereOPNS(Point3d o, Point3d p){
+        this((new CGARoundPointIPNS(p)).ip(createInf(1d).op((new CGARoundPointIPNS(o)))));
     }
     
     /**
@@ -42,8 +42,8 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
      * @param p3 multivector representing a point on the sphere
      * @param p4 multivector representing a point on the sphere
      */
-    public CGADualSphere(CGARoundPoint p1, CGARoundPoint p2, 
-                         CGARoundPoint p3, CGARoundPoint p4){
+    public CGASphereOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2, 
+                         CGARoundPointIPNS p3, CGARoundPointIPNS p4){
         this(p1.op(p2).op(p3).op(p4));
     }
     
@@ -55,13 +55,13 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
      * @param p3 a point on the sphere
      * @param p4 a point on the sphere
      */
-    public CGADualSphere(Point3d p1, Point3d p2, Point3d p3, Point3d p4){
-        this((new CGARoundPoint(p1)).op((new CGARoundPoint(p2))).op((new CGARoundPoint(p3))).op((new CGARoundPoint(p4))));
+    public CGASphereOPNS(Point3d p1, Point3d p2, Point3d p3, Point3d p4){
+        this((new CGARoundPointIPNS(p1)).op((new CGARoundPointIPNS(p2))).op((new CGARoundPointIPNS(p3))).op((new CGARoundPointIPNS(p4))));
     }
     
     @Override
-    public CGASphere undual(){
-        return new CGASphere(impl.undual());
+    public CGASphereIPNS undual(){
+        return new CGASphereIPNS(impl.undual());
     }
     
     /**
@@ -78,7 +78,7 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
      * @param p point
      * @return dual plane tanget to the sphere through the given point p
      */
-    public CGADualPlane tangent(CGARoundPoint p){
+    public CGAPlaneOPNS tangent(CGARoundPointIPNS p){
         // ist nicht nur für die plane, sondern auch für die Kugel gültig. Das 
         // führt zu unerwünschter Code-Dopplung. Wie kann ich das vermeiden?
         // In eine Hilfsklasse auslagern? und dabei weiteres Argument einführen?
@@ -88,7 +88,7 @@ public class CGADualSphere extends CGADualRound implements iCGAQuadvector {
         System.out.println("tangent="+m.toString());
         // tangent=-0.69999*eo^e3 - 0.349997*e2^e3 - 0.69993*e3^ei - 0.49967*eo^e1^e3^ei + 1.39999988*eo^e2^e3^ei + 0.249983*e1^e2^e3^ei
         // woher kommen die grade2 Komponenten? Die sind vermutlich falsch?
-        //FIXME CGADualPlane muss grade 4 sein
-        return new CGADualPlane(m);
+        //FIXME CGAPlaneOPNS muss grade 4 sein
+        return new CGAPlaneOPNS(m);
     }
 }

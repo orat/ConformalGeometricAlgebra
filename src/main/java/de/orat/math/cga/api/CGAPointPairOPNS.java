@@ -4,19 +4,19 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Dual point pair in outer product null space (grade 2 multivector).
+ * Dual point pair in outer product null space representation (grade 2 multivector).
  * 
  * Point pairs are the only rounds for which one can retrieve the points that 
  * constituted them.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualPointPair extends CGADualRound implements iCGABivector {
+public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector {
     
-    public CGADualPointPair(CGAMultivector m){
+    public CGAPointPairOPNS(CGAMultivector m){
         super(m);
     }
-    CGADualPointPair(iCGAMultivector impl){
+    CGAPointPairOPNS(iCGAMultivector impl){
         super(impl);
     }
     /**
@@ -26,7 +26,7 @@ public class CGADualPointPair extends CGADualRound implements iCGABivector {
      * @param point1
      * @param point2
      */
-    public CGADualPointPair(CGARoundPoint point1, CGARoundPoint point2){
+    public CGAPointPairOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
         this(point1.op(point2));
     }
     
@@ -36,11 +36,11 @@ public class CGADualPointPair extends CGADualRound implements iCGABivector {
      * @param point1
      * @param point2
      */
-    public CGADualPointPair(Point3d point1, Point3d point2){
-        this((new CGARoundPoint(point1)).op(new CGARoundPoint(point2)));
+    public CGAPointPairOPNS(Point3d point1, Point3d point2){
+        this((new CGARoundPointIPNS(point1)).op(new CGARoundPointIPNS(point2)));
     }
     
-    public CGAPointPair undual(){
-        return new CGAPointPair(impl.undual());
+    public CGAPointPairIPNS undual(){
+        return new CGAPointPairIPNS(impl.undual());
     }
 }

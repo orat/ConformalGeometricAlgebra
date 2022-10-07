@@ -7,17 +7,17 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * P-pair in inner product null space representation 
+ * Point-pair in inner product null space representation 
  * (grade 3 multivector).
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPointPair extends CGARound implements iCGATrivector  {
+public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector  {
     
-    public CGAPointPair(CGAMultivector m){
+    public CGAPointPairIPNS(CGAMultivector m){
         super(m);
     }
-    CGAPointPair(iCGAMultivector impl){
+    CGAPointPairIPNS(iCGAMultivector impl){
         super(impl);
     }
     /**
@@ -31,7 +31,7 @@ public class CGAPointPair extends CGARound implements iCGATrivector  {
      * @param sphere2
      * @param sphere3
      */
-    public CGAPointPair(CGASphere sphere1, CGASphere sphere2, CGASphere sphere3){
+    public CGAPointPairIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, CGASphereIPNS sphere3){
         this(sphere1.op(sphere2).op(sphere3));
     }
     
@@ -45,7 +45,7 @@ public class CGAPointPair extends CGARound implements iCGATrivector  {
      * @param weight 
      * @param sign 
      */
-    public CGAPointPair(Point3d c, Vector3d n, double r, double weight, boolean sign){
+    public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean sign){
         this(createCGAMultivector(c,n,r,weight, sign));
     }
     private static CGAMultivector createCGAMultivector(Point3d point, Vector3d normal, 
@@ -67,8 +67,8 @@ public class CGAPointPair extends CGARound implements iCGATrivector  {
                 sub(c.ip(c).add(sr2)).gp(n).gp(0.5d)).op(inf).gp(createPseudoscalar()).gp(weight);
     }
     @Override
-    public CGADualPointPair dual(){
-        return new CGADualPointPair(impl.dual());
+    public CGAPointPairOPNS dual(){
+        return new CGAPointPairOPNS(impl.dual());
     }
     
     /**

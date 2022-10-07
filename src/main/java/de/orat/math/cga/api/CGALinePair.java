@@ -12,7 +12,7 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGALinePair extends CGAMultivector {
     
-    public CGALinePair(CGALine line1, CGALine line2){
+    public CGALinePair(CGALineIPNS line1, CGALineIPNS line2){
         super(line1.gp(line2).impl);
     }
     
@@ -153,5 +153,4 @@ public class CGALinePair extends CGAMultivector {
         
         return new Decomposition3d.LinePairParameters(Math.atan2(cosalpha, sinalpha), location, attitude);
     }
-    
 }

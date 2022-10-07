@@ -4,7 +4,7 @@ package de.orat.math.cga.api;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualRoundPoint extends CGADualRound implements iCGAQuadvector {
+public class CGADualRoundPoint extends CGARoundOPNS implements iCGAQuadvector {
     
     public CGADualRoundPoint(CGAMultivector m){
         super(m);
@@ -19,12 +19,12 @@ public class CGADualRoundPoint extends CGADualRound implements iCGAQuadvector {
      * @param sphere3 third sphere in inner product null space representation
      * @param sphere4 forth sphere in inner product null space represenation
      */
-    public CGADualRoundPoint(CGASphere sphere1, CGASphere sphere2, 
-                        CGASphere sphere3, CGASphere sphere4){
+    public CGADualRoundPoint(CGASphereIPNS sphere1, CGASphereIPNS sphere2, 
+                        CGASphereIPNS sphere3, CGASphereIPNS sphere4){
         this(sphere1.op(sphere2).op(sphere3).op(sphere4));
     }
     
-    public CGARoundPoint undual(){
-        return new CGARoundPoint(impl.undual());
+    public CGARoundPointIPNS undual(){
+        return new CGARoundPointIPNS(impl.undual());
     }
 }

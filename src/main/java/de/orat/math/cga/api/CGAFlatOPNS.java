@@ -9,18 +9,18 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * DualFlatPoints?, DualPointPairs?, DualLines, DualPlanes, DualCircles? 
  * 
- * All in inner product null space representation.
+ * All in outer product null space representation.
  * 
  * A dual flat point has "hairs" extending to infinity.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGADualFlat extends CGABlade {
+class CGAFlatOPNS extends CGABlade {
     
-    CGADualFlat(CGAMultivector m){
+    CGAFlatOPNS(CGAMultivector m){
         super(m.impl);
     }
-    protected CGADualFlat(iCGAMultivector m){
+    protected CGAFlatOPNS(iCGAMultivector m){
         super(m);
     }
     
@@ -37,7 +37,7 @@ class CGADualFlat extends CGABlade {
     @Override
     public Point3d location(Point3d probe){
         // Determine a normalized dual sphere as location
-        CGAMultivector probeCGA = new CGARoundPoint(probe);
+        CGAMultivector probeCGA = new CGARoundPointIPNS(probe);
         CGAMultivector m = probeCGA.ip(this).div(this);
         System.out.println("location="+m.toString());
         // the euclidian part is the location in euclidian space
@@ -128,10 +128,10 @@ class CGADualFlat extends CGABlade {
      * @param point
      * @return the project of the given point onto the flat.
      */
-    public CGARoundPoint project(CGARoundPoint point){
+    public CGARoundPointIPNS project(CGARoundPointIPNS point){
         CGAMultivector nino = CGAMultivector.createInf(1d).op(CGAMultivector.createOrigin(1d));
-        return new CGARoundPoint(point.lc(this).lc(this).op(nino).gp(nino).negate().extractE3ToPoint3d());
+        return new CGARoundPointIPNS(point.lc(this).lc(this).op(nino).gp(nino).negate().extractE3ToPoint3d());
         // kommt aufs gleiche raus
-        //return new CGARoundPoint(point.negate().lc(this).lc(this).op(nino).gp(nino).extractE3ToPoint3d());
+        //return new CGARoundPointIPNS(point.negate().lc(this).lc(this).op(nino).gp(nino).extractE3ToPoint3d());
     }
 }

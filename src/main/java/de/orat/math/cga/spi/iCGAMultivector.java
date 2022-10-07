@@ -79,13 +79,19 @@ public interface iCGAMultivector {
     /**
      * Vee or regressive product.
      * 
-     * Overwrites this vee product with an optimized method if possible. The
-     * default impl caluclates the dual of the wedge of the duals.
+     * Used to intersect two objects (needs to be in an appropriate subspace)
+     * in outer product null space.
      * 
-     * @param x second argument of the vee product
+     * Overwrites this vee product with an optimized method if possible. This
+     * default impl calculates the dual of the wedge of the duals.
+     * 
+     * @param x second (right side) argument of the vee product
      * @return vee product
      */
     default iCGAMultivector vee(iCGAMultivector x){
+        // a&b = !(!a^!b)
+        //FIXME muss hier nicht dual() statt undual() stehen?
+        // es scheint aber so zu funktionieren
         return dual().op(x.dual()).undual();
     }
     
@@ -199,40 +205,85 @@ public interface iCGAMultivector {
     public iCGAMultivector exp();
    
     /**
-     * Unit under reverse norm.
+     * Unit on conjuage operation.
      * 
-     * nach Kleppe
-     * normalize = {
-     *   _P(1)/(sqrt(abs(_P(1)*_P(1)~)))
-     * }
-     *
+     * Implementation based on conjugate() instead of reverse() corresponding to
+     * ganja.js.
+     * 
      * @throws java.lang.ArithmeticException if multivector is null-vector
-     * @return unit under 'reverse' norm (this / sqrt(abs(this.reverse(this))))
+     * @return unit under 'reverse' norm (this / sqrt(length(this.reverse(this))))
      */
-    default iCGAMultivector normalize(){
-        double s = scp(reverse());
+    default iCGAMultivector normalize2(){
+        double s = length2Squared();
         if (s == 0.0) throw new java.lang.ArithmeticException("null multivector");
         else return this.gp(1d / Math.sqrt(Math.abs(s)));
     }
-    
+    /**
+     * Calculate the squared euclidean norm, also called magnitude 
+     * (modulus) squared or LengthSquared.
+     *
+     * Note: This may be negative
+     *
+     * @return squared euclidean norm
+     */
+    default double length2Squared(){
+        return gp(conjugate()).scalarPart();
+    }
     /** 
-     * Magnitude (modulus).This is sqrt(abs(~M*M))``.
+     * Magnitude (modulus), absolute value or Length. 
+     * 
+     * This is sqrt(abs(~M*M))``.
      *
      * following
      * https://github.com/pygae/clifford/blob/master/clifford/_multivector.py
      * 
-     * The abs inside the sqrt is need for spaces of mixed signature.
+     * The abs() inside the sqrt is need for spaces of mixed signature.
+     * TODO Have we mixed signature here in CGA? If so abs() can be substituted
+     * with "-", if not abs() is obsolete.
+     * 
+     * Implementation corresponding to ganja.js:
+     * get Length (){ 
+     *    return Math.sqrt(Math.abs(this.Mul(this.Conjugate).s)); 
+     * };
      * 
      * @return absolute value
      */
-    default double abs2(){
-        return Math.sqrt(Math.abs(squaredNorm()));
+    default double length2(){
+        double result = length2Squared();
+        if (result != 0d){
+            result = Math.sqrt(Math.abs(result));
+        }
+        return result;
     }
     
     /**
-     * @return 
+     * Unit under reverse norm.
+     * 
+     * Implementation based on reverse() instead of conjugate()! This is different
+     * to ganja.js.
+     * 
+     * nach Kleppe mit reverse
+     * normalize = {
+     *   _P(1)/(sqrt(abs(_P(1)*_P(1)~)))
+     * }
+     * 
+     * @throws java.lang.ArithmeticException if multivector is null-vector
+     * @return unit under 'reverse' norm (this / sqrt(length(this.reverse(this))))
      */
-    default double abs(){
+    default iCGAMultivector normalize(){
+        double s = lengthSquared();
+        if (s == 0.0) throw new java.lang.ArithmeticException("null multivector");
+        else return this.gp(1d / Math.sqrt(Math.abs(s)));
+    }
+    /**
+     * Magnitude (modulus), absolute value or Length. 
+     *
+     * Implementation based on reverse() instead of conjugate(). This is different
+     * to ganja.js.
+     * 
+     * @return length
+     */
+    default double length(){
         double result = scp(reverse());
         if (result != 0d){
             result = Math.sqrt(Math.abs(result));
@@ -240,17 +291,14 @@ public interface iCGAMultivector {
         return result;
     }
     /**
-     * Calculate the squared euclidean norm, also called magnitude 
-     * (modulus) squared.
-     *
-     * Note: this may be negative
-     *
-     * @return squared euclidean norm
+     * Squared magnitude, squared absolute value or squared length.
+     * 
+     * @return squared length
      */
-    default double squaredNorm(){
-        //TODO warum nicht reverse statt conjugate?
-        return gp(conjugate()).scalarPart();
+    default double lengthSquared(){
+        return scp(reverse());
     }
+    
     
     //public iCGAMultivector extractGrade(int grade);
     public iCGAMultivector extractGrade(int[] G);

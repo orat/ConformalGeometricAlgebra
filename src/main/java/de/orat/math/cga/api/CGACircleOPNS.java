@@ -6,12 +6,12 @@ import org.jogamp.vecmath.Point3d;
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualCircle extends CGADualRound implements iCGATrivector {
+public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
     
-    public CGADualCircle(CGAMultivector m){
+    public CGACircleOPNS(CGAMultivector m){
         super(m);
     }
-    CGADualCircle(iCGAMultivector m){
+    CGACircleOPNS(iCGAMultivector m){
         super(m);
     }
     /**
@@ -22,7 +22,7 @@ public class CGADualCircle extends CGADualRound implements iCGATrivector {
      * @param point2
      * @param point3
      */
-    public CGADualCircle(CGARoundPoint point1, CGARoundPoint point2, CGARoundPoint point3){
+    public CGACircleOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2, CGARoundPointIPNS point3){
         this(point1.op(point2).op(point3));
     }
     
@@ -33,10 +33,11 @@ public class CGADualCircle extends CGADualRound implements iCGATrivector {
      * @param point2
      * @param point3
      */
-    public CGADualCircle(Point3d point1, Point3d point2, Point3d point3){
-         this((new CGARoundPoint(point1)).op((new CGARoundPoint(point2))).op((new CGARoundPoint(point3))));
+    public CGACircleOPNS(Point3d point1, Point3d point2, Point3d point3){
+         this((new CGARoundPointIPNS(point1)).op((new CGARoundPointIPNS(point2))).op((new CGARoundPointIPNS(point3))));
     }
    
+    @Override
     public CGACircle undual(){
         return new CGACircle(impl.undual());
     }

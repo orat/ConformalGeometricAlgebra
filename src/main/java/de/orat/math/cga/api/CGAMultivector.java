@@ -206,7 +206,7 @@ public class CGAMultivector {
         return squaredWeight(new Point3d(0d,0d,0d));
     }
     public double squaredWeight(Point3d probePoint){
-        CGARoundPoint probePointCGA = new CGARoundPoint(probePoint);
+        CGARoundPointIPNS probePointCGA = new CGARoundPointIPNS(probePoint);
         System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
         return squaredWeight(attitudeIntern(), probePointCGA);
     } 
@@ -348,7 +348,7 @@ public class CGAMultivector {
         return gp(this.reverse());
     } 
     public double squaredNorm(){
-        return impl.squaredNorm();
+        return impl.length2Squared();
     }
     /**
      * Calculate the Euclidean norm. (strict positive).
@@ -467,11 +467,24 @@ public class CGAMultivector {
     public CGAMultivector op(CGAMultivector x){
          return new CGAMultivector(impl.op(x.impl));
     }
-    // a&b = !(!a^!b)
+    /**
+     * Vee/meet or regressive product.
+     * 
+     * Unsed for intersection.
+     * 
+     * Overwrites this vee product with an optimized method if possible. The
+     * default impl calculates the dual of the wedge of the duals.
+     * 
+     * @param x second (right side) argument of the vee product
+     * @return vee product
+     */
     public CGAMultivector vee(CGAMultivector x){
         //FIXME muss hier nicht dual() statt undual() stehen?
         // es scheint aber so zu funktionieren
+        // a&b = !(!a^!b)
         return dual().op(x.dual()).undual();
+        //TODO besser die default impl im interface aufrufen?
+        //return new CGAMultivector(impl.vee(x));
     }
     
     public CGAMultivector add(CGAMultivector b){
@@ -482,7 +495,7 @@ public class CGAMultivector {
     }
     
     public CGAMultivector abs(){
-        return new CGAMultivector(impl.abs());
+        return new CGAMultivector(impl.length());
     }
     public CGAMultivector exp() {
         return new CGAMultivector(impl.exp());
@@ -510,6 +523,8 @@ public class CGAMultivector {
         return impl.grade();
     }
     /**
+     * Create a normalized multivector.
+     * 
      * Multivectors can have a negative squared-magnitude.  So, without 
      * introducing formally imaginary numbers, we can only fix the normalized 
      * multivector's magnitude to +-1.
@@ -517,11 +532,11 @@ public class CGAMultivector {
      * @return the normalised multivector so that X*~X is +- 1
      */
     public CGAMultivector normalize(){
+        // TODO
+        // or should I use normalize2() corresponding to ganja.js?
         return new CGAMultivector(impl.normalize());
         // alternativ
         //return div(createInf(-1d).ip(this));
-        // or
-        // this.div(abs(this)
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // return div(this.negate().ip(createInf(1d)
     }

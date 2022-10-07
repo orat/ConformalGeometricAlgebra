@@ -16,12 +16,12 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADualLine extends CGADualFlat implements iCGATrivector {
+public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     
-    public CGADualLine(CGAMultivector m){
+    public CGALineOPNS(CGAMultivector m){
         super(m);
     }
-    CGADualLine(iCGAMultivector m){
+    CGALineOPNS(iCGAMultivector m){
         super(m);
     }
     /**
@@ -36,8 +36,8 @@ public class CGADualLine extends CGADualFlat implements iCGATrivector {
      * @param p2 second point on the line or direction of the line
      * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
      */
-    public CGADualLine(Point3d p1, Tuple3d p2){
-        this((new CGARoundPoint(p1)), (new CGARoundPoint(p2)));
+    public CGALineOPNS(Point3d p1, Tuple3d p2){
+        this((new CGARoundPointIPNS(p1)), (new CGARoundPointIPNS(p2)));
     }
     
     /**
@@ -50,12 +50,12 @@ public class CGADualLine extends CGADualFlat implements iCGATrivector {
      * Be careful: The representation is called dual in Hildenbrand2013 but not
      * in Dorst2007.
      */
-    public CGADualLine(CGARoundPoint p1, CGARoundPoint p2){
+    public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(p1.op(p2).op(createInf(1d)));
     }
     
     @Override
-    public CGALine undual(){
-        return new CGALine(impl.undual());
+    public CGALineIPNS undual(){
+        return new CGALineIPNS(impl.undual());
     }
 }

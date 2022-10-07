@@ -14,12 +14,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAFlat extends CGABlade {
+class CGAFlatIPNS extends CGABlade {
      
-    CGAFlat(CGAMultivector m){
+    CGAFlatIPNS(CGAMultivector m){
         super(m);
     }
-    CGAFlat(iCGAMultivector m){
+    CGAFlatIPNS(iCGAMultivector m){
         super(m);
     }
     public Vector3d attitude(){
@@ -37,7 +37,7 @@ class CGAFlat extends CGABlade {
         return createInf(-1d).op(this);
     }   
     CGAMultivector locationIntern(Point3d probe){
-        return new CGARoundPoint(probe).op(this).div(this);//.extractGrade(1);
+        return new CGARoundPointIPNS(probe).op(this).div(this);//.extractGrade(1);
     }
     @Override
     public Point3d location(Point3d probe){

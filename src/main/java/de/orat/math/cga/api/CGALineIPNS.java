@@ -14,12 +14,12 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGALine extends CGAFlat implements iCGABivector {
+public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
     
-    public CGALine(CGAMultivector m){
+    public CGALineIPNS(CGAMultivector m){
         super(m);
     }
-    CGALine(iCGAMultivector m){
+    CGALineIPNS(iCGAMultivector m){
         super(m);
     }
     /**
@@ -30,15 +30,15 @@ public class CGALine extends CGAFlat implements iCGABivector {
      * @param plane1 plane1 in inner product null space representation
      * @param plane2 plane2 in inner product null space representation
      */
-    public CGALine(CGAPlane plane1, CGAPlane plane2){
+    public CGALineIPNS(CGAPlaneIPNS plane1, CGAPlaneIPNS plane2){
         this(plane1.op(plane2));
     }
     
-    public CGALine(CGAPointPair pointPair){
+    public CGALineIPNS(CGAPointPairIPNS pointPair){
         this(pointPair.op(createInf(1d)));
     }
      
-    public CGALine(CGARoundPoint point, CGAAttitudeVector direction){
+    public CGALineIPNS(CGARoundPointIPNS point, CGAAttitudeVector direction){
         this(point.op(direction));
     }
     /**
@@ -49,13 +49,13 @@ public class CGALine extends CGAFlat implements iCGABivector {
      * @param direction
      * @param weight 
      */
-    public CGALine(Point3d c, Vector3d direction, double weight){
+    public CGALineIPNS(Point3d c, Vector3d direction, double weight){
         // local blade = weight * ( normal + ( center ^ normal ) * ni ) * i
         this(createE3(direction).add(createE3(c).op(createE3(direction)).gp(createInf(1d))).
                 gp(createE3Pseudoscalar()).gp(weight));
     }
     
-    public CGALine(CGABivector B, double d){
+    public CGALineIPNS(CGABivector B, double d){
         this(B.add(createInf(d)));
     }
     
@@ -65,14 +65,14 @@ public class CGALine extends CGAFlat implements iCGABivector {
      * @param b together with a to create a bivector: a^b
      * @param d 
      */
-    public CGALine(Vector3d a, Vector3d b, double d){
+    public CGALineIPNS(Vector3d a, Vector3d b, double d){
         this((CGABivector) createE3(a).op(createE3(b)), d);
     }
     
     
     @Override
-    public CGADualLine dual(){
-        return new CGADualLine(impl.dual());
+    public CGALineOPNS dual(){
+        return new CGALineOPNS(impl.dual());
     }
     
     /**

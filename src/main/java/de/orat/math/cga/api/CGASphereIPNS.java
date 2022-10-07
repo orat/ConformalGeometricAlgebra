@@ -11,14 +11,14 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGASphere extends CGARound implements iCGAVector {
+public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     
     boolean isNormalized = false;
     
-    public CGASphere(CGAMultivector m){
+    public CGASphereIPNS(CGAMultivector m){
         super(m);
     }
-    CGASphere(iCGAMultivector impl){
+    CGASphereIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -36,13 +36,13 @@ public class CGASphere extends CGARound implements iCGAVector {
      * @param location multivector representing a location as normalized point
      * @param r radius of the sphere to CGAMultivector
      */
-    public CGASphere(CGARoundPoint location, double r){
+    public CGASphereIPNS(CGARoundPointIPNS location, double r){
         this(create(location, r));
     }
     // (P,r)=>!(P-r**2*.5*ni),
-    private static CGAMultivector create(CGARoundPoint location, double r){
+    private static CGAMultivector create(CGARoundPointIPNS location, double r){
         if (!location.isNormalized()) throw new IllegalArgumentException("The given location is not normalized!");
-        CGARoundPoint result = new CGARoundPoint(location.sub(createInf(0.5*r*r)));
+        CGARoundPointIPNS result = new CGARoundPointIPNS(location.sub(createInf(0.5*r*r)));
         result.isNormalized = true;
         return result;
     }
@@ -55,7 +55,7 @@ public class CGASphere extends CGARound implements iCGAVector {
      * @param r
      * @param weight 
      */
-    public CGASphere(CGARoundPoint location, double r, double weight){
+    public CGASphereIPNS(CGARoundPointIPNS location, double r, double weight){
         this(location.sub(createInf(0.5*r*r)));
         if (weight != 1) {
             isNormalized = false;
@@ -72,7 +72,7 @@ public class CGASphere extends CGARound implements iCGAVector {
      * @param sign 
      * @param weight 
      */
-    public CGASphere(Point3d point, double radius, boolean sign, double weight){
+    public CGASphereIPNS(Point3d point, double radius, boolean sign, double weight){
        this(createCGASphere(point, radius, sign, weight));
     }
     private static CGAMultivector createCGASphere(Point3d point, double radius, boolean sign, double weight){
@@ -93,7 +93,7 @@ public class CGASphere extends CGARound implements iCGAVector {
      * @param location
      * @param pointOnSphere point on the sphere
      */
-    public CGASphere(CGARoundPoint location, CGARoundPoint pointOnSphere){
+    public CGASphereIPNS(CGARoundPointIPNS location, CGARoundPointIPNS pointOnSphere){
         this(pointOnSphere.ip(location.op(createInf(1d))));
     }
     /**
@@ -107,8 +107,8 @@ public class CGASphere extends CGARound implements iCGAVector {
      * @param r radius of the sphere (A negative radius does not create an imagninary 
      *          sphere. Use the method createImaginarySphere() instead.)
      */
-    public CGASphere(Point3d o, double r){
-        this(new CGARoundPoint(o), r);
+    public CGASphereIPNS(Point3d o, double r){
+        this(new CGARoundPointIPNS(o), r);
         //if (r < 0) throw new IllegalArgumentException("Negative radius is not allowed!");
         isNormalized = true;
     }
@@ -116,7 +116,7 @@ public class CGASphere extends CGARound implements iCGAVector {
     
     // decomposition
     
-    // CGARoundPoint extends CGASphere und für beide gelten die gleichen 
+    // CGARoundPointIPNS extends CGASphereIPNS und für beide gelten die gleichen 
     // weight Formeln
     @Override
     public double squaredWeight(){
@@ -158,8 +158,8 @@ public class CGASphere extends CGARound implements iCGAVector {
     // others
     
     @Override
-    public CGADualSphere dual(){
-        return new CGADualSphere(impl.dual());
+    public CGASphereOPNS dual(){
+        return new CGASphereOPNS(impl.dual());
     }
     
     public boolean isNormalized(){

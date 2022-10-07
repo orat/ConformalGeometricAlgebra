@@ -9,12 +9,12 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGADualRound extends CGABlade {
+class CGARoundOPNS extends CGABlade {
     
-    CGADualRound(CGAMultivector m){
+    CGARoundOPNS(CGAMultivector m){
         super(m.impl);
     }
-    protected CGADualRound(iCGAMultivector impl){
+    protected CGARoundOPNS(iCGAMultivector impl){
         super(impl);
     }
     public Vector3d attitude(){
@@ -36,7 +36,7 @@ class CGADualRound extends CGABlade {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        return -CGARound.squaredSize(this);
+        return -CGARoundIPNS.squaredSize(this);
     }
     
     @Override
@@ -65,7 +65,7 @@ class CGADualRound extends CGABlade {
      * @param point if the round is a sphere or the conjugate of the point if the round is a circle
      * @return the projected point = -point^ni<<sphere<<sphere
      */
-    public CGADualPointPair project(CGARoundPoint point){
-        return new CGADualPointPair(point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate());
+    public CGAPointPairOPNS project(CGARoundPointIPNS point){
+        return new CGAPointPairOPNS(point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate());
     }
 }

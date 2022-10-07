@@ -32,8 +32,8 @@ class CGABlade extends CGAMultivector implements iCGABlade {
     }
     
     // plane_through_point_tangent_to_x  = (point,x)=>point^ni<<x*point^ni;
-    public CGARoundPoint reject(CGARoundPoint p){
+    public CGARoundPointIPNS reject(CGARoundPointIPNS p){
         CGAMultivector ni = CGAMultivector.createInf(1d);
-        return new CGARoundPoint(p.op(ni).lc(this).gp(p.op(ni)));
+        return new CGARoundPointIPNS(p.op(ni).lc(this).gp(p.op(ni)));
     }
 }

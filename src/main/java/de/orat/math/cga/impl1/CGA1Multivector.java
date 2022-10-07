@@ -307,7 +307,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
      * @return squared euclidean norm
      */
     @Override
-    public double squaredNorm(){
+    public double length2Squared(){
         // alternative implementation: use default implementation in the spi
         return super.norm_e2(CGA_METRIC);
     }
@@ -317,7 +317,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
      * @return euclidean norm
      */
     public double norm(){
-        // alternative implementation: return Math.sqrt(squaredNorm)
+        // alternative implementation: return Math.sqrt(length2Squared)
         return super.norm_e(CGA_METRIC);
     }
             

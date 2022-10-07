@@ -391,7 +391,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
 
     @Override
-    public double squaredNorm() {
+    public double length2Squared() {
         return Math.abs(binop_Mul(this, this.Conjugate())._mVec[0]);
     }
 

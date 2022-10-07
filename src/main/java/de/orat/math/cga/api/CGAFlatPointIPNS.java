@@ -27,9 +27,9 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAFlatPoint extends CGAFlat implements iCGABivector {
+public class CGAFlatPointIPNS extends CGAFlatIPNS implements iCGABivector {
     
-    public CGAFlatPoint(CGAMultivector m){
+    public CGAFlatPointIPNS(CGAMultivector m){
         super(m);
     }
    
@@ -40,12 +40,12 @@ public class CGAFlatPoint extends CGAFlat implements iCGABivector {
      * @param c location
      * @param weight weight
      */
-    public CGAFlatPoint(Point3d c, double weight){
+    public CGAFlatPointIPNS(Point3d c, double weight){
         // local blade = weight * ( 1 - center ^ ni ) * i
         this((new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createPseudoscalar()).gp(weight));
     }
     
-    public CGAFlatPoint(CGARoundPoint p){
+    public CGAFlatPointIPNS(CGARoundPointIPNS p){
         this(p.op(createInf(1d)));
     }
     

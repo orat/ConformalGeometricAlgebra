@@ -11,12 +11,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGARound extends CGABlade {
+abstract class CGARoundIPNS extends CGABlade {
     
-    CGARound(CGAMultivector m){
+    CGARoundIPNS(CGAMultivector m){
         super(m);
     }
-    CGARound(iCGAMultivector impl){
+    CGARoundIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -54,7 +54,7 @@ abstract class CGARound extends CGABlade {
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");
     }
-    // für eine CGARound scheint das jetzt zu stimmen
+    // für eine CGARoundIPNS scheint das jetzt zu stimmen
     @Override
     public Point3d location(){
         CGAMultivector location = location3(weight());
@@ -162,8 +162,8 @@ abstract class CGARound extends CGABlade {
      * @return projected point
      */
     //(point,sphere)=>-point^ni<<sphere<<sphere
-    public CGARoundPoint project(CGARoundPoint point){
-        return new CGARoundPoint(point.negate().op(CGAMultivector.createInf(1d)).
+    public CGARoundPointIPNS project(CGARoundPointIPNS point){
+        return new CGARoundPointIPNS(point.negate().op(CGAMultivector.createInf(1d)).
                 lc(this).lc(this));
     }
 }

@@ -34,12 +34,12 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGARoundPoint extends CGASphere {
+public class CGARoundPointIPNS extends CGASphereIPNS {
     
-    public CGARoundPoint(CGAMultivector m){
+    public CGARoundPointIPNS(CGAMultivector m){
         super(m);
     }
-    CGARoundPoint(iCGAMultivector m){
+    CGARoundPointIPNS(iCGAMultivector m){
         super(m);
     }
     
@@ -56,7 +56,7 @@ public class CGARoundPoint extends CGASphere {
      * !
      * @param p euclidian normalized point
      */
-    public CGARoundPoint(Tuple3d p){
+    public CGARoundPointIPNS(Tuple3d p){
         this(create(p, 1d));
         isNormalized = true;
     }
@@ -70,7 +70,7 @@ public class CGARoundPoint extends CGASphere {
      * @param p euclidian point
      * @param weight
      */
-    public CGARoundPoint(Tuple3d p, double weight){
+    public CGARoundPointIPNS(Tuple3d p, double weight){
         this(create(p, weight));
         if (weight == 1d) isNormalized=true;
     }
@@ -104,7 +104,7 @@ public class CGARoundPoint extends CGASphere {
    
     /*public double squaredWeight(){
         CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
-        CGARoundPoint probePoint = new CGARoundPoint(new Point3d(0d,0d,0d));
+        CGARoundPointIPNS probePoint = new CGARoundPointIPNS(new Point3d(0d,0d,0d));
         return CGAMultivector.squaredWeight(attitude, probePoint);
     }*/
     
@@ -133,8 +133,8 @@ public class CGARoundPoint extends CGASphere {
      * @return normalized point
      */
     @Override
-    public CGARoundPoint normalize(){
-        CGARoundPoint result = new CGARoundPoint(this.div(createInf(1d).ip(this).gp(-1d)));
+    public CGARoundPointIPNS normalize(){
+        CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this).gp(-1d)));
         result.isNormalized = true;
         return result;
     }
@@ -142,10 +142,23 @@ public class CGARoundPoint extends CGASphere {
     /**
      * Determine squared distance.
      * 
+     * ganja.js example dual planes/spheres:
+     * The distance between two points.
+     * var d = (a,b)=>((a<<b).Length*2)**.5;
+     * TODO Wie passt das mit der aktuellen Implementierung zusammen?
+     * - Was bedeutet .Length? vermutlich scalarPart()?
+     * - Warum muss hier keine Vorzeichen korrigiert werden. Das wird vermutlich
+     *   irgendwie mit der method Length() gemacht. 
+     * - Vielleicht eine eigene length() method einführen
+     * 
+     * get Length (){ 
+     *   return options.over?Math.sqrt(Math.abs(this.Mul(this.Conjugate).s.s)):Math.sqrt(Math.abs(this.Mul(this.Conjugate).s)); 
+     * };
+     * 
      * @param p second point to determine the distance to
      * @return squared distance to the given point
      */
-    public double distSquare(CGARoundPoint p){
+    public double distSquare(CGARoundPointIPNS p){
         return -2*(this.normalize()).ip(p.normalize()).scalarPart();
     }
 }

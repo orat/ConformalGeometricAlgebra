@@ -10,7 +10,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGACircle extends CGARound implements iCGABivector {
+public class CGACircle extends CGARoundIPNS implements iCGABivector {
     
     public CGACircle(CGAMultivector m){
         super(m);
@@ -33,7 +33,7 @@ public class CGACircle extends CGARound implements iCGABivector {
      * @param sign 
      */
     public CGACircle(Point3d center, Vector3d normal, double radius, double weight, boolean sign){
-        this((new CGASphere(center, radius, sign, 1d)).op(new CGAPlane(center, normal, 1d)).gp(weight));
+        this((new CGASphereIPNS(center, radius, sign, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
     
     /**
@@ -42,7 +42,7 @@ public class CGACircle extends CGARound implements iCGABivector {
      * @param sphere1 first sphere
      * @param sphere2 second sphere
      */
-    public CGACircle(CGASphere sphere1, CGASphere sphere2){
+    public CGACircle(CGASphereIPNS sphere1, CGASphereIPNS sphere2){
         this(sphere1.op(sphere2));
     }
    
@@ -125,8 +125,8 @@ public class CGACircle extends CGARound implements iCGABivector {
     
     
     @Override
-    public CGADualCircle dual(){
-        return new CGADualCircle(impl.dual());
+    public CGACircleOPNS dual(){
+        return new CGACircleOPNS(impl.dual());
     }
     
     @Override

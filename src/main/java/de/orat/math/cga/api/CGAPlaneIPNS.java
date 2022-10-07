@@ -29,12 +29,12 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPlane extends CGAFlat implements iCGAVector {
+public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
     
-    public CGAPlane(CGAMultivector m){
+    public CGAPlaneIPNS(CGAMultivector m){
         super(m);
     }
-    CGAPlane(iCGAMultivector m){
+    CGAPlaneIPNS(iCGAMultivector m){
         super(m);
     }
     
@@ -53,7 +53,7 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
      * @param n normal vector of the plane
      * @param d distance of the plane to the origin
      */
-    public CGAPlane(Vector3d n, double d){
+    public CGAPlaneIPNS(Vector3d n, double d){
         this(createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
@@ -73,7 +73,7 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
      * @param n normal vector
      * @param weight 
      */
-    public CGAPlane(Point3d P, Vector3d n, double weight){
+    public CGAPlaneIPNS(Point3d P, Vector3d n, double weight){
         this(createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
@@ -94,25 +94,28 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
      * P2 ist grade 1
      * 
      * Diese Implementierung ist umständlich, da sie den Point3d erst in einen
-     * CGAPoint up-projeziert und dann intern das wieder rückgängig macht etc.
+     * CGAPoint up-projiziert und dann intern das wieder rückgängig macht etc.
      * 
      * @param P
      */
-    public CGAPlane(Point3d P){
-        this(new CGARoundPoint(P));
+    public CGAPlaneIPNS(Point3d P){
+        this(new CGARoundPointIPNS(P));
     }
     /**
+     * Definition of a plane by only a single point laying in the plane. The normal
+     * vector of the plane is defined implicit by the direction from the origin to the
+     * given point P.
      * 
      * @param P 
      * 
      * TODO normalize() hat uneindeutiges Vorzeichen, welches brauche ich hier und
      * wie beschaffe ich mir das richtige? Was liefert ganja.js
      */
-    public CGAPlane(CGARoundPoint P){
+    public CGAPlaneIPNS(CGARoundPointIPNS P){
         this(createInf(dist2Origin(P)).add(P.op(createNino()).gp(createNino()).normalize()));
     }
-    private static double dist2Origin(CGARoundPoint P){
-        return Math.sqrt((new CGARoundPoint(P)).distSquare(new CGARoundPoint(createOrigin(1d))));
+    private static double dist2Origin(CGARoundPointIPNS P){
+        return Math.sqrt((new CGARoundPointIPNS(P)).distSquare(new CGARoundPointIPNS(createOrigin(1d))));
     }
     private static CGAMultivector createNino(){
         return createInf(1d).op(createOrigin(1d));
@@ -166,7 +169,7 @@ public class CGAPlane extends CGAFlat implements iCGAVector {
     // others 
     
     @Override
-    public CGADualPlane dual(){
-        return new CGADualPlane(impl.dual());
+    public CGAPlaneOPNS dual(){
+        return new CGAPlaneOPNS(impl.dual());
     }
 }
