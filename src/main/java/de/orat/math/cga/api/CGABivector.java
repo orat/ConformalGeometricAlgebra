@@ -1,17 +1,15 @@
 package de.orat.math.cga.api;
 
-import org.jogamp.vecmath.Vector3d;
+import org.jogamp.vecmath.Tuple3d;
 
 /**
- * Bivectors describe points or pairs of points.
+ * Bivectors describe points and pairs of points in OPNS representation.
  * 
- * Bivectors are timelike.
+ * Bivectors are linear combinations of Blades with grade 2. They are also called
+ * timelike.
  * 
- *  TODO
- * abschaffen, oder alle spezifischen Bivectoren davon erben lassen
- * CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector
- * so kann CGAPointPairOPNS nicht von CGABivector erben
- * --> CGABivector wieder abschaffen und den Code als default Methods in iCGABivector verschieben
+ * Inheritage from this class typicall not possible because inheritage from round
+ * or flat is needed. Thatś why additional interface iCGABivector is available.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -21,11 +19,24 @@ public class CGABivector extends CGABlade implements iCGABivector {
         super(m);
     }
     
-    public CGABivector(Vector3d a, Vector3d b){
-        // eigentlich will ich hier einen euclidischen Bivector B erzeugen. Unklar
-        // ob das so überhaupt richtig ist, ist der dann hier eingebettet in CGA?
-        //FIXME
+    /**
+     * Create a bivector from two euclidian vectors.
+     * 
+     * @param a first vector
+     * @param b second vector
+     */
+    public CGABivector(Tuple3d a, Tuple3d b){
         this((new CGANormalVector(a)).op(
              (new CGANormalVector(b))));
+    }
+    
+    /**
+     * Create a bivector from an euclidian vector and the point at infinity.
+     * 
+     * @param a the euclidian vector
+     */
+    public CGABivector(Tuple3d a){
+        this((new CGANormalVector(a)).op(
+             CGAMultivector.createInf(1d)));
     }
 }

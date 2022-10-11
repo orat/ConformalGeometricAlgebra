@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Round objects in outer product null space representation corresponding to
+ * Direct round objects in outer product null space representation corresponding to
  * direct round in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

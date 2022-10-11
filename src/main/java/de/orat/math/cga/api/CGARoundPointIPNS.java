@@ -7,9 +7,11 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Normalized homogeneous points, or null-vectors, in the conformal model typically
- * have a weight of 1 (grade 1 multivector), corresponding to dual round point in
+ * Dual round point (grade 1 multivector), corresponding to dual round point in
  * Dorst2007. 
+ * 
+ * Normalized homogeneous points, or null-vectors, in the conformal model typically
+ * have a weight of 1.
  * 
  * In CGA a point can be represented as a round or a flat. The round point is a 
  * sphere with radius 0. The round point is a blade with grade 1.

@@ -1,6 +1,8 @@
 package de.orat.math.cga.api;
 
 /**
+ * A scalar is a blade with grade 0.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAScalar extends CGABlade implements iCGAScalar {

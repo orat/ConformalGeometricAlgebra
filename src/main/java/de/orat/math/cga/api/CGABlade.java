@@ -3,7 +3,8 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * A blade is a multivector, which contains only base vectors of the same grade.
+ * A blade is a multivector, which contains only base vectors of the same grade 
+ * (0..5).
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

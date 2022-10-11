@@ -3,6 +3,8 @@ package de.orat.math.cga.api;
 /**
  * Quadvectors describe spheres and planes.
  * 
+ * Quadvectors are linear combinations of Blades with grade 4.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 interface iCGAQuadvector extends iCGABlade {

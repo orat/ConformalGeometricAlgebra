@@ -578,6 +578,14 @@ norm(sphere) = 1.9999999999999998
         System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
         CGARoundPointIPNS cp = new CGARoundPointIPNS(p, 2d);
         System.out.println("cp="+cp.toString());
+        
+        CGAMultivector testgp = cp.gp(cp);
+        // P*P=9.00480064 Warum eigentlich?
+        System.out.println("P*P="+testgp);
+        CGAMultivector testgp2 = cp.ip(cp);
+        // P.P=1.6653345369377348E-15 (korrekt) sollte praktisch 0 sein
+        System.out.println("P.P="+testgp2);
+        
         // squared squaredWeight = 4, korrekt 
         System.out.println("squaredWeight1(sollte 4 sein)="+String.valueOf(cp.squaredWeight()));
         
