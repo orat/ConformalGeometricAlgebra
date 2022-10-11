@@ -1,13 +1,12 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Dual sphere (outer product null space representation) as a multivector 
- * of grade 4.
+ * Sphere in outer product null space representation as a multivector 
+ * of grade 4, corresponding to direct sphere in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

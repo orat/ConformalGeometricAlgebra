@@ -9,9 +9,8 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * DualFlatPoints?, DualPointPairs?, DualLines, DualPlanes, DualCircles? 
  * 
- * All in outer product null space representation.
- * 
- * A dual flat point has "hairs" extending to infinity.
+ * All in outer product null space representation, corresponding to direct flat
+ * in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

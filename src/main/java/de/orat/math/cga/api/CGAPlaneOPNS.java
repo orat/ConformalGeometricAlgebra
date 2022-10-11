@@ -6,7 +6,8 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * (Dual) plane in outer product null space representation (grade 4 multivector).
+ * Plane in outer product null space representation (grade 4 multivector), 
+ * corresponding to direct sphere in Dorst2007.
  * 
  * TODO gehört der folgende Text und die impl der Methode nicht nach CGAPlane?
  * Given two null points p and q, we can construct the dual plane in between them 

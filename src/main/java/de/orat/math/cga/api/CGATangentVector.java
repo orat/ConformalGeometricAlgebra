@@ -3,7 +3,7 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Grade 2 vector
+ * A vector with direction u at point location o (grade 2).
  * 
  * Pure tangents have zero size but a finite weight. 
  * 
@@ -16,11 +16,11 @@ import org.jogamp.vecmath.Vector3d;
  * as zero-sized spheres to generate implicit volumes.
  * 
  * TODO
- * was ist mit position vector (grade 3) und normal vector (grade 1)?
+ * was ist mit normal vector (grade 1)?
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGATangentVector extends CGATangent implements iCGABivector {
+public class CGATangentVector extends CGATangentOPNS implements iCGABivector {
      
     public CGATangentVector(CGAMultivector m){
         super(m);

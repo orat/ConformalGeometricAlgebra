@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeTrivector extends CGAAttitude implements iCGATrivector {
+public class CGAAttitudeTrivector extends AbstractCGAAttitude implements iCGATrivector {
     
     public CGAAttitudeTrivector(CGAMultivector m){
         super(m);

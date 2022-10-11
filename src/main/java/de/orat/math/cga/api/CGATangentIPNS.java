@@ -6,10 +6,14 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
+ * 
+ * Tangent in inner product null space representation corresponding to direct tangent in 
+ * Dorst2007.
+ * 
  */
-class CGADualTangent extends CGAMultivector {
+class CGATangentIPNS extends CGAMultivector {
     
-    CGADualTangent(CGAMultivector m){
+    CGATangentIPNS(CGAMultivector m){
         super(m.impl);
     }
     
@@ -51,7 +55,7 @@ class CGADualTangent extends CGAMultivector {
     }
     
     @Override
-    public CGADualTangent inverse(){
+    public CGATangentIPNS inverse(){
         throw new RuntimeException("A tangent has no inverse!");
     }
 }

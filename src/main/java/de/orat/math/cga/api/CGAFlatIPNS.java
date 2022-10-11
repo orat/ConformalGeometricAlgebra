@@ -8,10 +8,12 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * FlatPoints, Lines, Planes, hyperplanes, all in inner product null space 
- * representation.
+ * representation, corresponding to dual flat in Dorst2007.
  * 
  * A flat is a round containing inf in its formula.
  * 
+ * A dual flat point has "hairs" extending to infinity.
+ *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGAFlatIPNS extends CGABlade {

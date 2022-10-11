@@ -7,7 +7,7 @@ package de.orat.math.cga.api;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeBivector extends CGAAttitude implements iCGABivector {
+public class CGAAttitudeBivector extends AbstractCGAAttitude implements iCGABivector {
     
     public CGAAttitudeBivector(CGAMultivector m){
         super(m);

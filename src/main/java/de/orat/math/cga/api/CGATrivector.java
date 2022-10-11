@@ -3,7 +3,10 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
+ * A trivector describes lines and circles.
+ * 
+ * TODO
+ * ähnliche Probleme wie mit CGABivector
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGATrivector extends CGAMultivector implements iCGATrivector {
@@ -13,8 +16,8 @@ public class CGATrivector extends CGAMultivector implements iCGATrivector {
     }
     
     public CGATrivector(Vector3d a, Vector3d b, Vector3d c){
-        this((new CGAVectorE3(a)).op(
-                (new CGAVectorE3(b)).op(
-                (new CGAVectorE3(c)))));
+        this((new CGANormalVector(a)).op(
+                (new CGANormalVector(b)).op(
+                (new CGANormalVector(c)))));
     }
 }

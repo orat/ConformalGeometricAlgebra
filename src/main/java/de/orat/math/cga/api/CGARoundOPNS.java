@@ -7,6 +7,9 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
+ * Round objects in outer product null space representation corresponding to
+ * direct round in Dorst2007.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGARoundOPNS extends CGABlade {
@@ -17,6 +20,8 @@ class CGARoundOPNS extends CGABlade {
     protected CGARoundOPNS(iCGAMultivector impl){
         super(impl);
     }
+    
+    
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
         System.out.println("attitude(dualRound/dualTangent)="+result.toString());

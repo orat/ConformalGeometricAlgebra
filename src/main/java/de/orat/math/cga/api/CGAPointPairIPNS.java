@@ -8,7 +8,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * Point-pair in inner product null space representation 
- * (grade 3 multivector).
+ * (grade 3 multivector), corresponding to dual sphere in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * Rounds are RoundPoints, circles, spheres, hyperspheres and point-pairs, all in inner product
- * null space representation.
+ * null space representation corresponding to dual round in Drost2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

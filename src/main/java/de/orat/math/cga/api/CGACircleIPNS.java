@@ -6,16 +6,17 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Circle in inner product null space represenation (grade 2 multivector).
+ * Circle in inner product null space represenation (grade 2 multivector)
+ * corresponding to dual circle in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGACircle extends CGARoundIPNS implements iCGABivector {
+public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     
-    public CGACircle(CGAMultivector m){
+    public CGACircleIPNS(CGAMultivector m){
         super(m);
     }
-    protected CGACircle(iCGAMultivector impl){
+    protected CGACircleIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -32,7 +33,7 @@ public class CGACircle extends CGARoundIPNS implements iCGABivector {
      * @param weight
      * @param sign 
      */
-    public CGACircle(Point3d center, Vector3d normal, double radius, double weight, boolean sign){
+    public CGACircleIPNS(Point3d center, Vector3d normal, double radius, double weight, boolean sign){
         this((new CGASphereIPNS(center, radius, sign, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
     
@@ -42,7 +43,7 @@ public class CGACircle extends CGARoundIPNS implements iCGABivector {
      * @param sphere1 first sphere
      * @param sphere2 second sphere
      */
-    public CGACircle(CGASphereIPNS sphere1, CGASphereIPNS sphere2){
+    public CGACircleIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2){
         this(sphere1.op(sphere2));
     }
    

@@ -77,16 +77,16 @@ public interface iCGAMultivector {
     }
              
     /**
-     * Vee or regressive product.
+     * Vee- or regressive-product.
      * 
      * Used to intersect two objects (needs to be in an appropriate subspace)
-     * in outer product null space.
+     * in outer product null space representation.
      * 
      * Overwrites this vee product with an optimized method if possible. This
      * default impl calculates the dual of the wedge of the duals.
      * 
      * @param x second (right side) argument of the vee product
-     * @return vee product
+     * @return vee product (intersection object in outer product null space representation)
      */
     default iCGAMultivector vee(iCGAMultivector x){
         // a&b = !(!a^!b)
@@ -146,13 +146,6 @@ public interface iCGAMultivector {
         double scalar = part.gp(negate14).gp(part).scalarPart();
         return conjugate.gp(gradeInversion).gp(reversion).gp(negate14).gp(part).gp(1d/scalar);
     }
-        
-    /**
-     * An more efficient implementation can use the information that the multivector 
-     * a versor.
-     * 
-     * @return the default implementation is identical to generalInverse()
-     */
     default iCGAMultivector versorInverse(){
         return generalInverse();
     }
@@ -176,7 +169,8 @@ public interface iCGAMultivector {
     }
    
     /**
-     * Computes the dual of this element.
+     * Computes the inner product null space representation, if this element 
+     * is of type outer product null space representation.
      * 
      * It is defined for any k-vector x of an n-dimensional subspace as the n-k 
      * vector y containing all the basis vectors that are not in x. For 
@@ -184,26 +178,67 @@ public interface iCGAMultivector {
      * if so desired (although it will be less efficient). This is not possible 
      * for CGA because of its degenerate metric.
      * 
+     * The dual operation is an automorphism and almost (up to a sign) an involution.
+     * 
      * @return a new element that is the dual of this element.
      */
     public /*default*/ iCGAMultivector dual();//{
     //   return gp(createPseudoScalar().reverse());
     //}
     
+    /**
+     * Determination of inner product null space representation to outer product
+     * null space representation.
+     * 
+     * @return outer product null space representation
+     */
     public iCGAMultivector undual();
 
     public double scalarPart();
     
     public boolean isNull();
     
-    public iCGAMultivector conjugate();
+    // three involution functions:
+    
+    /**
+     * Reverse - the most important involution.
+     * 
+     * The reverse is distributive: (A + B)∼ =  ̃A +  ̃B.
+     * 
+     * (A B)∼ =  ̃B  ̃A
+     * (A ∧ B)∼ =  ̃B ∧  ̃A
+     * (A · B)∼ =  ̃B ·  ̃A
+     *
+     * Note that the conjugate and reverse operation commute as their result 
+     * ultimately differs by a sign.
+     * 
+     * @return reverse
+     */
     public iCGAMultivector reverse();
     
-    // main grade involution
+    /**
+     * Main grade involution.
+     * 
+     * @return grade inversion
+     */
     public iCGAMultivector gradeInversion();
     
-    public iCGAMultivector exp();
-   
+    /**
+     * Conjugate is reversion and additional grade involution.
+     * 
+     * This allows to define a magnitude for general multivectors.
+     * 
+     * Similar to complex conjugation, the conjugate negates those basis blades 
+     * of a multivector that would square to minus one. Like the reverse, the 
+     * conjugate is an involution.
+     * 
+     * Note that the conjugate and reverse operation commute as their result 
+     * ultimately differs by a sign.
+     * 
+     * @return conjugate
+     */
+    public iCGAMultivector conjugate();
+    
     /**
      * Unit on conjuage operation.
      * 
@@ -223,30 +258,25 @@ public interface iCGAMultivector {
      * (modulus) squared or LengthSquared.
      *
      * Note: This may be negative
-     *
+     * 
+     * TODO
+     * Warum wird das 0 für die folgende line aber nicht, wenn ich lengthSquare()
+     * verwende? Darf ich überhaupt eine line normalisieren?
+     * 
      * @return squared euclidean norm
      */
     default double length2Squared(){
         return gp(conjugate()).scalarPart();
     }
     /** 
-     * Magnitude (modulus), absolute value or Length. 
-     * 
-     * This is sqrt(abs(~M*M))``.
-     *
-     * following
-     * https://github.com/pygae/clifford/blob/master/clifford/_multivector.py
-     * 
-     * The abs() inside the sqrt is need for spaces of mixed signature.
-     * TODO Have we mixed signature here in CGA? If so abs() can be substituted
-     * with "-", if not abs() is obsolete.
+     * Magnitude (modulus), absolute value or length. 
      * 
      * Implementation corresponding to ganja.js:
      * get Length (){ 
      *    return Math.sqrt(Math.abs(this.Mul(this.Conjugate).s)); 
      * };
      * 
-     * @return absolute value
+     * @return length
      */
     default double length2(){
         double result = length2Squared();
@@ -260,12 +290,17 @@ public interface iCGAMultivector {
      * Unit under reverse norm.
      * 
      * Implementation based on reverse() instead of conjugate()! This is different
-     * to ganja.js.
+     * to ganja.js? 
      * 
-     * nach Kleppe mit reverse
+     * This follows https://github.com/pygae/clifford and also Kleppe:
+     * 
      * normalize = {
      *   _P(1)/(sqrt(abs(_P(1)*_P(1)~)))
      * }
+     * 
+     * Multivectors can have a negative squared-magnitude.  So, without 
+     * introducing formally imaginary numbers, we can only fix the normalized 
+     * multivector's magnitude to +-1.
      * 
      * @throws java.lang.ArithmeticException if multivector is null-vector
      * @return unit under 'reverse' norm (this / sqrt(length(this.reverse(this))))
@@ -280,8 +315,16 @@ public interface iCGAMultivector {
      *
      * Implementation based on reverse() instead of conjugate(). This is different
      * to ganja.js.
+     *
+     * following
+     * https://github.com/pygae/clifford/blob/master/clifford/_multivector.py
      * 
-     * @return length
+     * The abs() inside the sqrt is need for spaces of mixed signature.
+     * 
+     * TODO Have we mixed signature here in CGA? If so abs() can be substituted
+     * with "-", if not abs() is obsolete.
+     * 
+     * @return sqrt(abs(~M*M))
      */
     default double length(){
         double result = scp(reverse());
@@ -335,4 +378,7 @@ public interface iCGAMultivector {
     public double[] extractCoordinates();
     public double[] extractCoordinates(int grade);
     public void setCoordinates(int grade, double[] values);
+    
+    public iCGAMultivector exp();
+   
 }

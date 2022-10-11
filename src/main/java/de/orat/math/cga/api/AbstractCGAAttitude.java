@@ -5,31 +5,26 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * Also called free or direction vector, elements without position. 
  * 
+ * It represents a direction without a location. It is translation 
+ * invariant.
+ * 
  * This means there is no e0 -component in its formula.
  * 
  * A free vector does not have a position. Given the normal vector n, it can be 
  * calculated as follows: n ∧ e ∞ .
  * 
+ * This is the base class for all attitude classes (Vector, Bivector, TreeVector).
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAAttitude extends CGAMultivector {
+class AbstractCGAAttitude extends CGABlade {
     
-    CGAAttitude(CGAMultivector m){
+    AbstractCGAAttitude(CGAMultivector m){
         super(m.impl);
     }
     
-    public Vector3d attitude(){
-        CGAMultivector attitude = attitudeIntern();
-        return attitude.extractE3ToVector3d();
-    }
     @Override
-    protected CGAMultivector attitudeIntern(){
-        System.out.println("attitude="+toString());
-        return this;
-    }
-    
-    @Override
-    public CGATangent inverse(){
+    public CGATangentOPNS inverse(){
         throw new RuntimeException("An attitude has no inverse!");
     }
 }

@@ -11,7 +11,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGATangentBivector extends CGATangent implements iCGATrivector {
+public class CGATangentBivector extends CGATangentOPNS implements iCGATrivector {
     
     public CGATangentBivector(CGAMultivector m){
         super(m);

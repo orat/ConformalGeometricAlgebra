@@ -4,6 +4,9 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
+ * Cirlce in outer product null space representation (grade 3), corresponding to direct 
+ * circle in Dorst2007.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
@@ -38,7 +41,7 @@ public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
     }
    
     @Override
-    public CGACircle undual(){
-        return new CGACircle(impl.undual());
+    public CGACircleIPNS undual(){
+        return new CGACircleIPNS(impl.undual());
     }
 }

@@ -1,18 +1,16 @@
 package de.orat.math.cga.test;
 
-import de.orat.math.cga.api.CGACircle;
+import de.orat.math.cga.api.CGACircleIPNS;
 import de.orat.math.cga.api.CGACircleOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
 import de.orat.math.cga.api.CGAPointPairOPNS;
 import de.orat.math.cga.api.CGASphereOPNS;
 import de.orat.math.cga.api.CGALineIPNS;
-import de.orat.math.cga.api.CGALinePair;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.api.CGAPlaneIPNS;
-import de.orat.math.cga.api.CGAPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
 import de.orat.math.cga.api.CGASphereIPNS;
 import de.orat.math.cga.impl1.CGA1Metric;
@@ -461,9 +459,16 @@ nn=(0.0, 0.0, 0.0)
         System.out.println("---------------------- plane ----");
         Vector3d n = new Vector3d(0d,0d,1d);
         double d = 2d;
-        CGAPlaneIPNS plane = new CGAPlaneIPNS(n, d);
         System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
+        
+        CGAPlaneIPNS plane = new CGAPlaneIPNS(n, d);
+        // plane=1.0*e3 + 2.0*ei
         System.out.println("plane="+plane.toString());
+        
+        CGAPlaneIPNS plane1 = new CGAPlaneIPNS(new Point3d(0d,0d,2d));
+        // plane1=-1.0*e3 + 2.0000000000000004*ei
+        //FIXME Vorzeichenfehler bei e3 egal welche normalize()-Methode ich verwende
+        System.out.println("plane1="+plane1.toString());
         
         //CGAPoint cp = new CGARoundPointIPNS(new Point3d(0.0d,0.0d,2.0d));
         //System.out.println("probe="+cp.toString());
@@ -489,7 +494,7 @@ nn=(0.0, 0.0, 0.0)
         CGASphereIPNS sphere2 = new CGASphereIPNS(p2, radius);
         System.out.println("sphere2="+sphere2.toString());
         
-        CGACircle circle = new CGACircle(sphere1.op(sphere2));
+        CGACircleIPNS circle = new CGACircleIPNS(sphere1.op(sphere2));
         System.out.println("circle="+circle.toString());
         
         RoundAndTangentParameters/*FlatAndDirectionParameters*/ decomposition = circle.decompose();
@@ -726,7 +731,12 @@ norm(sphere) = 1.9999999999999998
        
         CGALineOPNS l1 = new CGALineOPNS(p1, p2);
         System.out.println("l1= "+l1.toString());
+        // l1= 5.551115123125783E-17*eo^e2 - 1.734723475976807E-18*eo^e3 + 0.9799999999999993*e2^e3 + 0.9799999999999995*e2^ei - 0.019599999999999985*e3^ei
         System.out.println("l1 normiert= "+l1.normalize().toString());
+        
+        // l1.squaredNorm()=0.0
+        System.out.println("l1.squaredNorm()="+String.valueOf(l1.squaredNorm()));
+        
         // ipns representation
         //CGA1Multivector l1dual = new CGA1Multivector(l1dual.dual(CGA1Metric.CGA_METRIC));
         
@@ -743,7 +753,7 @@ norm(sphere) = 1.9999999999999998
        
         CGALineOPNS l2 = new CGALineOPNS(p3, p4);
         System.out.println("l2= "+l2.toString());
-        System.out.println("l2 normiert= "+l1.normalize().toString());
+        //System.out.println("l2 normiert= "+l2.normalize().toString());
         //CGALinePair l2l1 = new CGALinePair(l1, l2); //l2.gp(l1).normalize();
         // bi- und trivector Anteile
         // l2l1= -2.87728 + 0.21520800000000018*no^e1 - 0.019208*no^e2 + 

@@ -79,11 +79,11 @@ public class CGAMultivector {
     public static CGAMultivector createEz(double scale){
         return new CGAMultivector(defaultInstance.impl.createEz(scale));
     }
-    public static CGAVectorE3 createE3(){
-        return new CGAVectorE3(createEx(1d).add(createEy(1d)).add(createEz(1d)));
+    public static CGANormalVector createE3(){
+        return new CGANormalVector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
     }
-    public static CGAVectorE3 createE3(Tuple3d v){
-        return new CGAVectorE3(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
+    public static CGANormalVector createE3(Tuple3d v){
+        return new CGANormalVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
     public static CGAMultivector createE3Pseudoscalar(){
         return createEx(1d).op(createEy(1d)).op(createEz(1d));
@@ -104,8 +104,8 @@ public class CGAMultivector {
     
     //TODO
     // in eigene Klasse auslagern
-    /*public static CGAVectorE3 createImaginarySphere(CGAMultivector o, double r){
-        return new CGAVectorE3(o.add(createInf(0.5*r*r)));
+    /*public static CGANormalVector createImaginarySphere(CGAMultivector o, double r){
+        return new CGANormalVector(o.add(createInf(0.5*r*r)));
     }*/
    
     /**
@@ -280,8 +280,9 @@ public class CGAMultivector {
     
     // monadic operators
     
-    // An Involution is an operation which maps an operand to itself when applied
-    // twice
+    // An Involution is an operation which maps an operand to itself, when applied
+    // twice. There exist three types: inversion, reverse and a combination of both
+    // called conjugation.
     
     /**
      * Reverse.
@@ -295,6 +296,18 @@ public class CGAMultivector {
     }
     
     /**
+     * Inversion is a reflection in e+, this swaps e0 and ei.
+     * 
+     * @return space inversion (reflection on a sphere?)
+     *
+     * cluscript: The inversion is obtained with the ! operator. If a multivector has no
+     * inverse then zero is returned.
+     */
+    public CGAMultivector inverse(){
+        return new CGAMultivector(impl.generalInverse());
+    }
+    
+    /**
      * Clifford conjugation.
      * 
      * The conjugation operation is the second most needed involution operation in 
@@ -305,6 +318,7 @@ public class CGAMultivector {
     public CGAMultivector conjugate(){
         return new CGAMultivector(impl.conjugate());
     }
+    
     
     /**
      * The Duality operator implements Poincare duality, a definition and 
@@ -336,11 +350,6 @@ public class CGAMultivector {
     public CGAMultivector undual(){
         return new CGAMultivector(impl.undual());
     }
-    // cluscript: The inversion is obtained with the ! operator. If a multivector has no
-    // inverse then zero is returned
-    public CGAMultivector inverse(){
-        return new CGAMultivector(impl.generalInverse());
-    }
     
     //FIXME ist das korrekt
     public CGAMultivector sqr(){
@@ -348,7 +357,10 @@ public class CGAMultivector {
         return gp(this.reverse());
     } 
     public double squaredNorm(){
-        return impl.length2Squared();
+        //return impl.length2Squared();
+        //TODO testweise
+        // l1.squaredNorm()=-0.9603999999999994 statt 0 für eine line
+        return impl.lengthSquared();
     }
     /**
      * Calculate the Euclidean norm. (strict positive).
@@ -534,6 +546,8 @@ public class CGAMultivector {
     public CGAMultivector normalize(){
         // TODO
         // or should I use normalize2() corresponding to ganja.js?
+        // mit normalize2() schlägt die Normalisierung einer line fehl, d.h. die
+        // Bestimmung der length() liefert dann 0.
         return new CGAMultivector(impl.normalize());
         // alternativ
         //return div(createInf(-1d).ip(this));

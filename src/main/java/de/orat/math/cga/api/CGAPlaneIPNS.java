@@ -48,9 +48,11 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
      * 
      * Successful tested!!!
      * 
-     * TODO n muss vermutlich normalisiert sein, oder?
+     * TODO
+     * Ein nicht normalisiertes n liefert anderen Multivektor, aber könnte der
+     * nicht die gleiche Ebene representieren?
      * 
-     * @param n normal vector of the plane
+     * @param n (normalized) normal vector of the plane
      * @param d distance of the plane to the origin
      */
     public CGAPlaneIPNS(Vector3d n, double d){

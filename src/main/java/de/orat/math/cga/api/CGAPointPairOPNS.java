@@ -4,7 +4,8 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Dual point pair in outer product null space representation (grade 2 multivector).
+ * Dual point pair in outer product null space representation (grade 2 
+ * multivector), corresponding to direct sphere in Dorst2007.
  * 
  * Point pairs are the only rounds for which one can retrieve the points that 
  * constituted them.
@@ -37,9 +38,11 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector {
      * @param point2
      */
     public CGAPointPairOPNS(Point3d point1, Point3d point2){
+        //FIXME ist hier IPNS richtig?
         this((new CGARoundPointIPNS(point1)).op(new CGARoundPointIPNS(point2)));
     }
     
+    @Override
     public CGAPointPairIPNS undual(){
         return new CGAPointPairIPNS(impl.undual());
     }

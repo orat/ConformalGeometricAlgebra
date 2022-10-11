@@ -1,7 +1,8 @@
 package de.orat.math.cga.api;
 
 /**
- *
+ * Quadvectors describe spheres and planes.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 interface iCGAQuadvector extends iCGABlade {

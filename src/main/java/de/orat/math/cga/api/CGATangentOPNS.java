@@ -5,13 +5,14 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Tangents are created from touching objects.
+ * Tangents are created from touching objects, in outer product null space 
+ * represenation corresponding to direct tangent in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGATangent extends CGAMultivector {
+class CGATangentOPNS extends CGAMultivector {
     
-    CGATangent(CGAMultivector m){
+    CGATangentOPNS(CGAMultivector m){
         super(m.impl);
     }
     
@@ -53,7 +54,7 @@ class CGATangent extends CGAMultivector {
     }
     
     @Override
-    public CGATangent inverse(){
+    public CGATangentOPNS inverse(){
         throw new RuntimeException("A tangent has no inverse!");
     }
 }
