@@ -13,6 +13,7 @@ public class CGATangentTrivector extends CGATangentOPNS implements iCGAQuadvecto
     
     public CGATangentTrivector(Vector3d a, Vector3d b, Vector3d c){
         // das soll o I3 sein
+        //FIXME
         this((createOrigin(1.0).gp(new CGATrivector(a,b,c))));
     }
 }

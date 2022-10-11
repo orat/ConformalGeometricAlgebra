@@ -592,8 +592,15 @@ norm(sphere) = 1.9999999999999998
         RoundAndTangentParameters decomposed = cp.decompose();
         Vector3d a1 = decomposed.attitude();
         System.out.println("attitude=("+String.valueOf(a1.x)+", "+String.valueOf(a1.y)+", "+String.valueOf(a1.z)+")");
-        Point3d p1 = decomposed.location(); // ok
+        
+        Point3d p1 = decomposed.location(); // ok input = (0.02,0.02,1)
+        // location lua=0.019999999999999993*e1 + 0.019999999999999993*e2 + 0.9999999999999996*e3
+        // locationFromTangentAndRound=1.0000000000000002*eo + 0.020000000000000004*e1 + 0.020000000000000004*e2 + 1.0000000000000002*e3 + 0.5004000000000001*ei
+
+        // location=(0.020000000000000004,0.020000000000000004,1.0000000000000002) (korrekt)
         System.out.println("location=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        
+
         // 2.251 sollte aber 0 sein.
         double squaredSize = decomposed.squaredSize();
         System.out.println("squaredSize="+String.valueOf(squaredSize));

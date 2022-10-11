@@ -5,6 +5,8 @@ import org.jogamp.vecmath.Tuple3d;
 /**
  * A Quadvector describes spheres and planes in OPNS representation, ...
  * 
+ * Quadvectors are linear combinations of Blades with grade 4.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAQuadvector extends CGAMultivector implements iCGAQuadvector {

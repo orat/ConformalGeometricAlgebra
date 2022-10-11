@@ -7,8 +7,8 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Dual round point (grade 1 multivector), corresponding to dual round point in
- * Dorst2007. 
+ * Round point in inner product null space representation (grade 1 multivector), 
+ * corresponding to dual round point in Dorst2007. 
  * 
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
  * have a weight of 1.

@@ -1,12 +1,12 @@
 package de.orat.math.cga.api;
 
 /**
- * Round point in outer product null space representation, corresponding to 
- * direct round point in Dorst2007.
+ * Round point in outer product null space representation (grade 4 multivector), 
+ * corresponding to direct round point in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGARoundPointOPNS extends CGARoundOPNS implements iCGAQuadvector {
+public class CGARoundPointOPNS extends CGASphereOPNS {
     
     public CGARoundPointOPNS(CGAMultivector m){
         super(m);
@@ -24,10 +24,5 @@ public class CGARoundPointOPNS extends CGARoundOPNS implements iCGAQuadvector {
     public CGARoundPointOPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, 
                         CGASphereIPNS sphere3, CGASphereIPNS sphere4){
         this(sphere1.op(sphere2).op(sphere3).op(sphere4));
-    }
-    
-    @Override
-    public CGARoundPointIPNS undual(){
-        return new CGARoundPointIPNS(impl.undual());
     }
 }
