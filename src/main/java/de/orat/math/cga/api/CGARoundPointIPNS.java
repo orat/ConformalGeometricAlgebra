@@ -61,6 +61,8 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      */
     public CGARoundPointIPNS(Tuple3d p){
         this(create(p, 1d));
+        //FIXME
+        // oder besser super(p,0d);
         isNormalized = true;
     }
     

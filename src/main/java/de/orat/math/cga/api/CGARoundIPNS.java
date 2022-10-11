@@ -6,12 +6,12 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Dual rounds are RoundPoints, circles, spheres, hyperspheres and point-pairs, all in inner product
+ * Rounds are RoundPoints, point-pairs, circles and spheres, here given in inner product
  * null space representation corresponding to dual round in Drost2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGARoundIPNS extends CGABlade {
+class CGARoundIPNS extends CGABlade {
     
     CGARoundIPNS(CGAMultivector m){
         super(m);
@@ -153,7 +153,7 @@ abstract class CGARoundIPNS extends CGABlade {
                 location(), squaredSize());
     }
     
-    public abstract boolean isImaginary();
+    //public abstract boolean isImaginary();
     
     /**
      * Project point on round.

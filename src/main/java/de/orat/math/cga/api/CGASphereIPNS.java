@@ -5,7 +5,7 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Dual sphere in inner product null space representation (grade 1 multivector)
+ * Sphere in inner product null space representation (grade 1 multivector)
  * corresponding to dual sphere in Dorst2007.
  * 
  * A sphere with radius=0 is a point.
@@ -166,7 +166,6 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     public boolean isNormalized(){
         return isNormalized;
     }
-    @Override
     public boolean isImaginary(){
         throw new RuntimeException("not yet implemented!");
     }

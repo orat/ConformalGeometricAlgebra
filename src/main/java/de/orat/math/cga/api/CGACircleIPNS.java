@@ -129,9 +129,4 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     public CGACircleOPNS dual(){
         return new CGACircleOPNS(impl.dual());
     }
-    
-    @Override
-    public boolean isImaginary(){
-        throw new RuntimeException("not yet implemented!");
-    }
 }

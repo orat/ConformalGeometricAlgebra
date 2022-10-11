@@ -11,7 +11,9 @@ import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.api.CGAPlaneIPNS;
+import de.orat.math.cga.api.CGAPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
+import de.orat.math.cga.api.CGARoundPointOPNS;
 import de.orat.math.cga.api.CGASphereIPNS;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA2_METRIC;
@@ -124,7 +126,7 @@ public class Test2 {
         System.out.println("s="+s.toString());
         
         CGAPlaneOPNS p = new CGAPlaneOPNS(p1,p2,p3);
-        // p=1.0*eo^e1^e2^ei + 1.0*eo^e1^e3^ei - 1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei (korrekt)
+        // p1=1.0*eo^e1^e2^ei + 1.0*eo^e1^e3^ei - 1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei (korrekt)
         System.out.println("p="+p.toString());
     }
     
@@ -162,15 +164,15 @@ public class Test2 {
         
         CGAMultivector inf_no = createInf(1d).op(createOrigin(1d));
         // Planes also have a direct dual representation. (but start from vector not point)
-        // var p = ()=>!(d(p2,no)*ni + (p2^nino*nino).Normalized);
+        // var p1 = ()=>!(d(p2,no)*ni + (p2^nino*nino).Normalized);
         
         CGAMultivector n = ((new CGARoundPointIPNS(p2)).op(inf_no).gp(inf_no)).normalize();
         // n=-0.8944271909999159*e2 - 0.4472135954999579*e3
         System.out.println("n="+n.toString());
         CGAPlaneOPNS p = (new CGAPlaneIPNS((CGAMultivector.createInf(Math.sqrt(p2.distSquare(new CGARoundPointIPNS(CGAMultivector.createOrigin(1d)))))).add(
                         n))).dual();
-        // java p=-0.447*eo^e1^e2^ei - 0.89*eo^e1^e3^ei - 1.118*e1^e2^e3^ei
-        // ganja.js p= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
+        // java p1=-0.447*eo^e1^e2^ei - 0.89*eo^e1^e3^ei - 1.118*e1^e2^e3^ei
+        // ganja.js p1= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
         // TODO
         System.out.println("p="+p.toString());
        
@@ -181,10 +183,10 @@ public class Test2 {
         //TODO
         //CGAPlane pa = CGAPlaneIPNS(n, d);
         
-        // p= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
+        // p1= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
 
         // You can use the regressive product to calculate intersections..
-        //var c = ()=>s&p;
+        //var c = ()=>s&p1;
         CGACircleOPNS c = new CGACircleOPNS(s.vee(p));
         // ganja.js: c=-1.11e123 - 0.48e124 - 0.03e125 - 0.40e134 + 0.48e135 + 
         // 0.22e145 - 1.11e234 -1.11e235-0.44e245-0.89e345
@@ -201,10 +203,10 @@ public class Test2 {
         
         //p  = up(0)                          // point
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));
-        // p=1.0*eo (korrekt)
+        // p1=1.0*eo (korrekt)
         System.out.println("p="+p.toString());
         
-        //S  = ()=>!(p-.5*ni),                 // main dual sphere around point 
+        //S  = ()=>!(p1-.5*ni),                 // main dual sphere around point 
         CGASphereOPNS S = (new CGASphereIPNS(p, 1d)).dual();
         // java: S=-eo^e1^e2^e3 + 0.49*e1^e2^e3^ei
         // ganja.js e1235 = 0.5e123i-e0123 (korrekt)
@@ -271,7 +273,7 @@ public class Test2 {
         // C5 = ()=>C&P2;  circle meet plane
         CGAPointPairOPNS C5 = new CGAPointPairOPNS(C.vee(P2));
         // ganja.js: 1.7e12-1.02e24-2.02e25 = 1.7e12 
-        // java: c&p=eo^e2 + 1.7*e1^e2 + 3.23*e2^ei
+        // java: c&p1=eo^e2 + 1.7*e1^e2 + 3.23*e2^ei
         //FIXME stimmt nur in einer Komponente überein
         //TODO vermutlich sind bereits der Ausgangs-circle oder plane flasch --> überprüfen
         System.out.println("c&p="+C5.toString());
@@ -301,10 +303,10 @@ public class Test2 {
         // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
         // plane_through_point_tangent_to_x  = (point,x)=>point^ni<<x*point^ni;
 
-        // var p  = up(.5e2),                     // point
+        // var p1  = up(.5e2),                     // point
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0.5d,0d));
         // ganja.js: 0.5e2-0.37e4+0.62e5 = e0 + 0.5e2 + 0.125ei (korrekt)
-        // java p=1.0*eo + 0.5*e2 + 0.125*ei
+        // java p1=1.0*eo + 0.5*e2 + 0.125*ei
         System.out.println("p="+p.toString());
         
         // S  = sphere(up(-1.4e1),.5),            // left sphere
@@ -346,13 +348,13 @@ public class Test2 {
         
         // project point on sphere
         // var project_point_on_round            = (point,sphere)=>-point^ni<<sphere<<sphere
-        // ()=>project_point_on_round(p,S), "p on S"
+        // ()=>project_point_on_round(p1,S), "p1 on S"
         CGAPointPairOPNS pOnS = S.project(p);
         // ganja.js: 0.7e12-1.89e14-0.49e15+0.30e24+0.80e25-1.95e45 = 0.7e12-1.19e1i-1.44e01+0.55e2i-0.5e02+1.95e0i
         // java POnS=-1.4*eo^e1 - 0.5*eo^e2 + 0.7*e1^e2 + 1.96*eo^ei - 1.197*e1^ei + 0.557*e2^ei (korrekt)
         System.out.println("POnS="+pOnS.toString());
         
-        //()=>project_point_on_round(~p,C), "p on C",   // point on circle
+        //()=>project_point_on_round(~p1,C), "p1 on C",   // point on circle
         // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
         CGAPointPairOPNS pOnC = C.project(new CGARoundPointIPNS(p.conjugate()));
         // ganja.js -0.70e12 + 1.89e14+0.49e15+0.30e24+0.80e25-1.95e4 = -0.7e12+1.19e1i-1.44e01+0.55e2i-0.5e02
@@ -361,13 +363,13 @@ public class Test2 {
         
         // project_point_on_flat             = (point,plane)=>up(-point<<plane<<plane^nino*nino),
         
-        // ()=>project_point_on_flat(p,P),   "p on P",   // point on plane
+        // ()=>project_point_on_flat(p1,P),   "p1 on P",   // point on plane
         CGARoundPointIPNS pOnP = P.project(p);
         // ganja.js: -0.90e2-0.09e4+0.90e5 = e0-0.9e2+0.41ei
         // java pOnP=1.0*eo - 0.899*e2 + 0.4049*ei (korrekt)
         System.out.println("pOnP="+pOnP.toString());
         
-        // ()=>project_point_on_flat(~p,L),  "p on L",   // point on line
+        // ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on line
         CGARoundPointIPNS pConjugate = new CGARoundPointIPNS(p.conjugate());
         // java pConjugate= -eo - 0.5*e2 - 0.125*ei
         // ganja.js: pConjugate = -e0 - 0.5e2 - 0.125ei (korrekt)
@@ -381,16 +383,16 @@ public class Test2 {
         // Projektion auf Linien falsch sein, obowohl die Projektion auf Ebenen korrekt ist.
         
         
-        // ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S
+        // ()=>plane_through_point_tangent_to_x(p1,S),    // plane through p1 tangent to S
         // tangent() error da falscher grade
         //FIXME
-        //CGADualPlane pToS = S.tangent(p);
+        //CGADualPlane pToS = S.tangent(p1);
         // ganja.js 0.25e1234+0.25e1235+0.5e1345-1.39e2345
         // java pToS=0.0724999999999999*e1^e3
         //System.out.println("pToS="+pToS.toString());
         //TODO
         
-        // ()=>plane_through_point_tangent_to_x(p,P),    // plane through p tangent to P
+        // ()=>plane_through_point_tangent_to_x(p1,P),    // plane through p1 tangent to P
         CGAPlaneOPNS pToP = P.tangent(p);
         System.out.println("pToP="+pToP.toString());
         // java pToP=-0.19999999999999984*e1^e3
@@ -399,13 +401,13 @@ public class Test2 {
         
         // Graph the items. (hex numbers are html5 colors, two extra first bytes = alpha)
         // document.body.appendChild(this.graph([ 
-        //      0x00FF0000, p, "p",                                       // point 
-        //      0x00008800, ()=>project_point_on_round(p,S), "p on S",    // point on sphere
-        //      0x000000FF, ()=>project_point_on_round(~p,C), "p on C",   // point on circle
-        //  0x00888800, ()=>project_point_on_flat(p,P),   "p on P",   // point on plane
-        //  0x00008888, ()=>project_point_on_flat(~p,L),  "p on L",   // point on line
-        //  0xc0FF0000, ()=>plane_through_point_tangent_to_x(p,S),    // plane through p tangent to S2
-        //  0xc000FF00, ()=>plane_through_point_tangent_to_x(p,P),    // plane through p tangent to P
+        //      0x00FF0000, p1, "p1",                                       // point 
+        //      0x00008800, ()=>project_point_on_round(p1,S), "p1 on S",    // point on sphere
+        //      0x000000FF, ()=>project_point_on_round(~p1,C), "p1 on C",   // point on circle
+        //  0x00888800, ()=>project_point_on_flat(p1,P),   "p1 on P",   // point on plane
+        //  0x00008888, ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on line
+        //  0xc0FF0000, ()=>plane_through_point_tangent_to_x(p1,S),    // plane through p1 tangent to S2
+        //  0xc000FF00, ()=>plane_through_point_tangent_to_x(p1,P),    // plane through p1 tangent to P
         //  0,L,0,C,                                                  // line and circle
         //  0xE0008800, P,                                            // plane
         //  0xE0FFFFFF, S                                             // spheres
@@ -572,6 +574,44 @@ norm(sphere) = 1.9999999999999998
         System.out.println("norm(sphere) = "+String.valueOf(sphere.norm()));
     }
     
+    public void testDecomposeLocation(){
+        System.out.println("--------------- decompose location -------");
+        Point3d p1 = new Point3d(0.02,0.02,1);
+        System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        
+        Point3d p2 = new Point3d(0.02,0.02,2);
+        System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
+        
+        
+        // test IPNS representations
+        
+        // test RoundPoints
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1, 2d);
+        System.out.println("cp1="+cp1.toString());
+        RoundAndTangentParameters decomposed = cp1.decompose();
+        
+        // point-pairs
+        // CGAPointPairIPNS pp = new CGAPointPairIPNS();
+        
+        // circles
+        
+        // spheres,
+        
+        //TODO
+        // Wie kann ich einen RoundPoint in OPNS Darstellung erzeugen?
+        //CGARoundPointOPNS cp = new CGARoundPointOPNS(p1, 2d);
+        //System.out.println("cp="+cp.toString());
+        //RoundAndTangentParameters decomposed = cp.decompose();
+        
+        // point pairs
+        CGAPointPairOPNS pp = new CGAPointPairOPNS(p1,p2);
+        // pp=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
+        System.out.println("pp="+pp.toString());
+        // FIXME e1 und e2 die doppelt so grosse Werte wie erwartet
+        // locationFromTangentAndRound=3.250000000000001*eo + 0.06500000000000002*e1 + 0.06500000000000002*e2 + 1.4994000000000005*e3 + 5.088522196198628E-19*eo^e1^e3 + 5.088522196198628E-19*eo^e2^e3 - 0.9996*ei + 7.632783294297935E-19*eo^e1^ei + 7.632783294297935E-19*eo^e2^ei - 3.7001512964707234E-16*eo^e3^ei - 6.9375061251264494E-18*e1^e3^ei - 6.9375061251264494E-18*e2^e3^ei
+        RoundAndTangentParameters decomposed2 = pp.decompose();
+    }
+        
     public void testPoint(){
         System.out.println("--------------- point -------");
         Point3d p = new Point3d(0.02,0.02,1);

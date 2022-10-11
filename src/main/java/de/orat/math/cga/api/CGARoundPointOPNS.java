@@ -1,9 +1,11 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Point3d;
+
 /**
  * Round point in outer product null space representation (grade 4 multivector), 
  * corresponding to direct round point in Dorst2007.
- * 
+ *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGARoundPointOPNS extends CGASphereOPNS {
@@ -24,5 +26,11 @@ public class CGARoundPointOPNS extends CGASphereOPNS {
     public CGARoundPointOPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, 
                         CGASphereIPNS sphere3, CGASphereIPNS sphere4){
         this(sphere1.op(sphere2).op(sphere3).op(sphere4));
+    }
+    public CGARoundPointOPNS(Point3d p){
+        this((new CGARoundPointIPNS(p)).dual());
+    }
+    public CGARoundPointOPNS(Point3d p, double weight){
+        this((new CGARoundPointIPNS(p, weight)).dual());
     }
 }

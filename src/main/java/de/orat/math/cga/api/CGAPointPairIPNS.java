@@ -8,7 +8,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * Point-pair in inner product null space representation 
- * (grade 3 multivector), corresponding to dual sphere in Dorst2007.
+ * (grade 3 multivector), corresponding to dual point-pair in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -39,6 +39,9 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector  {
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
+     * FIXME
+     * ist das wirklich ein point-pair?
+     * 
      * @param c center
      * @param n normal
      * @param r radius
@@ -112,10 +115,5 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector  {
         CGAMultivector no_ni = createOrigin(1d).op(createInf(1d));
         CGAMultivector result = attitudeIntern().gp(no_ni.ip(this.op(no_ni))).gp(createE3Pseudoscalar());
         return result.extractE3ToPoint3d();
-    }
-    
-    @Override
-    public boolean isImaginary(){
-        throw new RuntimeException("not yet implemented!");
     }
 }

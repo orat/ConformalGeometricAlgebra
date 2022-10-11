@@ -7,8 +7,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Direct round objects in outer product null space representation corresponding to
- * direct round in Dorst2007.
+ * Rounds are roundPoints, point-pairs, circles and spheres; here given in
+ * inner product null space representation corresponding to direct round in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -43,7 +43,6 @@ class CGARoundOPNS extends CGABlade {
     public double squaredSize(){
         return -CGARoundIPNS.squaredSize(this);
     }
-    
     @Override
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");
