@@ -4,12 +4,12 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Circle in outer product null space representation (grade 3), corresponding to direct 
+ * Circle (1-sphere) in outer product null space representation (grade 3), corresponding to direct 
  * circle in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
+public class CGACircleOPNS extends CGAOrientedRoundOPNS implements iCGATrivector {
     
     public CGACircleOPNS(CGAMultivector m){
         super(m);

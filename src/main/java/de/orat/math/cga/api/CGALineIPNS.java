@@ -14,7 +14,7 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
+public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivector {
     
     public CGALineIPNS(CGAMultivector m){
         super(m);

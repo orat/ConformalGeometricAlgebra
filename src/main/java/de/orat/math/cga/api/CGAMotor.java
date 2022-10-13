@@ -55,4 +55,9 @@ public class CGAMotor extends CGAVersor {
         dir.scale(d);
         return new MotorParameters(dir, alpha);
     }
+
+    @Override
+    public boolean isEven() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

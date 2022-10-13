@@ -16,19 +16,17 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAFlatIPNS extends CGABlade {
+class CGAOrientedFiniteFlatIPNS extends CGABlade {
      
-    CGAFlatIPNS(CGAMultivector m){
+    CGAOrientedFiniteFlatIPNS(CGAMultivector m){
         super(m);
     }
-    CGAFlatIPNS(iCGAMultivector m){
+    CGAOrientedFiniteFlatIPNS(iCGAMultivector m){
         super(m);
     }
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
         System.out.println("attitude_cga="+result.toString());
-        //double[] coordinates = impl.extractCoordinates(2);
-        //return new Vector3d(coordinates[1], coordinates[2], coordinates[3]);
         return result.extractAttitudeFromEeinfRepresentation();
     }
     @Override
@@ -36,10 +34,30 @@ class CGAFlatIPNS extends CGABlade {
         // Sign of all coordinates changes according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        return createInf(-1d).op(this);
+        //return createInf(-1d).op(this);
+        
+        /*corresponds to
+          Geometric Algebra: A powerful tool for solving geometric problems in visual computing
+          Leandro A. F. Fernandes, and Manuel M. Oliveira
+          DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
+          2009
+         */
+        return createInf(-1d).lc(this.undual());
     }   
+    
+    /**
+     * corresponds to
+     * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
+     * Leandro A. F. Fernandes, and Manuel M. Oliveira
+     * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
+     * 2009
+     * if probe set to origin.
+     * 
+     * @param probe
+     * @return 
+     */
     CGAMultivector locationIntern(Point3d probe){
-        return new CGARoundPointIPNS(probe).op(this).div(this);//.extractGrade(1);
+        return new CGARoundPointIPNS(probe).op(this).div(this);
     }
     @Override
     public Point3d location(Point3d probe){

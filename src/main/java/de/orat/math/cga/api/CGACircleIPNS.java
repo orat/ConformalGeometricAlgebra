@@ -94,7 +94,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         return new Point3d(locationIntern().extractE3ToVector3d());
     }
     /**
-     * Determine a point on the line which has the closest distance to the origin.Implementation following:
+     * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @return location

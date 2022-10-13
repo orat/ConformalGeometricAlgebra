@@ -27,7 +27,7 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAFlatPointIPNS extends CGAFlatIPNS implements iCGABivector {
+public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivector {
     
     public CGAFlatPointIPNS(CGAMultivector m){
         super(m);

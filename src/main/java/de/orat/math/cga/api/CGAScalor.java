@@ -12,4 +12,9 @@ public class CGAScalor extends CGAVersor {
     public void testGrade(){
         // test auf o^einf und scalar only
     }
+
+    @Override
+    public boolean isEven() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

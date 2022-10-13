@@ -57,8 +57,9 @@ class CGARoundIPNS extends CGABlade {
     // für eine CGARoundIPNS scheint das jetzt zu stimmen
     @Override
     public Point3d location(){
-        CGAMultivector location = location3(weight());
-        System.out.println("location lua="+location.toString()); // scheint für CGAPoint zu stimmen
+        //CGAMultivector location = location3(weight());
+        //System.out.println("location lua="+location.toString()); // scheint für CGAPoint zu stimmen
+        
         CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
         return result.extractE3ToPoint3d();
         //double[] vector = result.impl.extractCoordinates(1);

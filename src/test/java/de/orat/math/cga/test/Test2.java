@@ -576,11 +576,15 @@ norm(sphere) = 1.9999999999999998
     
     public void testDecomposeLocation(){
         System.out.println("--------------- decompose location -------");
+        
         Point3d p1 = new Point3d(0.02,0.02,1);
         System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
         
         Point3d p2 = new Point3d(0.02,0.02,2);
         System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
+        
+        Point3d p3 = new Point3d(0.5,0.02,2);
+        System.out.println("p3=("+String.valueOf(p3.x)+","+String.valueOf(p3.y)+","+String.valueOf(p3.z)+")");
         
         
         // test IPNS representations
@@ -588,28 +592,90 @@ norm(sphere) = 1.9999999999999998
         // test RoundPoints
         CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1, 2d);
         System.out.println("cp1="+cp1.toString());
-        RoundAndTangentParameters decomposed = cp1.decompose();
+        //RoundAndTangentParameters decomposed1 = cp1.decompose();
+        Point3d location = cp1.location();
+        System.out.println("loc(cp1) = ("+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+
+                String.valueOf(location.z)+")");
+        
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2, 2d);
+        System.out.println("cp2="+cp2.toString());
+        //RoundAndTangentParameters decomposed2 = cp2.decompose();
+        Point3d location2 = cp2.location();
+        System.out.println("loc(cp2) = ("+String.valueOf(location2.x)+", "+String.valueOf(location2.y)+", "+
+                String.valueOf(location2.z)+")");
         
         // point-pairs
-        // CGAPointPairIPNS pp = new CGAPointPairIPNS();
+        CGAPointPairIPNS pp1 = new CGAPointPairIPNS(cp1,cp2);
+        //RoundAndTangentParameters decomposed3 = pp1.decompose();
+        // loc(pp1) = (Infinity, Infinity, -Infinity) (ERROR)
+        //FIXME
+        Point3d location3 = pp1.location();
+        System.out.println("loc(pp1) = ("+String.valueOf(location3.x)+", "+String.valueOf(location3.y)+", "+
+                String.valueOf(location3.z)+")");
+        
+        // spheres
+        CGASphereIPNS s1 = new CGASphereIPNS(p1, 2d);
+        System.out.println("s1="+s1.toString());
+        //RoundAndTangentParameters decomposed4 = s1.decompose();
+        Point3d location4 = s1.location();
+        System.out.println("loc(s1) = ("+String.valueOf(location4.x)+", "+String.valueOf(location4.y)+", "+
+                String.valueOf(location4.z)+")");
+        
+        CGASphereIPNS s2 = new CGASphereIPNS(p2, 3d);
+        System.out.println("s2="+s2.toString());
+        //RoundAndTangentParameters decomposed5 = s2.decompose();
+        Point3d location5 = s2.location();
+        System.out.println("loc(s2) = ("+String.valueOf(location5.x)+", "+String.valueOf(location5.y)+", "+
+                String.valueOf(location5.z)+")");
         
         // circles
+        CGACircleIPNS c1 = new CGACircleIPNS(s1,s2);
+        // c1=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 - 1.0*eo^ei - 0.02*e1^ei - 0.02*e2^ei + 0.49960000000000004*e3^ei
+        System.out.println("c1="+c1.toString());
+        //RoundAndTangentParameters decomposed6 = c1.decompose();
+        Point3d location6 = c1.location();
+        // loc(c1) = (Infinity, Infinity, 0.0) (ERROR)
+        //FIXME
+        System.out.println("loc(c1) = ("+String.valueOf(location6.x)+", "+String.valueOf(location6.y)+", "+
+                String.valueOf(location6.z)+")");
         
-        // spheres,
         
-        //TODO
-        // Wie kann ich einen RoundPoint in OPNS Darstellung erzeugen?
-        //CGARoundPointOPNS cp = new CGARoundPointOPNS(p1, 2d);
-        //System.out.println("cp="+cp.toString());
-        //RoundAndTangentParameters decomposed = cp.decompose();
+        // opns representations
+        
+        //points
+        CGARoundPointOPNS cp1b = new CGARoundPointOPNS(p1);
+        System.out.println("cp1b="+cp1b.toString());
+        //RoundAndTangentParameters decomposed7 = cp1b.decompose();
+        Point3d location7 = cp1b.location();
+        System.out.println("loc(cp1b) = ("+String.valueOf(location7.x)+", "+String.valueOf(location7.y)+", "+
+                String.valueOf(location7.z)+")");
         
         // point pairs
-        CGAPointPairOPNS pp = new CGAPointPairOPNS(p1,p2);
+        CGAPointPairOPNS pp2 = new CGAPointPairOPNS(p1,p2);
         // pp=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
-        System.out.println("pp="+pp.toString());
+        System.out.println("pp2="+pp2.toString());
         // FIXME e1 und e2 die doppelt so grosse Werte wie erwartet
         // locationFromTangentAndRound=3.250000000000001*eo + 0.06500000000000002*e1 + 0.06500000000000002*e2 + 1.4994000000000005*e3 + 5.088522196198628E-19*eo^e1^e3 + 5.088522196198628E-19*eo^e2^e3 - 0.9996*ei + 7.632783294297935E-19*eo^e1^ei + 7.632783294297935E-19*eo^e2^ei - 3.7001512964707234E-16*eo^e3^ei - 6.9375061251264494E-18*e1^e3^ei - 6.9375061251264494E-18*e2^e3^ei
-        RoundAndTangentParameters decomposed2 = pp.decompose();
+        //RoundAndTangentParameters decomposed8 = pp2.decompose();
+        Point3d location8 = pp2.location();
+        System.out.println("loc(pp2) = ("+String.valueOf(location8.x)+", "+String.valueOf(location8.y)+", "+
+                String.valueOf(location8.z)+")");
+        
+        // spheres
+        CGASphereOPNS s1b = new CGASphereOPNS(p1, 2d);
+        System.out.println("s1b="+s1b.toString());
+        //RoundAndTangentParameters decomposed9 = s1b.decompose();
+        Point3d location9 = s1b.location();
+        System.out.println("loc(s1b) = ("+String.valueOf(location9.x)+", "+String.valueOf(location9.y)+", "+
+                String.valueOf(location9.z)+")");
+        
+        // circles
+        CGACircleOPNS c1b = new CGACircleOPNS(p1,p2,p3);
+        System.out.println("c1b="+c1b.toString());
+        //RoundAndTangentParameters decomposed11 = c1b.decompose();
+        Point3d location10 = c1b.location();
+        System.out.println("loc(c1b) = ("+String.valueOf(location10.x)+", "+String.valueOf(location10.y)+", "+
+                String.valueOf(location10.z)+")");
     }
         
     public void testPoint(){

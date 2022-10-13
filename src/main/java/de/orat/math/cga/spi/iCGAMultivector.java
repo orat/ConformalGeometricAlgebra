@@ -132,6 +132,7 @@ public interface iCGAMultivector {
      * The inverse of the multivector even if it is not a versor (returns 0 if 
      * inverse does not exist).
      * 
+     * 
      * @return the inverse of an arbitray multivector or 0 if no inverse exist.
      * 
      * TODO
@@ -146,8 +147,16 @@ public interface iCGAMultivector {
         double scalar = part.gp(negate14).gp(part).scalarPart();
         return conjugate.gp(gradeInversion).gp(reversion).gp(negate14).gp(part).gp(1d/scalar);
     }
+    /**
+     * Inverse for versors and invertable blades only.
+     * 
+     * Hint: It can be used only for versors or invertable blades. So squaredLength != 0 
+     * is needed.
+    
+     * @return inverse
+     */
     default iCGAMultivector versorInverse(){
-        return generalInverse();
+        return reverse().gp(1d/lengthSquared());
     }
     
     /**
@@ -198,6 +207,46 @@ public interface iCGAMultivector {
     
     public boolean isNull();
     
+    //default boolean isBlade(){
+      /*
+    def isBlade(self) -> bool:
+        """Returns true if multivector is a blade.
+        """
+        if len(self.grades()) != 1:
+            return False
+
+        return self.isVersor()
+    */  
+    //}
+    //default boolean isVersor(){
+        /*
+         def isVersor(self) -> bool:
+        """Returns true if multivector is a versor.
+        From :cite:`ga4cs` section 21.5, definition from 7.6.4
+        """
+        Vhat = self.gradeInvol()
+        Vrev = ~self
+        Vinv = Vrev/(self*Vrev)[()]
+
+        # Test if the versor inverse (~V)/(V * ~V) is truly the inverse of the
+        # multivector V
+        if (Vhat*Vinv).grades(eps=0.000001) != {0}:
+            return False
+        if not np.sum(np.abs((Vhat*Vinv).value - (Vinv*Vhat).value)) < 0.0001:
+            return False
+
+        # applying a versor (and hence an invertible blade) to a vector should
+        # not change the grade
+        if not all(
+            (Vhat*e*Vrev).grades(eps=0.000001) == {1}
+            for e in cf.basis_vectors(self.layout).values()
+        ):
+            return False
+
+        return True*/
+    //}
+    
+    
     // three involution functions:
     
     /**
@@ -235,9 +284,36 @@ public interface iCGAMultivector {
      * Note that the conjugate and reverse operation commute as their result 
      * ultimately differs by a sign.
      * 
-     * @return conjugate
+     * 
+     * For Quaternionen:
+     * The conjugate is useful because it has the following properties:
+     *
+     * qa' * qb' = (qb*qa)' In this way we can change the order of the multiplicands.
+     * q * q' = a2 + b2 + c2 + d2 = real number. Multiplying a quaternion by its 
+     * conjugate gives a real number. This makes the conjugate useful for finding 
+     * the multiplicative inverse. For instance, if we are using a quaternion q 
+     * to represent a rotation then conj(q) represents the same rotation in the reverse direction.
+     * Pout = q * Pin * q' We use this to calculate a rotation transform.
+     *
+     * For CGA:
+     * 
+     * This reverses all directions in space
+     *
+     * A~ denotes the conjugate of A
+     *
+     * conjugate, reverse and dual are related as follows.
+     *
+     * A~= (A†)* = (A*)†
+     *
+     * identities
+     *
+     * (A * B)~ = B~* A~
+     * 
+     * @return clifford conjugate
      */
-    public iCGAMultivector conjugate();
+    default iCGAMultivector conjugate(){
+        return this.reverse().gradeInversion();
+    }
     
     /**
      * Unit on conjuage operation.
@@ -334,7 +410,13 @@ public interface iCGAMultivector {
         return result;
     }
     /**
-     * Squared magnitude, squared absolute value or squared length.
+     * Squared magnitude, squared absolute value, squared norm,
+     * reverse norm or squared length.
+     * 
+     * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
+     * Leandro A. F. Fernandes, and Manuel M. Oliveira
+     * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
+     * 2009
      * 
      * @return squared length
      */

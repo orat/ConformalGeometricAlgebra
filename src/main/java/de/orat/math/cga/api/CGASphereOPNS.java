@@ -5,12 +5,12 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Direct sphere in outer product null space representation as a multivector 
+ * Direct (or ordinary) sphere in outer product null space representation as a multivector 
  * of grade 4, corresponding to direct sphere in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGASphereOPNS extends CGARoundOPNS implements iCGAQuadvector {
+public class CGASphereOPNS extends CGAOrientedRoundOPNS implements iCGAQuadvector {
     
     public CGASphereOPNS(CGAMultivector m){
         super(m);
@@ -30,6 +30,9 @@ public class CGASphereOPNS extends CGARoundOPNS implements iCGAQuadvector {
         this((new CGARoundPointIPNS(p)).ip(createInf(1d).op((new CGARoundPointIPNS(o)))));
     }
     
+    public CGASphereOPNS(Point3d o, double r){
+        this(new CGASphereIPNS(o,r).dual());
+    }
     /**
      * Create dual sphere in outer product null space representation 
      * (grade 4 multivector).

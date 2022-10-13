@@ -7,19 +7,19 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * DualFlatPoints?, DualPointPairs?, DualLines, DualPlanes, DualCircles? 
+ * Oriented finite flats e.g. FlatPoints, PointPairs?, Lines, Planes, DualCircles? 
  * 
  * All in outer product null space representation, corresponding to direct flat
  * in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAFlatOPNS extends CGABlade {
+class CGAOrientedFiniteFlatOPNS extends CGABlade {
     
-    CGAFlatOPNS(CGAMultivector m){
+    CGAOrientedFiniteFlatOPNS(CGAMultivector m){
         super(m.impl);
     }
-    protected CGAFlatOPNS(iCGAMultivector m){
+    protected CGAOrientedFiniteFlatOPNS(iCGAMultivector m){
         super(m);
     }
     
@@ -28,16 +28,38 @@ class CGAFlatOPNS extends CGABlade {
         System.out.println("attitude_cga="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
     }
+    
+    /**
+     * corresponds to
+     * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
+     * Leandro A. F. Fernandes, and Manuel M. Oliveira
+     * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
+     * 2009
+     */
     // scheint bei dualline so zu stimmen
     @Override
     protected CGAMultivector attitudeIntern(){
-        return createInf(-1d).ip(this);
+        return createInf(-1d).lc(this);
     } 
+    
+    /**
+     * corresponds to
+     * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
+     * Leandro A. F. Fernandes, and Manuel M. Oliveira
+     * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
+     * 2009
+     * if probe set to origin.
+     * 
+     * @param probe
+     * @return location (represented as finite point)
+     */
+    CGAMultivector locationIntern(Point3d probe){
+        return new CGARoundPointOPNS(probe).ip(this).div(this);
+    }
     @Override
     public Point3d location(Point3d probe){
         // Determine a normalized dual sphere as location
-        CGAMultivector probeCGA = new CGARoundPointIPNS(probe);
-        CGAMultivector m = probeCGA.ip(this).div(this);
+        CGAMultivector m = locationIntern(probe);
         System.out.println("location="+m.toString());
         // the euclidian part is the location in euclidian space
         return m.extractE3ToPoint3d();

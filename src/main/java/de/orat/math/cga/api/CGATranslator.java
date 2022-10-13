@@ -28,4 +28,9 @@ public class CGATranslator extends CGAVersor {
         this(createInf(1d).gp(createE3(d)).gp(0.5).exp());
         //this((new CGAScalar(1d)).sub(createE3(d).gp(-0.5d).gp(createInf(1d))));
     }
+
+    @Override
+    public boolean isEven() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -156,11 +156,9 @@ public class CGA {
 	/// CGA.Conjugate : res = a.Conjugate()
 	/// Clifford Conjugation
 	/// </summary>
-	public  CGA Conjugate ()
-	{
+	public  CGA Conjugate (){
 		double[] res = new double[CGA._basisLength];
 		
-
 		res[0]=this._mVec[0];
 		res[1]=-this._mVec[1];
 		res[2]=-this._mVec[2];

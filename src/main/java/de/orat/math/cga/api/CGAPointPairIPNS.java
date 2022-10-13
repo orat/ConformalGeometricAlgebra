@@ -34,6 +34,9 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector  {
     public CGAPointPairIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, CGASphereIPNS sphere3){
         this(sphere1.op(sphere2).op(sphere3));
     }
+    public CGAPointPairIPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
+        this(p1.op(p2).dual());
+    }
     
     /**
      * Implementation following:
@@ -115,5 +118,11 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector  {
         CGAMultivector no_ni = createOrigin(1d).op(createInf(1d));
         CGAMultivector result = attitudeIntern().gp(no_ni.ip(this.op(no_ni))).gp(createE3Pseudoscalar());
         return result.extractE3ToPoint3d();
+    }
+    
+    public Point3d[] decomposePoints(){
+        Point3d[] result = new Point3d[2];
+        //TODO
+        return result;
     }
 }

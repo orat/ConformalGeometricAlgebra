@@ -17,7 +17,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
+public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivector {
     
     public CGALineOPNS(CGAMultivector m){
         super(m);

@@ -75,7 +75,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return new CGA2Multivector(CGA.unop_Dual(this));
     }
     /**
-     * Bei Quaternionen:
+     * Conjugation.
+     * 
+     * For Quaternionen:
      * The conjugate is useful because it has the following properties:
      *
      * qa' * qb' = (qb*qa)' In this way we can change the order of the multiplicands.
@@ -85,7 +87,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
      * to represent a rotation then conj(q) represents the same rotation in the reverse direction.
      * Pout = q * Pin * q' We use this to calculate a rotation transform.
      *
-     * Aber was macht das in GA?
+     * For CGA:
      * 
      * This reverses all directions in space
      *

@@ -7,17 +7,17 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Rounds are roundPoints, point-pairs, circles and spheres; here given in
+ * (Oriented) Rounds are roundPoints, point-pairs, circles and spheres/hyper-spheres; here given in
  * inner product null space representation corresponding to direct round in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGARoundOPNS extends CGABlade {
+class CGAOrientedRoundOPNS extends CGABlade {
     
-    CGARoundOPNS(CGAMultivector m){
+    CGAOrientedRoundOPNS(CGAMultivector m){
         super(m.impl);
     }
-    protected CGARoundOPNS(iCGAMultivector impl){
+    protected CGAOrientedRoundOPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -50,7 +50,7 @@ class CGARoundOPNS extends CGABlade {
     @Override
     public Point3d location(){
         CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere(); //locationFromTangendAndRound();
-        return extractE3ToPoint3d();
+        return result.extractE3ToPoint3d();
         //double[] vector = result.impl.extractCoordinates(1);
         //int index = result.impl.getEStartIndex();
         //return new Point3d(vector[index++], vector[index++], vector[index]);

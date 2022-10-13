@@ -183,13 +183,20 @@ public class CGAMultivector {
      */
     protected CGAMultivector locationFromTangendAndRoundAsNormalizedSphere(){
         // corresponds to the errata of the book Dorst2007
+        
         // mit inf = createOrigin(1d).gp(2d); funktioniert es gar nicht
+        
         CGAMultivector inf = createInf(1d);
         
         CGAMultivector result = (this.div(inf.ip(this))).gp(-1d);
         // z.B. locationFromTangentAndRound=1.0000000000000002*eo + 0.020000000000000004*e1 + 0.020000000000000004*e2 + 1.0000000000000002*e3 + 0.5004000000000001*ei
         // bei input von p=(0.02,0.02,1.0)
         System.out.println("locationFromTangentAndRound="+result.toString());
+        
+        // https://github.com/pygae/clifford/blob/master/clifford/cga.py Zeile 284:
+        // self.mv * self.cga.einf * self.mv
+        //TODO ausprobieren?
+        
         return result;
     }
     /**
