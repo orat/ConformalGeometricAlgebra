@@ -155,33 +155,43 @@ public class CGAMultivector {
    
     /**
      * Determine direction/attitude from tangent or round objects.
+     * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
+     * @return attitude
+     */
+    static CGAMultivector attitudeFromTangentAndRound2(CGABlade tangentOrRound){
+        CGAMultivector result = CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d));
+        System.out.println("attitude(round/attitude)="+result.toString());
+        return result;
+    }
+    /**
+     * Determine direction/attitude from tangent or round objects.
      * 
      * Hildenbrand2004
      * 
      * @return direction/attitude
      */
-    protected CGAMultivector attitudeFromTangentAndRound(){
+    /*protected CGAMultivector attitudeFromTangentAndRound(){
         // see errata, dual tangend/round formula Dorst2007
         CGAMultivector einf = CGAMultivector.createInf(1d);
         CGAMultivector einfM = CGAMultivector.createInf(-1d);
         CGAMultivector result = einfM.ip(dual()).op(einf);
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;
-    }
-    protected CGAMultivector attitudeFromDualTangentAndDualRound(){
+    }*/
+    /*protected CGAMultivector attitudeFromDualTangentAndDualRound(){
         // see errata, dual tangend/round formula Dorst2007
         CGAMultivector einf = CGAMultivector.createInf(1d);
         CGAMultivector result = (einf.ip(this)).gp(-1d).op(einf);
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;
-    }
+    }*/
     /**
      * Determines location from tangent and round objects and also from its dual.
      * 
      * scheint für CGARound zu stimmen
      * @return location represented by a normalized sphere (dual sphere corresponding to Dorst2007)
      */
-    protected CGAMultivector locationFromTangendAndRoundAsNormalizedSphere(){
+    protected CGAMultivector locationFromRoundAsNormalizedSphere(){
         // corresponds to the errata of the book Dorst2007
         
         // mit inf = createOrigin(1d).gp(2d); funktioniert es gar nicht

@@ -12,7 +12,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector  {
+public class CGAPointPairIPNS extends CGAOrientedRoundIPNS implements iCGATrivector  {
     
     public CGAPointPairIPNS(CGAMultivector m){
         super(m);

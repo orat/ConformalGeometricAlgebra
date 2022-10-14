@@ -11,7 +11,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
+public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector {
     
     public CGACircleIPNS(CGAMultivector m){
         super(m);

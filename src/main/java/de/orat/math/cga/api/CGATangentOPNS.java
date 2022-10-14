@@ -24,7 +24,8 @@ class CGATangentOPNS extends CGABlade {
     }
     @Override
     protected CGAMultivector attitudeIntern(){
-        return attitudeFromTangentAndRound();
+        //return attitudeFromTangentAndRound();
+        return attitudeFromTangentAndRound2(this);
     }
     @Override
     public Point3d location(Point3d probe){
@@ -32,7 +33,7 @@ class CGATangentOPNS extends CGABlade {
     }
     @Override
     public Point3d location(){
-        //CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
+        //CGAMultivector result = locationFromRoundAsNormalizedSphere();
         
         Point3d result = locationIntern(this);
         System.out.println("location="+result.toString());

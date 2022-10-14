@@ -11,12 +11,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGARoundIPNS extends CGABlade {
+class CGAOrientedRoundIPNS extends CGABlade {
     
-    CGARoundIPNS(CGAMultivector m){
+    CGAOrientedRoundIPNS(CGAMultivector m){
         super(m);
     }
-    CGARoundIPNS(iCGAMultivector impl){
+    CGAOrientedRoundIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -48,19 +48,21 @@ class CGARoundIPNS extends CGABlade {
     }
     @Override
     protected CGAMultivector attitudeIntern(){
-        return attitudeFromTangentAndRound();
+        return attitudeFromTangentAndRound2((CGABlade) this.undual());
+        //return attitudeFromTangentAndRound();
     }
+    
     @Override
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");
     }
-    // für eine CGARoundIPNS scheint das jetzt zu stimmen
+    // für eine CGAOrientedRoundIPNS scheint das jetzt zu stimmen
     @Override
     public Point3d location(){
         //CGAMultivector location = location3(weight());
         //System.out.println("location lua="+location.toString()); // scheint für CGAPoint zu stimmen
         
-        CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
+        CGAMultivector result = locationFromRoundAsNormalizedSphere();
         return result.extractE3ToPoint3d();
         //double[] vector = result.impl.extractCoordinates(1);
         //int index = result.impl.getEStartIndex();
@@ -130,7 +132,7 @@ class CGARoundIPNS extends CGABlade {
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.
      * 
-     * ok für dualSphere, hint: CGADualRound ruft diese Methode auf uns switched nur das Vorzeichen
+     * ok für dualSphere, hint: CGADualRound ruft diese Methode auf und switched nur das Vorzeichen
      * falsch für CGARoundPoint
      * 
      * @param m round or dual round object represented by a multivector

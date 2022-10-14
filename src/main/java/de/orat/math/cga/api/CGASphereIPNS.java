@@ -12,7 +12,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
+public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
     
     boolean isNormalized = false;
     

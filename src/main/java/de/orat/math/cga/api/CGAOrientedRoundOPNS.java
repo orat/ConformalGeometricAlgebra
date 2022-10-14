@@ -29,7 +29,8 @@ class CGAOrientedRoundOPNS extends CGABlade {
     }
     @Override
     protected CGAMultivector attitudeIntern(){
-        return attitudeFromDualTangentAndDualRound();
+        return attitudeFromTangentAndRound2(this);
+        //return attitudeFromDualTangentAndDualRound();
     }
     
     /**
@@ -41,7 +42,7 @@ class CGAOrientedRoundOPNS extends CGABlade {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        return -CGARoundIPNS.squaredSize(this);
+        return -CGAOrientedRoundIPNS.squaredSize(this);
     }
     @Override
     public Point3d location(Point3d probe){
@@ -49,7 +50,7 @@ class CGAOrientedRoundOPNS extends CGABlade {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere(); //locationFromTangendAndRound();
+        CGAMultivector result = locationFromRoundAsNormalizedSphere(); //locationFromTangendAndRound();
         return result.extractE3ToPoint3d();
         //double[] vector = result.impl.extractCoordinates(1);
         //int index = result.impl.getEStartIndex();
