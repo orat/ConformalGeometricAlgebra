@@ -8,9 +8,10 @@ import org.jogamp.vecmath.Vector3d;
  * Tangents are created from touching objects, in outer product null space 
  * represenation corresponding to direct tangent in Dorst2007.
  * 
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGATangentOPNS extends CGAMultivector {
+class CGATangentOPNS extends CGABlade {
     
     CGATangentOPNS(CGAMultivector m){
         super(m.impl);
@@ -31,12 +32,15 @@ class CGATangentOPNS extends CGAMultivector {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
+        //CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
+        
+        Point3d result = locationIntern(this);
         System.out.println("location="+result.toString());
-        return extractE3ToPoint3d();
-        //double[] vector = result.impl.extractCoordinates(1);
-        //int index = result.impl.getEStartIndex();
-        //return new Point3d(vector[index++], vector[index++], vector[index]);
+        return result;
+        
+    }
+    static Point3d locationIntern(CGABlade tangent){
+        return tangent.div(createInf(-1d).lc(tangent)).extractE3ToPoint3d();
     }
     public double squaredSize(){
         return 0d;

@@ -11,7 +11,7 @@ import org.jogamp.vecmath.Vector3d;
  * Dorst2007.
  * 
  */
-class CGATangentIPNS extends CGAMultivector {
+class CGATangentIPNS extends CGABlade {
     
     CGATangentIPNS(CGAMultivector m){
         super(m.impl);
@@ -32,12 +32,10 @@ class CGATangentIPNS extends CGAMultivector {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
-        System.out.println("location="+result.toString());
-        return extractE3ToPoint3d();
-        //double[] vector = result.impl.extractCoordinates(1);
-        //int index = result.impl.getEStartIndex();
-        //return new Point3d(vector[index++], vector[index++], vector[index]);
+        return CGATangentOPNS.locationIntern(this);
+        //CGAMultivector result = locationFromTangendAndRoundAsNormalizedSphere();
+        //System.out.println("location="+result.toString());
+        //return extractE3ToPoint3d();
     }
     public double squaredSize(){
         return 0d;
