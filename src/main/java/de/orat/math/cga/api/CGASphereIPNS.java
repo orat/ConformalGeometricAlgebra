@@ -6,9 +6,9 @@ import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * Sphere in inner product null space representation (grade 1 multivector)
- * corresponding to dual sphere in Dorst2007.
+ * corresponding to dual real or imaginary sphere in Dorst2007.
  * 
- * A sphere with radius=0 is a point.
+ * A sphere with radius=0 is a round point.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -35,15 +35,20 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
      * Dorst2007 page 363 == Hildenbrand1998 page 29
      * 
      * @param location multivector representing a location as normalized point
-     * @param r radius of the sphere to CGAMultivector
+     * @param r radius of the sphere to CGAMultivector, imaginary sphere if r<0
      */
     public CGASphereIPNS(CGARoundPointIPNS location, double r){
         this(create(location, r));
     }
-    // (P,r)=>!(P-r**2*.5*ni),
+    // (P,r)=>!(P-r**2*.5*ni)
     private static CGAMultivector create(CGARoundPointIPNS location, double r){
         if (!location.isNormalized()) throw new IllegalArgumentException("The given location is not normalized!");
-        CGARoundPointIPNS result = new CGARoundPointIPNS(location.sub(createInf(0.5*r*r)));
+        CGARoundPointIPNS result;
+        if (r >0){
+            result = new CGARoundPointIPNS(location.sub(createInf(0.5*r*r)));
+        } else {
+            result = new CGARoundPointIPNS(location.add(createInf(0.5*r*r)));
+        }
         result.isNormalized = true;
         return result;
     }
@@ -52,12 +57,13 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
      * Create sphere in inner product null space representation 
      * (grade 1 multivector).
      * 
-     * @param location
-     * @param r
-     * @param weight 
+     * @param location multivector representation of a point
+     * @param r radius of the sphere, r<0 if imaginary sphere
+     * @param weight weight
      */
     public CGASphereIPNS(CGARoundPointIPNS location, double r, double weight){
-        this(location.sub(createInf(0.5*r*r)));
+        //this(location.sub(createInf(0.5*r*r)).gp(weight));
+        this(create(location, r).gp(weight));
         if (weight != 1) {
             isNormalized = false;
             gp(weight);
@@ -70,20 +76,21 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
      *
      * @param point
      * @param radius
-     * @param sign 
+     * @param isReal false to create an imaginary sphere
      * @param weight 
+     * 
      */
-    public CGASphereIPNS(Point3d point, double radius, boolean sign, double weight){
-       this(createCGASphere(point, radius, sign, weight));
+    public CGASphereIPNS(Point3d point, double radius, double weight){
+       this(createCGASphere(point, radius, weight));
     }
-    private static CGAMultivector createCGASphere(Point3d point, double radius, boolean sign, double weight){
+    private static CGAMultivector createCGASphere(Point3d point, double radius, double weight){
         // local blade = weight * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
         CGAMultivector c = createE3(point);
         CGAMultivector sr2;
-        if (sign){
-            sr2 = new CGAScalar(-radius*radius);
-        } else {
+        if (radius >0){
             sr2 = new CGAScalar(radius*radius);
+        } else {
+            sr2 = new CGAScalar(-radius*radius);
         }
         return createOrigin(1d).add(c).add(c.ip(c).sub(sr2).gp(createInf(0.5d))).gp(weight);
     }
@@ -130,29 +137,40 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
      * @return weight
      */
     private double weight(){
-        return this.gp(-1d).ip(createInf(1d)).scalarPart();
+        return gp(-1d).ip(createInf(1d)).scalarPart();
     }
     
+    /**
+     * Squared size (=squared radius only for round, - squared radius for dual round).
+     * 
+     * implementation follows
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * 
+     * @return squared size/radius imaginary sphere if radius < 0
+     */
+    @Override
+    public double squaredSize(){
+        //local radius_squared = ( center .. center ) + 2 * ( no .. blade )
+	//radius_squared = radius_squared:tonumber()
+        CGAMultivector center = locationIntern();
+        return center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight())).gp(2d))).scalarPart();
+    }
+       
     /**
      * implementation follows
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
-     * @return localisation
+     * @return location origin/midpoint
      */
-    public Point3d localisation(){
-        //lade = blade / weight
+    @Override
+    public Point3d location(){
+        return locationIntern().extractE3ToPoint3d();
+    }
+    private CGAMultivector locationIntern(){
+        //blade = blade / weight
 	//local center = no_ni .. ( blade ^ no_ni )
-	//local radius_squared = ( center .. center ) + 2 * ( no .. blade )
-	//radius_squared = radius_squared:tonumber()
-	//local imaginary = false
-	//if radius_squared < 0 then
-	//	imaginary = true
-	//	radius_squared = -radius_squared
-	//end
-	//local radius = math.sqrt( radius_squared )
-        
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
-        return no_inf.ip((this.gp(1d/weight())).op(no_inf)).extractE3ToPoint3d();
+        return no_inf.ip((gp(1d/weight())).op(no_inf));
     }
     
     

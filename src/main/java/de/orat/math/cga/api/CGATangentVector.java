@@ -17,6 +17,11 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * TODO
  * was ist mit normal vector (grade 1)?
+ * 
+ * The use of tangent blades is an elegant alternative to represent vertices in
+ * a mesh, because they encode both the positional as the tangential information 
+ * in a simple primitive element. 
+ * 
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

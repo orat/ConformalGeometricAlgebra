@@ -37,4 +37,13 @@ class CGABlade extends CGAMultivector implements iCGABlade {
         CGAMultivector ni = CGAMultivector.createInf(1d);
         return new CGARoundPointIPNS(p.op(ni).lc(this).gp(p.op(ni)));
     }
+    
+    @Override
+    public CGABlade undual(){
+        return new CGABlade(impl.undual());
+    }
+    @Override
+    public CGABlade dual(){
+        return new CGABlade(impl.dual());
+    }
 }

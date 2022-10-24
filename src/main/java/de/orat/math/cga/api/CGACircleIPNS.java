@@ -29,12 +29,11 @@ public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector 
      *
      * @param center
      * @param normal
-     * @param radius
+     * @param radius imaginary circle if radius<0
      * @param weight
-     * @param sign 
      */
-    public CGACircleIPNS(Point3d center, Vector3d normal, double radius, double weight, boolean sign){
-        this((new CGASphereIPNS(center, radius, sign, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
+    public CGACircleIPNS(Point3d center, Vector3d normal, double radius, double weight){
+        this((new CGASphereIPNS(center, radius, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
     
     /**
@@ -83,7 +82,8 @@ public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector 
         return createOrigin(-1d).op(createInf(1d)).ip(this.gp(1d/weight()).op(createInf(1d)));
     }
     /**
-     * Determine a point on the line which has the closest distance to the origin.Implementation following:
+     * Determine a point on the line which has the closest distance to the origin.
+     * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @return location
@@ -101,11 +101,19 @@ public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector 
      */
     private CGAMultivector locationIntern(){
         CGAMultivector no_ni = createOrigin(1d).op(createInf(1d));
-        return attitudeIntern().gp(-1d).gp(no_ni.ip(this.op(no_ni)));
+        // blade = blade / weight
+        //TODO
+        // hier fehlt noch die Division durch die Gewichtung/weight
+        
+	// local normal = -no_ni .. ( blade ^ ni )
+	// local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) )
+	// local radius_squared = ( center .. center ) - 2 * ( ( no_ni .. ( no ^ blade ) ) + ( center .. normal ) * center ) * normal
+	
+        return attitudeIntern().gp(-1d).gp(no_ni.ip(this.op(createOrigin(1d).gp(createInf(1d)))));
     }
     
     /**
-     * Determination of the squared size. This is the radiusSquared for a sphere.
+     * Determination of the squared size/radius. This is the radiusSquared for a sphere.
      * 
      * Determine a point on the line which has the closest distance to the origin.Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf

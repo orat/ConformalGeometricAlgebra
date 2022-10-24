@@ -45,8 +45,8 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
-     * @param c
-     * @param direction
+     * @param c location
+     * @param direction normalized direction
      * @param weight 
      */
     public CGALineIPNS(Point3d c, Vector3d direction, double weight){

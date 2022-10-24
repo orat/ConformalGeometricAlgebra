@@ -3,6 +3,11 @@ package de.orat.math.cga.api;
 /**
  * All vectors seems to be weighted spheres.
  * 
+ * Vectors are points, dual planes (CGAPlaneIPNS), dual real spheres and 
+ * dual imaginary spheres (CGASphereIPNS) corresponding to Dorst2007.
+ * 
+ * implemented by CGANormalVector
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 interface iCGAVector extends iCGABlade {

@@ -18,7 +18,7 @@ public class CGAMultivector {
     /**
      * Algebra's Precision.
      */
-    //protected static double eps = 1e-12;
+    public static double eps = 1e-12;
 
     private static CGAMultivector defaultInstance = new CGAMultivector();
     
@@ -98,6 +98,28 @@ public class CGAMultivector {
         double[] vector = impl.extractCoordinates(1);
         int index = impl.getEStartIndex();
         return new Point3d(vector[index++], vector[index++], vector[index]);
+    }
+    
+    double[] extractCoordinates(){
+        return impl.extractCoordinates();
+    }
+    /**
+     * Comparison of two multivectors.
+     * 
+     * @param M
+     * @return false in at minimum one of the 32 compontents differs more than the 
+     * precision (defined as eps) between the two multivectors
+     */
+    public boolean equals(CGAMultivector M){
+        double[] A = this.extractCoordinates();
+        double[] B = M.extractCoordinates();
+        double precision = CGAMultivector.eps;
+        for (int i=0;i<32;i++){
+            if (Math.abs(A[i]-B[i]) > precision){
+                return false;
+            }
+        }
+        return true;
     }
     
     // Create conformal algebra primitives
@@ -372,8 +394,8 @@ public class CGAMultivector {
     
     //FIXME ist das korrekt
     public CGAMultivector sqr(){
-        //return gp(this);
-        return gp(this.reverse());
+        return gp(this);
+        //return gp(this.reverse());
     } 
     public double squaredNorm(){
         //return impl.length2Squared();

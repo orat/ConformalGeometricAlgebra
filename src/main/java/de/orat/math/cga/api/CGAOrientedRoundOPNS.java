@@ -42,7 +42,25 @@ class CGAOrientedRoundOPNS extends CGABlade {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        return -CGAOrientedRoundIPNS.squaredSize(this);
+        //return -CGAOrientedRoundIPNS.squaredSize(this);
+        return squaredSize(this);
+    }
+    /**
+     * Determination of the squared size. 
+     * 
+     * @param m round or dual round object represented by a multivector
+     * @return squared size/radius squared
+     */
+    static double squaredSize(CGABlade m){
+        // unklar ob sqr() überhaupt richtig implementiert ist
+        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr());
+        //System.out.println("squaredSize/radiusSquared="+result.toString());
+        
+        // https://github.com/pygae/clifford/blob/master/clifford/cga.py
+        // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
+        // also nicht squaredSize bestimmt werden kann
+        
+        return result.scalarPart();
     }
     @Override
     public Point3d location(Point3d probe){
@@ -52,9 +70,6 @@ class CGAOrientedRoundOPNS extends CGABlade {
     public Point3d location(){
         CGAMultivector result = locationFromRoundAsNormalizedSphere(); //locationFromTangendAndRound();
         return result.extractE3ToPoint3d();
-        //double[] vector = result.impl.extractCoordinates(1);
-        //int index = result.impl.getEStartIndex();
-        //return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     public Decomposition3d.RoundAndTangentParameters decompose(){
        return new RoundAndTangentParameters(attitude(), 

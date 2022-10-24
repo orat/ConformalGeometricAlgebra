@@ -117,10 +117,10 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      * implementation follows
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
-     * @return localisation
+     * @return location
      */
     @Override
-    public Point3d localisation(){
+    public Point3d location(){
         // local blade = weight * ( no + center + 0.5 * ( center .. center ) * ni )
         CGAMultivector result = createOrigin(1d).add(this).add(this.ip(this)).gp(createInf(0.5d));
         return result.extractE3ToPoint3d();

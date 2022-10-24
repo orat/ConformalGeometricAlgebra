@@ -10,7 +10,7 @@ import org.jogamp.vecmath.Point3d;
 
 /**
  * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
- * square to 0. Planes are grade 1.
+ * square to 0. Planes are grade 1. Corresponding to dual plane in Dorst2007.
  * 
  * Planes π = n + δ ∞ are combination of a Euclidean normal vector n plus a
  * weighted infinity ∞ representing the distance from Origin (sometimes called 
@@ -159,7 +159,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * implementation follows
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
-     * @return localisation
+     * @return location
      */
     public Point3d localisation(){
         // local center = -( no .. blade ) * normal

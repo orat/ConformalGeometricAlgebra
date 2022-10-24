@@ -127,7 +127,7 @@ class CGAOrientedRoundIPNS extends CGABlade {
      * @return squared size
      */
     public double squaredSize(){
-        return squaredSize(this);
+        return CGAOrientedRoundOPNS.squaredSize(this);
     }
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.
@@ -138,7 +138,7 @@ class CGAOrientedRoundIPNS extends CGABlade {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius squared
      */
-    static double squaredSize(CGABlade m){
+    /*static double squaredSize(CGABlade m){
         //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in 
         // Dorst2007 p.407 - Formel für Round in Dorst also DualRound in meine Notation
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr()).gp(-1d);
@@ -149,7 +149,7 @@ class CGAOrientedRoundIPNS extends CGABlade {
         // also nicht squaredSize bestimmt werden kann
         
         return result.scalarPart();
-    }
+    }*/
     
     public RoundAndTangentParameters decompose(){
        return new RoundAndTangentParameters(attitude(), 

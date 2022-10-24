@@ -525,25 +525,28 @@ norm(sphere) = 1.9999999999999998
      */
     public void testSphere(){
         System.out.println("----------------- sphere -----");
-        Point3d p1 = new Point3d(1.0,0.0,1d);
+        Point3d p1 = new Point3d(0d,-1d,0d);
+        System.out.println("Test opns compose/decompose:");
         System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
         CGARoundPointIPNS cgaPoint = new CGARoundPointIPNS(p1);
-        System.out.println("p_cga="+cgaPoint.toString());
-        Point3d p2 = new Point3d(0,1,1);
-        Point3d p3 = new Point3d(0,0,0);
-        Point3d p4 = new Point3d(0,-1,1);
+        System.out.println("p1_cga="+cgaPoint.toString());
+        Point3d p2 = new Point3d(1d,0d,0d);
+        Point3d p3 = new Point3d(0d,1d,0d);
+        Point3d p4 = new Point3d(0d,0d,1d);
         CGASphereOPNS cgaDualSphere = new CGASphereOPNS(p1,p2,p3,p4);
         System.out.println("cgaDualSphere="+cgaDualSphere.toString());
         CGASphereIPNS cgaSphere = cgaDualSphere.undual();
         System.out.println("cgaSphere="+cgaSphere.toString());
         RoundAndTangentParameters rp1 = cgaDualSphere.decompose(); 
+        System.out.println("Decompose dual sphere:");
         System.out.println("radius = "+String.valueOf(Math.sqrt(Math.abs(rp1.squaredSize())))); 
         System.out.println("radius2squared = "+String.valueOf(Math.abs(rp1.squaredSize()))); 
         System.out.println("location1 = ("+String.valueOf(rp1.location().x)+", "+
                 String.valueOf(rp1.location().y)+", "+String.valueOf(rp1.location().z)+")"); // location1 = (0.0, 0.0, -1.6225927682921321E31)
-        double radius = 2d;
-        System.out.println("radius1="+String.valueOf(radius));
         
+        System.out.println("Test ipns compose/decompose:");
+        double radius = 2d;
+        System.out.println("input radius="+String.valueOf(radius));
         CGASphereIPNS sphere = new CGASphereIPNS(p1, radius);
         System.out.println("sphere="+sphere.toString());
         
