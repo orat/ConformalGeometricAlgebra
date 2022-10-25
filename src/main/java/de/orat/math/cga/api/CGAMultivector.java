@@ -39,6 +39,10 @@ public class CGAMultivector {
         this.impl = impl;
     }
     
+    CGAMultivector compress(){
+        return new CGAMultivector(impl.getCompressed());
+    }
+    
     // The origin and the Inf extends the Euclidian space to the Minkovski space.
     
     /**
@@ -180,7 +184,7 @@ public class CGAMultivector {
      * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
      * @return attitude
      */
-    static CGAMultivector attitudeFromTangentAndRound2(CGABlade tangentOrRound){
+    static CGAMultivector attitudeFromTangentAndRound2(CGAkBlade tangentOrRound){
         CGAMultivector result = CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d));
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;

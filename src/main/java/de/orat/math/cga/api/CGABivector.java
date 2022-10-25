@@ -13,7 +13,7 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGABivector extends CGABlade implements iCGABivector {
+public class CGABivector extends CGAkBlade implements iCGABivector {
     
     public CGABivector(CGAMultivector m){
         super(m);
@@ -21,6 +21,12 @@ public class CGABivector extends CGABlade implements iCGABivector {
     
     /**
      * Create a bivector from two euclidian vectors.
+     * 
+     * is testet for basis vectors!
+     * 
+     * TODO
+     * aber ist das auch korrekt wenn a,b keine Basisvektoren sind
+     * vermutlich ja, dann gibts nur mehrere Summanden aus k-basis-blades
      * 
      * @param a first vector
      * @param b second vector
@@ -32,6 +38,9 @@ public class CGABivector extends CGABlade implements iCGABivector {
     
     /**
      * Create a bivector from an euclidian vector and the point at infinity.
+     * 
+     * TODO
+     * Was ist das anschaulich?
      * 
      * @param a the euclidian vector
      */

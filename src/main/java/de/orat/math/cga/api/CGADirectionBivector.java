@@ -7,7 +7,7 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
  * 
   * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADirectionBivector extends CGABlade implements iCGATrivector {
+public class CGADirectionBivector extends CGAkBlade implements iCGATrivector {
     
     public CGADirectionBivector(CGAMultivector m){
         super(m);

@@ -3,32 +3,32 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * A blade is a multivector, which contains only base vectors of the same grade 
- * (0..5).
+ * A blade is a multivector, which contains (in form of a linear combination)
+ * only base blades of the same grade (0..5). It is also called k-blade oder k-vector.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGABlade extends CGAMultivector implements iCGABlade {
+class CGAkBlade extends CGAMultivector implements iCGABlade {
     
-    CGABlade(CGAMultivector m){
+    CGAkBlade(CGAMultivector m){
         super(m.impl);
         try {
             testGrade();
         } catch (IllegalArgumentException e){
-            System.out.println(m.toString());
+            System.out.println(e.getMessage()+" "+impl.toString());
             throw(e);
         }
     }
-    CGABlade(iCGAMultivector impl){
+    CGAkBlade(iCGAMultivector impl){
         super(impl);
         try {
             testGrade();
         } catch (IllegalArgumentException e){
-            System.out.println(impl.toString());
+            System.out.println(e.getMessage()+" "+impl.toString());
             throw(e);
         }
     }
-    CGABlade(double value){
+    CGAkBlade(double value){
         super(value);
     }
     
@@ -39,11 +39,11 @@ class CGABlade extends CGAMultivector implements iCGABlade {
     }
     
     @Override
-    public CGABlade undual(){
-        return new CGABlade(impl.undual());
+    public CGAkBlade undual(){
+        return new CGAkBlade(impl.undual());
     }
     @Override
-    public CGABlade dual(){
-        return new CGABlade(impl.dual());
+    public CGAkBlade dual(){
+        return new CGAkBlade(impl.dual());
     }
 }

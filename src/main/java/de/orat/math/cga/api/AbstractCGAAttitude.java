@@ -17,7 +17,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class AbstractCGAAttitude extends CGABlade {
+class AbstractCGAAttitude extends CGAkBlade {
     
     AbstractCGAAttitude(CGAMultivector m){
         super(m.impl);

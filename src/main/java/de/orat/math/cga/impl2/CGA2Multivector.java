@@ -22,6 +22,8 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         super(idx, value);
     }
     
+    // TODO
+    // Umstellen auf CGA1Multivector.toString() implementation
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

@@ -27,9 +27,8 @@ public class CGARotor extends CGAVersor {
     }
     
     /**
-     * 
      * @param B normalized bivector representing the rotation axis
-     * @param theta 
+     * @param theta in radians
      */
     public CGARotor(CGABivector B, double theta){
         this(B.gp(-theta/2d).exp());

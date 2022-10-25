@@ -10,7 +10,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointIPNS extends CGABlade implements iCGATrivector {
+public class CGAOrientedPointIPNS extends CGAkBlade implements iCGATrivector {
     
     public CGAOrientedPointIPNS(CGAMultivector m){
         super(m);

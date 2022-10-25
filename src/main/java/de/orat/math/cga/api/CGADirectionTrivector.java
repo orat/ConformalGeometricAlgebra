@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGADirectionTrivector extends CGABlade implements iCGAQuadvector {
+public class CGADirectionTrivector extends CGAkBlade implements iCGAQuadvector {
     
     public CGADirectionTrivector(CGAMultivector m){
         super(m);

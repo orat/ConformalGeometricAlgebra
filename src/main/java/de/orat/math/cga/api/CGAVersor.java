@@ -28,7 +28,11 @@ public abstract class CGAVersor extends CGAMultivector {
             return this.gp(m).gp(this.inverse());
         } 
         // odd number of blades
-        return this.gp(m.gradeInversion()).gp(this.inverse());
+        CGAMultivector result = this.gp(m.gradeInversion()).gp(this.inverse());
+        
+        // scheint nicht geholfen zu haben
+        result = result.compress();
+        return result;
     }
     
     public abstract boolean isEven();

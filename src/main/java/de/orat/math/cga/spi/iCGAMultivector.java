@@ -37,6 +37,10 @@ public interface iCGAMultivector {
     // default-impl
     public iCGAMultivector createScalar(double d);
     
+    default iCGAMultivector getCompressed(){
+        return this;
+    }
+    
     public boolean isScalar();
     // unklar wie sich das implementieren lässt
     //TODO

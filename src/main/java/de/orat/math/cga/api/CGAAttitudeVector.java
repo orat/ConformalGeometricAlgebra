@@ -11,7 +11,7 @@ import org.jogamp.vecmath.Vector3d;
  * It represents a direction without a location. It is translation 
  * invariant.
  * 
- * This means there is no e0 -component in its formula.
+ * This means there is no e0-component in its formula.
  * 
  * A free vector does not have a position. Given the normal vector n, it can be 
  * calculated as follows: n ∧ e ∞ .
@@ -40,10 +40,10 @@ public class CGAAttitudeVector extends AbstractCGAAttitude implements iCGABivect
     
     public Vector3d attitude(){
         CGAMultivector attitude = attitudeIntern();
-        //FIXME
-        // folgendes ist falsch, ich muss die richtigen componenten vom grade 2
-        // rausholen
-        return attitude.extractE3ToVector3d();
+        return attitude.extractAttitudeFromEeinfRepresentation();
+        //TODO
+        // mit was muss ich den multivector multiplizieren um die betreffenden 
+        // Komponenten dann mit attitude.extractE3ToVector3d() abspalten zu können?
     }
     @Override
     protected CGAMultivector attitudeIntern(){

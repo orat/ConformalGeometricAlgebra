@@ -11,7 +11,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedRoundIPNS extends CGABlade {
+class CGAOrientedRoundIPNS extends CGAkBlade {
     
     CGAOrientedRoundIPNS(CGAMultivector m){
         super(m);
@@ -48,7 +48,7 @@ class CGAOrientedRoundIPNS extends CGABlade {
     }
     @Override
     protected CGAMultivector attitudeIntern(){
-        return attitudeFromTangentAndRound2((CGABlade) this.undual());
+        return attitudeFromTangentAndRound2((CGAkBlade) this.undual());
         //return attitudeFromTangentAndRound();
     }
     
@@ -138,7 +138,7 @@ class CGAOrientedRoundIPNS extends CGABlade {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius squared
      */
-    /*static double squaredSize(CGABlade m){
+    /*static double squaredSize(CGAkBlade m){
         //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in 
         // Dorst2007 p.407 - Formel für Round in Dorst also DualRound in meine Notation
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr()).gp(-1d);

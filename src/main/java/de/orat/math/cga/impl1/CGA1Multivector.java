@@ -67,6 +67,10 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         super(mv.getBlades());
     }
     
+    @Override
+    public iCGAMultivector getCompressed(){
+        return (iCGAMultivector) compress();
+    }
     
     // coordinate extaction
     

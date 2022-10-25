@@ -76,7 +76,6 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
      *
      * @param point
      * @param radius
-     * @param isReal false to create an imaginary sphere
      * @param weight 
      * 
      */
