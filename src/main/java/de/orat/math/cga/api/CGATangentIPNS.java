@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGATangentOPNS.create;
 import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
@@ -34,15 +33,14 @@ class CGATangentIPNS extends CGAkBlade {
      * 
      * @param location
      * @param u k-vector
-     * @return 
+     * @return tangent in IPNS representation
      * 
      * TODO bekomme ich hier nicht immer ein k-blade zurück?
      */
     protected static CGAMultivector create(Point3d location, CGAkBlade u){
-        CGARoundPointOPNS o = new CGARoundPointOPNS(location);
-        //FIXME in Dorst2007 steht euclideanDual?
-        //return o.op(u.euclideanDual().negate());
-        return null;
+        CGARoundPointIPNS p = new CGARoundPointIPNS(location);
+        // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
+        return p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
     }
     
     public Vector3d attitude(){

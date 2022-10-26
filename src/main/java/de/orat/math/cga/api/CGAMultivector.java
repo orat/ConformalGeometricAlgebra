@@ -181,6 +181,7 @@ public class CGAMultivector {
    
     /**
      * Determine direction/attitude from tangent or round objects.
+     * 
      * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
      * @return attitude
      */

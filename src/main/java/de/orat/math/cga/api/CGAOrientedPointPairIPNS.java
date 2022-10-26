@@ -12,12 +12,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPointPairIPNS extends CGAOrientedRoundIPNS implements iCGATrivector  {
+public class CGAOrientedPointPairIPNS extends CGAOrientedRoundIPNS implements iCGATrivector  {
     
-    public CGAPointPairIPNS(CGAMultivector m){
+    public CGAOrientedPointPairIPNS(CGAMultivector m){
         super(m);
     }
-    CGAPointPairIPNS(iCGAMultivector impl){
+    CGAOrientedPointPairIPNS(iCGAMultivector impl){
         super(impl);
     }
     /**
@@ -31,10 +31,10 @@ public class CGAPointPairIPNS extends CGAOrientedRoundIPNS implements iCGATrivec
      * @param sphere2
      * @param sphere3
      */
-    public CGAPointPairIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, CGASphereIPNS sphere3){
+    public CGAOrientedPointPairIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, CGASphereIPNS sphere3){
         this(sphere1.op(sphere2).op(sphere3));
     }
-    public CGAPointPairIPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
+    public CGAOrientedPointPairIPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(p1.op(p2).dual());
     }
     
@@ -51,7 +51,7 @@ public class CGAPointPairIPNS extends CGAOrientedRoundIPNS implements iCGATrivec
      * @param weight 
      * @param sign 
      */
-    public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean sign){
+    public CGAOrientedPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean sign){
         this(createCGAMultivector(c,n,r,weight, sign));
     }
     private static CGAMultivector createCGAMultivector(Point3d point, Vector3d normal, 
@@ -73,8 +73,8 @@ public class CGAPointPairIPNS extends CGAOrientedRoundIPNS implements iCGATrivec
                 sub(c.ip(c).add(sr2)).gp(n).gp(0.5d)).op(inf).gp(createPseudoscalar()).gp(weight);
     }
     @Override
-    public CGAPointPairOPNS dual(){
-        return new CGAPointPairOPNS(impl.dual());
+    public CGAOrientedPointPairOPNS dual(){
+        return new CGAOrientedPointPairOPNS(impl.dual());
     }
     
     /**

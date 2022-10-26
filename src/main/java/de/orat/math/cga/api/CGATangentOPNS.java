@@ -30,17 +30,25 @@ class CGATangentOPNS extends CGAkBlade {
      * Create a cga tangent object in opns representation corresponding to 
      * direct tangent in Dorst2007.
      * 
-     * @param location
-     * @param u k-vector
-     * @return 
+     * @param location as finite point
+     * @param u k-vector representing a direction
+     * @return tangent in OPNS representation
      * 
      * TODO bekomme ich hier nicht immer ein k-blade zurück?
+     * 
+     * fixme das ist die Formel für IPNS only????
+     * TODO
      */
-    protected static CGAMultivector create(Point3d location, CGAkBlade u){
-        CGARoundPointOPNS o = new CGARoundPointOPNS(location);
+    /*protected static CGAMultivector create(Point3d location, CGAkBlade u){
+        CGARoundPointIPNS o = new CGARoundPointIPNS(location);
         //FIXME in Dorst2007 steht gradeInvolution, ist damit gradeInversion gemeint?
+        // The given multivector is not of grade 2: 0
+    
         return o.op(o.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
-    }
+    }*/
+    
+    
+    // decomposition
     
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
@@ -74,7 +82,7 @@ class CGATangentOPNS extends CGAkBlade {
     /**
      * Decompose tangent.
      * 
-     * Keep in mind: Corresponding to Dorst2007 dual and not-dual ist switched.
+     * Keep in mind: Corresponding to Dorst2007 dual and non-dual is switched.
      * 
      * @return direction/attitude and location, size/radius=0
      */

@@ -26,12 +26,16 @@ public class CGATangentVectorIPNS extends CGATangentIPNS implements iCGABivector
         //this(new CGADirectionVectorOPNS(direction).op((new CGARoundPointOPNS(location))));
         this(createCGATangentVectorIPNS(location, direction));
     }
-    // following Dorst2007 page 406
     private static CGAMultivector createCGATangentVectorIPNS(Point3d location, Vector3d direction){
-        CGARoundPointOPNS o = new CGARoundPointOPNS(location);
-        CGAkBlade u = new CGADirectionVectorOPNS(direction); //TODO unklar ob die impl stimmt?
-        //return o.op(o.negate().lc(u.gp(CGAMultivector.createInf(1d))));
+        CGAkBlade u = new CGAAttitudeVectorIPNS(direction); 
+        //CGARoundPointIPNS p = new CGARoundPointIPNS(location);
+        //return p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
         return create(location, u);
+    }
+    
+    @Override
+    public CGATangentVectorOPNS undual(){
+        return new CGATangentVectorOPNS(super.undual());
     }
     
     /**
@@ -40,13 +44,13 @@ public class CGATangentVectorIPNS extends CGATangentIPNS implements iCGABivector
      * @param t vector
      * @return tangent vector
      */
-    public CGATangentVectorIPNS createCGATangentVector (Vector3d t){
+    /*public CGATangentVectorIPNS createCGATangentVector (Vector3d t){
         //TODO
         // ist hier geometrisches Produkt überhaupt richtig oder muss hier äußeres 
         // Produkt stehen?
         // muss die Reihenfolge der Faktoren nicht umgedreht sein?
         return new CGATangentVectorIPNS(createOrigin(1.0).gp(new CGAMultivector(t)));
-    }
+    }*/
     
     // decompose Methoden
 }

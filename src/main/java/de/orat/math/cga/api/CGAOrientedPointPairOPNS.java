@@ -12,12 +12,12 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPointPairOPNS extends CGAOrientedRoundOPNS implements iCGABivector {
+public class CGAOrientedPointPairOPNS extends CGAOrientedRoundOPNS implements iCGABivector {
     
-    public CGAPointPairOPNS(CGAMultivector m){
+    public CGAOrientedPointPairOPNS(CGAMultivector m){
         super(m);
     }
-    CGAPointPairOPNS(iCGAMultivector impl){
+    CGAOrientedPointPairOPNS(iCGAMultivector impl){
         super(impl);
     }
     /**
@@ -27,7 +27,7 @@ public class CGAPointPairOPNS extends CGAOrientedRoundOPNS implements iCGABivect
      * @param point1
      * @param point2
      */
-    public CGAPointPairOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
+    public CGAOrientedPointPairOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
         this(point1.op(point2));
     }
     
@@ -37,12 +37,12 @@ public class CGAPointPairOPNS extends CGAOrientedRoundOPNS implements iCGABivect
      * @param point1
      * @param point2
      */
-    public CGAPointPairOPNS(Point3d point1, Point3d point2){
+    public CGAOrientedPointPairOPNS(Point3d point1, Point3d point2){
         this((new CGARoundPointIPNS(point1)).op(new CGARoundPointIPNS(point2)));
     }
     
     @Override
-    public CGAPointPairIPNS undual(){
-        return new CGAPointPairIPNS(impl.undual());
+    public CGAOrientedPointPairIPNS undual(){
+        return new CGAOrientedPointPairIPNS(impl.undual());
     }
 }

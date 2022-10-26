@@ -1,12 +1,12 @@
 package de.orat.math.cga.api;
 
-import org.jogamp.vecmath.Vector3d;
+import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * Also called free or direction vector, elements without position. 
  * 
  * It represents a direction without a location. It is translation 
- * invariant.
+ * invariant but rotation covariant.
  * 
  * This means there is no e0 -component in its formula.
  * 
@@ -21,6 +21,10 @@ class AbstractCGAAttitude extends CGAkBlade {
     
     AbstractCGAAttitude(CGAMultivector m){
         super(m.impl);
+    }
+    
+    protected AbstractCGAAttitude(iCGAMultivector impl){
+        super(impl);
     }
     
     @Override

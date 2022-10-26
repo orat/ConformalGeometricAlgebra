@@ -1,17 +1,17 @@
 package de.orat.math.cga.test;
 
-import de.orat.math.cga.api.CGACircleIPNS;
-import de.orat.math.cga.api.CGACircleOPNS;
+import de.orat.math.cga.api.CGAOrientedCircleIPNS;
+import de.orat.math.cga.api.CGAOrientedCircleOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
-import de.orat.math.cga.api.CGAPointPairOPNS;
+import de.orat.math.cga.api.CGAOrientedPointPairOPNS;
 import de.orat.math.cga.api.CGASphereOPNS;
 import de.orat.math.cga.api.CGALineIPNS;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.api.CGAPlaneIPNS;
-import de.orat.math.cga.api.CGAPointPairIPNS;
+import de.orat.math.cga.api.CGAOrientedPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
 import de.orat.math.cga.api.CGARoundPointOPNS;
 import de.orat.math.cga.api.CGASphereIPNS;
@@ -95,7 +95,7 @@ public class Test2 {
         // p3=1.0*eo + 1.0*e3 + 0.5*ei (korrekt)
         System.out.println("p3="+p3.toString());
         
-        CGACircleOPNS c = new CGACircleOPNS(p1,p2,p3);
+        CGAOrientedCircleOPNS c = new CGAOrientedCircleOPNS(p1,p2,p3);
         // c=1.0*eo^e1^e2 - 1.0*eo^e1^e3 + 1.0*eo^e2^e3 + 1.0*e1^e2^e3 
         // + 0.5*e1^e2^ei - 0.5*e1^e3^ei + 0.5*e2^e3^ei (korrekt)
         System.out.println("c="+c.toString());
@@ -187,7 +187,7 @@ public class Test2 {
 
         // You can use the regressive product to calculate intersections..
         //var c = ()=>s&p1;
-        CGACircleOPNS c = new CGACircleOPNS(s.vee(p));
+        CGAOrientedCircleOPNS c = new CGAOrientedCircleOPNS(s.vee(p));
         // ganja.js: c=-1.11e123 - 0.48e124 - 0.03e125 - 0.40e134 + 0.48e135 + 
         // 0.22e145 - 1.11e234 -1.11e235-0.44e245-0.89e345
         // java: c=0.447*eo^e1^e2 - 0.89*eo^e1^e3 - 1.118*e1^e2^e3 
@@ -221,7 +221,7 @@ public class Test2 {
         CGAPlaneIPNS plane = new CGAPlaneIPNS(new Vector3d(0d,0d,1d), 0d);
         System.out.println("plane="+plane.toString());
         //C  = !(up(1.4e1)-.125*ni)&!(1e3),    // right circle
-        CGACircleOPNS C = new CGACircleOPNS(S2.vee(plane.dual()));
+        CGAOrientedCircleOPNS C = new CGAOrientedCircleOPNS(S2.vee(plane.dual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245 = 1.3e02i + 0.85e12i -e012 (korrekt)
         // java: C=-eo^e1^e2 - 1.34*eo^e2^ei + 0.85*e1^e2^ei
         System.out.println("C="+C.toString());
@@ -246,32 +246,32 @@ public class Test2 {
         
         // The intersections of the big sphere with the other 4 objects.
         //var C1 = ()=>S&P sphere meets plane
-        CGACircleOPNS C1 = new CGACircleOPNS(S.vee(P));
+        CGAOrientedCircleOPNS C1 = new CGAOrientedCircleOPNS(S.vee(P));
         // ganja.js: 0.89e123+e135 = 0.89e123 + 0.5e13i + e013 (korrekt)
         // java: C1=eo^e1^e3 + 0.9*e1^e2^e3 + 0.49*e1^e3^ei
         System.out.println("C1="+C1.toString());
         
         // C2 = ()=>S&L 
-        CGAPointPairOPNS pp = new CGAPointPairOPNS(S.vee(L));
+        CGAOrientedPointPairOPNS pp = new CGAOrientedPointPairOPNS(S.vee(L));
         // java: s&l=eo^e1 - 0.89*e1^e2 - 0.5*e1^ei
         // ganja.js: -0.89e12-e15 = 0.89e12-0.5e1i + e01 (korrekt)
         System.out.println("s&l="+pp.toString());
         
         // C3 = ()=>S&S2 sphere meet sphere
-        CGACircleOPNS C3 = new CGACircleOPNS(S.vee(S2));
+        CGAOrientedCircleOPNS C3 = new CGAOrientedCircleOPNS(S.vee(S2));
         // ganja.js: -1.35e123+1.39e235 = -1.35e123+0.7e23i+1.39e023
         // java: s&s=1.4*eo^e2^e3 - 1.35*e1^e2^e3 - 0.7*e2^e3^ei (korrekt)
         System.out.println("s&s="+C3.toString());
         
         // C4 = ()=>S&C 
-        CGAPointPairOPNS C4 = new CGAPointPairOPNS(S.vee(C));
+        CGAOrientedPointPairOPNS C4 = new CGAOrientedPointPairOPNS(S.vee(C));
         // java s&c=1.39*eo^e2 - 1.35*e1^e2 - 0.69*e2^ei
         // ganja -1.35e12+1.39e25
         // TODO
         System.out.println("s&c="+C4.toString());
         
         // C5 = ()=>C&P2;  circle meet plane
-        CGAPointPairOPNS C5 = new CGAPointPairOPNS(C.vee(P2));
+        CGAOrientedPointPairOPNS C5 = new CGAOrientedPointPairOPNS(C.vee(P2));
         // ganja.js: 1.7e12-1.02e24-2.02e25 = 1.7e12 
         // java: c&p1=eo^e2 + 1.7*e1^e2 + 3.23*e2^ei
         //FIXME stimmt nur in einer Komponente überein
@@ -324,7 +324,7 @@ public class Test2 {
         System.out.println("sphere="+sphere.toString());
         // sphere=-eo^e1^e2^e3 - 1.34*eo^e2^e3^ei - 0.8545*e1^e2^e3^ei
         //TODO
-        CGACircleOPNS C = new CGACircleOPNS(sphere.vee((
+        CGAOrientedCircleOPNS C = new CGAOrientedCircleOPNS(sphere.vee((
                 new CGAPlaneIPNS(new Vector3d(0d,0d,1d),0d)).dual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245
         // C=-eo^e1^e2 + 1.34*eo^e2^ei + 0.855*e1^e2^ei
@@ -349,14 +349,14 @@ public class Test2 {
         // project point on sphere
         // var project_point_on_round            = (point,sphere)=>-point^ni<<sphere<<sphere
         // ()=>project_point_on_round(p1,S), "p1 on S"
-        CGAPointPairOPNS pOnS = S.project(p);
+        CGAOrientedPointPairOPNS pOnS = S.project(p);
         // ganja.js: 0.7e12-1.89e14-0.49e15+0.30e24+0.80e25-1.95e45 = 0.7e12-1.19e1i-1.44e01+0.55e2i-0.5e02+1.95e0i
         // java POnS=-1.4*eo^e1 - 0.5*eo^e2 + 0.7*e1^e2 + 1.96*eo^ei - 1.197*e1^ei + 0.557*e2^ei (korrekt)
         System.out.println("POnS="+pOnS.toString());
         
         //()=>project_point_on_round(~p1,C), "p1 on C",   // point on circle
         // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
-        CGAPointPairOPNS pOnC = C.project(new CGARoundPointIPNS(p.conjugate()));
+        CGAOrientedPointPairOPNS pOnC = C.project(new CGARoundPointIPNS(p.conjugate()));
         // ganja.js -0.70e12 + 1.89e14+0.49e15+0.30e24+0.80e25-1.95e4 = -0.7e12+1.19e1i-1.44e01+0.55e2i-0.5e02
         // java pOnC=1.4*eo^e1 - 0.5*eo^e2 - 0.7*e1^e2 + 1.96*eo^ei + 1.197*e1^ei + 0.553*e2^ei
         System.out.println("pOnC="+pOnC.toString()); // (korrekt)
@@ -496,7 +496,7 @@ nn=(0.0, 0.0, 0.0)
         CGASphereIPNS sphere2 = new CGASphereIPNS(p2, radius);
         System.out.println("sphere2="+sphere2.toString());
         
-        CGACircleIPNS circle = new CGACircleIPNS(sphere1.op(sphere2));
+        CGAOrientedCircleIPNS circle = new CGAOrientedCircleIPNS(sphere1.op(sphere2));
         System.out.println("circle="+circle.toString());
         
         RoundAndTangentParameters/*FlatAndDirectionParameters*/ decomposition = circle.decompose();
@@ -608,7 +608,7 @@ norm(sphere) = 1.9999999999999998
                 String.valueOf(location2.z)+")");
         
         // point-pairs
-        CGAPointPairIPNS pp1 = new CGAPointPairIPNS(cp1,cp2);
+        CGAOrientedPointPairIPNS pp1 = new CGAOrientedPointPairIPNS(cp1,cp2);
         //RoundAndTangentParameters decomposed3 = pp1.decompose();
         // loc(pp1) = (Infinity, Infinity, -Infinity) (ERROR)
         //FIXME
@@ -632,7 +632,7 @@ norm(sphere) = 1.9999999999999998
                 String.valueOf(location5.z)+")");
         
         // circles
-        CGACircleIPNS c1 = new CGACircleIPNS(s1,s2);
+        CGAOrientedCircleIPNS c1 = new CGAOrientedCircleIPNS(s1,s2);
         // c1=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 - 1.0*eo^ei - 0.02*e1^ei - 0.02*e2^ei + 0.49960000000000004*e3^ei
         System.out.println("c1="+c1.toString());
         //RoundAndTangentParameters decomposed6 = c1.decompose();
@@ -654,7 +654,7 @@ norm(sphere) = 1.9999999999999998
                 String.valueOf(location7.z)+")");
         
         // point pairs
-        CGAPointPairOPNS pp2 = new CGAPointPairOPNS(p1,p2);
+        CGAOrientedPointPairOPNS pp2 = new CGAOrientedPointPairOPNS(p1,p2);
         // pp=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
         System.out.println("pp2="+pp2.toString());
         // FIXME e1 und e2 die doppelt so grosse Werte wie erwartet
@@ -673,7 +673,7 @@ norm(sphere) = 1.9999999999999998
                 String.valueOf(location9.z)+")");
         
         // circles
-        CGACircleOPNS c1b = new CGACircleOPNS(p1,p2,p3);
+        CGAOrientedCircleOPNS c1b = new CGAOrientedCircleOPNS(p1,p2,p3);
         System.out.println("c1b="+c1b.toString());
         //RoundAndTangentParameters decomposed11 = c1b.decompose();
         Point3d location10 = c1b.location();

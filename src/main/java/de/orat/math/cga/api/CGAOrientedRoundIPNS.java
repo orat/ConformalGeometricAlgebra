@@ -6,8 +6,9 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Rounds are RoundPoints, point-pairs, circles and spheres, here given in inner product
- * null space representation corresponding to dual round in Drost2007.
+ * Oriented and weighted rounds are RoundPoints, point-pairs, circles and spheres, 
+ * here given in inner product null space representation corresponding to dual 
+ * round in Drost2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

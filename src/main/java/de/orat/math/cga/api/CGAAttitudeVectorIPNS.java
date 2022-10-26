@@ -1,12 +1,11 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Also called free or direction vector, elements without position. 
- * 
- * Just as tangents support round elements, so do directions support flat elements. 
- * grade 2 element
+ * Also called free or direction vector, elements without position in IPNS representation
+ * corresponding to dual direction vector or dual free vector in Dorst2007
  * 
  * It represents a direction without a location. It is translation 
  * invariant.
@@ -27,17 +26,18 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeVector extends AbstractCGAAttitude implements iCGABivector {
+public class CGAAttitudeVectorIPNS extends AbstractCGAAttitude implements iCGABivector {
     
-    public CGAAttitudeVector(CGAMultivector m){
+    public CGAAttitudeVectorIPNS(CGAMultivector m){
         super(m);
         testEinf();
     }
-    
-    public CGAAttitudeVector(Vector3d t){
-        super((new CGANormalVector(t)).gp(createInf(1.0)));
+    protected CGAAttitudeVectorIPNS(iCGAMultivector impl){
+        super(impl);
     }
-    
+    public CGAAttitudeVectorIPNS(Vector3d t){
+        super((new CGANormalVector(t)).op(createInf(1.0)).dual());
+    }
     public Vector3d attitude(){
         CGAMultivector attitude = attitudeIntern();
         return attitude.extractAttitudeFromEeinfRepresentation();
@@ -48,7 +48,7 @@ public class CGAAttitudeVector extends AbstractCGAAttitude implements iCGABivect
     @Override
     protected CGAMultivector attitudeIntern(){
         System.out.println("attitude="+toString());
-        return this;
+        return this.undual();
     }
     
     private void testEinf(){
@@ -56,8 +56,10 @@ public class CGAAttitudeVector extends AbstractCGAAttitude implements iCGABivect
         // Test darauf, dass alle componenten einf enthalten+
         // throw new IllegalArgumentException("T
     }
-        
-    public double squaredSize(){
-        return 0d;
+    
+    
+    @Override
+    public CGAAttitudeVectorOPNS undual(){
+        return new CGAAttitudeVectorOPNS(impl.undual());
     }
 }

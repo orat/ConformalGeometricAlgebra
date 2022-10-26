@@ -7,8 +7,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * (Oriented) Rounds are roundPoints, point-pairs, circles and spheres/hyper-spheres; here given in
- * inner product null space representation corresponding to direct round in Dorst2007.
+ * Oriented and weighted rounds are points, point-pairs, circles and spheres/hyper-spheres,
+ * here given in inner product null space representation corresponding to direct round in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -85,7 +85,7 @@ class CGAOrientedRoundOPNS extends CGAkBlade {
      * @param point if the round is a sphere or the conjugate of the point if the round is a circle
      * @return the projected point = -point^ni<<sphere<<sphere
      */
-    public CGAPointPairOPNS project(CGARoundPointIPNS point){
-        return new CGAPointPairOPNS(point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate());
+    public CGAOrientedPointPairOPNS project(CGARoundPointIPNS point){
+        return new CGAOrientedPointPairOPNS(point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate());
     }
 }

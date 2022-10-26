@@ -11,12 +11,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector {
+public class CGAOrientedCircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector {
     
-    public CGACircleIPNS(CGAMultivector m){
+    public CGAOrientedCircleIPNS(CGAMultivector m){
         super(m);
     }
-    protected CGACircleIPNS(iCGAMultivector impl){
+    protected CGAOrientedCircleIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -32,7 +32,7 @@ public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector 
      * @param radius imaginary circle if radius<0
      * @param weight
      */
-    public CGACircleIPNS(Point3d center, Vector3d normal, double radius, double weight){
+    public CGAOrientedCircleIPNS(Point3d center, Vector3d normal, double radius, double weight){
         this((new CGASphereIPNS(center, radius, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
     
@@ -42,7 +42,7 @@ public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector 
      * @param sphere1 first sphere
      * @param sphere2 second sphere
      */
-    public CGACircleIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2){
+    public CGAOrientedCircleIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2){
         this(sphere1.op(sphere2));
     }
    
@@ -134,7 +134,7 @@ public class CGACircleIPNS extends CGAOrientedRoundIPNS implements iCGABivector 
     
     
     @Override
-    public CGACircleOPNS dual(){
-        return new CGACircleOPNS(impl.dual());
+    public CGAOrientedCircleOPNS dual(){
+        return new CGAOrientedCircleOPNS(impl.dual());
     }
 }
