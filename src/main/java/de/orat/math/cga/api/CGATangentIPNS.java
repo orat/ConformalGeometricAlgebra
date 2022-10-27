@@ -21,7 +21,7 @@ import org.jogamp.vecmath.Vector3d;
  * as zero-sized spheres to generate implicit volumes.
 
  */
-class CGATangentIPNS extends CGAkBlade {
+class CGATangentIPNS extends CGAKVector {
     
     CGATangentIPNS(CGAMultivector m){
         super(m.impl);
@@ -36,8 +36,9 @@ class CGATangentIPNS extends CGAkBlade {
      * @return tangent in IPNS representation
      * 
      * TODO bekomme ich hier nicht immer ein k-blade zurück?
+     * ist das nicht die Formel für IPNS
      */
-    protected static CGAMultivector create(Point3d location, CGAkBlade u){
+    protected static CGAMultivector create(Point3d location, CGAKVector u){
         CGARoundPointIPNS p = new CGARoundPointIPNS(location);
         // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
         return p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
@@ -59,10 +60,10 @@ class CGATangentIPNS extends CGAkBlade {
     }
     @Override
     public Point3d location(){
-        return CGATangentOPNS.locationIntern(this);
-        //CGAMultivector result = locationFromRoundAsNormalizedSphere();
-        //System.out.println("location="+result.toString());
-        //return extractE3ToPoint3d();
+        //return CGATangentOPNS.locationIntern(this);
+        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere();
+        System.out.println("location="+result.toString());
+        return extractE3ToPoint3d();
     }
     public double squaredSize(){
         return 0d;

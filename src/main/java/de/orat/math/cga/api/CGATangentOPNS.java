@@ -20,7 +20,7 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGATangentOPNS extends CGAkBlade {
+class CGATangentOPNS extends CGAKVector {
     
     CGATangentOPNS(CGAMultivector m){
         super(m.impl);
@@ -39,7 +39,7 @@ class CGATangentOPNS extends CGAkBlade {
      * fixme das ist die Formel für IPNS only????
      * TODO
      */
-    /*protected static CGAMultivector create(Point3d location, CGAkBlade u){
+    /*protected static CGAMultivector create(Point3d location, CGAKVector u){
         CGARoundPointIPNS o = new CGARoundPointIPNS(location);
         //FIXME in Dorst2007 steht gradeInvolution, ist damit gradeInversion gemeint?
         // The given multivector is not of grade 2: 0
@@ -53,8 +53,13 @@ class CGATangentOPNS extends CGAkBlade {
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
         System.out.println("attitude="+result.toString());
-        return result.extractE3ToVector3d();
+        return result.extractAttitudeFromEeinfRepresentation();
     }
+    /**
+     * Determine attitude in X^einf representation.
+     * 
+     * @return attitude as X^einf
+     */
     @Override
     protected CGAMultivector attitudeIntern(){
         //return attitudeFromTangentAndRound();
@@ -66,16 +71,16 @@ class CGATangentOPNS extends CGAkBlade {
     }
     @Override
     public Point3d location(){
-        //CGAMultivector result = locationFromRoundAsNormalizedSphere();
+        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere();
         
-        Point3d result = locationIntern(this);
-        System.out.println("location="+result.toString());
-        return result;
+        //Point3d result = locationIntern(this);
+        //System.out.println("location="+result.toString());
+        return result.extractE3ToPoint3d();
         
     }
-    static Point3d locationIntern(CGAkBlade tangent){
+    /*static Point3d locationIntern(CGAKVector tangent){
         return tangent.div(createInf(-1d).lc(tangent)).extractE3ToPoint3d();
-    }
+    }*/
     public double squaredSize(){
         return 0d;
     }

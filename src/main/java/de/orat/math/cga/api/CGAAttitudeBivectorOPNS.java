@@ -16,6 +16,6 @@ public class CGAAttitudeBivectorOPNS extends AbstractCGAAttitude implements iCGA
     public CGAAttitudeBivectorOPNS(CGABivector B){
         // muss statt gp nicht op stehen
         //FIXME
-        this(B.gp(createInf(1.0)));
+        this(B.op(createInf(1.0)));
     }
 }

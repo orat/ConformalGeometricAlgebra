@@ -185,7 +185,7 @@ public class CGAMultivector {
      * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
      * @return attitude
      */
-    static CGAMultivector attitudeFromTangentAndRound2(CGAkBlade tangentOrRound){
+    static CGAMultivector attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
         CGAMultivector result = CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d));
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;
@@ -216,15 +216,17 @@ public class CGAMultivector {
      * Determines location from tangent and round objects and also from its dual.
      * 
      * scheint für CGARound zu stimmen
+     * scheint mit CGATangent nicht zu stimmen
+     * TODO
+     * 
      * @return location represented by a normalized sphere (dual sphere corresponding to Dorst2007)
      */
-    protected CGAMultivector locationFromRoundAsNormalizedSphere(){
+    protected CGAMultivector locationFromTangentAndRoundAsNormalizedSphere(){
         // corresponds to the errata of the book Dorst2007
-        
-        // mit inf = createOrigin(1d).gp(2d); funktioniert es gar nicht
         
         CGAMultivector inf = createInf(1d);
         
+        //TODO gp(1d) durch negate() ersetzen, ip() durch lc() ersetzen
         CGAMultivector result = (this.div(inf.ip(this))).gp(-1d);
         // z.B. locationFromTangentAndRound=1.0000000000000002*eo + 0.020000000000000004*e1 + 0.020000000000000004*e2 + 1.0000000000000002*e3 + 0.5004000000000001*ei
         // bei input von p=(0.02,0.02,1.0)

@@ -3,14 +3,16 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * A blade is a multivector, which contains (in form of a linear combination)
- * only base blades of the same grade (0..5). It is also called k-blade oder k-vector.
+ * A k-Vector is a multivector which is a linear combination of blades 
+ * (in form of a linear combination) of the same grade k (0..5). 
+ * 
+ * It is also called blade or k-blade. 
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAkBlade extends CGAMultivector implements iCGABlade {
+class CGAKVector extends CGAMultivector implements iCGABlade {
     
-    CGAkBlade(CGAMultivector m){
+    CGAKVector(CGAMultivector m){
         super(m.impl);
         try {
             testGrade();
@@ -19,7 +21,7 @@ class CGAkBlade extends CGAMultivector implements iCGABlade {
             throw(e);
         }
     }
-    CGAkBlade(iCGAMultivector impl){
+    CGAKVector(iCGAMultivector impl){
         super(impl);
         try {
             testGrade();
@@ -28,7 +30,7 @@ class CGAkBlade extends CGAMultivector implements iCGABlade {
             throw(e);
         }
     }
-    CGAkBlade(double value){
+    CGAKVector(double value){
         super(value);
     }
     
@@ -39,11 +41,11 @@ class CGAkBlade extends CGAMultivector implements iCGABlade {
     }
     
     @Override
-    public CGAkBlade undual(){
-        return new CGAkBlade(impl.undual());
+    public CGAKVector undual(){
+        return new CGAKVector(impl.undual());
     }
     @Override
-    public CGAkBlade dual(){
-        return new CGAkBlade(impl.dual());
+    public CGAKVector dual(){
+        return new CGAKVector(impl.dual());
     }
 }

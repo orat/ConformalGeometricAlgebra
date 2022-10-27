@@ -26,11 +26,12 @@ public class CGATangentVectorIPNS extends CGATangentIPNS implements iCGABivector
         //this(new CGADirectionVectorOPNS(direction).op((new CGARoundPointOPNS(location))));
         this(createCGATangentVectorIPNS(location, direction));
     }
-    private static CGAMultivector createCGATangentVectorIPNS(Point3d location, Vector3d direction){
-        CGAkBlade u = new CGAAttitudeVectorIPNS(direction); 
+    static CGAMultivector createCGATangentVectorIPNS(Point3d location, Vector3d direction){
+        //CGAkBlade u = new CGAAttitudeVectorIPNS(direction); 
+        // attitude ist vermutlich falsch, das muss wohl NormalVector sein.
         //CGARoundPointIPNS p = new CGARoundPointIPNS(location);
         //return p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
-        return create(location, u);
+        return create(location, new CGANormalVector(direction));
     }
     
     @Override

@@ -18,6 +18,6 @@ public class CGAAttitudeTrivectorOPNS extends AbstractCGAAttitude implements iCG
     public CGAAttitudeTrivectorOPNS(Vector3d a, Vector3d b, Vector3d c){
         //FIXME
         // muss statt gp nicht op stehen?
-        this((new CGATrivector(a,b,c)).gp(createInf(1.0)));
+        this((new CGATrivector(a,b,c)).op(createInf(1.0)));
     }
 }

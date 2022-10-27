@@ -12,7 +12,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedRoundIPNS extends CGAkBlade {
+class CGAOrientedRoundIPNS extends CGAKVector {
     
     CGAOrientedRoundIPNS(CGAMultivector m){
         super(m);
@@ -49,7 +49,7 @@ class CGAOrientedRoundIPNS extends CGAkBlade {
     }
     @Override
     protected CGAMultivector attitudeIntern(){
-        return attitudeFromTangentAndRound2((CGAkBlade) this.undual());
+        return attitudeFromTangentAndRound2((CGAKVector) this.undual());
         //return attitudeFromTangentAndRound();
     }
     
@@ -63,7 +63,7 @@ class CGAOrientedRoundIPNS extends CGAkBlade {
         //CGAMultivector location = location3(weight());
         //System.out.println("location lua="+location.toString()); // scheint für CGAPoint zu stimmen
         
-        CGAMultivector result = locationFromRoundAsNormalizedSphere();
+        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere();
         return result.extractE3ToPoint3d();
         //double[] vector = result.impl.extractCoordinates(1);
         //int index = result.impl.getEStartIndex();
@@ -139,7 +139,7 @@ class CGAOrientedRoundIPNS extends CGAkBlade {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius squared
      */
-    /*static double squaredSize(CGAkBlade m){
+    /*static double squaredSize(CGAKVector m){
         //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in 
         // Dorst2007 p.407 - Formel für Round in Dorst also DualRound in meine Notation
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr()).gp(-1d);

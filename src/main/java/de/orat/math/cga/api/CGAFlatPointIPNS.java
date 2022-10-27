@@ -37,6 +37,9 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
+     * FIXME 
+     * ist das wirklich IPNS?
+     * 
      * @param c location
      * @param weight weight
      */

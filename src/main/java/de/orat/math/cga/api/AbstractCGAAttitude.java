@@ -17,7 +17,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class AbstractCGAAttitude extends CGAkBlade {
+class AbstractCGAAttitude extends CGAKVector {
     
     AbstractCGAAttitude(CGAMultivector m){
         super(m.impl);

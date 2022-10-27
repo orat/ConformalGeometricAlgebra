@@ -13,7 +13,7 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGABivector extends CGAkBlade implements iCGABivector {
+public class CGABivector extends CGAKVector implements iCGABivector {
     
     public CGABivector(CGAMultivector m){
         super(m);

@@ -16,7 +16,7 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedFiniteFlatIPNS extends CGAkBlade {
+class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      
     CGAOrientedFiniteFlatIPNS(CGAMultivector m){
         super(m);

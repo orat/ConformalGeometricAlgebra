@@ -4,12 +4,11 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * A vector with direction u at point location o (grade 2), corresponding to 
+ * A vector with direction u at location p (grade 2), corresponding to 
  * direct tangent in Dorst2007.
  * 
- * TODO
- * was ist mit normal vector (grade 1)?
- * mir fehlt dann nocht CGATangentVectorIPNS class
+ * It squares to 0 since it is like a round with zero radius. It does not contain inf
+ * so that inf^X != 0.
  * 
  * The use of tangent blades is an elegant alternative to represent vertices in
  * a mesh, because they encode both the positional as the tangential information 
@@ -28,25 +27,32 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
     }
     
     public CGATangentVectorOPNS(Point3d location, Vector3d direction){
-        // TODO herausfinden ob Erzeugung im Ursprung + nachträgliche Verschiebung
-        // nach location identisch ist zu gleich mit location wedgen
-        // vermutlich falsch
-        //this(new CGADirectionVectorOPNS(direction).op((new CGARoundPointOPNS(location))));
         this(createCGATangentVectorOPNS(location, direction));
     }
     // following Dorst2007 page 406
     private static CGAMultivector createCGATangentVectorOPNS(Point3d location, Vector3d direction){
-        CGARoundPointOPNS p = new CGARoundPointOPNS(location);
+        // das sollte funktionieren, tut es aber nicht
+        // The given multivector is not of grade 2: 0
+        //FIXME
+        //CGARoundPointOPNS p = new CGARoundPointOPNS(location);
+        
+        // testweise
+        // warum hier die IPNS Darstellung?
+        //FIXME
+        CGARoundPointIPNS p = new CGARoundPointIPNS(location);
         System.out.println("(tangentVector) p="+p.toString());
-        // das scheint mir die Rechenreihenfolge zu ändern, es wird dann B ∧ n∞
-        // statt p ∧ B gerechnet?
-        //CGAkBlade u = new CGADirectionVectorOPNS(direction); 
-        CGAkBlade u = CGAMultivector.createE3(direction);
+        
+        CGAKVector u = CGAMultivector.createE3(direction);
         System.out.println("(tangentVector) u="+u.toString());
+        // tangent vector nach Dorst Tutorial 2008 page 17
         // p · (p ∧ B ∧ n∞) 
-        CGAMultivector result =  p.ip(p.op(u).op(CGAMultivector.createInf(1d)));
+        //CGAMultivector result =  p.ip(p.op(u).op(CGAMultivector.createInf(1d)));
         // hier kommt immer 0 raus
         //FIXME
+        
+        // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
+        CGAMultivector result = p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
+        
         System.out.println("tangentVector="+result.toString());
         return result;
     }

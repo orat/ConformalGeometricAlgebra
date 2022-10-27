@@ -12,7 +12,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedRoundOPNS extends CGAkBlade {
+class CGAOrientedRoundOPNS extends CGAKVector {
     
     CGAOrientedRoundOPNS(CGAMultivector m){
         super(m.impl);
@@ -51,7 +51,7 @@ class CGAOrientedRoundOPNS extends CGAkBlade {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius squared
      */
-    static double squaredSize(CGAkBlade m){
+    static double squaredSize(CGAKVector m){
         // unklar ob sqr() überhaupt richtig implementiert ist
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr());
         //System.out.println("squaredSize/radiusSquared="+result.toString());
@@ -68,7 +68,7 @@ class CGAOrientedRoundOPNS extends CGAkBlade {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromRoundAsNormalizedSphere(); //locationFromTangendAndRound();
+        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere(); //locationFromTangendAndRound();
         return result.extractE3ToPoint3d();
     }
     public Decomposition3d.RoundAndTangentParameters decompose(){

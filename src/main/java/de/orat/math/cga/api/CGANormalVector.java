@@ -12,7 +12,7 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGANormalVector extends CGAkBlade implements iCGAVector {
+public class CGANormalVector extends CGAKVector implements iCGAVector {
     
     public CGANormalVector(CGAMultivector m){
         super(m);
