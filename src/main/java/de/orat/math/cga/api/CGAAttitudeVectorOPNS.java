@@ -4,7 +4,8 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Also called free or direction vector (Dorst2007), elements without position (grade 2). 
+ * Also called free or direction vector (Dorst2007) or a free blade, elements 
+ * without position (grade 2). 
  * 
  * Just as tangents support round elements, so do directions support flat elements. 
  * 

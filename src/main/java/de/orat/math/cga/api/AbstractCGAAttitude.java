@@ -3,7 +3,8 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Also called free or direction vector, elements without position. 
+ * Also called free or direction vector or free k-bladed, elements without 
+ * position. 
  * 
  * It represents a direction without a location. It is translation 
  * invariant but rotation covariant.
