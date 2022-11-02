@@ -31,10 +31,11 @@ public class CGAAttitudeVectorOPNS extends AbstractCGAAttitude implements iCGABi
     
     public CGAAttitudeVectorOPNS(CGAMultivector m){
         super(m);
-        testEinf();
+        testDefiningProperties();
     }
     protected CGAAttitudeVectorOPNS(iCGAMultivector impl){
         super(impl);
+        testDefiningProperties();
     }
     
     public CGAAttitudeVectorOPNS(Vector3d t){
@@ -54,10 +55,13 @@ public class CGAAttitudeVectorOPNS extends AbstractCGAAttitude implements iCGABi
         return this;
     }
     
-    private void testEinf(){
-        //TODO
-        // Test darauf, dass alle componenten einf enthalten+
-        // throw new IllegalArgumentException("T
+    private void testDefiningProperties(){
+        if (!CGAMultivector.createInf(1d).op(this).isNull()){
+            throw new IllegalArgumentException("einf^X != 0");
+        }
+        if (!CGAMultivector.createInf(1d).ip(this).isNull()){
+            throw new IllegalArgumentException("einf . X != 0");
+        }
     }
     
     

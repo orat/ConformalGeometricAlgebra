@@ -221,13 +221,12 @@ public class CGAMultivector {
      * 
      * @return location represented by a normalized sphere (dual sphere corresponding to Dorst2007)
      */
-    protected CGAMultivector locationFromTangentAndRoundAsNormalizedSphere(){
+    protected CGARoundPointIPNS locationFromTangentAndRoundAsNormalizedSphere(){
         // corresponds to the errata of the book Dorst2007
-        
-        CGAMultivector inf = createInf(1d);
-        
-        //TODO gp(1d) durch negate() ersetzen, ip() durch lc() ersetzen
-        CGAMultivector result = (this.div(inf.ip(this))).gp(-1d);
+        // and also Fernandes2009 supplementary material B
+        // location as finite point/dual sphere corresponding to Dorst2007
+        CGARoundPointIPNS result = new CGARoundPointIPNS((this.div(createInf(-1d).ip(this))).compress());
+        //CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this)).negate().compress());
         // z.B. locationFromTangentAndRound=1.0000000000000002*eo + 0.020000000000000004*e1 + 0.020000000000000004*e2 + 1.0000000000000002*e3 + 0.5004000000000001*ei
         // bei input von p=(0.02,0.02,1.0)
         System.out.println("locationFromTangentAndRound="+result.toString());

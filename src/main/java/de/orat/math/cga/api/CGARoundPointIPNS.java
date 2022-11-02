@@ -7,10 +7,10 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Round point in inner product null space representation (grade 1 multivector), 
+ * A round point in inner product null space representation (grade 1 multivector), 
  * corresponding to dual round point in Dorst2007. 
  * 
- * Also calles tangent scalar (finite point)
+ * Also called tangent scalar (finite point).
  * 
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
  * have a weight of 1.
@@ -116,15 +116,32 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
     }*/
     
     /**
+     * Decompose location.
+     * 
      * implementation follows
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
+     * 
+     * blade = blade / weight
+     * local center = no_ni .. ( blade ^ no_ni )
+     * 
      * @return location
      */
     @Override
     public Point3d location(){
+        // das ist doch der Code für up-projection und nicht für decomposition
         // local blade = weight * ( no + center + 0.5 * ( center .. center ) * ni )
-        CGAMultivector result = createOrigin(1d).add(this).add(this.ip(this)).gp(createInf(0.5d));
+        //FIXME
+        //CGAMultivector result = createOrigin(1d).add(this).add(this.ip(this)).gp(createInf(0.5d));
+        
+        // local weight = -blade .. ni
+        double weight = this.negate().ip(CGAMultivector.createInf(1d)).scalarPart();
+        System.out.println("CGARoundPointIPNS.location weight = "+String.valueOf(weight));
+        CGAMultivector result = this.gp(1d/weight);
+        // blade = blade / weight
+        //local center = no_ni .. ( blade ^ no_ni )
+        //CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
+        //CGAMultivector result = no_inf.ip(this.gp(1d/weight).op(no_inf));
+        System.out.println("CGARoundPointIPNS.location decompose = "+this.toString());
         return result.extractE3ToPoint3d();
     }
     

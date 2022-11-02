@@ -3,10 +3,10 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * A k-Vector is a multivector which is a linear combination of blades 
+ * A k-Vector is a multivector which is a linear combination of the 32 basis blades 
  * (in form of a linear combination) of the same grade k (0..5). 
  * 
- * It is also called blade or k-blade. 
+ * It is also called blade or k-blade or shorter a blade.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

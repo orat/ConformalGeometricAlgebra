@@ -7,8 +7,14 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Point-pair in inner product null space representation 
+ * A point-pair (0-sphere) in inner product null space representation 
  * (grade 3 multivector), corresponding to dual point-pair in Dorst2007.
+ * 
+ * This corresponds to a sphere in a line, the set of point with an equal distance
+ * to the center of the point-pair.
+ * 
+ * Point pairs are the only rounds for which one can retrieve the points that 
+ * constitutes them.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

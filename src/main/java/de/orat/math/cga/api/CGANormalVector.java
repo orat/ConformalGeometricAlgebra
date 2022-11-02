@@ -3,7 +3,7 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
- * Multivector which contains only the blades e1,e2 and e3 (element of grade 1).
+ * Multivector which contains only the basis-blades e1,e2 and e3 (element of grade 1).
  * 
  * Different to a Vector only e1,e2 and e3 are different to 0.
  * 

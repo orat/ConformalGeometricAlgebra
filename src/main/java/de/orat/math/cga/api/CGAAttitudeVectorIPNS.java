@@ -4,11 +4,10 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Also called free or direction vector, elements without position in IPNS representation
- * corresponding to dual direction vector or dual free vector in Dorst2007
+ * Also called free or direction vector, elements without position/location in IPNS representation
+ * corresponding to dual direction vector or dual free vector in Dorst2007 (grade 3).
  * 
- * It represents a direction without a location. It is translation 
- * invariant.
+ * It is translation invariant.
  * 
  * This means there is no e0-component in its formula.
  * 
@@ -26,14 +25,15 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeVectorIPNS extends AbstractCGAAttitude implements iCGABivector {
+public class CGAAttitudeVectorIPNS extends AbstractCGAAttitude implements iCGATrivector {
     
     public CGAAttitudeVectorIPNS(CGAMultivector m){
         super(m);
-        testEinf();
+        testDefiningProperties();
     }
     protected CGAAttitudeVectorIPNS(iCGAMultivector impl){
         super(impl);
+        testDefiningProperties();
     }
     public CGAAttitudeVectorIPNS(Vector3d t){
         super((new CGANormalVector(t)).op(createInf(1.0)).dual());
@@ -51,12 +51,14 @@ public class CGAAttitudeVectorIPNS extends AbstractCGAAttitude implements iCGABi
         return this.undual();
     }
     
-    private void testEinf(){
-        //TODO
-        // Test darauf, dass alle componenten einf enthalten+
-        // throw new IllegalArgumentException("T
+    private void testDefiningProperties(){
+        if (!CGAMultivector.createInf(1d).op(this).isNull()){
+            throw new IllegalArgumentException("einf^X != 0");
+        }
+        if (!CGAMultivector.createInf(1d).ip(this).isNull()){
+            throw new IllegalArgumentException("einf . X != 0");
+        }
     }
-    
     
     @Override
     public CGAAttitudeVectorOPNS undual(){

@@ -7,7 +7,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Oriented finite flats e.g. FlatPoints, PointPairs?, Lines, Planes, DualCircles? 
+ * (Oriented finite) flats are rounds containing the the infinity inf., e.g. flat
+ * points, lines, planes, hyperplanes (k-dimensional flats).
  * 
  * All in outer product null space representation, corresponding to direct flat
  * in Dorst2007.

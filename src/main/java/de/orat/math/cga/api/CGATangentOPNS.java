@@ -69,14 +69,20 @@ class CGATangentOPNS extends CGAKVector {
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");
     }
+    /**
+     * Determine the location as finite point (dual spheres in Dorst2007).
+     * 
+     * @return location as finite point/dual sphere corresponding to Dorst2007
+     */
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere();
+        CGARoundPointIPNS result = locationFromTangentAndRoundAsNormalizedSphere();
         
         //Point3d result = locationIntern(this);
         //System.out.println("location="+result.toString());
-        return result.extractE3ToPoint3d();
         
+        //return result.extractE3ToPoint3d();
+        return result.location();
     }
     /*static Point3d locationIntern(CGAKVector tangent){
         return tangent.div(createInf(-1d).lc(tangent)).extractE3ToPoint3d();

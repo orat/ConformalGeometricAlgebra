@@ -10,6 +10,8 @@ import org.jogamp.vecmath.Vector3d;
  * Oriented and weighted rounds are points, point-pairs, circles and spheres/hyper-spheres,
  * here given in inner product null space representation corresponding to direct round in Dorst2007.
  * 
+ * Rounds are objects with finite areas/volumes/hyperolumes.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGAOrientedRoundOPNS extends CGAKVector {
@@ -68,7 +70,7 @@ class CGAOrientedRoundOPNS extends CGAKVector {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere(); //locationFromTangendAndRound();
+        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere(); 
         return result.extractE3ToPoint3d();
     }
     public Decomposition3d.RoundAndTangentParameters decompose(){

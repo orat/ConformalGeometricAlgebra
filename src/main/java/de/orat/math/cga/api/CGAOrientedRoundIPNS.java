@@ -10,6 +10,8 @@ import org.jogamp.vecmath.Vector3d;
  * here given in inner product null space representation corresponding to dual 
  * round in Drost2007.
  * 
+ * Rounds are objects with finite areas/volumes/hyperolumes.
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 class CGAOrientedRoundIPNS extends CGAKVector {

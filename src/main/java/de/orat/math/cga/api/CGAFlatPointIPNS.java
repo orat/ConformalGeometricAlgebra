@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Point3d;
 /**
  * Flat points are null vectors wedged with Infinity: p ∧ ∞. 
  * 
- * Flat points are blades with grade 2. 
+ * Flat-points are blades with grade 2 (e0inf).
  * 
  * Flat points are the result of an intersection between a line and a plane, and 
  * they are useful for describing potential elements within the algebra. 

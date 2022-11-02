@@ -3,7 +3,7 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Round point in outer product null space representation (grade 4 multivector), 
+ * A round point in outer product null space representation (grade 4 multivector), 
  * corresponding to direct round point in Dorst2007.
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

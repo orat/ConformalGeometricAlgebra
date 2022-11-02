@@ -4,11 +4,14 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Point pair (0-sphere) in outer product null space representation (grade 2 
+ * A point-pair (0-sphere) in outer product null space representation (grade 2 
  * multivector), corresponding to direct point-pair in Dorst2007.
  * 
+ * This corresponds to a sphere in a line, the set of point with an equal distance
+ * to the center of the point-pair.
+ * 
  * Point pairs are the only rounds for which one can retrieve the points that 
- * constituted them.
+ * constitutes them.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

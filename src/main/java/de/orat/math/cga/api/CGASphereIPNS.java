@@ -135,7 +135,7 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
      *
      * @return weight
      */
-    private double weight(){
+    double weight(){
         return gp(-1d).ip(createInf(1d)).scalarPart();
     }
     
@@ -165,6 +165,15 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
     public Point3d location(){
         return locationIntern().extractE3ToPoint3d();
     }
+    /**
+     * Decompose location.
+     * 
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * blade = blade / weight
+     * local center = no_ni .. ( blade ^ no_ni )
+     * @return 
+     */
     private CGAMultivector locationIntern(){
         //blade = blade / weight
 	//local center = no_ni .. ( blade ^ no_ni )

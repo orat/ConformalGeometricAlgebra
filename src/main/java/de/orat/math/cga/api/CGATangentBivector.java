@@ -5,7 +5,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Describes what a sphere and a plane have in common at their point of intersection.
+ * Describes what a sphere and a plane have in common at their point of intersection
+ * (grade 3).
  * 
  * This is an infinitesimal circle in a well defined plane.
  * 

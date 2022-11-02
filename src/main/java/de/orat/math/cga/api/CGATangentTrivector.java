@@ -3,6 +3,8 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Vector3d;
 
 /**
+ * A tangend tri-vector is a multivector of grade 4 (e1230).
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGATangentTrivector extends CGATangentOPNS implements iCGAQuadvector {

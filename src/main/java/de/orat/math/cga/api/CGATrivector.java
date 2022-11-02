@@ -3,9 +3,9 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
- * A trivector describes lines and circles in OPNS representation.
+ * A trivector describe lines and circles in OPNS representation.
  * 
- * Trivectors are linear combinations of Blades with grade 3.
+ * Trivectors are linear combinations of blades with grade 3 (e123).
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
