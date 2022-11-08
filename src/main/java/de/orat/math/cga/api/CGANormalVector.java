@@ -1,14 +1,14 @@
 package de.orat.math.cga.api;
 
-import org.jogamp.vecmath.Tuple3d;
+import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
 
 /**
- * Multivector which contains only the basis-blades e1,e2 and e3 (element of grade 1).
- * 
- * Different to a Vector only e1,e2 and e3 are different to 0.
+ * A normal vector of a plane with starts on the plane.
  * 
  * Localisation symmetry: plane
- * Translated form: p.lc(u.op(einf))
+ * 
+ * Translated form: p.lc(u.op(einf)) = u.add(p.lc(u).gp(einf))
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -19,10 +19,20 @@ public class CGANormalVector extends CGAKVector implements iCGAVector {
         // TODO test dass e0, einf nicht vorhanden ist!!!
     }
     
-    public CGANormalVector(Tuple3d t){
-        this(createE3(t));
+    public CGANormalVector(Point3d p, Vector3d t){
+        this(create(p,t));
     }
     
+    private static CGAMultivector create(Point3d p, Vector3d t){
+        //FIXME
+        // ist hier IPNS überhaupt richtig?
+        return (new CGARoundPointIPNS(p)).lc(createE3(t).op(CGAMultivector.createInf(1d)));
+    }
+    /**
+     * Squared norm/size.
+     * 
+     * @return squared size
+     */
     public double squaredSize(){
         return extractE3ToVector3d().lengthSquared();
     }

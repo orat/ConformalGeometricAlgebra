@@ -48,7 +48,7 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * @param p1 first point in inner product null space representation
      * @param p2 seconds point in inner product null space representation
      * 
-     * Be careful: The representation is called dual in Hildenbrand2013 but not
+     * Be careful: The representation is called dual in Hildenbrand2013 but direkt
      * in Dorst2007.
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){

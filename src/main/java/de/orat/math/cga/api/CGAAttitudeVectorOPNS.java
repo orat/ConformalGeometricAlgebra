@@ -40,7 +40,7 @@ public class CGAAttitudeVectorOPNS extends AbstractCGAAttitude implements iCGABi
     }
     
     public CGAAttitudeVectorOPNS(Vector3d t){
-        super((new CGANormalVector(t)).op(createInf(1.0)));
+        super((new CGAE3Vector(t)).op(createInf(1.0)));
     }
     
     public Vector3d attitude(){

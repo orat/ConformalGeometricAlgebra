@@ -30,10 +30,10 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
     }
     
     public CGATangentVectorOPNS(Point3d location, Vector3d direction){
-        this(createCGATangentVectorOPNS(location, direction));
+        this(create(location, direction));
     }
     // following Dorst2007 page 406
-    private static CGAMultivector createCGATangentVectorOPNS(Point3d location, Vector3d direction){
+    /*private static CGAMultivector createCGATangentVectorOPNS(Point3d location, Vector3d direction){
         // das sollte funktionieren, tut es aber nicht
         // The given multivector is not of grade 2: 0
         //CGARoundPointOPNS p = new CGARoundPointOPNS(location);
@@ -55,6 +55,25 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
         
         System.out.println("tangentVector="+result.toString());
         return result;
+    }*/
+    
+    /**
+     * Create tangent vector in OPNS representation (direct form in Dorst2007).
+     * 
+     * @param location euclidean point
+     * @param u direction (euclidean) vector
+     * @return tangent vector (in OPNS representation)
+     */
+    protected static CGAMultivector create(Point3d location, Vector3d u){
+        // Warum hier IPNS?
+        //FIXME
+        CGARoundPointIPNS p = new CGARoundPointIPNS(location);
+        // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
+        // general form: u can be vector, bivector, trivector
+        //return p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
+        
+        // following Dorst2007 page 452 (specialized form: u from euclidean vector)
+        return p.op(p.lc(CGAMultivector.createE3(u).gp(CGAMultivector.createInf(1d))));
     }
     
     /**
@@ -63,7 +82,7 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
      * @param t vector
      * @return tangent vector
      */
-    public CGATangentVectorOPNS createCGATangentVector (Vector3d t){
+    public static CGATangentVectorOPNS createCGATangentVector (Vector3d t){
         //TODO
         // ist hier geometrisches Produkt überhaupt richtig oder muss hier äußeres 
         // Produkt stehen?

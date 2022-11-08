@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import org.jogamp.vecmath.Tuple3d;
-import org.jogamp.vecmath.Vector3d;
 
 /**
  * A trivector describes lines and circles.
@@ -15,8 +14,8 @@ interface iCGATrivector extends iCGABlade {
     }
     
     default iCGATrivector createCGATrivector(Tuple3d a, Tuple3d b){
-        return (iCGATrivector) (new CGANormalVector(a)).op(
-                (new CGANormalVector(b)).op(
+        return (iCGATrivector) (new CGAE3Vector(a)).op(
+                (new CGAE3Vector(b)).op(
                 CGAMultivector.createInf(1d)));
     }
     

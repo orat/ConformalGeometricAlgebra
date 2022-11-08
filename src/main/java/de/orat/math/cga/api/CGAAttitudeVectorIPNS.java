@@ -36,7 +36,7 @@ public class CGAAttitudeVectorIPNS extends AbstractCGAAttitude implements iCGATr
         testDefiningProperties();
     }
     public CGAAttitudeVectorIPNS(Vector3d t){
-        super((new CGANormalVector(t)).op(createInf(1.0)).dual());
+        super((new CGAE3Vector(t)).op(createInf(1.0)).dual());
     }
     public Vector3d attitude(){
         CGAMultivector attitude = attitudeIntern();

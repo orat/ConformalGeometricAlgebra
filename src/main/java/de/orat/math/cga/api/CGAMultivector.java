@@ -83,11 +83,11 @@ public class CGAMultivector {
     public static CGAMultivector createEz(double scale){
         return new CGAMultivector(defaultInstance.impl.createEz(scale));
     }
-    public static CGANormalVector createE3(){
-        return new CGANormalVector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
+    public static CGAE3Vector createE3(){
+        return new CGAE3Vector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
     }
-    public static CGANormalVector createE3(Tuple3d v){
-        return new CGANormalVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
+    public static CGAE3Vector createE3(Tuple3d v){
+        return new CGAE3Vector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
     public static CGAMultivector createE3Pseudoscalar(){
         return createEx(1d).op(createEy(1d)).op(createEz(1d));
@@ -130,8 +130,8 @@ public class CGAMultivector {
     
     //TODO
     // in eigene Klasse auslagern
-    /*public static CGANormalVector createImaginarySphere(CGAMultivector o, double r){
-        return new CGANormalVector(o.add(createInf(0.5*r*r)));
+    /*public static CGAE3Vector createImaginarySphere(CGAMultivector o, double r){
+        return new CGAE3Vector(o.add(createInf(0.5*r*r)));
     }*/
    
     /**
@@ -213,28 +213,44 @@ public class CGAMultivector {
         return result;
     }*/
     /**
-     * Determines location from tangent and round objects and also from its dual.
+     * Determines location from tangent (direct/dual) and round (direct/dual) 
+     * objects.
      * 
      * scheint für CGARound zu stimmen
      * scheint mit CGATangent nicht zu stimmen
      * TODO
      * 
-     * @return location represented by a normalized sphere (dual sphere corresponding to Dorst2007)
+     * @return location represented by a normalized sphere/finite point (dual sphere corresponding to Dorst2007)
      */
     protected CGARoundPointIPNS locationFromTangentAndRoundAsNormalizedSphere(){
         // corresponds to the errata of the book Dorst2007
         // and also Fernandes2009 supplementary material B
         // location as finite point/dual sphere corresponding to Dorst2007
-        CGARoundPointIPNS result = new CGARoundPointIPNS((this.div(createInf(-1d).ip(this))).compress());
+        // createInf(-1d).ip(this) ist die Wichtung, es wird also durch die Wichtung geteilt,
+        // d.h. der Punkt wird normiert?
+        System.out.println(this.toString("tangentOrRound"));
+        // tangentOrRound = (eo^e2 + eo^ei + 0.5*e2^ei)
+        CGARoundPointIPNS result = new CGARoundPointIPNS((this.div(createInf(-1d).lc(this))).compress());
         //CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this)).negate().compress());
-        // z.B. locationFromTangentAndRound=1.0000000000000002*eo + 0.020000000000000004*e1 + 0.020000000000000004*e2 + 1.0000000000000002*e3 + 0.5004000000000001*ei
-        // bei input von p=(0.02,0.02,1.0)
+        // z.B. locationFromTangentAndRound=eo + 0.02*e1 + 0.02*e2 + e3 + 0.5*ei
+        // bei input von p=(0.02,0.02,1.0), funktioniert, aber vermutlich nur,
+        // da hier die Wichtung bei e0==1 ist.
+        // locationFromTangentAndRound=2.0*eo + 0.5000000000000001*e2 - 0.5*ei
+        // hiermit funktioniert es nicht mehr
         System.out.println("locationFromTangentAndRound="+result.toString());
         
+        // center of this round, as a null vector
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py Zeile 284:
-        // self.mv * self.cga.einf * self.mv
+        // self.mv * self.cga.einf * self.mv // * bedeutet geometrisches Produkt
         //TODO ausprobieren?
         
+        // euclidean part rausziehen, scheint zu funktionieren
+        CGAMultivector o = CGAMultivector.createOrigin(1d);
+        CGAMultivector inf = CGAMultivector.createInf(1d);
+        CGAMultivector resultEuclidean = o.op(inf).ip(o.op(inf).op(result));
+        // location (decomposed) euclidean only = (0.4999999999999998*e2)
+        // FIXME nur halb so gross wie ursprünglich
+        System.out.println(resultEuclidean.toString("location (decomposed) euclidean only"));
         return result;
     }
     /**
@@ -608,11 +624,14 @@ public class CGAMultivector {
     public CGAMultivector gradeInversion(){
         return new CGAMultivector(impl.gradeInversion());
     }
+    
     @Override
     public String toString(){
         return impl.toString();
     }
-    
+    public String toString(String name){
+        return name+" = ("+toString()+")";
+    }
     
     // coordinates extraction
     

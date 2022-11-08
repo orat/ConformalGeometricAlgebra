@@ -16,14 +16,14 @@ public class CGATrivector extends CGAMultivector implements iCGATrivector {
     }
     
     public CGATrivector(Tuple3d a, Tuple3d b, Tuple3d c){
-        this((new CGANormalVector(a)).op(
-                (new CGANormalVector(b)).op(
-                (new CGANormalVector(c)))));
+        this((new CGAE3Vector(a)).op(
+                (new CGAE3Vector(b)).op(
+                (new CGAE3Vector(c)))));
     }
     
     public CGATrivector(Tuple3d a, Tuple3d b){
-        this((new CGANormalVector(a)).op(
-                (new CGANormalVector(b)).op(
+        this((new CGAE3Vector(a)).op(
+                (new CGAE3Vector(b)).op(
                 (CGAMultivector.createInf(1d)))));
     }
 }

@@ -3,6 +3,10 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
+ * 
+ * FIXME
+ * brauche ich das überhaupt noch?
+ * 
  * Conformal geometric objects with focus on oriented points.
  * D. Hildenbrandt, P. Charrier
  * 9th international conference on clifford algebra and their applications in 

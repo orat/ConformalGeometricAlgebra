@@ -47,7 +47,6 @@ class CGATangentOPNS extends CGAKVector {
         return o.op(o.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
     }*/
     
-    
     // decomposition
     
     public Vector3d attitude(){
@@ -70,7 +69,7 @@ class CGATangentOPNS extends CGAKVector {
         throw new RuntimeException("Not available. Use location() without argument instead!");
     }
     /**
-     * Determine the location as finite point (dual spheres in Dorst2007).
+     * Determine the location.
      * 
      * @return location as finite point/dual sphere corresponding to Dorst2007
      */

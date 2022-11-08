@@ -16,14 +16,14 @@ public class CGAQuadvector extends CGAMultivector implements iCGAQuadvector {
     }
     
     public CGAQuadvector(Tuple3d a,Tuple3d b,Tuple3d c, Tuple3d d){
-         this((new CGANormalVector(a)).op(
-                (new CGANormalVector(b)).op(
-                (new CGANormalVector(c))).op(new CGANormalVector(d))));
+         this((new CGAE3Vector(a)).op(
+                (new CGAE3Vector(b)).op(
+                (new CGAE3Vector(c))).op(new CGAE3Vector(d))));
     }
     public CGAQuadvector(Tuple3d a,Tuple3d b,Tuple3d c){
-         this((new CGANormalVector(a)).op(
-                (new CGANormalVector(b)).op(
-                (new CGANormalVector(c))).op(CGAMultivector.createInf(1d))));
+         this((new CGAE3Vector(a)).op(
+                (new CGAE3Vector(b)).op(
+                (new CGAE3Vector(c))).op(CGAMultivector.createInf(1d))));
     }
     
     /*@Override

@@ -10,13 +10,13 @@ import org.jogamp.vecmath.Point3d;
  * A round point in inner product null space representation (grade 1 multivector), 
  * corresponding to dual round point in Dorst2007. 
  * 
- * Also called tangent scalar (finite point).
+ * Also called tangent scalar or finite point.
  * 
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
  * have a weight of 1.
  * 
  * In CGA a point can be represented as a round or a flat. The round point is a 
- * sphere with radius 0. The round point is a blade with grade 1.
+ * sphere with radius 0, a blade with grade 1.
  *
  * The round point is used more often in geometric expressions than the flat 
  * point, since it has nice perpendicularity properties. For example, given 
@@ -32,10 +32,11 @@ import org.jogamp.vecmath.Point3d;
  * dual sphere: σ 2 = r 2 . What exactly an imaginary sphere is varies from application to
  * application.
  * 
- * Null vectors, or points, in the conformal model have the unique property of hav-
- * ing a zero dot product with themselves: p · p = 0. This interesting result is part of a
- * more general useful trait: the dot product between any two normalized points rep-
- * resents the squared Euclidean distance between them: p · q = δ 2 .
+ * Null vectors, or points, in the conformal model have the unique property of 
+ * having a zero dot product with themselves: p · p = 0. This interesting result 
+ * is part of a more general useful trait: the dot product between any two 
+ * normalized points represents the squared Euclidean distance between them: 
+ * p · q = δ 2 .
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -128,20 +129,19 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      */
     @Override
     public Point3d location(){
-        // das ist doch der Code für up-projection und nicht für decomposition
-        // local blade = weight * ( no + center + 0.5 * ( center .. center ) * ni )
-        //FIXME
-        //CGAMultivector result = createOrigin(1d).add(this).add(this.ip(this)).gp(createInf(0.5d));
-        
         // local weight = -blade .. ni
         double weight = this.negate().ip(CGAMultivector.createInf(1d)).scalarPart();
         System.out.println("CGARoundPointIPNS.location weight = "+String.valueOf(weight));
         CGAMultivector result = this.gp(1d/weight);
+        // corresponding to CGAUtil.lua, line 223ff
         // blade = blade / weight
         //local center = no_ni .. ( blade ^ no_ni )
-        //CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
-        //CGAMultivector result = no_inf.ip(this.gp(1d/weight).op(no_inf));
-        System.out.println("CGARoundPointIPNS.location decompose = "+this.toString());
+        CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
+        CGAMultivector resultTest = no_inf.ip(this.gp(1d/weight).op(no_inf));
+        System.out.println(resultTest.toString("CGARoundPointIPNS.location decompose test"));
+        
+        System.out.println(this.toString("CGARoundPointIPNS.location decompose"));
+        System.out.println(result.toString("CGARoundPointIPNS.location decompose+normalized"));
         return result.extractE3ToPoint3d();
     }
     

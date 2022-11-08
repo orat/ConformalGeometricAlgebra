@@ -7,7 +7,7 @@ package de.orat.math.cga.api;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAEuclideanTrivector extends AbstractEuclideanKVector {
+public class CGAEuclideanTrivector extends AbstractEuclideanKVector implements iCGATrivector {
     public CGAEuclideanTrivector(CGAMultivector m){
         super(m);
     }
