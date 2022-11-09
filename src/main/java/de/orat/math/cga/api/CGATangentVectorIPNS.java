@@ -7,6 +7,9 @@ import org.jogamp.vecmath.Vector3d;
  * A vector with direction u at point/location (grade 3), corresponding to 
  * dual tangent in Dorst2007.
  * 
+ * FIXME
+ * composition scheint kaputt - grade4 statt grade3
+ * 
  * The use of tangent blades is an elegant alternative to represent vertices in
  * a mesh, because they encode both the positional as the tangential information 
  * in a simple primitive element. 

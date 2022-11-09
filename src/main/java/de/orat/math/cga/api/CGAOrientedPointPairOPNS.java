@@ -10,7 +10,7 @@ import org.jogamp.vecmath.Point3d;
  * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
  * e3^ni,    no^ni
  * 
- * This corresponds to a sphere in a line, the set of point with an equal distance
+ * This corresponds to a sphere in a line, the set of points with an equal distance
  * to the center of the point-pair.
  * 
  * Point pairs are the only rounds for which one can retrieve the points that 
@@ -34,17 +34,24 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedRoundOPNS implements iC
      * @param point2
      */
     public CGAOrientedPointPairOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
-        this(point1.op(point2));
+        this(create(point1, point2));
     }
     
     /**
      * Create point pair in outer product null space representation (grade 2 multivector).
      * 
      * @param point1
+     * @param weight1
      * @param point2
+     * @param weight2
      */
-    public CGAOrientedPointPairOPNS(Point3d point1, Point3d point2){
-        this((new CGARoundPointIPNS(point1)).op(new CGARoundPointIPNS(point2)));
+    public CGAOrientedPointPairOPNS(Point3d point1, double weight1, Point3d point2, double weight2){
+        //this((new CGARoundPointIPNS(point1)).op(new CGARoundPointIPNS(point2)).gp(weight));
+        this(create(new CGARoundPointIPNS(point1, weight1), new CGARoundPointIPNS(point2, weight2)));
+    }
+    
+    private static CGAMultivector create(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
+        return point1.op(point2);
     }
     
     @Override

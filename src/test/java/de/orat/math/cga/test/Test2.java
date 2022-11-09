@@ -23,6 +23,7 @@ import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -81,6 +82,30 @@ public class Test2 {
         sb.delete(sb.length()-3, sb.length()-1);
         System.out.println("CGA CGA2_METRIC: "+sb.toString());
     }
+    
+    public void testPointPairsDorst2008Drills(){
+        System.out.println("------------------Dorst2008 drills: point pair --------------");
+        Point3d p1 = new Point3d(1d,0d,0d);
+        double weight1 = 2d;
+        Point3d p2 = new Point3d(0d,1d,0d);
+        double weight2 = -1d;
+        CGAOrientedPointPairOPNS pp = new CGAOrientedPointPairOPNS(p1, weight1, p2, weight2);
+        // pp = (2.0*eo^e1 - 2.0*eo^e2 - 2.0*e1^e2 - 1.0*e1^ei + 1.0*e2^ei) (korrekt)
+        System.out.println(pp.toString("pp"));
+        
+        CGAMultivector ppTest = CGAMultivector.createOrigin(2d).op(CGAMultivector.createEx(1d)).sub(
+            CGAMultivector.createOrigin(2d).op(CGAMultivector.createEy(1d))).sub(
+            CGAMultivector.createEx(2d).op(CGAMultivector.createEy(1d))).sub(
+            CGAMultivector.createEx(1d).op(CGAMultivector.createInf(1d))).add(
+            CGAMultivector.createEy(1d).op(CGAMultivector.createInf(1d)));
+        System.out.println(ppTest.toString("ppTest"));
+        assertTrue(pp.equals(ppTest));
+        
+        double radiusSquared = pp.squaredSize();
+        System.out.println("radiusSquared="+String.valueOf(radiusSquared));
+        
+    }
+    
     
     // alles korrekt
     public void testGanjaExampleCreatePointsCircleLine(){
@@ -654,7 +679,7 @@ norm(sphere) = 1.9999999999999998
                 String.valueOf(location7.z)+")");
         
         // point pairs
-        CGAOrientedPointPairOPNS pp2 = new CGAOrientedPointPairOPNS(p1,p2);
+        CGAOrientedPointPairOPNS pp2 = new CGAOrientedPointPairOPNS(p1, 1d ,p2, 1d);
         // pp=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
         System.out.println("pp2="+pp2.toString());
         // FIXME e1 und e2 die doppelt so grosse Werte wie erwartet
