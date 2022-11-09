@@ -8,6 +8,8 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * Direct (or ordinary) sphere in outer product null space representation as a multivector 
  * of grade 4, corresponding to direct sphere in Dorst2007.
  * 
+ * e1^e2^e3^ni, e1^e2^no^ni, e1^e3^no^ni, e2^e3^no^ni, e1^e2^e3^no
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGASphereOPNS extends CGAOrientedRoundOPNS implements iCGAQuadvector {

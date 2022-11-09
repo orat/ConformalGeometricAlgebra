@@ -24,8 +24,8 @@ public class CGANormalVector extends CGAKVector implements iCGAVector {
     }
     
     private static CGAMultivector create(Point3d p, Vector3d t){
-        //FIXME
-        // ist hier IPNS überhaupt richtig?
+        // IPNS ist vermutlich richtig, da das ja auch bei CGALine etc auch
+        // so ist...
         return (new CGARoundPointIPNS(p)).lc(createE3(t).op(CGAMultivector.createInf(1d)));
     }
     /**

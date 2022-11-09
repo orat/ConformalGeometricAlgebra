@@ -12,6 +12,11 @@ import org.jogamp.vecmath.Point3d;
  * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
  * square to 0. Planes are grade 1. Corresponding to dual plane in Dorst2007.
  * 
+ * Given two null points p and q, we can construct the dual plane in between them 
+ * by simple substraction: π = p − q : subtracting one normalized point from a
+ * nother eliminates the o blade and returns a vector of the form π = n + δ ∞ #
+ * which represents a dual plane with normal n at distance δ from the origin.
+ *
  * Planes π = n + δ ∞ are combination of a Euclidean normal vector n plus a
  * weighted infinity ∞ representing the distance from Origin (sometimes called 
  * the Hessian distance). 

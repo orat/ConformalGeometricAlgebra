@@ -186,6 +186,7 @@ public class CGAMultivector {
      * @return attitude
      */
     static CGAMultivector attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
+        // Dorst2007 p. 562
         CGAMultivector result = CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d));
         System.out.println("attitude(round/attitude)="+result.toString());
         return result;

@@ -7,10 +7,14 @@ import org.jogamp.vecmath.Vector3d;
  * A vector with direction u at location p (grade 2), corresponding to 
  * direct tangent in Dorst2007.
  * 
+ * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
+ * e3^ni,    no^ni
+ * 
  * It squares to 0 since it is like a round with zero radius. It does not contain inf
  * so that inf^X != 0.
  * 
- * Vermutlich enthält das immer die folgenden Komponenten: e10, e20, e30
+ * Vermutlich enthält das immer die folgenden Komponenten: e10, e20, e30, scheint
+ * leider nicht zu stimmen, vielleicht nur für Tangenten im Ursprung
  * 
  * The use of tangent blades is an elegant alternative to represent vertices in
  * a mesh, because they encode both the positional as the tangential information 
@@ -24,14 +28,15 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
         super(m);
     }
     
+    public CGATangentVectorOPNS(Point3d location, Vector3d direction){
+        this(create(location, direction));
+    }
+    
     @Override
     public CGATangentVectorIPNS dual(){
         return new CGATangentVectorIPNS(super.dual());
     }
     
-    public CGATangentVectorOPNS(Point3d location, Vector3d direction){
-        this(create(location, direction));
-    }
     // following Dorst2007 page 406
     /*private static CGAMultivector createCGATangentVectorOPNS(Point3d location, Vector3d direction){
         // das sollte funktionieren, tut es aber nicht
@@ -65,13 +70,12 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
      * @return tangent vector (in OPNS representation)
      */
     protected static CGAMultivector create(Point3d location, Vector3d u){
-        // Warum hier IPNS?
-        //FIXME
-        CGARoundPointIPNS p = new CGARoundPointIPNS(location);
-        // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
-        // general form: u can be vector, bivector, trivector
-        //return p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
         
+        // FIXME generic version failed
+        //return create(location, CGAMultivector.createE3(u));
+        
+        // Warum hier IPNS? ist bei line etc. auch so
+        CGARoundPointIPNS p = new CGARoundPointIPNS(location);
         // following Dorst2007 page 452 (specialized form: u from euclidean vector)
         return p.op(p.lc(CGAMultivector.createE3(u).gp(CGAMultivector.createInf(1d))));
     }
@@ -79,8 +83,8 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
     /**
      * Creates a tangent vector in the origin.
      * 
-     * @param t vector
-     * @return tangent vector
+     * @param t euclidean vector
+     * @return tangent vector located in the origin
      */
     public static CGATangentVectorOPNS createCGATangentVector (Vector3d t){
         //TODO
@@ -90,5 +94,33 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
         return new CGATangentVectorOPNS(createOrigin(1.0).gp(new CGAMultivector(t)));
     }
     
+    
     // decompose Methoden
+    
+    /*@Override
+    public Vector3d attitude(){
+        CGAMultivector result = attitudeIntern();
+        System.out.println("attitude="+result.toString());
+        return result.extractAttitudeFromEeinfRepresentation();
+    }*/
+   
+    
+    /**
+     * Determine the location.
+     * 
+     * @return location as euclidean point
+     */
+    @Override
+    public Point3d location(){
+        // CGATangentVectorOPNS.location (flat point) = (eo^ei + e2^ei)
+        CGAMultivector inf = CGAMultivector.createInf(1d);
+        // The "meet" of the line perpendicularly through "this" with the plane that 
+        // contains "this".
+        // corresponding to Dorst2007 p. 562
+        // hier kommt grade-2 heraus, obwohl nach lua der FlatPoint eigentlich grade-3
+        // sein sollte
+        CGAFlatPointIPNS result = new CGAFlatPointIPNS(inf.lc(this).lc(this.op(inf)));
+        System.out.println(result.toString("CGATangentVectorOPNS.location (flat point)"));
+        return result.location();
+    }
 }

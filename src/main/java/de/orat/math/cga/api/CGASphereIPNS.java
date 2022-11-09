@@ -8,6 +8,8 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * Sphere in inner product null space representation (grade 1 multivector)
  * corresponding to dual real or imaginary sphere in Dorst2007.
  * 
+ * no, e1, e2, e3, ni
+ * 
  * A sphere with radius=0 is a round point.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

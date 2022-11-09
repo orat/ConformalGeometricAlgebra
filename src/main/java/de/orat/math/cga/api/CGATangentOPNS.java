@@ -27,25 +27,24 @@ class CGATangentOPNS extends CGAKVector {
     }
     
     /**
-     * Create a cga tangent object in opns representation corresponding to 
+     * Create a tangent vector in opns representation corresponding to 
      * direct tangent in Dorst2007.
      * 
-     * @param location as finite point
+     * @param location as finite point?
      * @param u k-vector representing a direction
      * @return tangent in OPNS representation
      * 
      * TODO bekomme ich hier nicht immer ein k-blade zurück?
-     * 
-     * fixme das ist die Formel für IPNS only????
-     * TODO
      */
-    /*protected static CGAMultivector create(Point3d location, CGAKVector u){
+    protected static CGAMultivector create(Point3d location, CGAKVector u){
         CGARoundPointIPNS o = new CGARoundPointIPNS(location);
-        //FIXME in Dorst2007 steht gradeInvolution, ist damit gradeInversion gemeint?
-        // The given multivector is not of grade 2: 0
-    
+        // FIXME in Dorst2007 steht gradeInvolution, ist damit gradeInversion gemeint?
+        // FIXME The given multivector is not of grade 2: 0
+        // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
+        // general form: u can be vector (CGAMultivector.createE3(u)), bivector, trivector
         return o.op(o.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
-    }*/
+    }
+    
     
     // decomposition
     

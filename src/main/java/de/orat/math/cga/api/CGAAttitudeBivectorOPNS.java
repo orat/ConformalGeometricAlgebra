@@ -5,6 +5,8 @@ package de.orat.math.cga.api;
  * 
  * A 2-dimensional direction element. Drawn sippled at the origin. 
  * 
+ * e1^e2^ni, e2^e3^ni, e3^e1^ni
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAAttitudeBivectorOPNS extends AbstractCGAAttitude implements iCGATrivector {

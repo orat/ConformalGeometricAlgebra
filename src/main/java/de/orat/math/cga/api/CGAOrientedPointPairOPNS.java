@@ -7,6 +7,9 @@ import org.jogamp.vecmath.Point3d;
  * A point-pair (0-sphere) in outer product null space representation (grade 2 
  * multivector), corresponding to direct point-pair in Dorst2007.
  * 
+ * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
+ * e3^ni,    no^ni
+ * 
  * This corresponds to a sphere in a line, the set of point with an equal distance
  * to the center of the point-pair.
  * 

@@ -10,7 +10,9 @@ import org.jogamp.vecmath.Point3d;
  * A round point in inner product null space representation (grade 1 multivector), 
  * corresponding to dual round point in Dorst2007. 
  * 
- * Also called tangent scalar or finite point.
+ * no, e1, e2, e3, ni
+ * 
+ * Also called tangent scalar or finite point????
  * 
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
  * have a weight of 1.

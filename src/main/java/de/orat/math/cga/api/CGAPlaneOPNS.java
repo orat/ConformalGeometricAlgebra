@@ -9,11 +9,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * Direct plane in outer product null space representation (grade 4 multivector), 
  * corresponding to direct plane in Dorst2007.
  * 
- * TODO gehört der folgende Text und die impl der Methode nicht nach CGAPlane?
- * Given two null points p and q, we can construct the dual plane in between them 
- * by simple substraction: π = p − q : subtracting one normalized point from a
- * nother eliminates the o blade and returns a vector of the form π = n + δ ∞ #
- * which represents a dual plane with normal n at distance δ from the origin.
+ * e1^e2^e3^ni, e1^e2^no^ni, e1^e3^no^ni, e2^e3^no^ni
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

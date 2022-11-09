@@ -7,6 +7,8 @@ import org.jogamp.vecmath.Vector3d;
  * Also called free or direction vector (Dorst2007) or a free blade, elements 
  * without position (grade 2). 
  * 
+ * e1^ni, e2^ni, e3^ni
+ * 
  * Just as tangents support round elements, so do directions support flat elements. 
  * 
  * It represents a direction without a location. It is translation 

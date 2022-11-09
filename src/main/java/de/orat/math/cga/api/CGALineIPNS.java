@@ -7,6 +7,8 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * Generates the motor algebra. 
  * 
+ * e1^e2, e1^e3, e2^e3, e1^ni, e2^ni, e3^ni
+ * 
  * There are many ways of finding a line: e.g. 
  * the central axis l of a circle σ can be found by contraction with infinity: 
  * 

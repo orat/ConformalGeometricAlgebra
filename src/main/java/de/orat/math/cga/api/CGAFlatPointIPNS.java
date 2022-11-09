@@ -7,7 +7,9 @@ import org.jogamp.vecmath.Point3d;
 /**
  * Flat points are null vectors wedged with Infinity: p ∧ ∞. 
  * 
- * Flat-points are blades with grade 2 (e0inf).
+ * Flat-points are blades with grade 2.
+ * 
+ * e1^ni, e2^ni, e3^ni, no^ni
  * 
  * Flat points are the result of an intersection between a line and a plane, and 
  * they are useful for describing potential elements within the algebra. 
@@ -19,8 +21,6 @@ import org.jogamp.vecmath.Point3d;
  * circle τ and the point q. We can also construct such a relationship with the 
  * contraction product – given a direct circle κ, the contraction with a point 
  * q'κ returns a direct plane that goes through the circle κ and the point q.
- * 
- * A flat point
  * 
  * The flat-point is the only geometric object in CGA that, when expressed in 
  * direct form, cannot be written as the outer product of (round) points.
@@ -34,20 +34,30 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
     }
    
     /**
-     * Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
-     * FIXME 
-     * ist das wirklich IPNS?
-     * 
      * @param c location
      * @param weight weight
      */
     public CGAFlatPointIPNS(Point3d c, double weight){
-        // local blade = weight * ( 1 - center ^ ni ) * i
-        this((new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createPseudoscalar()).gp(weight));
+        this(create(c, weight));
     }
     
+    /**
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * CGAUtil.lua l.153
+     * FIXME 
+     * ist das wirklich IPNS?
+     *
+     * @param c
+     * @param weight
+     * @return 
+     */
+    private static CGAMultivector create(Point3d c, double weight){
+        // local blade = weight * ( 1 - center ^ ni ) * i
+        return (new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createPseudoscalar()).gp(weight);
+    }
+    
+    //?
     public CGAFlatPointIPNS(CGARoundPointIPNS p){
         this(p.op(createInf(1d)));
     }
@@ -57,14 +67,14 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      * 
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * CGAUtil.lua l.256
      */
     private double weight(){
         // local weight = -( no .. ( blade ^ ni ) ) * i
-        return createOrigin(1d).ip(this.op(createInf(1d))).gp(createE3Pseudoscalar()).scalarPart();
+        return -createOrigin(1d).ip(this.op(createInf(1d))).gp(createE3Pseudoscalar()).scalarPart();
     }
     /**
-     * Determination the squared weight from this flat point.Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * Determination the squared weight.
      *
      * @return squared weight
      */
@@ -72,19 +82,35 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
     public double squaredWeight(){
         return Math.pow(weight(),2d);
     }
+    
     /**
      * Determines the center of this flat point.
      * 
-     * Determine a point on the line which has the closest distance to the origin.Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
-     * @return location
+      * 
+     * @return location as euclidean point
      */
     @Override
     public Point3d location(){
+        // Determine a point on the line which has the closest distance to the origin.
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+        // It must be non-zero and of grade 3.
+        // CGAUtil.lua l.263
         // blade = blade / weight
+        // i = e1 ^ e2 ^ e3
 	// local center = ( no .. blade ) * i
-        CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight()))).gp(createE3Pseudoscalar());
+        // flat point = (-5.5511151231257765E-17*eo^e2 + 0.999999999999999*eo^ei + 0.9999999999999989*e2^ei)
+        //CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight()))).gp(createE3Pseudoscalar());
+        // CGAFlatPointIPNS.location = (NaN*e1^e3 - Infinity*eo^e1^e2^e3 + NaN*e1^e2^e3^ei)
+        //FIXME stimmt irgendwie gar nicht!
+        //System.out.println(result.toString("CGAFlatPointIPNS.location"));
+        //return result.extractE3ToPoint3d();
+        
+        // Dorst2007 p. 428
+        CGAMultivector o = CGAMultivector.createOrigin(1d);
+        CGAMultivector oinf = o.op(CGAMultivector.createInf(1d));
+        CGAMultivector result = oinf.lc(o.op(this)).div(oinf.lc(this)).negate();
+        //System.out.println(result.toString("CGAFlatPointIPNS.location2"));
         return result.extractE3ToPoint3d();
     }
 }
