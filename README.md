@@ -16,4 +16,4 @@ The code is in very early experimetal status.
 
 ## Metric
 
-The origin is defined as e0=0.5(e5-e4) and the point at infinity as einf=e4+e4. This corresponds to ganja.js, the book Hildenbrand2009 and the papers Klepper2016.
+The origin is defined as e0=0.5(e5-e4) and the point at infinity as einf=e4+e5. This corresponds to ganja.js, the book Hildenbrand2009 and the papers Klepper2016.
