@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
@@ -14,6 +15,9 @@ public class CGARoundPointOPNS extends CGASphereOPNS {
         super(m);
     }
     
+    CGARoundPointOPNS(iCGAMultivector m){
+        super(m);
+    }
     /**
      * Create a conformal result in outer product null space representation 
      * (grade 4 multivector).
@@ -32,5 +36,10 @@ public class CGARoundPointOPNS extends CGASphereOPNS {
     }
     public CGARoundPointOPNS(Point3d p, double weight){
         this((new CGARoundPointIPNS(p, weight)).dual());
+    }
+    
+    @Override
+    public CGARoundPointIPNS dual(){
+        return new CGARoundPointIPNS(impl.dual());
     }
 }

@@ -12,7 +12,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGASphereOPNS extends CGAOrientedRoundOPNS implements iCGAQuadvector {
+public class CGASphereOPNS extends CGAOrientedFiniteRoundOPNS implements iCGAQuadvector {
     
     public CGASphereOPNS(CGAMultivector m){
         super(m);
@@ -64,8 +64,8 @@ public class CGASphereOPNS extends CGAOrientedRoundOPNS implements iCGAQuadvecto
     }
     
     @Override
-    public CGASphereIPNS undual(){
-        return new CGASphereIPNS(impl.undual());
+    public CGASphereIPNS dual(){
+        return new CGASphereIPNS(impl.dual());
     }
     
     /**

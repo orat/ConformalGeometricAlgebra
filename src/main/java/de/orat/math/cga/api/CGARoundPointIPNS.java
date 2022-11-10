@@ -10,6 +10,9 @@ import org.jogamp.vecmath.Point3d;
  * A round point in inner product null space representation (grade 1 multivector), 
  * corresponding to dual round point in Dorst2007. 
  * 
+ * vermutlich ist das ein Finite Point
+ * 
+ * 
  * no, e1, e2, e3, ni
  * 
  * Also called tangent scalar or finite point????
@@ -186,5 +189,10 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      */
     public double distSquare(CGARoundPointIPNS p){
         return -2*(this.normalize()).ip(p.normalize()).scalarPart();
+    }
+    
+    @Override
+    public CGARoundPointOPNS undual(){
+        return new CGARoundPointOPNS(impl.undual());
     }
 }

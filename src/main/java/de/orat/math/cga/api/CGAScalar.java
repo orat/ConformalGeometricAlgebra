@@ -18,4 +18,8 @@ public class CGAScalar extends CGAKVector implements iCGAScalar {
     public static CGAScalar atan2(CGAScalar y, CGAScalar x){
         return new CGAScalar(Math.atan2(y.scalarPart(), x.scalarPart()));
     }
+    
+    public CGAScalar sqrt(){
+        return new CGAScalar(Math.sqrt(this.scalarPart()));
+    }
 }

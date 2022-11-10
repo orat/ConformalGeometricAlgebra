@@ -14,12 +14,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedRoundOPNS extends CGAKVector {
+class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     
-    CGAOrientedRoundOPNS(CGAMultivector m){
+    CGAOrientedFiniteRoundOPNS(CGAMultivector m){
         super(m.impl);
     }
-    protected CGAOrientedRoundOPNS(iCGAMultivector impl){
+    protected CGAOrientedFiniteRoundOPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -38,29 +38,36 @@ class CGAOrientedRoundOPNS extends CGAKVector {
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.
      * 
-     * ok für dualSphere
+     * ok for dualSphere?
+     * false for pointPair
      * 
      * @param m round object represented by a multivector
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        //return -CGAOrientedRoundIPNS.squaredSize(this);
         return squaredSize(this);
     }
     /**
      * Determination of the squared size. 
      * 
      * @param m round or dual round object represented by a multivector
-     * @return squared size/radius squared
+     * @return squared size/radius
      */
     static double squaredSize(CGAKVector m){
         // unklar ob sqr() überhaupt richtig implementiert ist
-        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr());
-        //System.out.println("squaredSize/radiusSquared="+result.toString());
+        // following Dorst2008 p.407/08
+        // FIXME ist sqr() hier richtig oder muss das nicht ein inneres product sein
+        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr()).negate();
+        System.out.println(result.toString("squaredSize/radiusSquared"));
         
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
         // also nicht squaredSize bestimmt werden kann
+        //dual_sphere = self.dual
+        //dual_sphere /= (-dual_sphere | self.cga.einf)
+        //return math.sqrt(abs(dual_sphere * dual_sphere))
+        //result = m.dual().div(m.dual().negate().ip(CGAMultivector.createInf(1d)));
+        //result = result.gp(result);
         
         return result.scalarPart();
     }
@@ -70,8 +77,12 @@ class CGAOrientedRoundOPNS extends CGAKVector {
     }
     @Override
     public Point3d location(){
-        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere(); 
+        CGARoundPointIPNS result = locationIntern();
         return result.extractE3ToPoint3d();
+    }
+    @Override
+    public CGARoundPointIPNS locationIntern(){
+        return locationFromTangentAndRoundAsNormalizedSphere(); 
     }
     public Decomposition3d.RoundAndTangentParameters decompose(){
        return new RoundAndTangentParameters(attitude(), 

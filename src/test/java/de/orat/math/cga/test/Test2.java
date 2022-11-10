@@ -1,5 +1,6 @@
 package de.orat.math.cga.test;
 
+import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAOrientedCircleIPNS;
 import de.orat.math.cga.api.CGAOrientedCircleOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
@@ -15,6 +16,8 @@ import de.orat.math.cga.api.CGAOrientedPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
 import de.orat.math.cga.api.CGARoundPointOPNS;
 import de.orat.math.cga.api.CGASphereIPNS;
+import de.orat.math.cga.api.CGATangentVectorIPNS;
+import de.orat.math.cga.api.CGATangentVectorOPNS;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA2_METRIC;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA_METRIC;
@@ -44,7 +47,14 @@ public class Test2 {
     public Test2() {
     }
 
-    private boolean equals(Tuple3d a, Tuple3d b){
+    private boolean equals(double a, double b){
+        boolean result = true;
+        if (Math.abs(a-b) > epsilon){
+            result = false;
+        }
+        return result;
+    }
+    private static boolean equals(Tuple3d a, Tuple3d b){
         boolean result = true;
         if (Math.abs(a.x-b.x) > epsilon){
             result = false;
@@ -84,7 +94,7 @@ public class Test2 {
     }
     
     public void testPointPairsDorst2008Drills(){
-        System.out.println("------------------Dorst2008 drills: point pair --------------");
+        System.out.println("------------------Dorst2007 drills (chpater 14.9.1): point pair --------------");
         Point3d p1 = new Point3d(1d,0d,0d);
         double weight1 = 2d;
         Point3d p2 = new Point3d(0d,1d,0d);
@@ -92,7 +102,6 @@ public class Test2 {
         CGAOrientedPointPairOPNS pp = new CGAOrientedPointPairOPNS(p1, weight1, p2, weight2);
         // pp = (2.0*eo^e1 - 2.0*eo^e2 - 2.0*e1^e2 - 1.0*e1^ei + 1.0*e2^ei) (korrekt)
         System.out.println(pp.toString("pp"));
-        
         CGAMultivector ppTest = CGAMultivector.createOrigin(2d).op(CGAMultivector.createEx(1d)).sub(
             CGAMultivector.createOrigin(2d).op(CGAMultivector.createEy(1d))).sub(
             CGAMultivector.createEx(2d).op(CGAMultivector.createEy(1d))).sub(
@@ -101,11 +110,39 @@ public class Test2 {
         System.out.println(ppTest.toString("ppTest"));
         assertTrue(pp.equals(ppTest));
         
+        // ok
+        Point3d c = pp.location();
+        System.out.println(toString("c",c));
+        // (e1+e2)/2
+        Point3d cTest  = new Point3d(p1); cTest.add(p2); cTest.scale(0.5d);
+        // new Point3d(0.5d,0.5d,0d);
+        
+        System.out.println(toString("cTest",cTest));
+        assertTrue(equals(c,cTest));
+        
+        // beide Punkte wieder aus dem paar rausholen
+        Point3d[] points = pp.decomposePoints();
+        System.out.println(toString("p1",points[0]));
+        System.out.println(toString("p2", points[1]));
+        
+        //FIXME
+        // falsches ergenis mit 1,75 statt 0.5
+        // die input weights auf 1 zu setzen hat keinen Unterschied gebracht
+        // FIXME dual() führt zu The given multivector is not not grade 1! grade()=0
+        //double radiusSquared = pp.dual().squaredSize();
         double radiusSquared = pp.squaredSize();
         System.out.println("radiusSquared="+String.valueOf(radiusSquared));
-        
+        double radiusSquaredTest = 0.5d;
+        System.out.println("radiusSquaredTest="+String.valueOf(radiusSquaredTest));
+        //assertTrue(equals(radiusSquared,radiusSquaredTest));
     }
     
+    public static String toString(String name, Tuple3d value){
+        return name+" = ("+String.valueOf(value.x)+","+String.valueOf(value.y)+","+String.valueOf(value.z)+")";
+    }
+    public static String toString(String name, double value){
+        return name+" = "+String.valueOf(value);
+    }
     
     // alles korrekt
     public void testGanjaExampleCreatePointsCircleLine(){
@@ -155,7 +192,7 @@ public class Test2 {
         System.out.println("p="+p.toString());
     }
     
-    public void testGanjaExampleCreateDualSpherePlane(){
+    public void testGanjaExampleCreateDualSphereAndPlane(){
         System.out.println("------------------Ganja.js expample: creation of dual sphere and plane --------------");
         // We start by defining a null basis, and upcasting for points
         //var ni = 1e4+1e5, no = .5e5-.5e4, nino = ni^no;
@@ -165,13 +202,19 @@ public class Test2 {
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Vector3d(1d,0.5d,0d));
         // ganja.js: e1+0.5e2+0.12e4+1.12e5 = e1+0.5e2+0.625ei+e0 (korrekt)
         // java.js: p1=1.0*eo + 1.0*e1 + 0.5*e2 + 0.625*ei
-        System.out.println("p1="+p1.toString());
+        System.out.println(p1.toString("p1"));
+        CGAMultivector p1Test = CGAMultivector.createE3(new Vector3d(1d,0.5d,0d)).
+                add(CGAMultivector.createInf(0.625)).add(CGAMultivector.createOrigin(1d));
+        assert(p1.equals(p1Test));
         
         // p2 = up(1e2-.5e3);
         CGARoundPointIPNS p2 = new CGARoundPointIPNS(new Vector3d(0d,1d,0.5d));
         // java: p2=1.0*eo + 1.0*e2 + 0.5*e3 + 0.625*ei
         // ganja.js: e2-0.5e3+0.12e4+1.12e5
         System.out.println("p2="+p2.toString());
+        CGAMultivector p2Test = CGAMultivector.createE3(new Vector3d(0d,1d,0.5d)).
+                add(CGAMultivector.createOrigin(1d)).add(CGAMultivector.createInf(0.625d));
+        assertTrue(p2.equals(p2Test));
         
         // The distance between two points.
         //var d = (a,b)=>((a<<b).Length*2)**.5;
@@ -184,7 +227,7 @@ public class Test2 {
         CGASphereIPNS s1 = new CGASphereIPNS(p1, 0.3);
         // java: s1=1.0*eo + 1.0*e1 + 0.5*e2 + 0.58*ei (korrekt)
         System.out.println("s1="+s1.toString());
-        CGASphereOPNS s = s1.dual();
+        CGASphereOPNS s = s1.undual();
         System.out.println("s="+s.toString());
         
         CGAMultivector inf_no = createInf(1d).op(createOrigin(1d));
@@ -232,13 +275,13 @@ public class Test2 {
         System.out.println("p="+p.toString());
         
         //S  = ()=>!(p1-.5*ni),                 // main dual sphere around point 
-        CGASphereOPNS S = (new CGASphereIPNS(p, 1d)).dual();
+        CGASphereOPNS S = (new CGASphereIPNS(p, 1d)).undual();
         // java: S=-eo^e1^e2^e3 + 0.49*e1^e2^e3^ei
         // ganja.js e1235 = 0.5e123i-e0123 (korrekt)
         System.out.println("S="+S.toString());
         
         //S2 = !(up(-1.4e1)-0.125*ni),         // left dual sphere
-        CGASphereOPNS S2 = (new CGASphereIPNS(new CGARoundPointIPNS(new Vector3d(-1.4,0d,0d)), 0.5d)).dual();
+        CGASphereOPNS S2 = (new CGASphereIPNS(new CGARoundPointIPNS(new Vector3d(-1.4,0d,0d)), 0.5d)).undual();
         // ganja.js: -1.35e1234-0.35e1235-1.39e2345 = -0.85e123i - e0123 +1.4e023i
         // java: S2=-eo^e1^e2^e3 + 1.399*eo^e2^e3^ei - 0.85*e1^e2^e3^ei (korrekt)
         System.out.println("S2="+S2.toString());
@@ -345,7 +388,7 @@ public class Test2 {
         // sphere = (P,r)=>!(P-r**2*.5*ni)
         // plane  = (v,h=0)=>!(v-h*ni);
         // C  = sphere(up(1.4e1),.5)&plane(1e3),  // right circle
-        CGASphereOPNS sphere = (new CGASphereIPNS(new Point3d(1.4d,0d,0d),0.5d)).dual();
+        CGASphereOPNS sphere = (new CGASphereIPNS(new Point3d(1.4d,0d,0d),0.5d)).undual();
         System.out.println("sphere="+sphere.toString());
         // sphere=-eo^e1^e2^e3 - 1.34*eo^e2^e3^ei - 0.8545*e1^e2^e3^ei
         //TODO
@@ -467,19 +510,19 @@ public class Test2 {
     
     /**
      * Input:
-     * n=(0.0,0.0, 1.0), d=2
-     * 
-     * plane=1.0*e3 + 2.0*ei
-     * probe=1.0*eo + 0.5*e1 + 0.5*e2 + 0.5*e3 + 0.375*ei
-     * attitude=-5.551115123125783E-17*eo^e1^e2 + 0.9999999999999996*e1^e2^ei
-     * location=(2.500000000000001, 2.500000000000001, 1.2500000000000004)
-     * n=(0.0, 0.0, 0.9999999999999996)
-     * 
-     * aktueller Output
-     * plane=2.0*e3 + 2.0*ei
+ n=(0.0,0.0, 1.0), d=2
+ 
+ plane=1.0*e3 + 2.0*ei
+ probe=1.0*eo + 0.5*e1 + 0.5*e2 + 0.5*e3 + 0.375*ei
+ attitude=-5.551115123125783E-17*eo^e1^e2 + 0.9999999999999996*e1^e2^ei
+ locCP1=(2.500000000000001, 2.500000000000001, 1.2500000000000004)
+ n=(0.0, 0.0, 0.9999999999999996)
+ 
+ aktueller Output
+ plane=2.0*e3 + 2.0*ei
 attitude_cga=Infinity*e3
 location_cga=2.0000000000000004*eo + 0.20000000000000007*e1 + 0.20000000000000007*e2 - 0.010000000000000004*e3 + 0.010000000000000004*ei
-location2=(0.20000000000000007, 0.20000000000000007, -0.010000000000000004)
+locCP2=(0.20000000000000007, 0.20000000000000007, -0.010000000000000004)
 nn=(0.0, 0.0, 0.0)
      */
     public void testPlane(){
@@ -524,50 +567,67 @@ nn=(0.0, 0.0, 0.0)
         CGAOrientedCircleIPNS circle = new CGAOrientedCircleIPNS(sphere1.op(sphere2));
         System.out.println("circle="+circle.toString());
         
-        RoundAndTangentParameters/*FlatAndDirectionParameters*/ decomposition = circle.decompose();
+        //circle=1.0*eo^e1 + 1.0*eo^e2 - 1.0*e1^e3 - 1.0*e2^e3 + 1.04*eo^ei + 1.5204*e1^ei + 1.5204*e2^ei + 1.04*e3^ei
+        //attitude=Infinity*e1 + Infinity*e2
+        //The given multivector is not not grade 1! grade()=-1 Infinity*e3 + NaN*e1^e2^e3
+        //FIXME
+        /*RoundAndTangentParameters decomposition = circle.decompose();
         Vector3d attitude = decomposition.attitude();
-        Point3d location = decomposition.location();
+        Point3d locCP1 = decomposition.locCP1();
         double squaredSize = decomposition.squaredSize();
         System.out.println("squaredSize="+String.valueOf(squaredSize));
         System.out.println("attitude = "+String.valueOf(attitude.x)+", "+String.valueOf(attitude.y)+", "+String.valueOf(attitude.z));
-        System.out.println("location = "+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+String.valueOf(location.z));
-    }
+        System.out.println("locCP1 = "+String.valueOf(locCP1.x)+", "+String.valueOf(locCP1.y)+", "+String.valueOf(locCP1.z));
+    */
+        }
     /**
      * p1=(0.02,0.02,1.0)
 radius=2.0
 sphere=1.0*eo + 0.02*e1 + 0.02*e2 + 1.0*e3 - 1.4996*ei
 location1=-1.0000000000000004*eo - 0.02000000000000001*e1 - 0.02000000000000001*e2 - 1.0000000000000004*e3 + 1.4996000000000007*ei
-location=1.4996000000000014*eo + 0.02999200000000003*e1 + 0.02999200000000003*e2 + 1.4996000000000014*e3 - 0.12400008000000018*ei
+locCP1=1.4996000000000014*eo + 0.02999200000000003*e1 + 0.02999200000000003*e2 + 1.4996000000000014*e3 - 0.12400008000000018*ei
 radius = 2.061455835083547
 location1=-1.0000000000000004*eo - 0.02000000000000001*e1 - 0.02000000000000001*e2 - 1.0000000000000004*e3 + 1.4996000000000007*ei
-location=1.4996000000000014*eo + 0.02999200000000003*e1 + 0.02999200000000003*e2 + 1.4996000000000014*e3 - 0.12400008000000018*ei
+locCP1=1.4996000000000014*eo + 0.02999200000000003*e1 + 0.02999200000000003*e2 + 1.4996000000000014*e3 - 0.12400008000000018*ei
 radius2 = 2.061455835083547
 radius2squared = 4.2496001600000035
 squaredWeight=0.9999999999999989
-location = (0.02999200000000003, 0.02999200000000003, 1.4996000000000014)
+locCP1 = (0.02999200000000003, 0.02999200000000003, 1.4996000000000014)
 -einf*sphere = 0.9999999999999996
 norm(sphere) = 1.9999999999999998
      */
-    public void testSphere(){
-        System.out.println("----------------- sphere -----");
+    public void testSpheresOPNS(){
+        System.out.println("----------------- spheres OPNS -----");
         Point3d p1 = new Point3d(0d,-1d,0d);
-        System.out.println("Test opns compose/decompose:");
-        System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
-        CGARoundPointIPNS cgaPoint = new CGARoundPointIPNS(p1);
-        System.out.println("p1_cga="+cgaPoint.toString());
+        //System.out.println("Test opns compose/decompose:");
+        //System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        //CGARoundPointIPNS cgaPoint = new CGARoundPointIPNS(p1);
+        //System.out.println("p1_cga="+cgaPoint.toString());
         Point3d p2 = new Point3d(1d,0d,0d);
         Point3d p3 = new Point3d(0d,1d,0d);
         Point3d p4 = new Point3d(0d,0d,1d);
-        CGASphereOPNS cgaDualSphere = new CGASphereOPNS(p1,p2,p3,p4);
-        System.out.println("cgaDualSphere="+cgaDualSphere.toString());
-        CGASphereIPNS cgaSphere = cgaDualSphere.undual();
-        System.out.println("cgaSphere="+cgaSphere.toString());
-        RoundAndTangentParameters rp1 = cgaDualSphere.decompose(); 
-        System.out.println("Decompose dual sphere:");
-        System.out.println("radius = "+String.valueOf(Math.sqrt(Math.abs(rp1.squaredSize())))); 
-        System.out.println("radius2squared = "+String.valueOf(Math.abs(rp1.squaredSize()))); 
-        System.out.println("location1 = ("+String.valueOf(rp1.location().x)+", "+
-                String.valueOf(rp1.location().y)+", "+String.valueOf(rp1.location().z)+")"); // location1 = (0.0, 0.0, -1.6225927682921321E31)
+        CGASphereOPNS sphereOPNS = new CGASphereOPNS(p1,p2,p3,p4);
+        System.out.println(sphereOPNS.toString("sphereOPNS"));
+        //CGASphereIPNS cgaSphereIPNS = sphereOPNS.dual();
+        //System.out.println("SphereIPNS="+cgaSphereIPNS.toString());
+        
+        RoundAndTangentParameters rp1 = sphereOPNS.decompose(); 
+        Point3d location = rp1.location();
+        System.out.println(toString("location",location));
+        assertTrue(equals(new Point3d(0d,0d,0d),location));
+        
+        double radiusSquared = rp1.squaredSize();
+        System.out.println(toString("radiusSquared",radiusSquared));
+        // failed da 1.25 statt 1
+        //FIXME
+        assertTrue(equals(radiusSquared,1d));
+        
+    }
+    
+    public void testSpheresIPNS(){
+        
+        System.out.println("----------------- sphere OPNS-----");
+        Point3d p1 = new Point3d(0d,-1d,0d);
         
         System.out.println("Test ipns compose/decompose:");
         double radius = 2d;
@@ -603,7 +663,7 @@ norm(sphere) = 1.9999999999999998
     }
     
     public void testDecomposeLocation(){
-        System.out.println("--------------- decompose location -------");
+        System.out.println("--------------- decompose location for several objecs in IPNS and OPNS representation  -------");
         
         Point3d p1 = new Point3d(0.02,0.02,1);
         System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
@@ -617,22 +677,25 @@ norm(sphere) = 1.9999999999999998
         
         // test IPNS representations
         
-        // test RoundPoints
+        // test round points IPNS
+        
         CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1, 2d);
         System.out.println("cp1="+cp1.toString());
         //RoundAndTangentParameters decomposed1 = cp1.decompose();
-        Point3d location = cp1.location();
-        System.out.println("loc(cp1) = ("+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+
-                String.valueOf(location.z)+")");
+        Point3d locCP1 = cp1.location();
+        System.out.println("loc(cp1) = ("+String.valueOf(locCP1.x)+", "+String.valueOf(locCP1.y)+", "+
+                String.valueOf(locCP1.z)+")");
+        assertTrue(equals(p1,locCP1));
         
         CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2, 2d);
         System.out.println("cp2="+cp2.toString());
         //RoundAndTangentParameters decomposed2 = cp2.decompose();
-        Point3d location2 = cp2.location();
-        System.out.println("loc(cp2) = ("+String.valueOf(location2.x)+", "+String.valueOf(location2.y)+", "+
-                String.valueOf(location2.z)+")");
+        Point3d locCP2 = cp2.location();
+        System.out.println("loc(cp2) = ("+String.valueOf(locCP2.x)+", "+String.valueOf(locCP2.y)+", "+
+                String.valueOf(locCP2.z)+")");
+        assertTrue(equals(p2,locCP2));
         
-        // point-pairs
+        // point-pairs IPNS representation (failed)
         CGAOrientedPointPairIPNS pp1 = new CGAOrientedPointPairIPNS(cp1,cp2);
         //RoundAndTangentParameters decomposed3 = pp1.decompose();
         // loc(pp1) = (Infinity, Infinity, -Infinity) (ERROR)
@@ -641,13 +704,14 @@ norm(sphere) = 1.9999999999999998
         System.out.println("loc(pp1) = ("+String.valueOf(location3.x)+", "+String.valueOf(location3.y)+", "+
                 String.valueOf(location3.z)+")");
         
+        
         // spheres
         CGASphereIPNS s1 = new CGASphereIPNS(p1, 2d);
-        System.out.println("s1="+s1.toString());
+        System.out.println(s1.toString("s1"));
         //RoundAndTangentParameters decomposed4 = s1.decompose();
         Point3d location4 = s1.location();
-        System.out.println("loc(s1) = ("+String.valueOf(location4.x)+", "+String.valueOf(location4.y)+", "+
-                String.valueOf(location4.z)+")");
+        System.out.println(toString("s1loc",location4));
+        assertTrue(equals(p1,location4)); 
         
         CGASphereIPNS s2 = new CGASphereIPNS(p2, 3d);
         System.out.println("s2="+s2.toString());
@@ -655,8 +719,9 @@ norm(sphere) = 1.9999999999999998
         Point3d location5 = s2.location();
         System.out.println("loc(s2) = ("+String.valueOf(location5.x)+", "+String.valueOf(location5.y)+", "+
                 String.valueOf(location5.z)+")");
+        assertTrue(equals(p2,location5));
         
-        // circles
+        // circles (failed)
         CGAOrientedCircleIPNS c1 = new CGAOrientedCircleIPNS(s1,s2);
         // c1=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 - 1.0*eo^ei - 0.02*e1^ei - 0.02*e2^ei + 0.49960000000000004*e3^ei
         System.out.println("c1="+c1.toString());
@@ -670,15 +735,19 @@ norm(sphere) = 1.9999999999999998
         
         // opns representations
         
-        //points
+        //points in OPNS representation (failed)
         CGARoundPointOPNS cp1b = new CGARoundPointOPNS(p1);
         System.out.println("cp1b="+cp1b.toString());
         //RoundAndTangentParameters decomposed7 = cp1b.decompose();
         Point3d location7 = cp1b.location();
-        System.out.println("loc(cp1b) = ("+String.valueOf(location7.x)+", "+String.valueOf(location7.y)+", "+
-                String.valueOf(location7.z)+")");
+        // p1=(0.02,0.02,1.0)
+        // loc(cp1b) = (0.010008000000000006, 0.010008000000000008, 0.5004000000000005)
+        // FIXME location hat nur die halbe Größe
+        System.out.println(toString("p1",p1));
+        System.out.println(toString("loc(cp1b)",location7));
+        assertTrue(equals(p1,location7));
         
-        // point pairs
+        // point pair OPNS
         CGAOrientedPointPairOPNS pp2 = new CGAOrientedPointPairOPNS(p1, 1d ,p2, 1d);
         // pp=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
         System.out.println("pp2="+pp2.toString());
@@ -686,8 +755,21 @@ norm(sphere) = 1.9999999999999998
         // locationFromTangentAndRound=3.250000000000001*eo + 0.06500000000000002*e1 + 0.06500000000000002*e2 + 1.4994000000000005*e3 + 5.088522196198628E-19*eo^e1^e3 + 5.088522196198628E-19*eo^e2^e3 - 0.9996*ei + 7.632783294297935E-19*eo^e1^ei + 7.632783294297935E-19*eo^e2^ei - 3.7001512964707234E-16*eo^e3^ei - 6.9375061251264494E-18*e1^e3^ei - 6.9375061251264494E-18*e2^e3^ei
         //RoundAndTangentParameters decomposed8 = pp2.decompose();
         Point3d location8 = pp2.location();
-        System.out.println("loc(pp2) = ("+String.valueOf(location8.x)+", "+String.valueOf(location8.y)+", "+
-                String.valueOf(location8.z)+")");
+        System.out.println(toString("loc(pp2)",location8));
+        Point3d p12 = new Point3d(p1); p12.add(p2); p12.scale(0.5d);
+        System.out.println(toString("p12",p12));
+        assertTrue(equals(p12,location8));
+        
+         // point-pairs OPNS represenation location (failed)
+        CGAOrientedPointPairOPNS pp1OPNS = new CGAOrientedPointPairOPNS(cp1,cp2);
+        Point3d locPPOPNS = pp1OPNS.location();
+        // pp1OPNS = (0.06500000000000002,0.06500000000000002,1.4994000000000005)
+        // locPPOPNSTest = (0.02,0.02,1.5)
+        System.out.println(toString("pp1OPNS",locPPOPNS));
+        Point3d locPPOPNSTest = new Point3d(p1); locPPOPNSTest.add(new Point3d(p2)); locPPOPNSTest.scale(0.5d);
+        System.out.println(toString("locPPOPNSTest",locPPOPNSTest));
+        //assertTrue(equals(locPPOPNS,locPPOPNSTest));
+       
         
         // spheres
         CGASphereOPNS s1b = new CGASphereOPNS(p1, 2d);
@@ -706,49 +788,82 @@ norm(sphere) = 1.9999999999999998
                 String.valueOf(location10.z)+")");
     }
         
-    public void testPoint(){
-        System.out.println("--------------- point -------");
+    public void testPointsIPNS(){
+        System.out.println("--------------- points in IPNS representation -------");
         Point3d p = new Point3d(0.02,0.02,1);
         System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
-        CGARoundPointIPNS cp = new CGARoundPointIPNS(p, 2d);
+        double weight = 2d;
+        CGARoundPointIPNS cp = new CGARoundPointIPNS(p, weight);
         System.out.println("cp="+cp.toString());
         
+        // products
         CGAMultivector testgp = cp.gp(cp);
         // P*P=9.00480064 Warum eigentlich?
+        // ist das gleich p.sqr()?
+        // muesst da nicht mit dem reverse multipliziert werden um norm quadrdat zu bekommen
+        //FIXME
         System.out.println("P*P="+testgp);
-        CGAMultivector testgp2 = cp.ip(cp);
+        CGAMultivector testip = cp.ip(cp);
         // P.P=1.6653345369377348E-15 (korrekt) sollte praktisch 0 sein
-        System.out.println("P.P="+testgp2);
+        System.out.println("P.P="+testip);
+        assertTrue(equals(testip.scalarPart(),0));
         
-        // squared squaredWeight = 4, korrekt 
-        System.out.println("squaredWeight1(sollte 4 sein)="+String.valueOf(cp.squaredWeight()));
+        // squaredWeight
+        System.out.println(toString("squaredWeight",weight*weight));
+        double squaredWeight = cp.squaredWeight();
+        System.out.println(toString("squaredWeight (decompose)",squaredWeight)); //(sollte 4 sein)="+String.valueOf(cp.squaredWeight()));
+        assert(equals(weight*weight, squaredWeight));
         
         RoundAndTangentParameters decomposed = cp.decompose();
+        
+        // attitude
         Vector3d a1 = decomposed.attitude();
         System.out.println("attitude=("+String.valueOf(a1.x)+", "+String.valueOf(a1.y)+", "+String.valueOf(a1.z)+")");
+        assert(equals(a1,new Vector3d(0d,0d,0d)));
         
+        // location
         Point3d p1 = decomposed.location(); // ok input = (0.02,0.02,1)
-        // location lua=0.019999999999999993*e1 + 0.019999999999999993*e2 + 0.9999999999999996*e3
+        // locCP1 lua=0.019999999999999993*e1 + 0.019999999999999993*e2 + 0.9999999999999996*e3
         // locationFromTangentAndRound=1.0000000000000002*eo + 0.020000000000000004*e1 + 0.020000000000000004*e2 + 1.0000000000000002*e3 + 0.5004000000000001*ei
 
-        // location=(0.020000000000000004,0.020000000000000004,1.0000000000000002) (korrekt)
+        // locCP1=(0.020000000000000004,0.020000000000000004,1.0000000000000002) (korrekt)
         System.out.println("location=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        assert(equals(p,p1));
         
 
-        // 2.251 sollte aber 0 sein.
+        // squared size
         double squaredSize = decomposed.squaredSize();
-        System.out.println("squaredSize="+String.valueOf(squaredSize));
-        //CGAMultivector attitude = cp.determineDirectionFromTangentAndRoundObjectsAsMultivector();
-        //CGAPoint probePoint = new CGARoundPointIPNS(new Point3d(0d,0d,0d));
-        //double squaredWeight = CGAMultivector.squaredWeight(attitude, probePoint);
-        double squaredWeight = cp.squaredWeight();
-        System.out.println("squaredWeight="+String.valueOf(squaredWeight));
+        System.out.println("squaredSize (sollte 0 sein)="+String.valueOf(squaredSize));
+        assertTrue(equals(squaredSize,0d));
+        
+        // Abstände zwischen Punkten
         Point3d p2 = new Point3d(2.02,0.02,1);
         System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
         CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
         System.out.println("cp2="+cp2.toString());
-        System.out.println("distSquare="+String.valueOf(cp2.distSquare(cp)));
-        // Abstände scheinen zu stimmen
+        double distSquare = cp2.distSquare(cp);
+        System.out.println("distSquare="+String.valueOf(distSquare));
+        assertTrue(equals(p.distanceSquared(p2),distSquare));
+    }
+
+    public void testPointsOPNS(){
+        System.out.println("--------------- points in OPNS representation -------");
+        Point3d p = new Point3d(0.02,0.02,1);
+        System.out.println("p=("+String.valueOf(p.x)+","+String.valueOf(p.y)+","+String.valueOf(p.z)+")");
+        double weight = 2d;
+        CGARoundPointIPNS cp = new CGARoundPointIPNS(p, weight);
+        System.out.println("cp="+cp.toString());
+        
+        CGARoundPointOPNS cpOPNS = cp.undual();
+        System.out.println(cpOPNS.toString("cpOPNS"));
+        RoundAndTangentParameters decomposed = cpOPNS.decompose();
+        Point3d loc = decomposed.location();
+        System.out.println(toString("p1",p));
+        System.out.println(toString("p1 (decomposed)", loc));
+        // alle decomposed coordinaten scheinen genau halb so gross zu sein
+        // ist der dual-Operator korrekt? 
+        //FIXME
+        assert(equals(p,loc));
     }
     
     // scheint zu funktionieren
@@ -805,7 +920,7 @@ norm(sphere) = 1.9999999999999998
         Point3d location = decomposition.location();
         System.out.println("location="+String.valueOf(location.x)+","+String.valueOf(location.y)+","+
                 String.valueOf(location.z));
-        // location=-4.6259292692714784E-17,8.789265611615823E-17,-4.39463280580791E-16
+        // locCP1=-4.6259292692714784E-17,8.789265611615823E-17,-4.39463280580791E-16
         // vermutlich falsch
         
         System.out.println("squaredWeight="+ldual.squaredWeight());
@@ -913,5 +1028,54 @@ norm(sphere) = 1.9999999999999998
         //System.out.println("l2l1= "+l2l1.unit().toString(CGA1Metric.baseVectorNames));
         
         //l2l1.decomposeLinePair();
+    }
+    
+     public void testAttitudeCompositionAndDecomposition(){
+        System.out.println("------------- test attitude composition and decomposition in OPNS representation ---------------------");
+        // test attitude vector construction and decomposition
+        Vector3d yDirVec = new Vector3d(0d,1d,0.5d);
+        System.out.println(toString("yDir", yDirVec));
+        CGAAttitudeVectorOPNS ydir = new CGAAttitudeVectorOPNS(yDirVec);
+        System.out.println(ydir.toString("AttitudeVector ydir"));
+        // y-richtung wieder rausholen - test
+        Vector3d yDirVec2 = ydir.attitude();
+        toString("yDir (decomposed)",yDirVec2);
+        assert(equals(yDirVec, yDirVec2));
+    }
+     
+    // test tangent vector construction and decomposition
+    public void testTangentCompositionAndDecomposition(){
+        System.out.println("----------------- tangent composition and decomposition ------------------");
+        Point3d p = new Point3d(0d,1d,0d);
+        toString("P", p);
+        Vector3d u =  new Vector3d(0d,1d,0d);
+        toString("u", u);
+        
+        // TangentVector ytangent = (eo^e2 + eo^ei + 0.5*e2^ei)
+        CGATangentVectorOPNS ytangent = new CGATangentVectorOPNS(p,u);
+        CGAMultivector ytangent2 = CGAMultivector.createOrigin(1d).op(CGAMultivector.createEy(1d)).add(
+        CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d)).add(
+        CGAMultivector.createEy(0.5).op(CGAMultivector.createInf(1d))));
+        System.out.println(ytangent2.toString("ytangentTest"));
+        System.out.println(ytangent.toString("TangentVector ytangent"));
+        assertTrue(ytangent.equals(ytangent2));
+        
+        // TangentVector* ytangentDual = (eo^e1^e3 - e1^e2^e3 + 0.45*e1^e3^ei)
+        CGATangentVectorIPNS ytangentDual = ytangent.dual();
+        System.out.println(ytangentDual.toString("TangentVector* ytangentDual"));
+        
+        // The given multivector m is not of grade 3! 
+        // 5.55111512312578E-17*eo^e1^e2^e3 - 5.551115123125781E-17*eo^e1^e3^ei + 2.7755575615628904E-17*e1^e2^e3^ei
+        //CGATangentVectorIPNS ytangentDual2 = new CGATangentVectorIPNS(p,u);
+        //System.out.println("TangentVector* ytangentDual2 = "+ytangentDual2.toString());
+        
+        
+        Vector3d yTangentVec = ytangent.attitude();
+        toString("yTangent (decomposed) u",yTangentVec);
+        assertTrue(equals(yTangentVec,u));
+        
+        Point3d yTangentPoint = ytangent.location();
+        toString("yTangent (decomposed) P", yTangentPoint);
+        assertTrue(equals(yTangentPoint,p));
     }
 }

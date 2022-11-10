@@ -18,7 +18,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointPairIPNS extends CGAOrientedRoundIPNS implements iCGATrivector  {
+public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS implements iCGATrivector  {
     
     public CGAOrientedPointPairIPNS(CGAMultivector m){
         super(m);
@@ -79,15 +79,18 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedRoundIPNS implements iC
                 sub(c.ip(c).add(sr2)).gp(n).gp(0.5d)).op(inf).gp(createPseudoscalar()).gp(weight);
     }
     @Override
-    public CGAOrientedPointPairOPNS dual(){
-        return new CGAOrientedPointPairOPNS(impl.dual());
+    public CGAOrientedPointPairOPNS undual(){
+        return new CGAOrientedPointPairOPNS(impl.undual());
     }
     
     /**
-     * Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * Determine weight. 
+     * 
+     * Maybe the sign can not be determined. So leave this method private
      */
     private double weight(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( ( no_ni .. ( blade ^ ni ) ) * i ) ):tonumber()
         return (createOrigin(1d).op(createInf(1d)).ip(this.op(createInf(1d)))).gp(createE3Pseudoscalar()).scalarPart();
     }
@@ -96,39 +99,65 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedRoundIPNS implements iC
         return Math.pow(weight(),2d);
     }
     /**
-     * Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
+     * Determine the attitude.
+     * 
      * @return attitude
      */
     @Override
     protected CGAMultivector attitudeIntern(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
         // local normal = -( no_ni .. ( blade ^ ni ) ) * i
-        return createOrigin(1d).op(createInf(1d)).ip(this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar().gp(-1d));
+        return createOrigin(1d).op(createInf(1d)).ip(
+                this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar().negate());
     }
     
     /**
      * Determines the center of the point-pair as the mid-point of the two points.
-     * 
-     * Determine a point on the line which has the closest distance to the origin.
-     * 
-     * Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @return location
      */
     @Override
-    public Point3d location(){
+    public CGARoundPointIPNS locationIntern(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) ) * i
-        CGAMultivector no_ni = createOrigin(1d).op(createInf(1d));
-        CGAMultivector result = attitudeIntern().gp(no_ni.ip(this.op(no_ni))).gp(createE3Pseudoscalar());
-        return result.extractE3ToPoint3d();
+        CGAMultivector no = createOrigin(1d);
+        CGAMultivector ni = createInf(1d);
+        CGAMultivector no_ni = no.op(ni);
+        CGAMultivector result = attitudeIntern().negate().gp(no_ni.ip(
+                this.gp(1d/weight()).op(no.gp(ni)))).gp(createE3Pseudoscalar());
+        System.out.println(result.toString("CGAOrientedPointPairIPNS.localIntern"));
+        return new CGARoundPointIPNS(result);
     }
     
     public Point3d[] decomposePoints(){
-        Point3d[] result = new Point3d[2];
-        //TODO
-        return result;
+        return this.undual().decomposePoints();
+    }
+    
+    /**
+     * Specific implementation, because generic implementation for all rounds
+     * does not work.
+     * 
+     * @return squaredSize/squaredRadius
+     */
+    @Override
+     public double squaredSize(){
+        // It must be non-zero and of grade 3
+        // CGAUtil.lua l.293 based on center and normal
+        //blade = blade / weight
+        CGAMultivector blade = this.gp(1d/weight());
+        CGAMultivector no = CGAMultivector.createOrigin(1d);
+        CGAMultivector no_ni = no.op(CGAMultivector.createInf(1d));
+        CGAMultivector center = locationIntern();
+        CGAMultivector normal = attitudeIntern();
+        // local radius_squared = -( center .. center ) + 
+        // 2 * ( ( no_ni .. ( no ^ blade ) ) * i + ( center .. normal ) * center ) * normal
+        return center.ip(center).negate().add(
+                no_ni.ip(no.op(blade)).gp(CGAMultivector.createE3Pseudoscalar()).
+                        add(center.ip(normal).gp(center)).gp(2d).gp(normal)).scalarPart();
+        //FIXME
+        // da kommt fälschlicherweise 0 raus
     }
 }

@@ -14,7 +14,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
+public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVector {
     
     boolean isNormalized = false;
     
@@ -176,19 +176,20 @@ public class CGASphereIPNS extends CGAOrientedRoundIPNS implements iCGAVector {
      * local center = no_ni .. ( blade ^ no_ni )
      * @return 
      */
-    private CGAMultivector locationIntern(){
+    @Override
+    public CGARoundPointIPNS locationIntern(){
         //blade = blade / weight
 	//local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
-        return no_inf.ip((gp(1d/weight())).op(no_inf));
+        return new CGARoundPointIPNS(no_inf.ip((gp(1d/weight())).op(no_inf)));
     }
     
     
     // others
     
     @Override
-    public CGASphereOPNS dual(){
-        return new CGASphereOPNS(impl.dual());
+    public CGASphereOPNS undual(){
+        return new CGASphereOPNS(impl.undual());
     }
     
     public boolean isNormalized(){

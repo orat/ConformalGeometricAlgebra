@@ -106,7 +106,8 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
         //System.out.println(result.toString("CGAFlatPointIPNS.location"));
         //return result.extractE3ToPoint3d();
         
-        // Dorst2007 p. 428
+        // Dorst2007 p. 428 or Dorst Drills p. 45
+        // funktioniert gut!!!
         CGAMultivector o = CGAMultivector.createOrigin(1d);
         CGAMultivector oinf = o.op(CGAMultivector.createInf(1d));
         CGAMultivector result = oinf.lc(o.op(this)).div(oinf.lc(this)).negate();

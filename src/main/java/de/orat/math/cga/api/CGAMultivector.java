@@ -217,8 +217,10 @@ public class CGAMultivector {
      * Determines location from tangent (direct/dual) and round (direct/dual) 
      * objects.
      * 
+     * scheint für CGAOrientedFiniteRoundOPNS um einen faktor 2 falsch zu sein in allen Koordinaten
      * scheint für CGARound zu stimmen
-     * scheint mit CGATangent nicht zu stimmen
+     * scheint mit CGATangent nicht zu stimmen??? mittlerweile korrigiert?
+     * scheint mit CGAOrientedPointPair zu stimmen
      * TODO
      * 
      * @return location represented by a normalized sphere/finite point (dual sphere corresponding to Dorst2007)
@@ -287,6 +289,9 @@ public class CGAMultivector {
      */
     public Point3d location(){
         return location(new Point3d(0d,0d,0d));
+    }
+    public CGARoundPointIPNS locationIntern(){
+        return new CGARoundPointIPNS(location());
     }
    
     /**
@@ -419,6 +424,7 @@ public class CGAMultivector {
     public CGAMultivector sqr(){
         return gp(this);
         //return gp(this.reverse());
+        // oder vielleicht das innere Produkt?
     } 
     public double squaredNorm(){
         //return impl.length2Squared();

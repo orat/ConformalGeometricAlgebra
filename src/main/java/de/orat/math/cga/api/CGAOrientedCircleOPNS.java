@@ -9,7 +9,7 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedCircleOPNS extends CGAOrientedRoundOPNS implements iCGATrivector {
+public class CGAOrientedCircleOPNS extends CGAOrientedFiniteRoundOPNS implements iCGATrivector {
     
     public CGAOrientedCircleOPNS(CGAMultivector m){
         super(m);

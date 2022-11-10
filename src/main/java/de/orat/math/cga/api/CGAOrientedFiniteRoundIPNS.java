@@ -6,20 +6,20 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Oriented and weighted rounds are RoundPoints, point-pairs, circles and spheres, 
+ * Oriented and weighted finite rounds are round points, point-pairs, circles and spheres, 
  * here given in inner product null space representation corresponding to dual 
  * round in Drost2007.
  * 
- * Rounds are objects with finite areas/volumes/hyperolumes.
+ * Finite rounds are objects with finite areas/volumes/hyperolumes.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedRoundIPNS extends CGAKVector {
+class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     
-    CGAOrientedRoundIPNS(CGAMultivector m){
+    CGAOrientedFiniteRoundIPNS(CGAMultivector m){
         super(m);
     }
-    CGAOrientedRoundIPNS(iCGAMultivector impl){
+    CGAOrientedFiniteRoundIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -59,31 +59,32 @@ class CGAOrientedRoundIPNS extends CGAKVector {
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");
     }
-    // für eine CGAOrientedRoundIPNS scheint das jetzt zu stimmen
+    
     @Override
     public Point3d location(){
         //CGAMultivector location = location3(weight());
         //System.out.println("location lua="+location.toString()); // scheint für CGAPoint zu stimmen
-        
-        CGAMultivector result = locationFromTangentAndRoundAsNormalizedSphere();
+        CGARoundPointIPNS result = locationIntern();
         return result.extractE3ToPoint3d();
-        //double[] vector = result.impl.extractCoordinates(1);
-        //int index = result.impl.getEStartIndex();
-        //return new Point3d(vector[index++], vector[index++], vector[index]);
     }
         
+    @Override
+    public CGARoundPointIPNS locationIntern(){
+        return locationFromTangentAndRoundAsNormalizedSphere();
+    }
+    
     /**
      * Implementation following Hildenbrand1998.
      * 
      * @return location of the round
      */
-    public Point3d location2(){
+    /*public Point3d location2(){
         CGAMultivector result = this.gp(CGAMultivector.createInf(1d)).gp(this);
         return extractE3ToPoint3d();
         //double[] vector = result.impl.extractCoordinates(1);
         //int index = result.impl.getEStartIndex();
         //return new Point3d(vector[index++], vector[index++], vector[index]);
-    }
+    }*/
     
     /**
      * Implementation following the formulae from CGAUtil Math, Spencer T
@@ -115,22 +116,25 @@ class CGAOrientedRoundIPNS extends CGAKVector {
      * 
      * @return location of the round
      */
-    private CGAMultivector location3(double weight){
+    /*private CGAMultivector location3(double weight){
         CGAMultivector normalizedRound = new CGAMultivector(this.impl);
         normalizedRound = normalizedRound.gp(1d/weight);
         System.out.println("weight="+String.valueOf(weight));
         System.out.println("normalizedRound(location)="+normalizedRound.toString());
         CGAMultivector e0_einf = createOrigin(1d).op(createInf(1d));
 	return e0_einf.ip(normalizedRound.op(e0_einf));
-    }
+    }*/
     
     /**
      * Squared size (=squared radius only for round, - squared radius for dual round).
      * 
-     * @return squared size
+     * Hint: Squared size is - radius squared. The sign is different to 
+     * CGAOrientedFiniteRoundOPNS.
+     * 
+     * @return squared size/-radius squared
      */
     public double squaredSize(){
-        return CGAOrientedRoundOPNS.squaredSize(this);
+        return CGAOrientedFiniteRoundOPNS.squaredSize(this);
     }
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.

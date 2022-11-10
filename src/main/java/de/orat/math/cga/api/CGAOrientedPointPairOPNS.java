@@ -18,7 +18,7 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointPairOPNS extends CGAOrientedRoundOPNS implements iCGABivector {
+public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS implements iCGABivector {
     
     public CGAOrientedPointPairOPNS(CGAMultivector m){
         super(m);
@@ -55,7 +55,36 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedRoundOPNS implements iC
     }
     
     @Override
-    public CGAOrientedPointPairIPNS undual(){
-        return new CGAOrientedPointPairIPNS(impl.undual());
+    public CGAOrientedPointPairIPNS dual(){
+        return new CGAOrientedPointPairIPNS(impl.dual());
+    }
+    
+    
+    // decomposition
+    
+    /**
+     * Specific implementation because generic implementation for all rounds
+     * does not work.
+     * 
+     * @return squared size/radius
+     */
+    @Override
+    public double squaredSize(){
+        //return this.dual().squaredSize();
+        return super.squaredSize();
+    }
+    
+    public Point3d[] decomposePoints(){
+        Point3d[] result = new Point3d[2];
+        CGAScalar sqrt = new CGAScalar(this.ip(this)).sqrt();
+        
+        CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(new CGAScalar(sqrt)).div(CGAMultivector.createInf(1d).ip(this)).compress());
+        System.out.println(p1.toString("p1"));
+        CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(new CGAScalar(sqrt)).div(CGAMultivector.createInf(1d).ip(this)).compress());
+        System.out.println(p2.toString("p2"));
+        
+        result[0] = p1.location();
+        result[1] = p2.location();
+        return result;
     }
 }
