@@ -58,8 +58,8 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
     // composition
     
     /**
-     * A conformal point (grade 1 multivector) by up-projecting an 
-     * euclidian vector into a conformal vector.
+     * A normalized conformal point (grade 1 multivector) by up-projecting an 
+     * euclidian vector into its conformal one.
      * 
      * Inner and outer product null space representation is identical?.<p>
      * 
@@ -69,8 +69,6 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      */
     public CGARoundPointIPNS(Tuple3d p){
         this(create(p, 1d));
-        //FIXME
-        // oder besser super(p,0d);
         isNormalized = true;
     }
     
@@ -134,12 +132,12 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      */
     @Override
     public Point3d location(){
-        // local weight = -blade .. ni
+        // local weight2 = -blade .. ni
         double weight = this.negate().ip(CGAMultivector.createInf(1d)).scalarPart();
         System.out.println("CGARoundPointIPNS.location weight = "+String.valueOf(weight));
         CGAMultivector result = this.gp(1d/weight);
         // corresponding to CGAUtil.lua, line 223ff
-        // blade = blade / weight
+        // blade = blade / weight2
         //local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
         CGAMultivector resultTest = no_inf.ip(this.gp(1d/weight).op(no_inf));

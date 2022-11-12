@@ -34,10 +34,12 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      */
     @Override
     protected CGAAttitudeVectorOPNS attitudeIntern(){
-        // Sign of all coordinates changes according to errato to the book Dorst2007
+        // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        //return createInf(-1d).op(this);
+        CGAMultivector result = createInf(1d).op(this).undual().negate();
+        System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatIPNS)"));
+        return new CGAAttitudeVectorOPNS(result);
         
         /*corresponds to
           Geometric Algebra: A powerful tool for solving geometric problems in visual computing
@@ -45,7 +47,7 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
           DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
           2009
          */
-        return new CGAAttitudeVectorOPNS(createInf(-1d).lc(this.undual()).compress());
+        //return new CGAAttitudeVectorOPNS(createInf(-1d).lc(this.undual()).compress());
     }   
     
     /**

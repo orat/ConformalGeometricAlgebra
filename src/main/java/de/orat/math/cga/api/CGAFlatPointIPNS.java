@@ -63,13 +63,14 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
     }
     
     /**
-     * Determination the weight from this flat point.
+     * Determination the weight from this flat point without the usage of a probe
+     * point and without determination of the attitude.
      * 
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      * CGAUtil.lua l.256
      */
-    private double weight(){
+    private double weight2(){
         // local weight = -( no .. ( blade ^ ni ) ) * i
         return -createOrigin(1d).ip(this.op(createInf(1d))).gp(createE3Pseudoscalar()).scalarPart();
     }
@@ -78,10 +79,10 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      *
      * @return squared weight
      */
-    @Override
+    /*@Override
     public double squaredWeight(){
         return Math.pow(weight(),2d);
-    }
+    }*/
     
     /**
      * Determines the center of this flat point.

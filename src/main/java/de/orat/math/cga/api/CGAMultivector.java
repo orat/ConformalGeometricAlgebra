@@ -271,9 +271,21 @@ public class CGAMultivector {
         System.out.println("locationFromTangentAndRound2="+result.toString());
         return result;
     }
+    /**
+     * Determines the squared weight based on the attitude and the origin as
+     * probe point.
+     * 
+     * @return squared weight
+     */
     public double squaredWeight(){
         return squaredWeight(new Point3d(0d,0d,0d));
     }
+    /**
+     * Determines the squared weight based on the attitude.
+     * 
+     * @param probePoint
+     * @return squared weight
+     */
     public double squaredWeight(Point3d probePoint){
         // probePoint(0,0,0)=1.0*eo
         //System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
@@ -312,7 +324,7 @@ public class CGAMultivector {
      * @return squared weight
      */
     protected static double squaredWeight(CGAMultivector attitude, CGARoundPointIPNS probePoint){
-        return probePoint.ip(attitude).sqr().scalarPart();
+        return probePoint.lc(attitude).sqr().scalarPart();
         // liefert gleiches Ergebnis
         // CGAMultivector A = probePoint.ip(attitude);
         //return A.reverse().gp(A).scalarPart();

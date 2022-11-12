@@ -94,27 +94,29 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     }*/
     
     /**
-     * Determine the weight (without the sign).
+     * Determine the weight (without the sign) without a probe point and without
+     * determination of the attitude.
      * 
      * @return weight (without sign) > 0
      * 
      * FIXME für CGALineIPNS = (-2*e1^e2 - 2*e1^e3 - 2*e1^ei + 2*e2^ei + 2*e3^ei)
      * ergibt sich hier 0, warum?
      */
-    private double weight(){
+    private double weight2(){
         // following Parkin2013 CGAUtilMath lua implementation
         // local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
         return Math.abs((createOrigin(1d).ip(this.op(createInf(1d)))).
                 gp(createE3Pseudoscalar()).scalarPart());
     }
-    @Override
+    /*@Override
     public double squaredWeight(){
         return Math.pow(weight(),2d);
-    }
+    }*/
+    
     /**
      * @return attitude
      */
-    @Override
+    /*@Override
     protected CGAAttitudeVectorOPNS attitudeIntern(){
         // Infinity da weight == 0 und die Komponenten damit durch 0 geteilt werden
         // attitudeIntern = (Infinity*e2 - Infinity*eo^e1^e2 - Infinity*e3 + Infinity*eo^e1^e3 + Infinity*eo^e2^e3 + NaN*e1^e2^ei + NaN*e1^e3^ei + NaN*e2^e3^ei)
@@ -128,21 +130,21 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
                 createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar()).compress();
         System.out.println(result.toString("attitudeIntern"));
         return new CGAAttitudeVectorOPNS(result);
-    }
+    }*/
     
     /**
      * Determine a point on the line which has the closest distance to the origin.
      * 
-     * Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     * 
+      * 
      * TODO
      * möglicherweise geht das für alle flats?
      */
     @Override
     public Point3d location(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = ( no .. blade ) * normal * i
-        return new Point3d((createOrigin(1d).ip(this.gp(1d/weight())).
+        return new Point3d((createOrigin(1d).ip(this.gp(1d/weight2())).
                 gp(attitudeIntern())).gp(createE3Pseudoscalar()).extractE3ToPoint3d());
     }
 }

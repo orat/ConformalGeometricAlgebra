@@ -50,28 +50,29 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
     // decomposition
     
     /**
-     * Determination the weight.
+     * Determination the weight without usage of a probepoint and without 
+     * determination of the attitude.
      * 
      * Vermutlich bekommen ich hier das Vorzeichen nicht eindeutig. Damit ist
      * unklar wie das Normalisieren korrekt durchgeführt werden soll.
      * FIXME
      */
-    private double weight(){
+    private double weight2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // local weight = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
+        // local weight2 = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
         //FIXME warum Math.abs()?
         return Math.abs(createOrigin(1d).op(createInf(1d).ip(this.op(createInf(1d)))).scalarPart());
     }
     /**
-     * Determination of the squared weight.
+     * Determination of the squared weight2.
      *
-     * @return squared weight
+     * @return squared weight2
      */
-    @Override
+    /*@Override
     public double squaredWeight(){
         return Math.pow(weight(),2d);
-    }
+    }*/
     /**
      * Determine the attitude (normal vector of the carrier plane).
      * 
@@ -82,10 +83,10 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // CGAUtil.lua l.366
-        // blade = blade / weight
+        // blade = blade / weight2
 	// local normal = -no_ni .. ( blade ^ ni )
         return new CGAAttitudeVectorOPNS(
-                createOrigin(-1d).op(createInf(1d)).ip(this.gp(1d/weight()).op(createInf(1d))).compress());
+                createOrigin(-1d).op(createInf(1d)).ip(this.gp(1d/weight2()).op(createInf(1d))).compress());
     }
     
    
@@ -101,7 +102,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) )
 	return new CGARoundPointIPNS(attitudeIntern().negate().gp(no_ni.ip(
-                this.gp(1d/weight()).op(createOrigin(1d).gp(createInf(1d))))));
+                this.gp(1d/weight2()).op(createOrigin(1d).gp(createInf(1d))))));
     }
     
     /**
@@ -113,14 +114,14 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
     public double squaredSize(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // blade = blade / weight
+        // blade = blade / weight2
         // local radius_squared = ( center .. center ) - 2 * ( ( no_ni .. ( no ^ blade ) ) + ( center .. normal ) * center ) * normal
 	CGAMultivector normal = attitudeIntern();
         CGAMultivector center = locationIntern();
         CGAMultivector o = createOrigin(1d);
         CGAMultivector inf = createInf(1d);
         CGAMultivector no_ni = o.op(inf);
-        CGAMultivector result = center.ip(center).sub((no_ni.ip(o.op(this.gp(1d/weight()))).add((o.ip(normal).gp(center)))).gp(2d).gp(normal));
+        CGAMultivector result = center.ip(center).sub((no_ni.ip(o.op(this.gp(1d/weight2()))).add((o.ip(normal).gp(center)))).gp(2d).gp(normal));
         return Math.abs(result.scalarPart());
     }
     

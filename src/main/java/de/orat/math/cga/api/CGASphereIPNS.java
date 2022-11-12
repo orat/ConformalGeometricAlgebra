@@ -61,10 +61,10 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * 
      * @param location multivector representation of a point
      * @param r radius of the sphere, r<0 if imaginary sphere
-     * @param weight weight
+     * @param weight weight2
      */
     public CGASphereIPNS(CGARoundPointIPNS location, double r, double weight){
-        //this(location.sub(createInf(0.5*r*r)).gp(weight));
+        //this(location.sub(createInf(0.5*r*r)).gp(weight2));
         this(create(location, r).gp(weight));
         if (weight != 1) {
             isNormalized = false;
@@ -85,7 +85,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
        this(createCGASphere(point, radius, weight));
     }
     private static CGAMultivector createCGASphere(Point3d point, double radius, double weight){
-        // local blade = weight * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
+        // local blade = weight2 * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
         CGAMultivector c = createE3(point);
         CGAMultivector sr2;
         if (radius >0){
@@ -126,18 +126,19 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     // decomposition
     
     // CGARoundPointIPNS extends CGASphereIPNS und für beide gelten die gleichen 
-    // weight Formeln
-    @Override
+    // weight2 Formeln
+    /*@Override
     public double squaredWeight(){
-        return Math.pow(weight(),2);
-    }
+        return Math.pow(weight2(),2);
+    }*/
     /**
-     * implementation follows
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
-     * @return weight
+     * Determination of weight2 without probe point and not based on the attitude.
+     * 
+     * @return weight2
      */
-    double weight(){
+    private double weight2(){
+        // implementation follows
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         return gp(-1d).ip(createInf(1d)).scalarPart();
     }
     
@@ -154,7 +155,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         //local radius_squared = ( center .. center ) + 2 * ( no .. blade )
 	//radius_squared = radius_squared:tonumber()
         CGAMultivector center = locationIntern();
-        return center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight())).gp(2d))).scalarPart();
+        return center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d))).scalarPart();
     }
        
     /**
@@ -178,10 +179,10 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      */
     @Override
     public CGARoundPointIPNS locationIntern(){
-        //blade = blade / weight
+        //blade = blade / weight2
 	//local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
-        return new CGARoundPointIPNS(no_inf.ip((gp(1d/weight())).op(no_inf)));
+        return new CGARoundPointIPNS(no_inf.ip((gp(1d/weight2())).op(no_inf)));
     }
     
     

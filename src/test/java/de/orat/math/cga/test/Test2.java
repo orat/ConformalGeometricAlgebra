@@ -109,7 +109,7 @@ public class Test2 {
         Point3d p1Test = p1cga.location();
         assert(equals(p1,p1Test));
         
-        // squared weight
+        // squared weight2
         double squaredWeight1Test = p1cga.squaredWeight();
         assert(equals(squaredWeight1Test, weight1*weight1));
         
@@ -134,7 +134,7 @@ public class Test2 {
         Vector3d attitudeTest = new Vector3d(0d,2d,-2d);
         assertTrue(equals(attitude, attitudeTest));
         
-        // weight of the line
+        // weight2 of the line
         double squaredLineWeight = line.squaredWeight();
         //FIXME mit 8 ist das um einen Faktor 2 zu gross
         // squaredLineWeight = 7.999999999999988
@@ -572,7 +572,7 @@ public class Test2 {
         // plane=1.0*e3 + 2.0*ei
         System.out.println(plane.toString("planeIPNS"));
         
-        // weight
+        // weight2
         double squaredWeight = plane.squaredWeight();
         // squaredWeight = 0.0
         System.out.println(toString("squaredWeight", squaredWeight));
@@ -581,7 +581,7 @@ public class Test2 {
         Point3d location = plane.location();
         System.out.println(toString("location",location));
         
-        // attitude (failed vermutlich da weight==0)
+        // attitude (failed vermutlich da weight2==0)
         Vector3d attitude = plane.attitude();
         System.out.println(toString("attitude",attitude));
         
@@ -952,17 +952,15 @@ public class Test2 {
         // line=2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei
         // sollte p1 ∧ p2 ∧ ∞ = −2(o + (e1 + e2 )) ∧ (e3 − e2 ) ∧ ∞. sein
         // stimmt
+        double squaredWeight = lineOPNS.squaredWeight();
+        System.out.println(toString("squaredWeight(CGALineOPNS)",squaredWeight));
+        // squaredWeight=7.999999999999988
+        // falsch, sollte doch 4 sein oder?
         
-        // the weight1 is -2, and the conformal direction is −2(e3 − e2 ) ∧ ∞.
-        //FlatAndDirectionParameters decomposition = lineOPNS.decompose(new Point3d(0d,0d,0d));
+        // the weight2 is -2, and the conformal direction is −2(e3 − e2 ) ∧ ∞.
         Vector3d attitude = lineOPNS.attitude();
-        // attitude_cga=-1.1102230246251565E-16*eo^e2 - 2.220446049250313E-16*e1^e2 + 
-        // 1.1102230246251565E-16*eo^e3 + 2.220446049250313E-16*e1^e3 + 
-        // 2.220446049250313E-16*e2^e3 - 1.9999999999999991*e2^ei + 1.9999999999999991*e3^ei
-
         System.out.println(toString("attitude", attitude));
         // attitude=0.0,1.9999999999999991,-1.9999999999999991
-        // stimmt
         assertTrue(equals(attitude,new Vector3d(0d,2d,-2d)));
         
         Point3d location = lineOPNS.location();
@@ -971,17 +969,14 @@ public class Test2 {
         // locCP1=-4.6259292692714784E-17,8.789265611615823E-17,-4.39463280580791E-16
         // vermutlich falsch
         
-        System.out.println("squaredWeight((CGALineOPNS)="+lineOPNS.squaredWeight());
-        // squaredWeight=7.999999999999988
-        // vermutlich falsch, sollte doch 4 sein oder?
         
         CGALineIPNS line = lineOPNS.dual(); // grade 2
-        System.out.println(line.toString("CGALineIPNS"));
+        System.out.println(line.toString("IPNS line"));
         
-        double squaredWeight = line.squaredWeight();
+        double squaredWeight2 = line.squaredWeight();
         // squaredWeight=0.0, ist das richtig?
         // wenn das so ist, dann kann die attitude vermutlich nicht mehr korrekt bestimmt werden
-        System.out.println("squaredWeight(CGALineIPNS)="+String.valueOf(squaredWeight));
+        System.out.println(toString("squaredWeight(CGALineIPNS)",squaredWeight2));
         
         // attitudeIntern = (Infinity*e2 - Infinity*eo^e1^e2 - Infinity*e3 + Infinity*eo^e1^e3 + Infinity*eo^e2^e3 + NaN*e1^e2^ei + NaN*e1^e3^ei + NaN*e2^e3^ei)
         //The given multivector is not of grade 2: Infinity*e2 - Infinity*eo^e1^e2 - Infinity*e3 + Infinity*eo^e1^e3 + Infinity*eo^e2^e3 + NaN*e1^e2^ei + NaN*e1^e3^ei + NaN*e2^e3^ei

@@ -95,18 +95,20 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * 
      * @return squaredWeight
      */
-    @Override
+    /*@Override
     public double squaredWeight(){
         return Math.pow(weight(),2d);
-    }
+    }*/
     
     /**
-     * Implementation following the formulae from CGAUtil Math, Spencer T
-     * Parkin 2013. 
+     * Determination of the weight without a probe point and without determination
+     * of the attitude.
      * 
      * @return weight, can be 0
      */
-    private double weight(){
+    private double weight2(){
+        // Implementation following the formulae from CGAUtil Math, Spencer T
+        // Parkin 2013. 
         return ip(createInf(1d)).gp(-1d).scalarPart();
     }
     /**

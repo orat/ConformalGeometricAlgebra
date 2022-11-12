@@ -130,12 +130,14 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     
     // decomposition 
     
-    @Override
+    /*@Override
     public double squaredWeight(){
         return Math.pow(weight(),2);
-    }
+    }*/
+    
     /**
-     * Determine weight.
+     * Determine weight without a probe point and without determination of the
+     * attitude.
      * 
      * The sign in lost in composition of the plane and unreoverable.
      * 
@@ -144,7 +146,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * FIXME
      * für n=(0.0,0.0, 1.0), d=2.0 wird weight aber 0. Warum?
      */
-    private double weight(){
+    private double weight2(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( no .. ( blade ^ ni ) ) ):tonumber()
@@ -152,6 +154,8 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     }
     
     /**
+     * Determination of the attitude.
+     * 
      * @return attitude/normal/direction
      */
     @Override
@@ -164,7 +168,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //blade = blade / weight
 	//local normal = no .. ( blade ^ ni )
-        double weight = weight();
+        double weight = weight2();
         CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(createInf(1d))).compress();
         System.out.println(result.toString("attitudeIntern(CGAPlaneIPNS)"));
         if (weight<=0){
@@ -176,14 +180,14 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     /**
      * @return location
      */
-    @Override
+    /*@Override
     public Point3d location(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = -( no .. blade ) * normal
         CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight())).gp(attitudeIntern()).gp(-1d);
         return result.extractE3ToPoint3d();
-    }
+    }*/
     
     
     // others 

@@ -84,20 +84,22 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
     }
     
     /**
-     * Determine weight. 
+     * Determine weight without a probe point and without determination of the
+     * attitute.
      * 
      * Maybe the sign can not be determined. So leave this method private
      */
-    private double weight(){
+    private double weight2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( ( no_ni .. ( blade ^ ni ) ) * i ) ):tonumber()
         return (createOrigin(1d).op(createInf(1d)).ip(this.op(createInf(1d)))).gp(createE3Pseudoscalar()).scalarPart();
     }
-    @Override
+    /*@Override
     public double squaredWeight(){
         return Math.pow(weight(),2d);
-    }
+    }*/
+    
     /**
      * Determine the attitude.
      * 
@@ -110,7 +112,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         // blade = blade / weight
         // local normal = -( no_ni .. ( blade ^ ni ) ) * i
         return new CGAAttitudeVectorOPNS(createOrigin(1d).op(createInf(1d)).ip(
-                this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar().negate()).compress());
+                this.gp(1d/weight2()).op(createInf(1d))).gp(createE3Pseudoscalar().negate()).compress());
     }
     
     /**
@@ -127,7 +129,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         CGAMultivector ni = createInf(1d);
         CGAMultivector no_ni = no.op(ni);
         CGAMultivector result = attitudeIntern().negate().gp(no_ni.ip(
-                this.gp(1d/weight()).op(no.gp(ni)))).gp(createE3Pseudoscalar());
+                this.gp(1d/weight2()).op(no.gp(ni)))).gp(createE3Pseudoscalar());
         System.out.println(result.toString("CGAOrientedPointPairIPNS.localIntern"));
         return new CGARoundPointIPNS(result);
     }
@@ -147,7 +149,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         // It must be non-zero and of grade 3
         // CGAUtil.lua l.293 based on center and normal
         //blade = blade / weight
-        CGAMultivector blade = this.gp(1d/weight());
+        CGAMultivector blade = this.gp(1d/weight2());
         CGAMultivector no = CGAMultivector.createOrigin(1d);
         CGAMultivector no_ni = no.op(CGAMultivector.createInf(1d));
         CGAMultivector center = locationIntern();

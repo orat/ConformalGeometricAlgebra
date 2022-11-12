@@ -31,6 +31,7 @@ class CGAOrientedFiniteFlatOPNS extends CGAKVector {
     }
     
     /**
+     * Determine the attitude.
      * 
      * @return attitude
      */
@@ -41,6 +42,8 @@ class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         // Leandro A. F. Fernandes, and Manuel M. Oliveira
         // DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
         // 2009
+        // also corresponding to Dorst2007 p407
+        // tested for line
         CGAMultivector result =  createInf(-1d).lc(this).compress();
         System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatOPNS)"));
         return new CGAAttitudeVectorOPNS(result);
