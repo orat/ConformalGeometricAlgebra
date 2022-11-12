@@ -28,8 +28,12 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         System.out.println("attitude_cga="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
     }
+    
+    /**
+     * @return attitude
+     */
     @Override
-    protected CGAMultivector attitudeIntern(){
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
         // Sign of all coordinates changes according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
@@ -41,7 +45,7 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
           DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
           2009
          */
-        return createInf(-1d).lc(this.undual());
+        return new CGAAttitudeVectorOPNS(createInf(-1d).lc(this.undual()).compress());
     }   
     
     /**

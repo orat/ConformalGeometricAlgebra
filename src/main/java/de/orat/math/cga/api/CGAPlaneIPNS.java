@@ -135,38 +135,51 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         return Math.pow(weight(),2);
     }
     /**
-     * implementation follows
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
+     * Determine weight.
+     * 
      * The sign in lost in composition of the plane and unreoverable.
      * 
-     * @return weight wihout sign (aloways positive)
+     * @return weight wihout sign (always positive)
+     * 
+     * FIXME
+     * für n=(0.0,0.0, 1.0), d=2.0 wird weight aber 0. Warum?
      */
     private double weight(){
+        // implementation follows
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( no .. ( blade ^ ni ) ) ):tonumber()
         return Math.abs(createOrigin(1d).ip(this.op(createInf(1d))).scalarPart());
     }
     
     /**
-     * implementation follows
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
      * @return attitude/normal/direction
      */
     @Override
-    protected CGAMultivector attitudeIntern(){
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
+        // attitudeIntern(CGAPlaneIPNS) = (Infinity*e3)
+        // The given multivector is not of grade 2: Infinity*e3
+        // FIXME
+        
+        // implementation follows
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //blade = blade / weight
 	//local normal = no .. ( blade ^ ni )
-        return createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d)));
+        double weight = weight();
+        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(createInf(1d))).compress();
+        System.out.println(result.toString("attitudeIntern(CGAPlaneIPNS)"));
+        if (weight<=0){
+            System.out.println("attitudeIntern(CGAPlaneIPNS) failed because weight="+String.valueOf(weight));
+        }
+        return new CGAAttitudeVectorOPNS(result);
     }
     
     /**
-     * implementation follows
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
      * @return location
      */
-    public Point3d localisation(){
+    @Override
+    public Point3d location(){
+        // implementation follows
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = -( no .. blade ) * normal
         CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight())).gp(attitudeIntern()).gp(-1d);
         return result.extractE3ToPoint3d();

@@ -200,7 +200,7 @@ public interface iCGAMultivector {
     //}
     
     /**
-     * Determination of inner product null space representation to outer product
+     * Determination of outer product null space representation form inner product
      * null space representation.
      * 
      * @return outer product null space representation
@@ -391,7 +391,7 @@ public interface iCGAMultivector {
         else return this.gp(1d / Math.sqrt(Math.abs(s)));
     }
     /**
-     * Magnitude (modulus), absolute value or Length. 
+     * Magnitude (modulus), absolute value or length. 
      *
      * Implementation based on reverse() instead of conjugate(). This is different
      * to ganja.js.

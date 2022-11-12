@@ -76,7 +76,9 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     
     public Point3d[] decomposePoints(){
         Point3d[] result = new Point3d[2];
-        CGAScalar sqrt = new CGAScalar(this.ip(this)).sqrt();
+        // vielleicht kann es hier gar keine Rundungsfehler geben, dann brauche ich
+        // hier auch keinen Aufruf von compress().
+        CGAScalar sqrt = new CGAScalar(this.ip(this).compress()).sqrt();
         
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(new CGAScalar(sqrt)).div(CGAMultivector.createInf(1d).ip(this)).compress());
         System.out.println(p1.toString("p1"));

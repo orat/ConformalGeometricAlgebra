@@ -52,10 +52,13 @@ class CGATangentIPNS extends CGAKVector {
         System.out.println("attitude="+result.toString());
         return result.extractE3ToVector3d();
     }
+    /**
+     * @return attitude
+     */
     @Override
-    protected CGAMultivector attitudeIntern(){
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
         //return attitudeFromDualTangentAndDualRound();
-        return attitudeFromTangentAndRound2(this);
+        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRound2(this));
     }
     @Override
     public Point3d location(Point3d probe){

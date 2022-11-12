@@ -46,15 +46,14 @@ public class CGAAttitudeVectorOPNS extends AbstractCGAAttitude implements iCGABi
     }
     
     public Vector3d attitude(){
-        CGAMultivector attitude = attitudeIntern();
+        CGAAttitudeVectorOPNS attitude = attitudeIntern();
         return attitude.extractAttitudeFromEeinfRepresentation();
         //TODO
         // mit was muss ich den multivector multiplizieren um die betreffenden 
         // Komponenten dann mit attitude.extractE3ToVector3d() abspalten zu können?
     }
     @Override
-    protected CGAMultivector attitudeIntern(){
-        System.out.println("attitude="+toString());
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
         return this;
     }
     
@@ -62,9 +61,11 @@ public class CGAAttitudeVectorOPNS extends AbstractCGAAttitude implements iCGABi
         if (!CGAMultivector.createInf(1d).op(this).isNull()){
             throw new IllegalArgumentException("einf^X != 0");
         }
-        if (!CGAMultivector.createInf(1d).ip(this).isNull()){
+        //FIXME
+        // warum geht das nicht, bzw. warum sollte der folgende test eigentlich funktionieren
+        /*if (!CGAMultivector.createInf(1d).ip(this).isNull()){
             throw new IllegalArgumentException("einf . X != 0");
-        }
+        }*/
     }
     
     

@@ -22,7 +22,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
 public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivector {
     
     public CGALineOPNS(CGAMultivector m){
-        super(m);
+        super(m.compress());
     }
     CGALineOPNS(iCGAMultivector m){
         super(m);
@@ -54,14 +54,14 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * in Dorst2007.
      * 
      * TODO
-     * ist das identisch mit einem LineVector p^u^inf
+     * ist das identisch mit einem LineVector p^u^inf?
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(p1.op(p2).op(createInf(1d)));
     }
     
     @Override
-    public CGALineIPNS undual(){
-        return new CGALineIPNS(impl.undual());
+    public CGALineIPNS dual(){
+        return new CGALineIPNS(new CGALineIPNS(impl.dual()).compress());
     }
 }

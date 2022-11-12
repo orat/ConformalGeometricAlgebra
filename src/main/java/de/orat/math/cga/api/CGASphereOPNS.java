@@ -33,8 +33,9 @@ public class CGASphereOPNS extends CGAOrientedFiniteRoundOPNS implements iCGAQua
     }
     
     public CGASphereOPNS(Point3d o, double r){
-        this(new CGASphereIPNS(o,r).dual());
+        this(new CGASphereIPNS(o,r).undual());
     }
+    
     /**
      * Create dual sphere in outer product null space representation 
      * (grade 4 multivector).

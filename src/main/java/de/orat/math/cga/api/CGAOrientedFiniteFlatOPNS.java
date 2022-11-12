@@ -25,22 +25,25 @@ class CGAOrientedFiniteFlatOPNS extends CGAKVector {
     }
     
     public Vector3d attitude(){
-        CGAMultivector result = attitudeIntern();
+        CGAAttitudeVectorOPNS result = attitudeIntern();
         System.out.println("attitude_cga="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
     }
     
     /**
-     * corresponds to
-     * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
-     * Leandro A. F. Fernandes, and Manuel M. Oliveira
-     * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
-     * 2009
+     * 
+     * @return attitude
      */
-    // scheint bei dualline so zu stimmen
     @Override
-    protected CGAMultivector attitudeIntern(){
-        return createInf(-1d).lc(this);
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
+        // corresponds to
+        // Geometric Algebra: A powerful tool for solving geometric problems in visual computing
+        // Leandro A. F. Fernandes, and Manuel M. Oliveira
+        // DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
+        // 2009
+        CGAMultivector result =  createInf(-1d).lc(this).compress();
+        System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatOPNS)"));
+        return new CGAAttitudeVectorOPNS(result);
     } 
     
     /**

@@ -24,13 +24,20 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     }
     
     
+    // decompose
+    
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
         System.out.println("attitude(dualRound/dualTangent)="+result.toString());
         return result.extractE3ToVector3d();
     }
+    /**
+     * @return attitude
+     */
     @Override
-    protected CGAMultivector attitudeIntern(){
+    protected AbstractCGAAttitude attitudeIntern(){
+        // z.B. -1.9999999999999982*e1^e2^e3^ei also grade 4 und nicht grade 2
+        // wenn das von einem CGASphereOPNS aufgerufen wird
         return attitudeFromTangentAndRound2(this);
         //return attitudeFromDualTangentAndDualRound();
     }
@@ -84,10 +91,12 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     public CGARoundPointIPNS locationIntern(){
         return locationFromTangentAndRoundAsNormalizedSphere(); 
     }
+    
     public Decomposition3d.RoundAndTangentParameters decompose(){
        return new RoundAndTangentParameters(attitude(), 
                 location(), squaredSize());
     }
+    
     
     // var project_point_on_round = (point,sphere)=>-point^ni<<sphere<<sphere
     // - hat 1

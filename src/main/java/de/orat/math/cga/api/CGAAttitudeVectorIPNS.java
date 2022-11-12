@@ -46,8 +46,7 @@ public class CGAAttitudeVectorIPNS extends AbstractCGAAttitude implements iCGATr
         // Komponenten dann mit attitude.extractE3ToVector3d() abspalten zu können?
     }
     @Override
-    protected CGAMultivector attitudeIntern(){
-        System.out.println("attitude="+toString());
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
         return this.undual();
     }
     

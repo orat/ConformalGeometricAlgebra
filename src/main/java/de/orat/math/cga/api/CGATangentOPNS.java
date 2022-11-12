@@ -59,9 +59,9 @@ class CGATangentOPNS extends CGAKVector {
      * @return attitude as X^einf
      */
     @Override
-    protected CGAMultivector attitudeIntern(){
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
         //return attitudeFromTangentAndRound();
-        return attitudeFromTangentAndRound2(this);
+        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRound2(this));
     }
     @Override
     public Point3d location(Point3d probe){

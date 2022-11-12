@@ -104,13 +104,13 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * @return attitude
      */
     @Override
-    protected CGAMultivector attitudeIntern(){
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
         // local normal = -( no_ni .. ( blade ^ ni ) ) * i
-        return createOrigin(1d).op(createInf(1d)).ip(
-                this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar().negate());
+        return new CGAAttitudeVectorOPNS(createOrigin(1d).op(createInf(1d)).ip(
+                this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar().negate()).compress());
     }
     
     /**

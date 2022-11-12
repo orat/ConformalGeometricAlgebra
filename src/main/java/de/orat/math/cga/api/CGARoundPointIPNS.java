@@ -48,7 +48,7 @@ import org.jogamp.vecmath.Point3d;
 public class CGARoundPointIPNS extends CGASphereIPNS {
     
     public CGARoundPointIPNS(CGAMultivector m){
-        super(m);
+        super(m.compress());
     }
     CGARoundPointIPNS(iCGAMultivector m){
         super(m);
@@ -163,7 +163,7 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      */
     @Override
     public CGARoundPointIPNS normalize(){
-        CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this).gp(-1d)));
+        CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(-1d).ip(this)));
         result.isNormalized = true;
         return result;
     }
@@ -188,6 +188,7 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      * @return squared distance to the given point
      */
     public double distSquare(CGARoundPointIPNS p){
+        // Implementation following Dorst2008 drills p. 39
         return -2*(this.normalize()).ip(p.normalize()).scalarPart();
     }
     

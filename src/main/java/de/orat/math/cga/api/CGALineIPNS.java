@@ -73,8 +73,8 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     
     
     @Override
-    public CGALineOPNS dual(){
-        return new CGALineOPNS(impl.dual());
+    public CGALineOPNS undual(){
+        return new CGALineOPNS(impl.undual());
     }
     
     /**
@@ -93,7 +93,16 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         return true;
     }*/
     
+    /**
+     * Determine the weight (without the sign).
+     * 
+     * @return weight (without sign) > 0
+     * 
+     * FIXME für CGALineIPNS = (-2*e1^e2 - 2*e1^e3 - 2*e1^ei + 2*e2^ei + 2*e3^ei)
+     * ergibt sich hier 0, warum?
+     */
     private double weight(){
+        // following Parkin2013 CGAUtilMath lua implementation
         // local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
         return Math.abs((createOrigin(1d).ip(this.op(createInf(1d)))).
                 gp(createE3Pseudoscalar()).scalarPart());
@@ -103,16 +112,22 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         return Math.pow(weight(),2d);
     }
     /**
-     * Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
      * @return attitude
      */
     @Override
-    protected CGAMultivector attitudeIntern(){
+    protected CGAAttitudeVectorOPNS attitudeIntern(){
+        // Infinity da weight == 0 und die Komponenten damit durch 0 geteilt werden
+        // attitudeIntern = (Infinity*e2 - Infinity*eo^e1^e2 - Infinity*e3 + Infinity*eo^e1^e3 + Infinity*eo^e2^e3 + NaN*e1^e2^ei + NaN*e1^e3^ei + NaN*e2^e3^ei)
+        //The given multivector is not of grade 2: Infinity*e2 - Infinity*eo^e1^e2 - Infinity*e3 + Infinity*eo^e1^e3 + Infinity*eo^e2^e3 + NaN*e1^e2^ei + NaN*e1^e3^ei + NaN*e2^e3^ei
+        //FIXME
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
 	// local normal = ( no .. ( blade ^ ni ) ) * i
-        return createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar());
+        CGAMultivector result =  
+                createOrigin(1d).ip(this.gp(1d/weight()).op(createInf(1d))).gp(createE3Pseudoscalar()).compress();
+        System.out.println(result.toString("attitudeIntern"));
+        return new CGAAttitudeVectorOPNS(result);
     }
     
     /**

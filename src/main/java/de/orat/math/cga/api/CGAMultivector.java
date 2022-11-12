@@ -185,11 +185,14 @@ public class CGAMultivector {
      * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
      * @return attitude
      */
-    static CGAMultivector attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
+    static AbstractCGAAttitude attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
+        // z.B. -1.9999999999999982*e1^e2^e3^ei also grade 4 und nicht grade 2
+        // wenn das von einem CGASphereOPNS aufgerufen wird
         // Dorst2007 p. 562
-        CGAMultivector result = CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d));
-        System.out.println("attitude(round/attitude)="+result.toString());
-        return result;
+        CGAMultivector result = CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d)).compress();
+        System.out.println(result.toString("attitude(round/attitude)"));
+        
+        return new CGAAttitudeVectorOPNS(result);
     }
     /**
      * Determine direction/attitude from tangent or round objects.
@@ -272,10 +275,17 @@ public class CGAMultivector {
         return squaredWeight(new Point3d(0d,0d,0d));
     }
     public double squaredWeight(Point3d probePoint){
-        CGARoundPointIPNS probePointCGA = new CGARoundPointIPNS(probePoint);
-        System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
-        return squaredWeight(attitudeIntern(), probePointCGA);
+        // probePoint(0,0,0)=1.0*eo
+        //System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
+        return squaredWeight(attitudeIntern(), new CGARoundPointIPNS(probePoint));
     } 
+    // bekomme ich da nicht immer einen AttitudeVector zurück?
+    //FIXME
+    /**
+     * Determine the attitude/direction as (E inf). 
+     * 
+     * @return 
+     */
     protected CGAMultivector attitudeIntern(){
         throw new RuntimeException("Not implemented. Available for derivative classes only!");
     }
@@ -301,7 +311,7 @@ public class CGAMultivector {
      * @param probePoint If not specified use e0.
      * @return squared weight
      */
-    protected static double squaredWeight(CGAMultivector attitude, CGAMultivector probePoint){
+    protected static double squaredWeight(CGAMultivector attitude, CGARoundPointIPNS probePoint){
         return probePoint.ip(attitude).sqr().scalarPart();
         // liefert gleiches Ergebnis
         // CGAMultivector A = probePoint.ip(attitude);
@@ -420,11 +430,15 @@ public class CGAMultivector {
         return new CGAMultivector(impl.undual());
     }
     
-    //FIXME ist das korrekt
+    /**
+     * Determine the square.
+     * 
+     * a a = a^a + a.a = a.a
+     * 
+     * @return square, equals the ip
+     */
     public CGAMultivector sqr(){
-        return gp(this);
-        //return gp(this.reverse());
-        // oder vielleicht das innere Produkt?
+        return ip(this);
     } 
     public double squaredNorm(){
         //return impl.length2Squared();
