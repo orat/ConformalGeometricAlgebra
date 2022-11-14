@@ -120,7 +120,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      *
      * @return location
      */
-    @Override
+    /*@Override
     public CGARoundPointIPNS locationIntern(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
@@ -132,7 +132,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
                 this.gp(1d/weight2()).op(no.gp(ni)))).gp(createE3Pseudoscalar());
         System.out.println(result.toString("CGAOrientedPointPairIPNS.localIntern"));
         return new CGARoundPointIPNS(result);
-    }
+    }*/
     
     public Point3d[] decomposePoints(){
         return this.undual().decomposePoints();

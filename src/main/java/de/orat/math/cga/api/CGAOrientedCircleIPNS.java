@@ -79,13 +79,13 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * @return attitude
      */
     @Override
-    protected CGAAttitudeVectorOPNS attitudeIntern(){
+    protected CGAAttitudeBivectorOPNS attitudeIntern(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // CGAUtil.lua l.366
         // blade = blade / weight2
 	// local normal = -no_ni .. ( blade ^ ni )
-        return new CGAAttitudeVectorOPNS(
+        return new CGAAttitudeBivectorOPNS(
                 createOrigin(-1d).op(createInf(1d)).ip(this.gp(1d/weight2()).op(createInf(1d))).compress());
     }
     
@@ -95,7 +95,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * 
      * @return location
      */
-    @Override
+    /*@Override
     public CGARoundPointIPNS locationIntern(){
         CGAMultivector no_ni = createOrigin(1d).op(createInf(1d));
         // Implementation following:
@@ -103,7 +103,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         // local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) )
 	return new CGARoundPointIPNS(attitudeIntern().negate().gp(no_ni.ip(
                 this.gp(1d/weight2()).op(createOrigin(1d).gp(createInf(1d))))));
-    }
+    }*/
     
     /**
      * Determination of the squared size/radius. This is the radiusSquared for a sphere.

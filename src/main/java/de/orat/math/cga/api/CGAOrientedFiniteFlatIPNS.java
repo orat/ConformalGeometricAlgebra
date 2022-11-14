@@ -30,16 +30,26 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
     }
     
     /**
+     * TODO
+     * vermutlich die Methode hier ganz beseitigen, da line, plane etc. Vector
+     * Bivector ... erzeugen ...
+     * 
      * @return attitude
      */
     @Override
-    protected CGAAttitudeVectorOPNS attitudeIntern(){
+    protected CGAAttitude attitudeIntern(){
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         CGAMultivector result = createInf(1d).op(this).undual().negate();
         System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatIPNS)"));
-        return new CGAAttitudeVectorOPNS(result);
+        // IPNS plane = (1.0*e3 + 2.0*ei)
+        // attitudeIntern(CGAOrientedFiniteFlatIPNS) = (5.551115123125783E-17*eo^e1^e2 - 0.9999999999999996*e1^e2^ei)
+        // die bestimmte attitude ist hier grade 3
+        //TODO
+        // vielleicht ist das aber richtig und ich muss hier einen AttitudeBivector
+        // statt einen AttitudeVector erzeugen
+        return new CGAAttitude(result);
         
         /*corresponds to
           Geometric Algebra: A powerful tool for solving geometric problems in visual computing

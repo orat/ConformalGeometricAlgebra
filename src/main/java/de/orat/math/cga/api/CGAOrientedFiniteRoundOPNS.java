@@ -35,7 +35,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return attitude
      */
     @Override
-    protected AbstractCGAAttitude attitudeIntern(){
+    protected CGAAttitude attitudeIntern(){
         // z.B. -1.9999999999999982*e1^e2^e3^ei also grade 4 und nicht grade 2
         // wenn das von einem CGASphereOPNS aufgerufen wird
         return attitudeFromTangentAndRound2(this);
@@ -47,6 +47,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * 
      * ok for dualSphere?
      * false for pointPair
+     * false für OPNS_Sphere
      * 
      * @param m round object represented by a multivector
      * @return squared size/radius squared
@@ -61,9 +62,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return squared size/radius
      */
     static double squaredSize(CGAKVector m){
-        // unklar ob sqr() überhaupt richtig implementiert ist
         // following Dorst2008 p.407/08
-        // FIXME ist sqr() hier richtig oder muss das nicht ein inneres product sein
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr()).negate();
         System.out.println(result.toString("squaredSize/radiusSquared"));
         

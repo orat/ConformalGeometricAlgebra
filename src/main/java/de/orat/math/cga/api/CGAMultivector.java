@@ -185,14 +185,14 @@ public class CGAMultivector {
      * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
      * @return attitude
      */
-    static AbstractCGAAttitude attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
+    static CGAAttitude attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
         // z.B. -1.9999999999999982*e1^e2^e3^ei also grade 4 und nicht grade 2
         // wenn das von einem CGASphereOPNS aufgerufen wird
         // Dorst2007 p. 562
-        CGAMultivector result = CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d)).compress();
+        CGAAttitude result = new CGAAttitude(CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d)).compress());
         System.out.println(result.toString("attitude(round/attitude)"));
         
-        return new CGAAttitudeVectorOPNS(result);
+        return result;
     }
     /**
      * Determine direction/attitude from tangent or round objects.
@@ -272,19 +272,19 @@ public class CGAMultivector {
         return result;
     }
     /**
-     * Determines the squared weight based on the attitude and the origin as
-     * probe point.
+     * Determines the squared weight (without sign) based on the attitude and 
+     * the origin as probe point.
      * 
-     * @return squared weight
+     * @return squared weight >0
      */
     public double squaredWeight(){
         return squaredWeight(new Point3d(0d,0d,0d));
     }
     /**
-     * Determines the squared weight based on the attitude.
+     * Determines the squared weight (without sign) based on the attitude.
      * 
      * @param probePoint
-     * @return squared weight
+     * @return squared weight > 0
      */
     public double squaredWeight(Point3d probePoint){
         // probePoint(0,0,0)=1.0*eo
@@ -317,14 +317,14 @@ public class CGAMultivector {
     }
    
     /**
-     * Determine the squared weight of any CGA object.
+     * Determine the squared weight (without sign) of any CGA object.
      * 
      * @param attitude direction specific for the object form the multivector is representing
      * @param probePoint If not specified use e0.
-     * @return squared weight
+     * @return squared weight >0
      */
     protected static double squaredWeight(CGAMultivector attitude, CGARoundPointIPNS probePoint){
-        return probePoint.lc(attitude).sqr().scalarPart();
+        return Math.abs(probePoint.lc(attitude).sqr().scalarPart());
         // liefert gleiches Ergebnis
         // CGAMultivector A = probePoint.ip(attitude);
         //return A.reverse().gp(A).scalarPart();

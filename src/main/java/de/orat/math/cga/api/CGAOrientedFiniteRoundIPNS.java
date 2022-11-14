@@ -45,7 +45,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return attitude in the form E^inf
      */
     public Vector3d attitude(){
-        AbstractCGAAttitude result = attitudeIntern();
+        CGAAttitude result = attitudeIntern();
         System.out.println("attitude="+result.toString());
         return result.extractE3ToVector3d();
     }
@@ -53,7 +53,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return attitude
      */
     @Override
-    protected AbstractCGAAttitude attitudeIntern(){
+    protected CGAAttitude attitudeIntern(){
         return attitudeFromTangentAndRound2((CGAKVector) this.undual());
         //return attitudeFromTangentAndRound();
     }

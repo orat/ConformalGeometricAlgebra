@@ -633,18 +633,25 @@ public class Test2 {
         CGASphereOPNS sphereOPNS = new CGASphereOPNS(p1,p2,p3,p4);
         System.out.println(sphereOPNS.toString("sphereOPNS"));
         
-        RoundAndTangentParameters rp1 = sphereOPNS.decompose(); 
+        // squaredWeight
+        double squaredWeight = sphereOPNS.squaredWeight();
+        // squaredWeight(sphereOPNS) = -3.9999999999999964
+        System.out.println(toString("squaredWeight(sphereOPNS)",squaredWeight));
+        
+        // attitude
+        Vector3d attitude = sphereOPNS.attitude();
+        System.out.println(toString("attitude(sphereOPNS)",attitude));
         
         // location
-        Point3d location = rp1.location();
+        Point3d location = sphereOPNS.location();
         System.out.println(toString("location",location));
         assertTrue(equals(new Point3d(0d,0d,0d),location));
         
         // squared size
-        double radiusSquared = rp1.squaredSize();
+        double radiusSquared = sphereOPNS.squaredSize();
         System.out.println(toString("radiusSquared",radiusSquared));
         // failed da 1.25 statt 1
-        //FIXME
+        //FIXME warum kommt da 1.25 raus?
         assertTrue(equals(radiusSquared,1d));
     }
     
@@ -678,8 +685,8 @@ public class Test2 {
         assert(equals(p1, loc2));
         
         // squaredWeight
-        double weight = sphereIPNS.squaredWeight();
-        // squaredWeight=0.9999999999999989 richtig
+        double weight = sphereIPNS.squaredWeight(); // ich bekomme jetzt aber -1 heraus
+        // sphereIPNs wird aber mit weight=1 erzeugt
         System.out.println(toString("weight",weight));
         assert(equals(weight,1d));
         
@@ -753,10 +760,10 @@ public class Test2 {
         // circles (failed)
         CGAOrientedCircleIPNS c1 = new CGAOrientedCircleIPNS(s1,s2);
         // c1=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 - 1.0*eo^ei - 0.02*e1^ei - 0.02*e2^ei + 0.49960000000000004*e3^ei
-        System.out.println("c1="+c1.toString());
-        //RoundAndTangentParameters decomposed6 = c1.decompose();
+        System.out.println(c1.toString("c1"));
         Point3d location6 = c1.location();
-        // loc(c1) = (Infinity, Infinity, 0.0) (ERROR)
+        // c1=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 - 1.0*eo^ei - 0.02*e1^ei - 0.02*e2^ei + 0.49960000000000004*e3^ei
+        // The given multivector m is not of grade 3! Infinity*e3
         //FIXME
         System.out.println("loc(c1) = ("+String.valueOf(location6.x)+", "+String.valueOf(location6.y)+", "+
                 String.valueOf(location6.z)+")");
@@ -836,6 +843,7 @@ public class Test2 {
         System.out.println(toString("squaredWeight",weight*weight));
         double squaredWeight = cp.squaredWeight();
         System.out.println(toString("squaredWeight (decompose)",squaredWeight)); //(sollte 4 sein)="+String.valueOf(cp.squaredWeight()));
+        // squaredWeight ist aber -4
         assert(equals(weight*weight, squaredWeight));
         
         //RoundAndTangentParameters decomposed = cp.decompose();
@@ -880,8 +888,8 @@ public class Test2 {
         
         CGARoundPointOPNS cpOPNS = cp.undual();
         System.out.println(cpOPNS.toString("cpOPNS"));
-        RoundAndTangentParameters decomposed = cpOPNS.decompose();
-        Point3d loc = decomposed.location();
+        //RoundAndTangentParameters decomposed = cpOPNS.decompose();
+        Point3d loc = cp.location();
         System.out.println(toString("p1",p));
         System.out.println(toString("p1 (decomposed)", loc));
         // alle decomposed coordinaten scheinen genau halb so gross zu sein
