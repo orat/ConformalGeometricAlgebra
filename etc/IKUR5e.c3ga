@@ -181,8 +181,8 @@ function Rotation set_rotation(){
     P_c = e0^e3^X_c^einf;
 
     // Section 5.1: Find X_3 and X_4
-    P_cpar = (P_c*)+(X_5.(P_c*))*einf;
-    P_56perp = ((X_5^X_e)*)^einf;
+    P_cpar = (P_c*)+(X_5.(P_c*))*einf; // eq. 47
+    P_56perp = ((X_5^X_e)*)^einf; // eq. 48, l.1
     n_56perp = -::normalize(P_56perp.e0.einf);
     P_cperp = X_5^n_56perp^einf;
     L_45 = P_cpar.P_cperp;

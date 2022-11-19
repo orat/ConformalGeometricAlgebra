@@ -59,11 +59,14 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * Determination of the squared size. 
      * 
      * @param m round or dual round object represented by a multivector
-     * @return squared size/radius
+     * @return squared size/radius (maybe negative)
      */
     static double squaredSize(CGAKVector m){
-        // following Dorst2008 p.407/08
-        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr()).negate();
+        // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
+        //CGAMultivector m_normalized = m.normalize();
+        // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
+        //FIXME funktioniert nicht
+        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr()); 
         System.out.println(result.toString("squaredSize/radiusSquared"));
         
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py

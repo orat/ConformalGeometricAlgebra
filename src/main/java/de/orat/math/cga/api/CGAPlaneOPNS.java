@@ -92,4 +92,10 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
         //FIXME
         return new CGAPlaneOPNS(m);
     }
+    
+    // -1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei
+    @Override
+    public Vector3d attitude(){
+        return (new CGAAttitudeBivectorOPNS(attitudeIntern())).direction();
+    }
 }

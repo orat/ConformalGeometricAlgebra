@@ -8,7 +8,8 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * Localisation symmetry: plane
  * 
- * Translated form: p.lc(u.op(einf)) = u.add(p.lc(u).gp(einf))
+ * Translated form: p·lc(u.op(einf)) = u.add(p.lc(u).gp(einf))
+ *  p·(u ∧ e∞), and can shift on a localized plane
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

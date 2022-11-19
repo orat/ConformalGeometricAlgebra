@@ -128,9 +128,12 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         return createInf(1d).op(createOrigin(1d));
     }
     
+    
     // decomposition 
     
     /**
+     * Determine the attitude.
+     * 
      * @return attitude
      */
     @Override
@@ -138,13 +141,19 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        CGAMultivector result = createInf(1d).op(this).undual().negate();
+        CGAMultivector result = createInf(1d).op(this).undual().negate().compress();
         System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatIPNS)"));
         // IPNS plane = (1.0*e3 + 2.0*ei)
-        // attitudeIntern(CGAOrientedFiniteFlatIPNS) = (5.551115123125783E-17*eo^e1^e2 - 0.9999999999999996*e1^e2^ei)
+        // attitudeIntern(CGAOrientedFiniteFlatIPNS) = - 0.9999999999999996*e1^e2^ei
         // die bestimmte attitude ist hier grade 3
+        // jetzt bekomme ich
+        // attitude_cga=-0.9999999999999996*e1^e2^ei
         return new CGAAttitudeBivectorOPNS(result);
     }  
+    @Override
+    public Vector3d attitude(){
+        return (new CGAAttitudeBivectorOPNS(attitudeIntern())).direction();
+    }
     
     /*@Override
     public double squaredWeight(){
@@ -209,7 +218,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     // others 
     
     @Override
-    public CGAPlaneOPNS dual(){
-        return new CGAPlaneOPNS(impl.dual());
+    public CGAPlaneOPNS undual(){
+        return new CGAPlaneOPNS(impl.undual());
     }
 }

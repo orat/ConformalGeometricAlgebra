@@ -75,9 +75,22 @@ public interface iCGAMultivector {
     public iCGAMultivector op(iCGAMultivector b);
     
     
-    // Scalarproduct
+    /**
+     * Scalarproduct.
+     * 
+     * @param x
+     * @return 
+     */
     default double scp(iCGAMultivector x) {
+        if (this.grade() != x.grade()) 
+            throw new IllegalArgumentException("The scalar product is defined only for two blades with the same grade!");
+        
+        //FIXME 
+        // das gilt doch nur für R_pq also für Vektoren?
+        // ist aber in der Dorst Referenzimplementierung so zu finden
 	return ip(x, LEFT_CONTRACTION).scalarPart();
+        // das ist vermutlich richtig, aber umständlich?
+        //return gp(x).scalarPart();
     }
              
     /**
@@ -270,7 +283,7 @@ public interface iCGAMultivector {
     public iCGAMultivector reverse();
     
     /**
-     * Main grade involution.
+     * Grade inversion, also called main grade involution.
      * 
      * @return grade inversion
      */

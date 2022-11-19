@@ -255,11 +255,11 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         return new CGA1Multivector(super.exp(CGA_METRIC));
     }
     /**
-     * Grade inversion of the multivector.
+     * Grade inversion.
      * 
      * This is also called "involution" in Dorst2007.
      * 
-     * @return grade inversion/involution of this multivector
+     * @return grade inversion/involution
      */
     @Override
     public CGA1Multivector gradeInversion() {

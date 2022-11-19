@@ -23,6 +23,10 @@ import org.jogamp.vecmath.Vector3d;
  * It is a one-dimensional attitude, e.g. a direction vector. A line is build from 
  * this by outer product with a point. 
  * 
+ * A free vector does not have a position. Given the normal vector n, it can be 
+ * calculated as follows: n ∧ e ∞ .
+ 
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAAttitudeVectorIPNS extends CGAAttitude implements iCGATrivector {

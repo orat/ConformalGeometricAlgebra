@@ -15,7 +15,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedFiniteFlatOPNS extends CGAKVector {
+abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
     
     CGAOrientedFiniteFlatOPNS(CGAMultivector m){
         super(m.impl);
@@ -24,19 +24,13 @@ class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         super(m);
     }
     
-    public Vector3d attitude(){
-        CGAAttitudeVectorOPNS result = attitudeIntern();
-        System.out.println("attitude_cga="+result.toString());
-        return result.extractAttitudeFromEeinfRepresentation();
-    }
-    
     /**
      * Determine the attitude.
      * 
      * @return attitude
      */
     @Override
-    protected CGAAttitudeVectorOPNS attitudeIntern(){
+    protected CGAAttitude attitudeIntern(){
         // corresponds to
         // Geometric Algebra: A powerful tool for solving geometric problems in visual computing
         // Leandro A. F. Fernandes, and Manuel M. Oliveira
@@ -46,7 +40,7 @@ class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         // tested for line
         CGAMultivector result =  createInf(-1d).lc(this).compress();
         System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatOPNS)"));
-        return new CGAAttitudeVectorOPNS(result);
+        return new CGAAttitude/*VectorOPNS*/(result);
     } 
     
     /**
@@ -71,6 +65,8 @@ class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         // the euclidian part is the location in euclidian space
         return m.extractE3ToPoint3d();
     }
+    
+    public abstract Vector3d attitude();
     
     public FlatAndDirectionParameters decompose(Point3d probePoint){
         return new FlatAndDirectionParameters(attitude(), location(probePoint));

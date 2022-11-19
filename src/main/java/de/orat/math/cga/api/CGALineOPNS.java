@@ -4,6 +4,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * Line in outer product null space representation (grade 3 multivector),
@@ -63,5 +64,10 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     @Override
     public CGALineIPNS dual(){
         return new CGALineIPNS(new CGALineIPNS(impl.dual()).compress());
+    }
+    
+    @Override
+    public Vector3d attitude(){
+        return (new CGAAttitudeVectorOPNS(attitudeIntern())).direction();
     }
 }

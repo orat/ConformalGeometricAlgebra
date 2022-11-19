@@ -139,7 +139,8 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return squared size/-radius squared
      */
     public double squaredSize(){
-        return CGAOrientedFiniteRoundOPNS.squaredSize(this);
+        // sign corresponding to errata in Dorst2007
+        return -CGAOrientedFiniteRoundOPNS.squaredSize(this);
     }
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.

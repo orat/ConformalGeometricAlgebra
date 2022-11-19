@@ -1,5 +1,7 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Vector3d;
+
 /**
  * Direction/attitude bivector of grade 3.
  * 
@@ -19,5 +21,11 @@ public class CGAAttitudeBivectorOPNS extends CGAAttitude implements iCGATrivecto
         // muss statt gp nicht op stehen
         //FIXME
         this(B.op(createInf(1.0)));
+    }
+    
+    
+    public Vector3d direction(){
+        System.out.println(this.toString("CGAAttitudeBivectorOPNS"));
+        return extractAttitudeFromBivectorEinfRepresentation();
     }
 }

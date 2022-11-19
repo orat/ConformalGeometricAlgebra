@@ -189,6 +189,9 @@ public class CGAMultivector {
         // z.B. -1.9999999999999982*e1^e2^e3^ei also grade 4 und nicht grade 2
         // wenn das von einem CGASphereOPNS aufgerufen wird
         // Dorst2007 p. 562
+        
+        // attitude=1.9999999999999982*e2^e3^ei
+        // also grade 3, wenn das von einem circle aufgerufen wird
         CGAAttitude result = new CGAAttitude(CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d)).compress());
         System.out.println(result.toString("attitude(round/attitude)"));
         
@@ -453,9 +456,6 @@ public class CGAMultivector {
         return ip(this);
     } 
     public double squaredNorm(){
-        //return impl.length2Squared();
-        //TODO testweise
-        // l1.squaredNorm()=-0.9603999999999994 statt 0 für eine line
         return impl.lengthSquared();
     }
     /**
@@ -525,10 +525,10 @@ public class CGAMultivector {
     }
    
     /**
-     * @Deprectated brauche ich vermutlich gar nicht
+     * Scalar product.
      * 
      * @param x
-     * @return 
+     * @return scalar product
      */
     public double scp(CGAMultivector x) {
         return impl.scp(x.impl);
@@ -611,6 +611,8 @@ public class CGAMultivector {
     /**
      * Extract a multivector which contains only components of the given grade.
      * 
+     * Also called grade projection.
+     * 
      * @param grade
      * @return 
      */
@@ -677,5 +679,16 @@ public class CGAMultivector {
         double[] coordinates = impl.extractCoordinates(2);
         //FIXME indizes hängen von der impl ab
         return new Vector3d(coordinates[12-6], coordinates[14-6], coordinates[15-6]);
+    }
+    /**
+     * Extract attitude/direction from Bivector^einf multivector representation.
+     * 
+     * example: -1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei
+     *
+     * @return direction/attitude
+     */
+    protected Vector3d extractAttitudeFromBivectorEinfRepresentation(){
+         double[] coordinates = impl.extractCoordinates(3);
+         return new Vector3d(coordinates[9], coordinates[8], coordinates[7]);
     }
 }

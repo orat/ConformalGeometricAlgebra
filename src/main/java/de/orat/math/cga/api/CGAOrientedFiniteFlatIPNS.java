@@ -23,8 +23,13 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
     CGAOrientedFiniteFlatIPNS(iCGAMultivector m){
         super(m);
     }
+    // unklar, ob das hier so gut aufgehoben ist, vermutlich klappt nämlich extract
+    // nicht bei Ebenen und Kugeln da ich dann vermutlich einen Bivector bekomme
+    //  nach Abspaltung von einf
+    // dann kann ich den spezifischen extract-Methode in die spezifischen Attitude classen verschieben?
+    //TODO
     public Vector3d attitude(){
-        CGAMultivector result = attitudeIntern();
+        CGAAttitude result = attitudeIntern();
         System.out.println("attitude_cga="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
     }
@@ -34,6 +39,9 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * vermutlich die Methode hier ganz beseitigen, da line, plane etc. Vector
      * Bivector ... erzeugen ...
      * 
+     * für ipns line stimmt das vorzeichen nicht -->bivector
+     * für ipns plane --> trivector
+     * 
      * @return attitude
      */
     @Override
@@ -41,7 +49,7 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        CGAMultivector result = createInf(1d).op(this).undual().negate();
+        CGAMultivector result = createInf(1d).op(this).undual().negate().compress();
         System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatIPNS)"));
         // IPNS plane = (1.0*e3 + 2.0*ei)
         // attitudeIntern(CGAOrientedFiniteFlatIPNS) = (5.551115123125783E-17*eo^e1^e2 - 0.9999999999999996*e1^e2^ei)
@@ -61,6 +69,8 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
     }   
     
     /**
+     * Location point of the flat nearest to to the given probe point.
+     * 
      * corresponds to
      * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
      * Leandro A. F. Fernandes, and Manuel M. Oliveira
@@ -68,18 +78,23 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * 2009
      * if probe set to origin.
      * 
-     * @param probe
-     * @return 
+     * @param probe point
+     * @return location as normalized dual sphere (grade 1)
      */
     CGAMultivector locationIntern(Point3d probe){
-        return new CGARoundPointIPNS(probe).op(this).div(this);
+        return (new CGARoundPointIPNS(probe)).op(this).div(this).compress();
     }
     @Override
     public Point3d location(Point3d probe){
         CGAMultivector m = locationIntern(probe);
-        // location_cga=2.0000000000000004*eo + 0.0*eo^e3^ei
-        System.out.println("location_cga="+m.toString());
-        return m.extractE3ToPoint3d();
+        // location_cga=2.0000000000000004*eo 
+        // should be a normalized dual sphere (grade 1)
+        //FIXME
+        // Dorst2007 hat weitere Formeln um E3 komplett abzuspalten
+        System.out.println(m.toString("location_cga (Finite flat)"));
+        return m.extractE3ToPoint3d(); 
+        // sollte funktionieren, da normalized dual sphere (grade 1) x,y,z 
+        // als e1,e2,e3 direkt enthalten sollte
     }
     public FlatAndDirectionParameters decompose(Point3d probePoint){
         return new FlatAndDirectionParameters(attitude(), location(probePoint));

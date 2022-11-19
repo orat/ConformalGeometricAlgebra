@@ -101,6 +101,7 @@ public class CGALinePair extends CGAMultivector {
        
         // Bivektoren 
         double[] bivectors = l2l1.impl.extractCoordinates(2);
+        
         double[] quadvectors = l2l1.impl.extractCoordinates(4);
         
         // attitude zeigt von l1 nach l2?

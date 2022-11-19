@@ -19,9 +19,6 @@ import org.jogamp.vecmath.Vector3d;
  * A free vector does not have a position. Given the normal vector n, it can be 
  * calculated as follows: n ∧ e ∞ .
  * 
- * Directions are made by wedging any Euclidean element (vector, bivector, or 
- * trivector) with ∞. Directions are invariant under translations 
- * (they do not change if moved), but they can of course be rotated.
  * 
  * Drawn dashed at origin.
  * 
@@ -45,16 +42,11 @@ public class CGAAttitudeVectorOPNS extends CGAAttitude implements iCGABivector {
         super((new CGAE3Vector(t)).op(createInf(1.0)));
     }
     
-    public Vector3d attitude(){
-        CGAAttitudeVectorOPNS attitude = attitudeIntern();
-        return attitude.extractAttitudeFromEeinfRepresentation();
+    public Vector3d direction(){
+        return extractAttitudeFromEeinfRepresentation();
         //TODO
         // mit was muss ich den multivector multiplizieren um die betreffenden 
         // Komponenten dann mit attitude.extractE3ToVector3d() abspalten zu können?
-    }
-    @Override
-    protected CGAAttitudeVectorOPNS attitudeIntern(){
-        return this;
     }
     
     private void testDefiningProperties(){

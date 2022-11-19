@@ -64,7 +64,7 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      * Inner and outer product null space representation is identical?.<p>
      * 
      * Successfull tested!!
-     * !
+     * 
      * @param p euclidian normalized point
      */
     public CGARoundPointIPNS(Tuple3d p){
@@ -94,7 +94,7 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      *
      * @param p euclidian point/vector
      * @param weight
-     * @return normalized point
+     * @return (weighted) point
      */
     private static CGAMultivector create(Tuple3d p, double weight){
         // old version
@@ -127,6 +127,10 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      * 
      * blade = blade / weight
      * local center = no_ni .. ( blade ^ no_ni )
+     * 
+     * FIXME
+     * kann das nicht einfach wieder abschaffen?
+     * Die super-Methode sollte doch auch funktionieren
      * 
      * @return location
      */

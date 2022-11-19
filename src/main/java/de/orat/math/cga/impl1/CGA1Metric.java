@@ -99,7 +99,7 @@ public class CGA1Metric {
         bitsetMap.put(8,4);
         gradeCoordinatesMap.put(4,3); // e3 // gaalop ni
         bitsetMap.put(16,5);
-        gradeCoordinatesMap.put(5,4); // ni / gaalop n0
+        gradeCoordinatesMap.put(5,4); // ni // gaalop n0
         // bivectors
         bitsetMap.put(1+2,6);
         gradeCoordinatesMap.put(6,0); // e01

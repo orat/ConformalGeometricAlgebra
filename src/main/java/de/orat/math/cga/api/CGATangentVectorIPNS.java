@@ -14,6 +14,9 @@ import org.jogamp.vecmath.Vector3d;
  * a mesh, because they encode both the positional as the tangential information 
  * in a simple primitive element. 
  *
+ * TODO
+ * muss das nicht grade 2 sein?
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGATangentVectorIPNS extends CGATangentIPNS implements iCGATrivector {

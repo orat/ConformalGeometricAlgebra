@@ -20,4 +20,5 @@ public class CGAAttitudeTrivectorOPNS extends CGAAttitude implements iCGAQuadvec
         // muss statt gp nicht op stehen?
         this((new CGATrivector(a,b,c)).op(createInf(1.0)));
     }
+    
 }

@@ -3,16 +3,17 @@ package de.orat.math.cga.api;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Also called free or direction vector or free k-bladed, elements without 
- * position. 
+ * Attitudes, also called free or direction vectors or free k-blades are elements 
+ * without position. 
  * 
- * It represents a direction without a location. It is translation 
+ * They are made by wedging any Euclidean element (vector, bivector, or 
+ * trivector) with ∞. Directions are invariant under translations 
+ * (they do not change if moved), but they can of course be rotated.
+
+ * They represent directions without a location. They are translation 
  * invariant but rotation covariant.
  * 
- * This means there is no e0 -component in its formula.
- * 
- * A free vector does not have a position. Given the normal vector n, it can be 
- * calculated as follows: n ∧ e ∞ .
+ * This means there is no e0-component in its formulae.
  * 
  * This is the base class for all attitude classes (Vector, Bivector, TreeVector).
  * 

@@ -1,9 +1,6 @@
 package de.orat.math.cga.impl2;
 
 import de.orat.math.cga.api.CGAMultivector;
-import de.orat.math.cga.util.Decomposition3d;
-import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
-import de.orat.math.cga.util.Decomposition3d.LinePairParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 

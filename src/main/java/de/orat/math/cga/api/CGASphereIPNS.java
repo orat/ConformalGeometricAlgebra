@@ -145,22 +145,20 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     /**
      * Squared size (=squared radius only for round, - squared radius for dual round).
      * 
-     * implementation follows
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * scheint zu funktionieren, siehe testSphereIPNS()
      * 
      * @return squared size/radius imaginary sphere if radius < 0
      */
-    @Override
-    public double squaredSize(){
+    public double squaredSize2(){
+        // implementation follows
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //local radius_squared = ( center .. center ) + 2 * ( no .. blade )
 	//radius_squared = radius_squared:tonumber()
-        CGAMultivector center = locationIntern();
+        CGAMultivector center = locationIntern2();
         return center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d))).scalarPart();
     }
        
     /**
-     * implementation follows
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @return location origin/midpoint
      */
@@ -171,14 +169,11 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     /**
      * Decompose location.
      * 
-     * Implementation following:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     * blade = blade / weight
-     * local center = no_ni .. ( blade ^ no_ni )
      * @return 
      */
-    @Override
-    public CGARoundPointIPNS locationIntern(){
+    public CGARoundPointIPNS locationIntern2(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //blade = blade / weight2
 	//local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
