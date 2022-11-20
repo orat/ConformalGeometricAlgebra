@@ -79,22 +79,32 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * if probe set to origin.
      * 
      * @param probe point
-     * @return location as normalized dual sphere (grade 1)
+     * @return result as normalized dual sphere (grade 1)
      */
     CGAMultivector locationIntern(Point3d probe){
-        return (new CGARoundPointIPNS(probe)).op(this).div(this).compress();
+        // determination of result as normalized dual sphere (getestet? vielleicht zu grosse Werte, quadratische)
+        CGAMultivector result =  (new CGARoundPointIPNS(probe)).op(this).div(this).compress();
+        System.out.println(result.toString("location normalized dual sphere (CGAOrientedFiniteFlatIPNS)"));
+        // extract E3 (ungetestet)
+        //Dorst2007 p.409
+        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
+        result = oinf.lc(oinf.op(result));
+        System.out.println(result.toString("location E3 (CGAOrientedFiniteFlatIPNS)"));
+        return result;
     }
     @Override
     public Point3d location(Point3d probe){
-        CGAMultivector m = locationIntern(probe);
-        // location_cga=2.0000000000000004*eo 
         // should be a normalized dual sphere (grade 1)
-        //FIXME
-        // Dorst2007 hat weitere Formeln um E3 komplett abzuspalten
+        CGASphereIPNS m = new CGASphereIPNS(locationIntern(probe));
         System.out.println(m.toString("location_cga (Finite flat)"));
+        //m.result(probe)
+        // location_cga (Finite flat) = (5.000000000000002*eo + 25.000000000000007*e1 + 25.000000000000007*e2 - 46.00000000000002*e3 + 23.00000000000001*ei)
+        // result (plane IPNS) = (25.000000000000007,25.000000000000007,-46.00000000000002)
         return m.extractE3ToPoint3d(); 
         // sollte funktionieren, da normalized dual sphere (grade 1) x,y,z 
         // als e1,e2,e3 direkt enthalten sollte
+        // nein: funktioniert so nicht,da m ein dual sphere ist
+        // Dorst2007 hat weitere Formeln um E3 komplett abzuspalten
     }
     public FlatAndDirectionParameters decompose(Point3d probePoint){
         return new FlatAndDirectionParameters(attitude(), location(probePoint));
@@ -121,11 +131,11 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
                 
         // Dorst2007 - Formel für dual-flat verwenden
         // locations are determined as dual spheres
-        CGAMultivector location = probePoint.op(this).gp(inverse());
-        //CGAMultivector location = probePoint.ip(this, LEFT_CONTRACTION).gp(inverse());
+        CGAMultivector result = probePoint.op(this).gp(inverse());
+        //CGAMultivector result = probePoint.ip(this, LEFT_CONTRACTION).gp(inverse());
         
-        double[] locationCoord = location.impl.extractCoordinates(1);
-        int index = location.impl.getEStartIndex();
+        double[] locationCoord = result.impl.extractCoordinates(1);
+        int index = result.impl.getEStartIndex();
         return new Decomposition3d.FlatAndDirectionParameters(attitude.extractAttitudeFromEeinfRepresentation(), 
                new Point3d(locationCoord[index++], locationCoord[index++], locationCoord[index]));
     }*/

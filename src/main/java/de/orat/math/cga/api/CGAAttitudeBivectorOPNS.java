@@ -23,9 +23,8 @@ public class CGAAttitudeBivectorOPNS extends CGAAttitude implements iCGATrivecto
         this(B.op(createInf(1.0)));
     }
     
-    
     public Vector3d direction(){
-        System.out.println(this.toString("CGAAttitudeBivectorOPNS"));
+        //System.out.println(this.toString("CGAAttitudeBivectorOPNS"));
         return extractAttitudeFromBivectorEinfRepresentation();
     }
 }

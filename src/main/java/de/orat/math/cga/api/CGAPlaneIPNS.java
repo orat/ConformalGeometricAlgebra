@@ -81,10 +81,10 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * @param weight 
      */
     public CGAPlaneIPNS(Point3d P, Vector3d n, double weight){
-        this(createEx(n.x)
+        this((createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
-            .add(createInf(P.x*n.x+P.y*n.y+P.z*n.z)).gp(weight));
+            .add(createInf(P.x*n.x+P.y*n.y+P.z*n.z))).gp(weight));
     }
     
     /**

@@ -55,7 +55,9 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
      * @return location (represented as finite point)
      */
     CGAMultivector locationIntern(Point3d probe){
-        return new CGARoundPointOPNS(probe).ip(this).div(this);
+        // muss probe hier wirklich in OPNS representation angegeben werden?
+        //FIXME CGARoundPointOPNS
+        return new CGARoundPointIPNS(probe).ip(this).div(this);
     }
     @Override
     public Point3d location(Point3d probe){

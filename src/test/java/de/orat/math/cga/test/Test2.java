@@ -641,9 +641,10 @@ public class Test2 {
     public void testPlane(){
         System.out.println("---------------------- plane ----");
         
-        Vector3d n = new Vector3d(0d,0d,1d);
+        // hessissche Normalenform der Ebene
+        Vector3d n = new Vector3d(0d,0d,1d); n.normalize();
         double d = 2d;
-        System.out.println("n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
+        System.out.println("HNF: n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
         
         CGAPlaneIPNS planeIPNS = new CGAPlaneIPNS(n, d);
         // planeIPNS=1.0*e3 + 2.0*ei
@@ -653,8 +654,11 @@ public class Test2 {
         Vector3d attitude = planeIPNS.attitude();
         System.out.println(toString("attitude (planeIPNS)",attitude));
         // attitude_cga=-0.9999999999999996*e1^e2^ei
-        //attitude (planeIPNS) = (0.0,0.0,0.0)
-        // FIXME warum bekomme ich 0,0,0????
+        // attitude (planeIPNS) = (0.0,0.0,-0.9999999999999996)
+        // FIXME
+        // Das Vorzeichen stimmt nicht, möglicherweise ist das aber auch korrekt so
+        // und das Vorzeichen wird nur durch die Definition des Pseudoskalars im 
+        // in CGA festgelegt
         
         // squaredWeight
         double squaredWeight = planeIPNS.squaredWeight();
@@ -662,13 +666,14 @@ public class Test2 {
         System.out.println(toString("squaredWeight", squaredWeight));
         assertTrue(equals(squaredWeight,1d));
         
-        Point3d location = planeIPNS.location(new Point3d(5,5,2));
+        Point3d probe = new Point3d(5,5,2);
+        Point3d location = planeIPNS.location(probe);
+        // location E3 (CGAOrientedFiniteFlatIPNS) = (24.99999999999999*e1 + 24.99999999999999*e2 - 46.0*e3)
+        // location_cga (Finite flat) = (24.99999999999999*e1 + 24.99999999999999*e2 - 46.0*e3)
+        // location (plane IPNS) = (24.99999999999999,24.99999999999999,-46.0)
         System.out.println(toString("location (plane IPNS)",location));
-        //location_cga=5.000000000000002*eo + 0.0*eo^e3^ei
-        //FIXME das ist kein k-blade!!!! vielleicht muss ich e0 in den Formeln noch abspalten???
-        //location (plane IPNS) = (0.0,0.0,0.0)
-        //FIXME vermutlich fehlt für IPNS plane die implementation????
         Vector3d locationTest = new Vector3d(n);
+        locationTest.normalize();
         locationTest.scale(d);
         assertTrue(equals(location, locationTest));
         
