@@ -142,10 +142,12 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * Specific implementation, because generic implementation for all rounds
      * does not work.
      * 
+     * scheint nicht zu funktionieren
+     * 
      * @return squaredSize/squaredRadius
      */
-    @Override
-     public double squaredSize(){
+    /*@Override
+    public double squaredSize(){
         // It must be non-zero and of grade 3
         // CGAUtil.lua l.293 based on center and normal
         //blade = blade / weight
@@ -161,5 +163,5 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
                         add(center.ip(normal).gp(center)).gp(2d).gp(normal)).scalarPart();
         //FIXME
         // da kommt fälschlicherweise 0 raus
-    }
+    }*/
 }

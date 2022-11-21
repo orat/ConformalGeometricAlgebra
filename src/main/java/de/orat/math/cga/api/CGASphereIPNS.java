@@ -45,12 +45,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     // (P,r)=>!(P-r**2*.5*ni)
     private static CGAMultivector create(CGARoundPointIPNS location, double r){
         if (!location.isNormalized()) throw new IllegalArgumentException("The given location is not normalized!");
-        CGARoundPointIPNS result;
-        if (r >0){
-            result = new CGARoundPointIPNS(location.sub(createInf(0.5*r*r)));
-        } else {
-            result = new CGARoundPointIPNS(location.add(createInf(0.5*r*r)));
-        }
+        CGARoundPointIPNS result = new CGARoundPointIPNS(location.sub(createInf(0.5*r*r)));
         result.isNormalized = true;
         return result;
     }
@@ -76,23 +71,31 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
-     * @param point
+     * @param center
      * @param radius
      * @param weight 
      * 
+     * The given multivector is not grade 1! grade()==0
+     * Failed wenn p1=0,0,0, soll dann aber einfach e0 sein
+     * Warum funktioniert diese implementierung nicht?
+     * FIXME
      */
-    public CGASphereIPNS(Point3d point, double radius, double weight){
-       this(createCGASphere(point, radius, weight));
+    public CGASphereIPNS(Point3d center, double radius, double weight){
+       this(createCGASphere(center, radius, weight));
     }
-    private static CGAMultivector createCGASphere(Point3d point, double radius, double weight){
+    private static CGAMultivector createCGASphere(Point3d center, double radius, double weight){
         // local blade = weight2 * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
-        CGAMultivector c = createE3(point);
+        CGAMultivector c = createE3(center);
         CGAMultivector sr2;
         if (radius >0){
             sr2 = new CGAScalar(radius*radius);
         } else {
             sr2 = new CGAScalar(-radius*radius);
         }
+        /*CGAMultivector test1 = createOrigin(1d).add(c);
+        CGAMultivector test2 = c.ip(c);
+        System.out.println(test1.toString("CGASphereIPNS test1"));
+        System.out.println(test2.toString("CGASphereIPNS test2"));*/
         return createOrigin(1d).add(c).add(c.ip(c).sub(sr2).gp(createInf(0.5d))).gp(weight);
     }
     

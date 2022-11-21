@@ -43,6 +43,9 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     public CGALineOPNS(Point3d p1, Tuple3d p2){
         this((new CGARoundPointIPNS(p1)), (new CGARoundPointIPNS(p2)));
     }
+    public CGALineOPNS(Point3d p1, double weight1, Tuple3d p2, double weight2){
+        this((new CGARoundPointIPNS(p1, weight1)), (new CGARoundPointIPNS(p2, weight2)));
+    }
     
     /**
      * Create line in outer product null space representation 

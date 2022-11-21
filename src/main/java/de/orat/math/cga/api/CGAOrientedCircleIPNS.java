@@ -24,9 +24,16 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
     // composition
     
     /**
+     * Composition by the euclidian parameters of a sphere and a plane.
+     * 
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
+     * or
+     * CONFORMAL GEOMETRIC OBJECTS WITH FOCUS ON ORIENTED POINTS
+     * Dietmar Hildenbrand∗, Patrick Charrier, 2011
+     * 
+     * Determination by intersection of a sphere and a plane.
+     * 
      * @param center
      * @param normal
      * @param radius imaginary circle if radius<0

@@ -13,6 +13,11 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * This is an infinitesimal circle in a well defined plane.
  * 
+ * FIXME
+ * sollte ich das nicht in CGATangentBivectorOPNS umbenennen?
+ * Vermutlich nein, denn vermutlich gibts keine duale Darstellung für einen
+ * tangentbivector. Ist das dann aber IPNS oder OPNS?
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGATangentBivector extends CGATangentOPNS implements iCGATrivector {

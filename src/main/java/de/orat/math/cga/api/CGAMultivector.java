@@ -87,7 +87,11 @@ public class CGAMultivector {
         return new CGAE3Vector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
     }
     public static CGAE3Vector createE3(Tuple3d v){
-        return new CGAE3Vector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
+        if (v.x == 0d && v.y == 0d && v.z == 0){
+            return new CGAE3Vector(CGAMultivector.createOrigin(1d));
+        } else {
+            return new CGAE3Vector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
+        }
     }
     public static CGAMultivector createE3Pseudoscalar(){
         return createEx(1d).op(createEy(1d)).op(createEz(1d));

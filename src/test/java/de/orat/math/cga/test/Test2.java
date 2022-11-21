@@ -196,20 +196,20 @@ public class Test2 {
         double weight2 = -1d;
         
         // 1.
-        CGAOrientedPointPairOPNS pp = new CGAOrientedPointPairOPNS(p1, weight1, p2, weight2);
-        // pp = (2.0*eo^e1 - 2.0*eo^e2 - 2.0*e1^e2 - 1.0*e1^ei + 1.0*e2^ei) (korrekt)
-        System.out.println(pp.toString("pp"));
+        CGAOrientedPointPairOPNS ppOPNS = new CGAOrientedPointPairOPNS(p1, weight1, p2, weight2);
+        // ppOPNS = (2.0*eo^e1 - 2.0*eo^e2 - 2.0*e1^e2 - 1.0*e1^ei + 1.0*e2^ei) (korrekt)
+        System.out.println(ppOPNS.toString("pp"));
         CGAMultivector ppTest = CGAMultivector.createOrigin(2d).op(CGAMultivector.createEx(1d)).sub(
             CGAMultivector.createOrigin(2d).op(CGAMultivector.createEy(1d))).sub(
             CGAMultivector.createEx(2d).op(CGAMultivector.createEy(1d))).sub(
             CGAMultivector.createEx(1d).op(CGAMultivector.createInf(1d))).add(
             CGAMultivector.createEy(1d).op(CGAMultivector.createInf(1d)));
         System.out.println(ppTest.toString("ppTest"));
-        assertTrue(pp.equals(ppTest));
+        assertTrue(ppOPNS.equals(ppTest));
         
         // 2.
-        // locationIPNS
-        Point3d c = pp.location();
+        // locationOPNS
+        Point3d c = ppOPNS.location();
         System.out.println(toString("c",c));
         // (e1+e2)/2
         Point3d cTest  = new Point3d(p1); cTest.add(p2); cTest.scale(0.5d);
@@ -219,20 +219,24 @@ public class Test2 {
         
         // 4. 
         // beide Punkte wieder aus dem paar rausholen
-        Point3d[] points = pp.decomposePoints();
+        Point3d[] points = ppOPNS.decomposePoints();
         System.out.println(toString("p1",points[0]));
-        assert(equals(p1, points[0]));
         System.out.println(toString("p2", points[1]));
-        assert(equals(p2, points[1]));
+        boolean p1test = equals(p1, points[0]);
+        boolean p12test = equals(p1, points[1]);
+        boolean p2test = equals(p2, points[1]);
+        boolean p21test = equals(p2, points[0]);
+        assertTrue((p1test & p2test) || (p12test & p21test));
         
         // 2.
         // squaredSize
         //FIXME
         // falsches Ergebnis mit 1,75 statt 0.5
         // die input weights auf 1 zu setzen hat keinen Unterschied gebracht
-        // FIXME dual() führt zu: The given multivector is not not grade 1! grade()=0
-        //double radiusSquared = pp.dual().squaredSize();
-        double radiusSquared = pp.squaredSize();
+        System.out.println(ppOPNS.dual().toString("pp (dual)"));
+        // FIXME dual() führt zum gleichen Ergebnis
+        // double radiusSquared = ppOPNS.dual().squaredSize();
+        double radiusSquared = ppOPNS.squaredSize();
         System.out.println("radiusSquared="+String.valueOf(radiusSquared));
         double radiusSquaredTest = 0.5d;
         System.out.println("radiusSquaredTest="+String.valueOf(radiusSquaredTest));
@@ -328,6 +332,7 @@ public class Test2 {
         //var ni = 1e4+1e5, no = .5e5-.5e4, nino = ni^no;
         //var up = (x)=> no + x + .5*x*x*ni;
 
+        // point
         // var p1 = up(1e1+.5e2)
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Vector3d(1d,0.5d,0d));
         // ganja.js: e1+0.5e2+0.12e4+1.12e5 = e1+0.5e2+0.625ei+e0 (korrekt)
@@ -337,6 +342,7 @@ public class Test2 {
                 add(CGAMultivector.createInf(0.625)).add(CGAMultivector.createOrigin(1d));
         assert(p1.equals(p1Test));
         
+        // point
         // p2 = up(1e2-.5e3);
         CGARoundPointIPNS p2 = new CGARoundPointIPNS(new Vector3d(0d,1d,0.5d));
         // java: p2=1.0*eo + 1.0*e2 + 0.5*e3 + 0.625*ei
@@ -357,6 +363,15 @@ public class Test2 {
         CGASphereIPNS s1 = new CGASphereIPNS(p1, 0.3);
         // java: s1=1.0*eo + 1.0*e1 + 0.5*e2 + 0.58*ei (korrekt)
         System.out.println("s1="+s1.toString());
+        
+        // radiusSquared
+        double radiusSquared1 = s1.squaredSize();
+        // radiusSquared 1 = 2.586400000000001
+        // failed da 2.58... es wird aber 0.3 erwartet
+        //FIXME
+        System.out.println(toString("radiusSquared 1", radiusSquared1));
+        assertTrue(equals(radiusSquared1, 0.3d));
+        
         CGASphereOPNS s = s1.undual();
         System.out.println("s="+s.toString());
         
@@ -804,7 +819,7 @@ public class Test2 {
     public void testSpheresIPNS(){
         
         System.out.println("----------------- sphere IPNS-----");
-        Point3d p1 = new Point3d(0d,-1d,0d);
+        Point3d p1 = new Point3d(0d,0d,0d);; //new Point3d(0d,-1d,0d);
         System.out.println(toString("p1", p1));
         
         double radius = 2d;
@@ -812,6 +827,8 @@ public class Test2 {
         double weight = 3d;
         System.out.println("input weight="+String.valueOf(weight));
          
+        // The given multivector is not grade 1! grade()==0
+        //Failed wenn p1=0,0,0
         CGASphereIPNS sphereIPNS = new CGASphereIPNS(p1, radius, weight);
         System.out.println(sphereIPNS.toString("sphereIPNS"));
         
@@ -824,7 +841,7 @@ public class Test2 {
         // squaredSize/squaredRadius
         // squaredSize/radiusSquared = (4.2500000000000036) (failed)
         double squaredRadius = sphereIPNS.squaredSize();
-        System.out.println(toString("radius2squared", squaredRadius));
+        System.out.println(toString("radius2squared", squaredRadius)); // failed
         //assertTrue(equals(radius*radius,squaredRadius));
         double squaredRadius2 = sphereIPNS.squaredSize2();
         System.out.println(toString("radius2squared2", squaredRadius2)); // 4.0 stimmt
@@ -933,7 +950,7 @@ public class Test2 {
         
         // point pair OPNS (failed)
         CGAOrientedPointPairOPNS pp2 = new CGAOrientedPointPairOPNS(p1, 1d ,p2, 1d);
-        // pp=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
+        // ppOPNS=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
         System.out.println("pp2="+pp2.toString());
         // FIXME e1 und e2 die doppelt so grosse Werte wie erwartet
         // locationFromTangentAndRound=3.250000000000001*eo + 0.06500000000000002*e1 + 0.06500000000000002*e2 + 1.4994000000000005*e3 + 5.088522196198628E-19*eo^e1^e3 + 5.088522196198628E-19*eo^e2^e3 - 0.9996*ei + 7.632783294297935E-19*eo^e1^ei + 7.632783294297935E-19*eo^e2^ei - 3.7001512964707234E-16*eo^e3^ei - 6.9375061251264494E-18*e1^e3^ei - 6.9375061251264494E-18*e2^e3^ei

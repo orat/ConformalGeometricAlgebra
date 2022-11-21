@@ -53,7 +53,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        return squaredSize(this);
+        return squaredSize(this).scalarPart();
     }
     /**
      * Determination of the squared size. 
@@ -61,13 +61,19 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius (maybe negative)
      */
-    static double squaredSize(CGAKVector m){
+    static CGAMultivector squaredSize(CGAKVector m){
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
         //CGAMultivector m_normalized = m.normalize();
         // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
         //FIXME funktioniert nicht
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr()); 
         System.out.println(result.toString("squaredSize/radiusSquared"));
+        
+        // Alternative implementation
+        // following Vince2008 for Sphere, Circle and maybe point-pair
+        // failed!!!
+        //result = m.gp(m).negate().div((m.op(CGAMultivector.createInf(1d))).sqr());
+        //System.out.println(result.toString("squaredSize/radiusSquared2"));
         
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
@@ -78,7 +84,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         //result = m.dual().div(m.dual().negate().ip(CGAMultivector.createInf(1d)));
         //result = result.gp(result);
         
-        return result.scalarPart();
+        return result;
     }
     @Override
     public Point3d location(Point3d probe){
