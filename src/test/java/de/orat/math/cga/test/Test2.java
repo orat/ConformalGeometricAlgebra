@@ -827,8 +827,6 @@ public class Test2 {
         double weight = 3d;
         System.out.println("input weight="+String.valueOf(weight));
          
-        // The given multivector is not grade 1! grade()==0
-        //Failed wenn p1=0,0,0
         CGASphereIPNS sphereIPNS = new CGASphereIPNS(p1, radius, weight);
         System.out.println(sphereIPNS.toString("sphereIPNS"));
         

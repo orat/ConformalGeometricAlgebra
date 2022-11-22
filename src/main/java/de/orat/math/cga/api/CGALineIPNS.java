@@ -50,8 +50,11 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
      * @param c location
      * @param direction normalized direction
      * @param weight 
+     * @throws IllegalArgumentException if direction is (0,0,0)
      */
     public CGALineIPNS(Point3d c, Vector3d direction, double weight){
+        // FIXME
+        // ungeklärt, was passiert wenn c=(0,0,0)--> das sollte möglich sein
         // local blade = weight * ( normal + ( center ^ normal ) * ni ) * i
         this(createE3(direction).add(createE3(c).op(createE3(direction)).gp(createInf(1d))).
                 gp(createE3Pseudoscalar()).gp(weight));

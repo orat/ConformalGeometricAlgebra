@@ -86,12 +86,14 @@ public class CGAMultivector {
     public static CGAE3Vector createE3(){
         return new CGAE3Vector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
     }
+    /**
+     * Create an E3 Vector or 0-Vector if the given argument is a null-vector.
+     * 
+     * @param v
+     * @return E3 vector
+    */
     public static CGAE3Vector createE3(Tuple3d v){
-        if (v.x == 0d && v.y == 0d && v.z == 0){
-            return new CGAE3Vector(CGAMultivector.createOrigin(1d));
-        } else {
             return new CGAE3Vector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
-        }
     }
     public static CGAMultivector createE3Pseudoscalar(){
         return createEx(1d).op(createEy(1d)).op(createEz(1d));
@@ -161,6 +163,7 @@ public class CGAMultivector {
      * @param v1
      * @param v2
      * @return multivector representing a parallelogram
+     * @throws IllegalArgumentException if v1 = (0,0,0) or v2=(0,0,0)
      */
     public static CGAMultivector createDualParallelogram(Vector3d v1, Vector3d v2){
         return createE3(v1).op(createE3(v2));
@@ -175,6 +178,7 @@ public class CGAMultivector {
      * @param v2
      * @param v3
      * @return multivector representing a parallelepiped
+     * @throws IllegalArgumentException if v1 = (0,0,0) or v2=(0,0,0) or v3=(0,0,0)
      */
     public static CGAMultivector createDualParallelepiped(Vector3d v1, Vector3d v2, Vector3d v3){
         return createE3(v1).op(createE3(v2)).op(createE3(v3));

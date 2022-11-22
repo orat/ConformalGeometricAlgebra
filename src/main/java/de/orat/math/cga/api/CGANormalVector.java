@@ -24,6 +24,16 @@ public class CGANormalVector extends CGAKVector implements iCGAVector {
         this(create(p,t));
     }
     
+    /**
+     * Composition of a normal vector.
+     * 
+     * @param p
+     * @param t
+     * @return 
+     * @throws IllegalArgumentException if t=(0,0,0)
+     * 
+     * P=(0,0,0) is allowed!
+     */
     private static CGAMultivector create(Point3d p, Vector3d t){
         // IPNS ist vermutlich richtig, da das ja auch bei CGALine etc auch
         // so ist...

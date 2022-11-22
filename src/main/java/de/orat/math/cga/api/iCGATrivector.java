@@ -19,8 +19,12 @@ interface iCGATrivector extends iCGABlade {
                 CGAMultivector.createInf(1d)));
     }
     
+    public double scalarPart();
+    
     @Override
     default void testGrade(){
-        if (grade() != 3) throw new IllegalArgumentException("The given multivector m is not of grade 3!");
+        int grade = grade();
+        if (grade != 3 && grade != 0) throw new IllegalArgumentException("The given multivector m is not of grade 3!");
+        if (grade == 0 && scalarPart() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
     }
 }

@@ -22,6 +22,12 @@ public class CGAMotor extends CGAVersor {
         this(rotor.gp(translator));
     }
     
+    /**
+     * 
+     * @param B
+     * @param d 
+     * @throws IllegalArgumentException if d=(0,0,0)
+     */
     public CGAMotor(CGABivector B, Vector3d d){
         this(B.add(createE3(d).gp(createInf(1d))));
     }

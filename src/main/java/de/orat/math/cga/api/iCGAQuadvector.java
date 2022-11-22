@@ -12,8 +12,13 @@ interface iCGAQuadvector extends iCGABlade {
     default boolean isQuadvector(){
         return true;
     }
+    
+    public double scalarPart();
+    
     @Override
     default void testGrade(){
-        if (grade() != 4) throw new IllegalArgumentException("The given multivector is not of grade 4!");
+        int grade = grade();
+        if (grade() != 4 && grade != 0) throw new IllegalArgumentException("The given multivector is not of grade 4 or a null vector!");
+        if (grade == 0 && scalarPart() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
     }
 }

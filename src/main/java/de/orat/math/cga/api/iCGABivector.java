@@ -10,6 +10,7 @@ interface iCGABivector extends iCGABlade {
     }
     @Override
     default void testGrade(){
-        if (grade() != 2) throw new IllegalArgumentException("The given multivector is not of grade 2:");
+        int grade = grade();
+        if (grade != 2 && grade != 0) throw new IllegalArgumentException("The given multivector is not of grade 2 or a null vector:");
     }
 }

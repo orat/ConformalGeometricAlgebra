@@ -84,7 +84,8 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
        this(createCGASphere(center, radius, weight));
     }
     private static CGAMultivector createCGASphere(Point3d center, double radius, double weight){
-        // local blade = weight2 * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
+        // following Spence2013 lua implementation
+        // local blade = weight * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
         CGAMultivector c = createE3(center);
         CGAMultivector sr2;
         if (radius >0){
