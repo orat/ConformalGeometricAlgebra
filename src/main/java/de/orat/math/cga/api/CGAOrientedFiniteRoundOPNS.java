@@ -53,31 +53,63 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        return squaredSize(this).scalarPart();
+        double result =  squaredSizeIntern(this).scalarPart();
+        // testweise
+        squaredSize3();
+        return result;
     }
     /**
+     * Determination of the squared size of the corresponding geometric object.
+     * 
+     * Implementation following Hitzer2005.
+     * 
+     * @return squared size
+     */
+    public double squaredSize3(){
+        return squaredSize3Intern(this);
+    }
+    static double squaredSize3Intern(CGAKVector m){
+        // andere impl
+        // basierend auf Hitzer2005, sollte auch für pointpair funktionieren
+        // scheint zu funktionieren für sphereopns
+        // für circle sollte eigentlich 1.0-->-1.0 geändert werden
+        // (L.ScProd(L))*(1.0/(n.OutProd(L).ScProd(n.OutProd(L))));
+        double result = m.scp(m) / (createInf(1d).op(m)).sqr().scalarPart();
+        System.out.println("squaredSize (Hitzer2004, for circle change sign)="+String.valueOf(result));
+        return result;
+    }
+    
+    /**
      * Determination of the squared size. 
+     * 
+     * precondition:
+     * - location at the origin
+     * 
+     * test failed für circle_ipns
      * 
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius (maybe negative)
      */
-    static CGAMultivector squaredSize(CGAKVector m){
+    static CGAMultivector squaredSizeIntern(CGAKVector m){
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
         //CGAMultivector m_normalized = m.normalize();
         // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
+        // vermutlich funktioniert das nur wenn das Objekt im Ursprung liegt!!!!
+        // Vergleich mit Hitzer: gleiche Formbel bis auf op statt lc im Nennen FIXME
         //FIXME funktioniert nicht
-        CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).lc(m)).sqr()); 
-        System.out.println(result.toString("squaredSize/radiusSquared"));
+        CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
+        CGAMultivector result = m_n.gp(m_n.gradeInversion()).div((createInf(1d).lc(m_n)).sqr()); 
+        System.out.println(result.toString("squaredSize (Dorst2007)"));
         
         // Alternative implementation
         // following Vince2008 for Sphere, Circle and maybe point-pair
         // failed!!!
         //result = m.gp(m).negate().div((m.op(CGAMultivector.createInf(1d))).sqr());
-        //System.out.println(result.toString("squaredSize/radiusSquared2"));
+        //System.out.println(result.toString("squaredSizeIntern/radiusSquared2"));
         
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
-        // also nicht squaredSize bestimmt werden kann
+        // also nicht squaredSizeIntern bestimmt werden kann
         //dual_sphere = self.dual
         //dual_sphere /= (-dual_sphere | self.cga.einf)
         //return math.sqrt(abs(dual_sphere * dual_sphere))

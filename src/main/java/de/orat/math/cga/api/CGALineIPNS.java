@@ -108,8 +108,8 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     private double weight2(){
         // following Parkin2013 CGAUtilMath lua implementation
         // local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
-        return Math.abs((createOrigin(1d).ip(this.op(createInf(1d)))).
-                gp(createE3Pseudoscalar()).scalarPart());
+        return (createOrigin(1d).ip(this.op(createInf(1d)))).
+                gp(createE3Pseudoscalar()).norm();
     }
     /*@Override
     public double squaredWeight(){
@@ -150,4 +150,27 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         return new Point3d((createOrigin(1d).ip(this.gp(1d/weight2())).
                 gp(attitudeIntern())).gp(createE3Pseudoscalar()).extractE3ToPoint3d());
     }
+    
+    // unklar, ob das hier so gut aufgehoben ist, vermutlich klappt nämlich extract
+    // nicht bei Ebenen und Kugeln da ich dann vermutlich einen Bivector bekomme
+    //  nach Abspaltung von einf
+    // dann kann ich den spezifischen extract-Methode in die spezifischen Attitude classen verschieben?
+    // siehe OPNS impl
+    //TODO
+    @Override
+    public Vector3d attitude(){
+        return (new CGAAttitudeVectorOPNS(attitudeIntern())).direction(); // aus OPNS impl
+        ///CGAAttitude result = attitudeIntern();
+        //System.out.println("attitude_cga="+result.toString());
+        //return result.extractAttitudeFromEeinfRepresentation();
+    }
+    
+    public Vector3d attitudeIntern2(){
+        // implementation following Spencer
+        CGAE3Vector result = CGAMultivector.createOrigin(1d).ip(this.div(weight2()).
+                op(CGAMultivector.createInf(1d))).gp(CGAMultivector.createE3Pseudoscalar());
+        System.out.println(result.toString("attitueIntern2 (CGALineIPNS)"));
+        return result.direction();
+    }
+    
 }

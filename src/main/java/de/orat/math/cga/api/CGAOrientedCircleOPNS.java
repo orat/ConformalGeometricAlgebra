@@ -47,7 +47,7 @@ public class CGAOrientedCircleOPNS extends CGAOrientedFiniteRoundOPNS implements
     }
    
     @Override
-    public CGAOrientedCircleIPNS undual(){
-        return new CGAOrientedCircleIPNS(impl.undual());
+    public CGAOrientedCircleIPNS dual(){
+        return new CGAOrientedCircleIPNS(impl.dual());
     }
 }

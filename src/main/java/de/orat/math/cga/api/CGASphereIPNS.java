@@ -129,29 +129,24 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     
     // decomposition
     
-    // CGARoundPointIPNS extends CGASphereIPNS und für beide gelten die gleichen 
-    // weight2 Formeln
-    /*@Override
-    public double squaredWeight(){
-        return Math.pow(weight2(),2);
-    }*/
     /**
-     * Determination of weight2 without probe point and not based on the attitude.
+     * Determination of weight without probe point and not based on the attitude.
      * 
-     * @return weight2
+     * @return weight
      */
-    private double weight2(){
+    public double weight2(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        return gp(-1d).ip(createInf(1d)).scalarPart();
+        return negate().ip(createInf(1d)).scalarPart();
     }
     
     /**
      * Squared size (=squared radius only for round, - squared radius for dual round).
      * 
      * scheint zu funktionieren, siehe testSphereIPNS()
+     * Fehler bei Ganja.js examle: creation of dual sphere and plane
      * 
-     * @return squared size/radius imaginary sphere if radius < 0
+     * @return squared size/radius imaginary sphere, if squared radius < 0
      */
     public double squaredSize2(){
         // implementation follows
@@ -159,11 +154,14 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         //local radius_squared = ( center .. center ) + 2 * ( no .. blade )
 	//radius_squared = radius_squared:tonumber()
         CGAMultivector center = locationIntern2();
-        return center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d))).scalarPart();
+        CGAMultivector result =  center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d)));
+        System.out.println(result.toString("squaredSize2 (CGASphereIPNS)"));
+        return result.scalarPart();
     }
        
     /**
-     *
+     * Detmerination of the midpoint of the sphere.
+     * 
      * @return location origin/midpoint
      */
     @Override
@@ -173,15 +171,17 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     /**
      * Decompose location.
      * 
-     * @return 
+     * @return location midpoint/center
      */
-    public CGARoundPointIPNS locationIntern2(){
+    public CGAE3Vector locationIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //blade = blade / weight2
 	//local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
-        return new CGARoundPointIPNS(no_inf.ip((gp(1d/weight2())).op(no_inf)));
+        CGAMultivector result = no_inf.ip((gp(1d/weight2())).op(no_inf));
+        System.out.println(result.toString("locationIntern2 (CGASphereIPNS)"));
+        return new CGAE3Vector(result);
     }
     
     

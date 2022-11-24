@@ -3,9 +3,19 @@ package de.orat.math.cga.api;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * Flat points are null vectors wedged with Infinity: p ∧ ∞. 
+ * 
+ * FIXME
+ * Es sieht so aus, dass die gesamte Beschreibung für flat-Points in opns Darstellung
+ * gilt und der Konstruktor aber ipns erzeugt. Das würde beideuten, dass es bei float
+ * points wirklich eine duale representation gibt.
+ * Der Konstruktor liefert grade-3 vektoren statt der zu erwartenden grade 2
+ * 
+ * The implementation is based on a the outer product of a plane on the left side
+ * and a line one the right side. This affects the sign of the weight.
  * 
  * Flat-points are blades with grade 2.
  * 
@@ -45,8 +55,6 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      * CGAUtil.lua l.153
-     * FIXME 
-     * ist das wirklich IPNS?
      *
      * @param c
      * @param weight
@@ -54,7 +62,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      */
     private static CGAMultivector create(Point3d c, double weight){
         // local blade = weight * ( 1 - center ^ ni ) * i
-        return (new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createPseudoscalar()).gp(weight);
+        return (new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createE3Pseudoscalar()).gp(weight);
     }
     
     //?
@@ -114,5 +122,10 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
         CGAMultivector result = oinf.lc(o.op(this)).div(oinf.lc(this)).negate();
         //System.out.println(result.toString("CGAFlatPointIPNS.location2"));
         return result.extractE3ToPoint3d();
+    }
+
+    @Override
+    public Vector3d attitude() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

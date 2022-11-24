@@ -1,6 +1,8 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * Multivector which contains only the basis-blades e1,e2 and e3 (element of grade 1).
@@ -25,5 +27,13 @@ public class CGAE3Vector extends CGAKVector implements iCGAVector {
     
     public double squaredSize(){
         return extractE3ToVector3d().lengthSquared();
+    }
+    
+    @Override
+    public Point3d location(){
+        return extractE3ToPoint3d();
+    }
+    public Vector3d direction(){
+        return extractE3ToVector3d();
     }
 }

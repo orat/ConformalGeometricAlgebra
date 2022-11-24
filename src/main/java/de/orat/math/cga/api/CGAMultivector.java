@@ -188,20 +188,21 @@ public class CGAMultivector {
     // decompose
    
     /**
-     * Determine direction/attitude from tangent or round objects.
+     * Determine direction/attitude from tangent or round objects in OPNS 
+     * representation.
      * 
      * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
      * @return attitude
      */
     static CGAAttitude attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
-        // z.B. -1.9999999999999982*e1^e2^e3^ei also grade 4 und nicht grade 2
-        // wenn das von einem CGASphereOPNS aufgerufen wird
+        // e.g. -1.9999999999999982*e1^e2^e3^ei 
+        // grade 4 if invoked from a sphere
         // Dorst2007 p. 562
         
-        // attitude=1.9999999999999982*e2^e3^ei
-        // also grade 3, wenn das von einem circle aufgerufen wird
-        CGAAttitude result = new CGAAttitude(CGAMultivector.createInf(-1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d)).compress());
-        System.out.println(result.toString("attitude(round/attitude)"));
+        // e.g. attitude=1.9999999999999982*e2^e3^ei
+        // grade 3, if invoked from a circle 
+        CGAAttitude result = new CGAAttitude(CGAMultivector.createInf(1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d)).negate().compress());
+        System.out.println(result.toString("attitude (round/tangent)"));
         
         return result;
     }
@@ -312,13 +313,23 @@ public class CGAMultivector {
     protected CGAMultivector attitudeIntern(){
         throw new RuntimeException("Not implemented. Available for derivative classes only!");
     }
+    /**
+     * Determination of the location of the corresponding geometric object, if 
+     * available.
+     * 
+     * @param probe
+     * @return location
+     * @throws RuntimeException if location is not available
+     */
     public Point3d location(Point3d probe){
-        throw new RuntimeException("Not implemented. Available for derivative classes only!");
+        throw new RuntimeException("Available for most of the derivative classes only!");
     }
     /**
-     * Determination of location based on default probe point at (0,0,0).
+     * Determination of location of the corresponding geometric object, based 
+     * on default euclidiean probe point at (0,0,0).
      * 
      * @return location based on probe point = (0,0,0)
+     * @throws RuntimeException if location is not available
      */
     public Point3d location(){
         return location(new Point3d(0d,0d,0d));
@@ -458,10 +469,10 @@ public class CGAMultivector {
      * 
      * a a = a^a + a.a = a.a
      * 
-     * @return square, equals the ip
+     * @return square, equals the ip results in a scalar.
      */
-    public CGAMultivector sqr(){
-        return ip(this);
+    public CGAScalar sqr(){
+        return new CGAScalar(ip(this).compress());
     } 
     public double squaredNorm(){
         return impl.lengthSquared();

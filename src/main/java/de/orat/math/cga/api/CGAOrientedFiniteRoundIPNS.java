@@ -42,20 +42,21 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * In this case the magnitude of the attitude is the weight and its sign is 
      * the orientation.
      * 
-     * @return attitude in the form E^inf
+     * @return attitude extraction from the E3 representation
      */
     public Vector3d attitude(){
         CGAAttitude result = attitudeIntern();
         System.out.println("attitude="+result.toString());
         return result.extractE3ToVector3d();
     }
+    
     /**
      * @return attitude
      */
     @Override
     protected CGAAttitude attitudeIntern(){
+        // FIXME geht so nur wenn der round im Ursprung ist?
         return attitudeFromTangentAndRound2((CGAKVector) this.undual());
-        //return attitudeFromTangentAndRound();
     }
     
     @Override
@@ -65,8 +66,6 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     
     @Override
     public Point3d location(){
-        //CGAMultivector location = location3(weight());
-        //System.out.println("location lua="+location.toString()); // scheint für CGAPoint zu stimmen
         CGARoundPointIPNS result = locationIntern();
         return result.extractE3ToPoint3d();
     }
@@ -75,7 +74,17 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     public CGARoundPointIPNS locationIntern(){
         return locationFromTangentAndRoundAsNormalizedSphere();
     }
-    
+    /**
+     * Determine location of the correspondig geometric object based on a
+     * sandwitch-product following Hildenbrand1998.
+     * 
+     * @return location of the corresponding geometric object.
+     */
+    public CGARoundPointIPNS locationIntern3(){
+        CGARoundPointIPNS result = new CGARoundPointIPNS(this.gp(CGAMultivector.createInf(1d)).gp(this));
+        System.out.println(result.toString("locationIntern3 (CGAOrientedFiniteRoundIPNS)"));
+        return result;
+    }
     /**
      * Implementation following Hildenbrand1998.
      * 
@@ -136,11 +145,32 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * Hint: Squared size is - radius squared. The sign is different to 
      * CGAOrientedFiniteRoundOPNS.
      * 
+     * precondition:
+     * - normalized sphere located at the origin
+     * 
+     * test failed für circle_ipns
+     * test failed for sphere_ipns
+     * 
      * @return squared size/-radius squared
      */
     public double squaredSize(){
         // sign corresponding to errata in Dorst2007
-        return -CGAOrientedFiniteRoundOPNS.squaredSize(this).scalarPart();
+        CGAMultivector result = CGAOrientedFiniteRoundOPNS.squaredSizeIntern(this.undual());
+        System.out.println(result.toString("squaredSize (CGAOrientedFiniteRoundIPNS)"));
+        return -result.scalarPart();
+    }
+    /**
+     * Squared size (=squared radius only for round, - squared radius for dual round).
+     * 
+     * The sign is correct defined only for sphere.
+     * 
+     * @return squared size/-radius squared
+     */
+    public double squaredSize3(){
+        // following Hitzer, sollte bis auf Vorzeichen für circle und sphere funktionieren,
+        // möglicherweise auch für pointpair
+        //FIXME oder muss ich this.dual() übergeben?
+        return CGAOrientedFiniteRoundOPNS.squaredSize3Intern(this);
     }
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.
@@ -151,15 +181,15 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius squared
      */
-    /*static double squaredSize(CGAKVector m){
+    /*static double squaredSizeIntern(CGAKVector m){
         //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in 
         // Dorst2007 p.407 - Formel für Round in Dorst also DualRound in meine Notation
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr()).gp(-1d);
-        //System.out.println("squaredSize/radiusSquared="+result.toString());
+        //System.out.println("squaredSizeIntern/radiusSquared="+result.toString());
         
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
-        // also nicht squaredSize bestimmt werden kann
+        // also nicht squaredSizeIntern bestimmt werden kann
         
         return result.scalarPart();
     }*/

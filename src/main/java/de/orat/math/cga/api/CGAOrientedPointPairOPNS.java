@@ -2,6 +2,7 @@ package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * A point-pair (0-sphere) in outer product null space representation (grade 2 
@@ -62,16 +63,11 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     
     // decomposition
     
-    /**
-     * Specific implementation because generic implementation for all rounds
-     * does not work.
-     * 
-     * @return squared size/radius
-     */
     @Override
-    public double squaredSize(){
-        //return this.dual().squaredSize();
-        return super.squaredSize();
+    public Vector3d attitude(){
+        CGAAttitude result = attitudeIntern();
+        System.out.println("attitude (CGAOrientedPointPairOPNS)="+result.toString());
+        return result.extractAttitudeFromEeinfRepresentation();
     }
     
     public Point3d[] decomposePoints(){

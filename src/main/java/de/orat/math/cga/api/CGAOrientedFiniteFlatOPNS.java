@@ -39,8 +39,8 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         // also corresponding to Dorst2007 p407
         // tested for line
         CGAMultivector result =  createInf(-1d).lc(this).compress();
-        System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatOPNS)"));
-        return new CGAAttitude/*VectorOPNS*/(result);
+        System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst)"));
+        return new CGAAttitude(result);
     } 
     
     /**

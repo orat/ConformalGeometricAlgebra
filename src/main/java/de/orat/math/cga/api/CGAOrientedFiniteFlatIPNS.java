@@ -15,7 +15,7 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedFiniteFlatIPNS extends CGAKVector {
+abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      
     CGAOrientedFiniteFlatIPNS(CGAMultivector m){
         super(m);
@@ -23,16 +23,10 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
     CGAOrientedFiniteFlatIPNS(iCGAMultivector m){
         super(m);
     }
-    // unklar, ob das hier so gut aufgehoben ist, vermutlich klappt nämlich extract
-    // nicht bei Ebenen und Kugeln da ich dann vermutlich einen Bivector bekomme
-    //  nach Abspaltung von einf
-    // dann kann ich den spezifischen extract-Methode in die spezifischen Attitude classen verschieben?
-    //TODO
-    public Vector3d attitude(){
-        CGAAttitude result = attitudeIntern();
-        System.out.println("attitude_cga="+result.toString());
-        return result.extractAttitudeFromEeinfRepresentation();
-    }
+    
+    public abstract Vector3d attitude();
+    
+    
     
     /**
      * TODO
@@ -49,8 +43,9 @@ class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        CGAMultivector result = createInf(1d).op(this).undual().negate().compress();
-        System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatIPNS)"));
+        // testweise normalisieren
+        CGAMultivector result = createInf(1d).op(this.normalize()).undual().negate().compress();
+        System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatIPNS, Dorst)"));
         // IPNS plane = (1.0*e3 + 2.0*ei)
         // attitudeIntern(CGAOrientedFiniteFlatIPNS) = (5.551115123125783E-17*eo^e1^e2 - 0.9999999999999996*e1^e2^ei)
         // die bestimmte attitude ist hier grade 3
