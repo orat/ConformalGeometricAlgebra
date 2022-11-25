@@ -133,6 +133,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * Determination of weight not based on the attitude.
      * 
      * The weight of a dual sphere is the weight of its center.
+     * 
      * @return weight
      */
     public double weight2(){
@@ -182,7 +183,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
 	//local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
         CGAMultivector result = no_inf.ip((gp(1d/weight2())).op(no_inf));
-        System.out.println(result.toString("locationIntern2 (CGASphereIPNS)"));
+        System.out.println(result.toString("locationIntern2 (CGASphereIPNS, Spencer)"));
         return new CGAE3Vector(result);
     }
     

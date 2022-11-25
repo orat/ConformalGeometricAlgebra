@@ -19,6 +19,7 @@ import de.orat.math.cga.api.CGAScalar;
 import de.orat.math.cga.api.CGASphereIPNS;
 import de.orat.math.cga.api.CGATangentVectorIPNS;
 import de.orat.math.cga.api.CGATangentVectorOPNS;
+import de.orat.math.cga.api.CGATranslator;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA_METRIC;
 import org.jogamp.vecmath.Point3d;
@@ -1016,17 +1017,21 @@ public class Test2 {
         //attitude(sphereOPNS) = (0.0,0.0,0.0)
         // unklar ob das so stimmt
         Vector3d attitude = sphereOPNS.attitude();
-        System.out.println(toString("attitude (sphereOPNS)",attitude));
+        System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
         
         // location
         // Kugel im Ursprung, test damit nicht vollständig
         Point3d location = sphereOPNS.location();
-        System.out.println(toString("location (sphereOPNS)",location));
+        System.out.println(toString("location (sphereOPNS, Dorst)",location));
         assertTrue(equals(new Point3d(0d,0d,0d),location));
         
         // squared size
-        double radiusSquared = sphereOPNS.squaredSize();
-        System.out.println(toString("radiusSquared (sphereOPNS)",radiusSquared));
+        double radiusSquared = sphereOPNS.squaredSize3();
+        System.out.println(toString("radiusSquared (sphereOPNS, Hitzer2005)",radiusSquared));        
+        assertTrue(equals(radiusSquared,1d));
+        
+        radiusSquared = sphereOPNS.squaredSize();
+        System.out.println(toString("radiusSquared (sphereOPNS, Dorst)",radiusSquared));
         assertTrue(equals(radiusSquared,1d));
     }
     
@@ -1272,13 +1277,17 @@ public class Test2 {
 
         // locCP1=(0.020000000000000004,0.020000000000000004,1.0000000000000002) (korrekt)
         System.out.println(toString("location",p1));
-        assert(equals(p,p1));
+        assertTrue(equals(p,p1));
         
 
         // squared size
-        double squaredSize = cp.squaredSize();
+        double squaredSize = cp.squaredSize3();
+        System.out.println(toString("squaredSize (sollte 0 sein, Hitzer2005)",squaredSize));
+        assertTrue(equals(squaredSize,0d));
+        
+        squaredSize = cp.squaredSize();
         // squaredSizeIntern (sollte 0 sein)=2.2512001600000007 (failed)
-        System.out.println("squaredSize (sollte 0 sein)="+String.valueOf(squaredSize));
+        System.out.println(toString("squaredSize (sollte 0 sein, Dorst)",squaredSize));
         //FIXME
         assertTrue(equals(squaredSize,0d));
         
@@ -1577,5 +1586,27 @@ public class Test2 {
         Point3d yTangentPoint = ytangent.location();
         toString("yTangent (decomposed) P", yTangentPoint);
         assertTrue(equals(yTangentPoint,p));
+    }
+    
+    public void testTranslation(){
+        System.out.println("---------------- translation--------------");
+        // transform a point
+        Point3d p = new Point3d(0,0,1);
+        CGARoundPointIPNS cp = new CGARoundPointIPNS(p);
+        System.out.println(cp.toString("p"));
+        Point3d pout = cp.location();
+        //System.out.println(toString("pout",pout));
+        assertTrue(equals(p,pout));
+        
+        Vector3d v = new Vector3d(1,0,0);
+        CGATranslator t = new CGATranslator(v);
+        CGARoundPointIPNS cp1Transform = new CGARoundPointIPNS(t.transform(cp));
+        System.out.println(cp1Transform.toString("transformed point"));
+        Point3d locationTransformed = cp1Transform.location();
+        System.out.println(toString("Transformed point", locationTransformed));
+        Point3d locationTransformedTest = new Point3d(p);
+        locationTransformedTest.add(v);
+        // Transformed point = (-0.40000000000000013,0.0,1.0000000000000004) failed sollte 1,0,1 sein
+        assertTrue(equals(locationTransformed, locationTransformedTest));
     }
 }

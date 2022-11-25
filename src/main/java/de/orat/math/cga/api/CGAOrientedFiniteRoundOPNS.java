@@ -55,7 +55,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        double result =  squaredSizeIntern(this).scalarPart();
+        double result =  squaredSizeIntern(this.toOrigin()).scalarPart();
         // testweise
         squaredSize3();
         return result;
@@ -82,12 +82,10 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     }
     
     /**
-     * Determination of the squared size. 
+     * Determination of the squared size of a round centered in the origin. 
      * 
      * precondition:
      * - location at the origin
-     * 
-     * test failed für circle_ipns
      * 
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius (maybe negative)
@@ -96,10 +94,12 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
         // CGAMultivector m_normalized = m.normalize();
         // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
-        // vermutlich funktioniert das nur wenn das Objekt im Ursprung liegt!!!!
+        // Das funktioniert nur, wenn das Objekt im Ursprung liegt!!!!
         // Vergleich mit Hitzer: gleiche Formbel bis auf op statt lc im Nenner FIXME
         //FIXME funktioniert nicht
         CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
+        // gradInversion() ist elegant, da ich damit die Formel für pp, circle und sphere
+        // verwenden kann
         CGAMultivector result = m_n.gp(m_n.gradeInversion()).div((createInf(1d).lc(m_n)).sqr()); 
         System.out.println(result.toString("squaredSize (Dorst2007)"));
         
@@ -120,6 +120,14 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         
         return result;
     }
+    
+    private CGAKVector toOrigin(){
+        Vector3d d = new Vector3d(location());
+        d.negate();
+        CGATranslator t = new CGATranslator(d);
+        return new CGAKVector(t.transform(this));
+    }
+    
     @Override
     public Point3d location(Point3d probe){
         throw new RuntimeException("Not available. Use location() without argument instead!");

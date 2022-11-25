@@ -135,22 +135,25 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      * @return location
      */
     @Override
-    public Point3d location(){
+    /*public Point3d location(){
+        // weight corresponding to CGAUtil.lua, line 223ff
         // local weight2 = -blade .. ni
         double weight = this.negate().ip(CGAMultivector.createInf(1d)).scalarPart();
-        System.out.println("CGARoundPointIPNS.location weight = "+String.valueOf(weight));
-        CGAMultivector result = this.gp(1d/weight);
-        // corresponding to CGAUtil.lua, line 223ff
+        //System.out.println("CGARoundPointIPNS.location weight = "+String.valueOf(weight));
         // blade = blade / weight2
+        CGAMultivector result = this.gp(1d/weight);
+        
+        // location corresponding to CGAUtil.lua, line 223ff
+        
         //local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
-        CGAMultivector resultTest = no_inf.ip(this.gp(1d/weight).op(no_inf));
+        CGAMultivector resultTest = no_inf.ip(result.op(no_inf));
         System.out.println(resultTest.toString("CGARoundPointIPNS.location decompose test"));
         
         System.out.println(this.toString("CGARoundPointIPNS.location decompose"));
         System.out.println(result.toString("CGARoundPointIPNS.location decompose+normalized"));
         return result.extractE3ToPoint3d();
-    }
+    }*/
     
     
     /**
@@ -163,7 +166,6 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      * 
      * @return normalized point
      */
-    @Override
     public CGARoundPointIPNS normalize(){
         CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(-1d).ip(this)));
         result.isNormalized = true;

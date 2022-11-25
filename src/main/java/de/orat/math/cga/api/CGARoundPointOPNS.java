@@ -19,7 +19,7 @@ public class CGARoundPointOPNS extends CGASphereOPNS {
         super(m);
     }
     /**
-     * Create a conformal result in outer product null space representation 
+     * Create a conformal round point in outer product null space representation 
      * (grade 4 multivector).
      * 
      * @param sphere1 first sphere in inner product null space representation
