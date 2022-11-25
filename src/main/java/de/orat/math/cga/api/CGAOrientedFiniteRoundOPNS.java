@@ -94,10 +94,10 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      */
     static CGAMultivector squaredSizeIntern(CGAKVector m){
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
-        //CGAMultivector m_normalized = m.normalize();
+        // CGAMultivector m_normalized = m.normalize();
         // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
         // vermutlich funktioniert das nur wenn das Objekt im Ursprung liegt!!!!
-        // Vergleich mit Hitzer: gleiche Formbel bis auf op statt lc im Nennen FIXME
+        // Vergleich mit Hitzer: gleiche Formbel bis auf op statt lc im Nenner FIXME
         //FIXME funktioniert nicht
         CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
         CGAMultivector result = m_n.gp(m_n.gradeInversion()).div((createInf(1d).lc(m_n)).sqr()); 

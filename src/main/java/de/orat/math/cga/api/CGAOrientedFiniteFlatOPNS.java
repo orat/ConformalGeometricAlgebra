@@ -30,7 +30,7 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
      * @return attitude
      */
     @Override
-    protected CGAAttitude attitudeIntern(){
+    public CGAAttitude attitudeIntern(){
         // corresponds to
         // Geometric Algebra: A powerful tool for solving geometric problems in visual computing
         // Leandro A. F. Fernandes, and Manuel M. Oliveira
@@ -38,7 +38,8 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         // 2009
         // also corresponding to Dorst2007 p407
         // tested for line
-        CGAMultivector result =  createInf(-1d).lc(this).compress();
+        // Achtung: create(-1d) statt negate() am Ende ändert das Vorezeichen?????
+        CGAMultivector result =  createInf(1d).lc(this).negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst)"));
         return new CGAAttitude(result);
     } 

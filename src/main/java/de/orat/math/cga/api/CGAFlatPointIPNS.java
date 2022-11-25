@@ -65,11 +65,6 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
         return (new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createE3Pseudoscalar()).gp(weight);
     }
     
-    //?
-    public CGAFlatPointIPNS(CGARoundPointIPNS p){
-        this(p.op(createInf(1d)));
-    }
-    
     /**
      * Determination the weight from this flat point without the usage of a probe
      * point and without determination of the attitude.
@@ -82,15 +77,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
         // local weight = -( no .. ( blade ^ ni ) ) * i
         return -createOrigin(1d).ip(this.op(createInf(1d))).gp(createE3Pseudoscalar()).scalarPart();
     }
-    /**
-     * Determination the squared weight.
-     *
-     * @return squared weight
-     */
-    /*@Override
-    public double squaredWeight(){
-        return Math.pow(weight(),2d);
-    }*/
+    
     
     /**
      * Determines the center of this flat point.

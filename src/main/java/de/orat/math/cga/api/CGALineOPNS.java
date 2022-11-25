@@ -70,8 +70,19 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     }
     
     @Override
+    public CGAAttitudeVectorOPNS attitudeIntern(){
+        return new CGAAttitudeVectorOPNS(super.attitudeIntern());
+    }
+    
+    /**
+     * Determine the normalized attitude of the corresponding geometric object.
+     * 
+     * @return noramlized attitude (its sign is the orientation corresponding to
+     * the euclidean pseudoscalar)
+     */
+    @Override
     public Vector3d attitude(){
-        Vector3d result = (new CGAAttitudeVectorOPNS(attitudeIntern())).direction();
+        Vector3d result = attitudeIntern().direction();
         result.normalize();
         return result;
     }

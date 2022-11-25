@@ -130,13 +130,15 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     // decomposition
     
     /**
-     * Determination of weight without probe point and not based on the attitude.
+     * Determination of weight not based on the attitude.
      * 
+     * The weight of a dual sphere is the weight of its center.
      * @return weight
      */
     public double weight2(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+        // also corresponding to Dorst2007 drills 14.9.2, nr. 3
         return negate().ip(createInf(1d)).scalarPart();
     }
     
