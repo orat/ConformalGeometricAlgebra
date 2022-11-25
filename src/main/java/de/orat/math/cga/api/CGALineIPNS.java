@@ -105,16 +105,12 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
      * FIXME für CGALineIPNS = (-2*e1^e2 - 2*e1^e3 - 2*e1^ei + 2*e2^ei + 2*e3^ei)
      * ergibt sich hier 0, warum?
      */
-    private double weight2(){
-        // following Parkin2013 CGAUtilMath lua implementation
+    private CGAScalar weightIntern2(){
+        // following Parkin2013 CGAUtilMath.pdf, lua implementation
         // local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
-        return (createOrigin(1d).ip(this.op(createInf(1d)))).
-                gp(createE3Pseudoscalar()).norm();
+        return new CGAScalar((createOrigin(1d).ip(this.op(createInf(1d)))).
+                gp(createE3Pseudoscalar()).norm());
     }
-    /*@Override
-    public double squaredWeight(){
-        return Math.pow(weight(),2d);
-    }*/
     
     /**
      * @return attitude
@@ -147,7 +143,7 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = ( no .. blade ) * normal * i
-        return new Point3d((createOrigin(1d).ip(this.gp(1d/weight2())).
+        return new Point3d((createOrigin(1d).ip(this.div(weightIntern2())).
                 gp(attitudeIntern())).gp(createE3Pseudoscalar()).extractE3ToPoint3d());
     }
     
@@ -159,18 +155,21 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     //TODO
     @Override
     public Vector3d attitude(){
-        return (new CGAAttitudeVectorOPNS(attitudeIntern())).direction(); // aus OPNS impl
+        Vector3d result = (new CGAAttitudeVectorOPNS(attitudeIntern())).direction(); // aus OPNS impl
+        result.normalize();
+        return result;
         ///CGAAttitude result = attitudeIntern();
         //System.out.println("attitude_cga="+result.toString());
         //return result.extractAttitudeFromEeinfRepresentation();
     }
     
-    public Vector3d attitudeIntern2(){
+    public CGAE3Vector attitudeIntern2(){
         // implementation following Spencer
-        CGAE3Vector result = CGAMultivector.createOrigin(1d).ip(this.div(weight2()).
-                op(CGAMultivector.createInf(1d))).gp(CGAMultivector.createE3Pseudoscalar());
+        CGAE3Vector result = new CGAE3Vector(CGAMultivector.createOrigin(1d).ip(this.div(weightIntern2()).
+                op(CGAMultivector.createInf(1d))).gp(CGAMultivector.createE3Pseudoscalar()));
         System.out.println(result.toString("attitueIntern2 (CGALineIPNS)"));
-        return result.direction();
+        return result;
+        //return result.direction();
     }
     
 }

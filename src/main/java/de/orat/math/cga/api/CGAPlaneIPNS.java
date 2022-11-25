@@ -70,16 +70,16 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     }
    
     /**
-     * Composition of a plane based on a point and a normal vector and the weight. 
+     * Composition of a plane based on a point, a normal vector and the weight. 
      * 
-     * Notice: The sign of the weight is lost in this decomposition and therefor
+     * Notice: The sign of the weight is lost in the decomposition and therefor
      * can not be recovered in decomposition.
      * 
      * looks identical to 
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @param P point in the plane
-     * @param n normal vector
+     * @param n normal vector/attitude
      * @param weight 
      */
     public CGAPlaneIPNS(Point3d P, Vector3d n, double weight){
@@ -105,7 +105,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * Diese Implementierung ist umständlich, da sie den Point3d erst in einen
      * CGAPoint up-projiziert und dann intern das wieder rückgängig macht etc.
      * 
-     * @param P
+     * @param P point laying in the plane and defining the normal vector.
      */
     public CGAPlaneIPNS(Point3d P){
         this(new CGARoundPointIPNS(P));
@@ -141,12 +141,12 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * @return attitude
      */
     @Override
-    protected CGAAttitudeBivectorOPNS attitudeIntern(){
+    public CGAAttitudeBivectorOPNS attitudeIntern(){
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         CGAMultivector result = createInf(1d).op(this).undual().negate().compress();
-        System.out.println(result.toString("attitudeIntern(CGAOrientedFiniteFlatIPNS)"));
+        System.out.println(result.toString("attitudeIntern (CGAPlaneIPNS)"));
         // IPNS plane = (1.0*e3 + 2.0*ei)
         // attitudeIntern(CGAOrientedFiniteFlatIPNS) = - 0.9999999999999996*e1^e2^ei
         // die bestimmte attitude ist hier grade 3
@@ -156,13 +156,10 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     }  
     @Override
     public Vector3d attitude(){
-        return (new CGAAttitudeBivectorOPNS(attitudeIntern())).direction();
+        Vector3d result = (new CGAAttitudeBivectorOPNS(attitudeIntern())).direction();
+        result.normalize();
+        return result;
     }
-    
-    /*@Override
-    public double squaredWeight(){
-        return Math.pow(weight(),2);
-    }*/
     
     /**
      * Determine weight without a probe point and without determination of the
@@ -170,16 +167,13 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * 
      * The sign in lost in composition of the plane and unreoverable.
      * 
-     * @return weight wihout sign (always positive)
-     * 
-     * FIXME
-     * für n=(0.0,0.0, 1.0), d=2.0 wird weight aber 0. Warum?
+     * @return weight wihout sign (always positive, the sign is lost)
      */
-    private double weight2(){
+    public double weight2Intern(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( no .. ( blade ^ ni ) ) ):tonumber()
-        return Math.abs(createOrigin(1d).ip(this.op(createInf(1d))).scalarPart());
+        return createOrigin(1d).ip(this.op(createInf(1d))).norm();
     }
     
     /**
@@ -187,36 +181,36 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * 
      * @return attitude/normal/direction
      */
-    /*@Override
-    protected CGAAttitudeVectorOPNS attitudeIntern(){
-        // attitudeIntern(CGAPlaneIPNS) = (Infinity*e3)
-        // The given multivector is not of grade 2: Infinity*e3
-        // FIXME
-        
+    public CGAE3Vector attitudeIntern2(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        //blade = blade / weight
-	//local normal = no .. ( blade ^ ni )
-        double weight = weight2();
+        // blade = blade / weight
+	// local normal = no .. ( blade ^ ni )
+        double weight = weight2Intern();
         CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(createInf(1d))).compress();
+        // attitudeIntern(CGAPlaneIPNS) = (1.0*e3)
         System.out.println(result.toString("attitudeIntern(CGAPlaneIPNS)"));
         if (weight<=0){
             System.out.println("attitudeIntern(CGAPlaneIPNS) failed because weight="+String.valueOf(weight));
         }
-        return new CGAAttitudeVectorOPNS(result);
-    }*/
+        return new CGAE3Vector(result);
+    }
     
+     
     /**
+     * Determine location.
+     * 
      * @return location
      */
-    /*@Override
-    public Point3d location(){
+    public CGAE3Vector locationIntern2(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = -( no .. blade ) * normal
-        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight())).gp(attitudeIntern()).gp(-1d);
-        return result.extractE3ToPoint3d();
-    }*/
+        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight2Intern())).gp(attitudeIntern2()).negate();
+        System.out.println(result.toString("locationIntern2 (CGAPlaneIPNS)"));
+        //return result.extractE3ToPoint3d();
+        return new CGAE3Vector(result);
+    }
     
     
     // others 

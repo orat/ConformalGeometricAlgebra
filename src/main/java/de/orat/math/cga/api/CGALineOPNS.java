@@ -71,6 +71,8 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     
     @Override
     public Vector3d attitude(){
-        return (new CGAAttitudeVectorOPNS(attitudeIntern())).direction();
+        Vector3d result = (new CGAAttitudeVectorOPNS(attitudeIntern())).direction();
+        result.normalize();
+        return result;
     }
 }

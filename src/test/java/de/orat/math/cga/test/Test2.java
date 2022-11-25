@@ -1,7 +1,6 @@
 package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
-import de.orat.math.cga.api.CGAE3Vector;
 import de.orat.math.cga.api.CGAOrientedCircleIPNS;
 import de.orat.math.cga.api.CGAOrientedCircleOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
@@ -41,6 +40,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class Test2 {
     
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
+    public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+    public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
+    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+    public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
     private static double epsilon = 0.0000001;
     
     public static CGAMultivector o = CGAMultivector.createOrigin(1d);
@@ -776,15 +794,23 @@ public class Test2 {
         // hessissche Normalenform der Ebene
         Vector3d n = new Vector3d(0d,0d,1d); n.normalize();
         double d = 2d;
+        double weight = 1d;
         System.out.println("HNF: n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
         
         CGAPlaneIPNS planeIPNS = new CGAPlaneIPNS(n, d);
+        CGAPlaneIPNS planeIPNSTest = new CGAPlaneIPNS(CGAMultivector.createEz(1d).add(CGAMultivector.createInf(2d)));
         // planeIPNS=1.0*e3 + 2.0*ei
         System.out.println(planeIPNS.toString("planeIPNS"));
+        assertTrue(planeIPNS.equals(planeIPNS));
+        
+        //TODO
+        // Wie ist die Orientierung dieser Ebene festgelegt?
         
         // attitude
+        
+        // attitude (planeIPNS, Dorst) = (0.0,0.0,-0.9999999999999996)
         Vector3d attitude = planeIPNS.attitude();
-        System.out.println(toString("attitude (planeIPNS)",attitude));
+        System.out.println(toString("attitude (planeIPNS, Dorst)",attitude));
         // attitude_cga=-0.9999999999999996*e1^e2^ei
         // attitude (planeIPNS) = (0.0,0.0,-0.9999999999999996)
         // FIXME
@@ -792,28 +818,51 @@ public class Test2 {
         // und das Vorzeichen wird nur durch die Definition des Pseudoskalars im 
         // in CGA festgelegt
         
+        // nach Spencer
+        // attitude (planeIPNS, Spencer) = (0.0,0.0,1.0)
+        attitude = planeIPNS.attitudeIntern2().direction();
+         System.out.println(toString("attitude (planeIPNS, Spencer)",attitude));
+        // normal vector/attitude nach Kleppe2016
+        CGAMultivector normal = planeIPNS.op(CGAMultivector.createInf(1d)).ip(CGAMultivector.createOrigin(1d)).negate();
+        // normal (planeIPNS, Kleppe 1) = (0)
+        System.out.println(normal.toString("normal (planeIPNS, Kleppe 1)"));
+        
+        normal = planeIPNS.undual().ip(CGAMultivector.createOrigin(1d)).ip(CGAMultivector.createInf(1d))/*.normalize()*/.negate();
+        // normal (planeIPNS, Kleppe 2) = (0)
+        System.out.println(normal.toString("normal (planeIPNS, Kleppe 2)"));
+        
+        
+        
         // squaredWeight
         double squaredWeight = planeIPNS.squaredWeight();
         // 1 da nichts bei der composition angegeben wurde
-        System.out.println(toString("squaredWeight", squaredWeight));
+        System.out.println(toString("squaredWeight (planeIPNS, Dorst)", squaredWeight));
         assertTrue(equals(squaredWeight,1d));
         
+        
+        // location
+        
         Point3d probe = new Point3d(5,5,2);
-        Point3d location = planeIPNS.location(probe);
-        // location E3 (CGAOrientedFiniteFlatIPNS) = (24.99999999999999*e1 + 24.99999999999999*e2 - 46.0*e3)
-        // location_cga (Finite flat) = (24.99999999999999*e1 + 24.99999999999999*e2 - 46.0*e3)
-        // location (plane IPNS) = (24.99999999999999,24.99999999999999,-46.0)
-        System.out.println(toString("location (plane IPNS)",location));
         Vector3d locationTest = new Vector3d(n);
         locationTest.normalize();
         locationTest.scale(d);
-        assertTrue(equals(location, locationTest));
         
-        // nach Kleppe2016
-        // liefet aber 0 sowohl für IPNS als auch für OPNS
-        //FIXME
-        CGAMultivector normal = planeIPNS.undual().op(inf).negate().ip(o);
-        System.out.println(normal.toString("normal vector nach Kleppe 2016"));
+        Point3d location = planeIPNS.locationIntern2().location(); 
+        System.out.println(toString("location (planeIPNS, Spencer)",location));
+        assertTrue(equals(location, locationTest)); 
+        
+        // location planeIPNS, Dorst
+        location = planeIPNS.location(probe);
+        
+        
+        
+        // location normalized dual sphere (CGAOrientedFiniteFlatIPNS) = (5.000000000000002*eo + 25.000000000000007*e1 + 25.000000000000007*e2 - 46.00000000000002*e3 + 23.00000000000001*ei)
+        // location E3 (CGAOrientedFiniteFlatIPNS) = (24.99999999999999*e1 + 24.99999999999999*e2 - 46.0*e3)
+        // location (plane IPNS) = (24.99999999999999,24.99999999999999,-46.0)
+        System.out.println(toString("location (planeIPNS, Dorst)",location));
+        assertTrue(equals(location, locationTest)); // failed
+        
+        
         
         CGAPlaneIPNS plane1 = new CGAPlaneIPNS(new Point3d(0d,0d,2d));
         // plane1=-1.0*e3 + 2.0000000000000004*ei

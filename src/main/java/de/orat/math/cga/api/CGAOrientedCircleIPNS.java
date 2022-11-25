@@ -67,12 +67,12 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
     public double weight2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // local weight2 = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
+        // local weight2Intern = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
         // # bedeutet magnitude
         //FIXME warum Math.abs()? Warum bekomme ich hier das Vorzeichen nicht?
         CGAMultivector result =  createOrigin(1d).op(createInf(1d).ip(this.op(createInf(1d))));
         System.out.println(result.toString("weight2 (CGAOrientedCircleIPNS)"));
-        // weight2 (CGAOrientedCircleIPNS) = (1.9999999999999991*eo^e1^ei)
+        // weight2Intern (CGAOrientedCircleIPNS) = (1.9999999999999991*eo^e1^ei)
         return Math.abs(result.norm());
     }
     
@@ -87,7 +87,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // CGAUtil.lua l.366
-        // blade = blade / weight2
+        // blade = blade / weight2Intern
 	// local normal = -no_ni .. ( blade ^ ni )
         CGAMultivector result = 
                 createOrigin(-1d).op(createInf(1d)).ip(this.gp(1d/weight2()).op(createInf(1d))).compress();
@@ -121,7 +121,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
     public double squaredSize2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // blade = blade / weight2
+        // blade = blade / weight2Intern
         // local radius_squared = ( center .. center ) - 2 * ( ( no_ni .. ( no ^ blade ) ) + ( center .. normal ) * center ) * normal
 	CGAMultivector normal = attitudeIntern2();
         CGAMultivector center = locationIntern2();

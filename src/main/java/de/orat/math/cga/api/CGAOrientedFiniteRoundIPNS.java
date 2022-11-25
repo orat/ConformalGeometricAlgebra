@@ -32,8 +32,8 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
         return result;
     }
     /**
-     * The attitude is the direction of the translation of this object from the origin
-     * to its location.
+     * The attitude is the normalized direction of the translation of this object 
+     * from the origin to its location.
      * 
      * The Euclidian parts of this direction may not be of unit weight or positive
      * orientation relative to the pseudoscalar of the Euclidean subspace they
@@ -42,15 +42,23 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * In this case the magnitude of the attitude is the weight and its sign is 
      * the orientation.
      * 
-     * @return attitude extraction from the E3 representation
+     * @return attitude extraction from the E3 representation inclusive normalization
      */
     public Vector3d attitude(){
         CGAAttitude result = attitudeIntern();
         System.out.println("attitude="+result.toString());
-        return result.extractE3ToVector3d();
+        Vector3d res = result.extractE3ToVector3d();
+        res.normalize();
+        return res;
     }
     
     /**
+     * Determination of the attitude.
+     * 
+     * The attitude is not normalized. Its length is the weight of the corresponding
+     * geometric object and the sign of the weight is its orientation relativ to
+     * the choosen pseudoscalar for the directional subspace.
+     * 
      * @return attitude
      */
     @Override
@@ -99,21 +107,10 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     }*/
     
     /**
-     * Implementation following the formulae from CGAUtil Math, Spencer T
-     * Parkin 2013. 
-     * 
-     * @return squaredWeight
-     */
-    /*@Override
-    public double squaredWeight(){
-        return Math.pow(weight(),2d);
-    }*/
-    
-    /**
      * Determination of the weight without a probe point and without determination
      * of the attitude.
      * 
-     * @return weight, can be 0
+     * @return weight, can be 0?
      */
     private double weight2(){
         // Implementation following the formulae from CGAUtil Math, Spencer T

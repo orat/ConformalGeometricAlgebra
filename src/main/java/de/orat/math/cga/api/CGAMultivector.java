@@ -300,7 +300,7 @@ public class CGAMultivector {
      */
     public double squaredWeight(Point3d probePoint){
         // probePoint(0,0,0)=1.0*eo
-        //System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
+        // System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
         return squaredWeight(attitudeIntern(), new CGARoundPointIPNS(probePoint));
     } 
     // bekomme ich da nicht immer einen AttitudeVector zurück?

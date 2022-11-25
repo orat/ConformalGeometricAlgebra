@@ -26,8 +26,6 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
     
     public abstract Vector3d attitude();
     
-    
-    
     /**
      * TODO
      * vermutlich die Methode hier ganz beseitigen, da line, plane etc. Vector
@@ -39,19 +37,13 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * @return attitude
      */
     @Override
-    protected CGAAttitude attitudeIntern(){
+    public CGAAttitude attitudeIntern(){
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         // testweise normalisieren
         CGAMultivector result = createInf(1d).op(this.normalize()).undual().negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatIPNS, Dorst)"));
-        // IPNS plane = (1.0*e3 + 2.0*ei)
-        // attitudeIntern(CGAOrientedFiniteFlatIPNS) = (5.551115123125783E-17*eo^e1^e2 - 0.9999999999999996*e1^e2^ei)
-        // die bestimmte attitude ist hier grade 3
-        //TODO
-        // vielleicht ist das aber richtig und ich muss hier einen AttitudeBivector
-        // statt einen AttitudeVector erzeugen
         return new CGAAttitude(result);
         
         /*corresponds to
@@ -71,13 +63,12 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * Leandro A. F. Fernandes, and Manuel M. Oliveira
      * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
      * 2009
-     * if probe set to origin.
      * 
      * @param probe point
      * @return result as normalized dual sphere (grade 1)
      */
-    CGAMultivector locationIntern(Point3d probe){
-        // determination of result as normalized dual sphere (getestet? vielleicht zu grosse Werte, quadratische)
+    public CGAE3Vector locationIntern(Point3d probe){
+        // determination of result as normalized dual sphere 
         CGAMultivector result =  (new CGARoundPointIPNS(probe)).op(this).div(this).compress();
         System.out.println(result.toString("location normalized dual sphere (CGAOrientedFiniteFlatIPNS)"));
         // extract E3 (ungetestet)
@@ -85,21 +76,12 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
         result = oinf.lc(oinf.op(result));
         System.out.println(result.toString("location E3 (CGAOrientedFiniteFlatIPNS)"));
-        return result;
+        return new CGAE3Vector(result);
     }
     @Override
     public Point3d location(Point3d probe){
-        // should be a normalized dual sphere (grade 1)
-        CGASphereIPNS m = new CGASphereIPNS(locationIntern(probe));
-        System.out.println(m.toString("location_cga (Finite flat)"));
-        //m.result(probe)
-        // location_cga (Finite flat) = (5.000000000000002*eo + 25.000000000000007*e1 + 25.000000000000007*e2 - 46.00000000000002*e3 + 23.00000000000001*ei)
-        // result (plane IPNS) = (25.000000000000007,25.000000000000007,-46.00000000000002)
-        return m.extractE3ToPoint3d(); 
-        // sollte funktionieren, da normalized dual sphere (grade 1) x,y,z 
-        // als e1,e2,e3 direkt enthalten sollte
-        // nein: funktioniert so nicht,da m ein dual sphere ist
-        // Dorst2007 hat weitere Formeln um E3 komplett abzuspalten
+        CGAE3Vector result = locationIntern(probe);
+        return result.location();
     }
     public FlatAndDirectionParameters decompose(Point3d probePoint){
         return new FlatAndDirectionParameters(attitude(), location(probePoint));

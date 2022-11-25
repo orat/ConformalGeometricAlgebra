@@ -28,8 +28,10 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
-        System.out.println("attitude(dualRound/dualTangent)="+result.toString());
-        return result.extractE3ToVector3d();
+        System.out.println("attitude (dualRound/dualTangent)="+result.toString());
+        Vector3d res = result.extractE3ToVector3d();
+        res.normalize();
+        return res;
     }
     /**
      * @return attitude
