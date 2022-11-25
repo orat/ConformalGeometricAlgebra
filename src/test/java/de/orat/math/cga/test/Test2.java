@@ -842,20 +842,16 @@ public class Test2 {
         
         // location
         
-        Point3d probe = new Point3d(5,5,2);
-        Vector3d locationTest = new Vector3d(n);
-        locationTest.normalize();
-        locationTest.scale(d);
-        
         Point3d location = planeIPNS.locationIntern2().location(); 
         System.out.println(toString("location (planeIPNS, Spencer)",location));
-        assertTrue(equals(location, locationTest)); 
+        assertTrue(equals(location, new Point3d(0,0,2))); 
         
+        Point3d probe = new Point3d(5,5,1); 
+        // von Hand bestimmt (Projektion von probe auf die Ebene)
+        Vector3d locationTest = new Vector3d(5,5,2);
+       
         // location planeIPNS, Dorst
         location = planeIPNS.location(probe);
-        
-        
-        
         // location normalized dual sphere (CGAOrientedFiniteFlatIPNS) = (5.000000000000002*eo + 25.000000000000007*e1 + 25.000000000000007*e2 - 46.00000000000002*e3 + 23.00000000000001*ei)
         // location E3 (CGAOrientedFiniteFlatIPNS) = (24.99999999999999*e1 + 24.99999999999999*e2 - 46.0*e3)
         // location (plane IPNS) = (24.99999999999999,24.99999999999999,-46.0)
