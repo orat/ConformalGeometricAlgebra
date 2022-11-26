@@ -22,6 +22,8 @@ public abstract class CGAVersor extends CGAMultivector {
         super(impl);
     }
     
+    // TODO Umstellung der API mit generics sodass spezifischere Class als Argument
+    // und Rückgabewert möglich werden
     public CGAMultivector transform(CGAMultivector m){
         // even number of blades
         if (isEven()){

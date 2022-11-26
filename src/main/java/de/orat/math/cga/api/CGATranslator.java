@@ -14,7 +14,7 @@ import org.jogamp.vecmath.Vector3d;
  * with d2 = 0 and weighted bases. 
  * 
  * They can be considered a double reflection in parallel planes, and can be 
- * algorithmically generated as the ratio of two flat points (see
+ * algorithmically generated as the ratio of two flat points.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -25,17 +25,16 @@ public class CGATranslator extends CGAVersor {
         // test auf blades 0,2
     }
     
-    /*public CGAMultivector translate(CGAMultivector m){
-        return transform(m);
-    }*/
-    
     public CGATranslator(Vector3d d){
         //this(createInf(1d).gp(createE3(d)).gp(0.5).exp());
-        this((new CGAScalar(1d)).sub(createE3(d).gp(0.5d).gp(createInf(1d))));
+        this((new CGAScalar(1d)).sub(createE3(d).gp(createInf(1d).gp(0.5d))));
     }
 
     @Override
     public boolean isEven() {
         return true;
+    }
+    private void test(){
+        this.grade()
     }
 }

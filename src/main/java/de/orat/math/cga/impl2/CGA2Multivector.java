@@ -233,7 +233,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
                 break;
             }
         }
-        
     }
     /**
      * Grade projection/extraction.
@@ -242,12 +241,12 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
      * 
      * @param grade
      * @return k-grade part of the multivector
+     * @throws IllegalArgumentException if grade <0 or grade > 5
      */
     @Override
     public CGA2Multivector extractGrade(int grade){
         if (grade > 5 || grade < 0) 
             throw new IllegalArgumentException ("Grade "+String.valueOf(grade)+" not allowed!");
-        // eigentlich sollte das doch zulässig sein und nur 0 herauskommen, oder?
         
         double[] arr = new double[32];
         switch (grade){
@@ -401,8 +400,66 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
 
     @Override
     public int grade() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        //  { "1","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134","e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345" };
+	int result = -1;
+        if (_mVec[0] != 0){
+            result = 0;
+        }
+        boolean found = false;
+        for (int i=1;i<6;i++){
+            if (_mVec[i] != 0) found = true;
+        }
+        if (found){
+            if (result == -1){
+                result = 1;
+            } else {
+                return -1;
+            }
+        }
+        found = false;
+        for (int i=6;i<16;i++){
+             if (_mVec[i] != 0) found = true;
+        }
+        if (found){
+            if (result == -1){
+                result = 2;
+            } else {
+                return -1;
+            }
+        }
+        found = false;
+        for (int i=16;i<26;i++){
+             if (_mVec[i] != 0) found = true;
+        }
+        if (found){
+            if (result == -1){
+                result = 3;
+            } else {
+                return -1;
+            }
+        }
+        found = false;
+        for (int i=26;i<31;i++){
+             if (_mVec[i] != 0) found = true;
+        }
+        if (found){
+            if (result == -1){
+                result = 4;
+            } else {
+                return -1;
+            }
+        }
+        found = false;
+        if (_mVec[31] != 0) found = true;
+        if (found){
+            if (result == -1){
+                result = 5;
+            } else {
+                return -1;
+            }
+        }
+        return result;
+     }
 
     @Override
     public iCGAMultivector extractGrade(int[] G) {

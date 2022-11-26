@@ -77,7 +77,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         // für circle sollte eigentlich 1.0-->-1.0 geändert werden
         // (L.ScProd(L))*(1.0/(n.OutProd(L).ScProd(n.OutProd(L))));
         double result = m.scp(m) / (createInf(1d).op(m)).sqr().scalarPart();
-        System.out.println("squaredSize (Hitzer2004, for circle change sign)="+String.valueOf(result));
+        System.out.println("squaredSize (Hitzer2004, change sign for circle)="+String.valueOf(result));
         return result;
     }
     

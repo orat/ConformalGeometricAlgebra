@@ -1606,6 +1606,7 @@ public class Test2 {
         System.out.println(toString("Transformed point", locationTransformed));
         Point3d locationTransformedTest = new Point3d(p);
         locationTransformedTest.add(v);
+        System.out.println(toString("Transformed point (test)", locationTransformedTest));
         // Transformed point = (-0.40000000000000013,0.0,1.0000000000000004) failed sollte 1,0,1 sein
         assertTrue(equals(locationTransformed, locationTransformedTest));
     }
