@@ -198,6 +198,6 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
     
     @Override
     public CGARoundPointOPNS undual(){
-        return new CGARoundPointOPNS(impl.undual());
+        return new CGARoundPointOPNS(impl.dual().gp(-1));
     }
 }

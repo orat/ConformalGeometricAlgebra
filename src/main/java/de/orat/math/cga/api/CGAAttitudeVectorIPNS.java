@@ -65,6 +65,6 @@ public class CGAAttitudeVectorIPNS extends CGAAttitude implements iCGATrivector 
     
     @Override
     public CGAAttitudeVectorOPNS undual(){
-        return new CGAAttitudeVectorOPNS(impl.undual());
+        return new CGAAttitudeVectorOPNS(impl.dual().gp(-1d));
     }
 }

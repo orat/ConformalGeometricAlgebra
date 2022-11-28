@@ -64,7 +64,7 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
     
     @Override
     public CGAPlaneIPNS undual(){
-        return new CGAPlaneIPNS(impl.undual());
+        return new CGAPlaneIPNS(impl.dual().gp(-1));
     }
     /**
      * Plane through p tangent to this.

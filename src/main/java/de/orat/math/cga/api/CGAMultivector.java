@@ -95,7 +95,9 @@ public class CGAMultivector {
     public static CGAE3Vector createE3(Tuple3d v){
             return new CGAE3Vector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
-    public static CGAMultivector createE3Pseudoscalar(){
+    public static CGAMultivector createI3(){
+        // da könnte ich doch gleich den richtigen Blade in einem Schritt erzeugen
+        //FIXME
         return createEx(1d).op(createEy(1d)).op(createEz(1d));
     }
     
@@ -146,7 +148,9 @@ public class CGAMultivector {
      * 
      * @return the multivector representing the pseudoscalar
      */
-    public static CGAMultivector createPseudoscalar(){
+    public static CGAMultivector createI(){
+        // da könnte ich doch gleich den richtigen Blade in einem Schritt erzeugen
+        //FIXME
         return createOrigin(1d).op(createEx(1d))
                 .op(createEy(1d)).op(createEz(1d))
                 .op(createInf(1d));
@@ -461,7 +465,7 @@ public class CGAMultivector {
      * the correct sign.
      */
     public CGAMultivector undual(){
-        return new CGAMultivector(impl.undual());
+        return new CGAMultivector(impl.dual().gp(-1));
     }
     
     /**

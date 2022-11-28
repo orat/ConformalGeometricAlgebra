@@ -62,7 +62,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      */
     private static CGAMultivector create(Point3d c, double weight){
         // local blade = weight * ( 1 - center ^ ni ) * i
-        return (new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createE3Pseudoscalar()).gp(weight);
+        return (new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createI3()).gp(weight);
     }
     
     /**
@@ -75,7 +75,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      */
     private double weight2(){
         // local weight = -( no .. ( blade ^ ni ) ) * i
-        return -createOrigin(1d).ip(this.op(createInf(1d))).gp(createE3Pseudoscalar()).scalarPart();
+        return -createOrigin(1d).ip(this.op(createInf(1d))).gp(createI3()).scalarPart();
     }
     
     
@@ -96,7 +96,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
         // i = e1 ^ e2 ^ e3
 	// local center = ( no .. blade ) * i
         // flat point = (-5.5511151231257765E-17*eo^e2 + 0.999999999999999*eo^ei + 0.9999999999999989*e2^ei)
-        //CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight()))).gp(createE3Pseudoscalar());
+        //CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight()))).gp(createI3());
         // CGAFlatPointIPNS.location = (NaN*e1^e3 - Infinity*eo^e1^e2^e3 + NaN*e1^e2^e3^ei)
         //FIXME stimmt irgendwie gar nicht!
         //System.out.println(result.toString("CGAFlatPointIPNS.location"));

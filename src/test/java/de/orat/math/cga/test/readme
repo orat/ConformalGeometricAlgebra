@@ -1,0 +1,9 @@
+- Test dual/undual von alle geometrischen Objekten
+- Translation fix bug
+- squaredSize nach Dorst mit Hilfe von Translation fix 
+- Normalenvektor/attitude einer Ebene
+- location einer Ebene mit probe point fix bug
+- test rotation
+- Transformation api mit generics
+- int[] grades() statt int grade() im interface, dann kann ich im interface default int grade() auf Basis von grades() implementieren
+- Vorzeichenfehler bei line attitude

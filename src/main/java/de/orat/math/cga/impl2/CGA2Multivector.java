@@ -366,10 +366,10 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return true;
     }
 
-    @Override
+    /*@Override
     public iCGAMultivector undual() {
         return dual().gp(-1d);
-    }
+    }*/
 
     @Override
     public boolean isNull() {

@@ -109,7 +109,7 @@ public interface iCGAMultivector {
         // a&b = !(!a^!b)
         //FIXME muss hier nicht dual() statt undual() stehen?
         // es scheint aber so zu funktionieren
-        return dual().op(x.dual()).undual();
+        return dual().op(x.dual()).dual().gp(-1);
     }
     
     /**
@@ -218,7 +218,7 @@ public interface iCGAMultivector {
      * 
      * @return outer product null space representation
      */
-    public iCGAMultivector undual();
+    //public iCGAMultivector undual();
 
     public double scalarPart();
     

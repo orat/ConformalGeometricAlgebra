@@ -55,9 +55,9 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        double result =  squaredSizeIntern(this.toOrigin()).scalarPart();
+        double result =  squaredSizeIntern(this).scalarPart();
         // testweise
-        squaredSize3();
+        //squaredSize3();
         return result;
     }
     /**
@@ -85,12 +85,12 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * Determination of the squared size of a round centered in the origin. 
      * 
      * precondition:
-     * - location at the origin
+     * - location at the origin?
      * 
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius (maybe negative)
      */
-    static CGAMultivector squaredSizeIntern(CGAKVector m){
+    static CGAScalar squaredSizeIntern(CGAKVector m){
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
         // CGAMultivector m_normalized = m.normalize();
         // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
@@ -98,9 +98,9 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         // Vergleich mit Hitzer: gleiche Formbel bis auf op statt lc im Nenner FIXME
         //FIXME funktioniert nicht
         CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
-        // gradInversion() ist elegant, da ich damit die Formel für pp, circle und sphere
+        // gradeInversion() ist elegant, da ich damit die Formel für pp, circle und sphere
         // verwenden kann
-        CGAMultivector result = m_n.gp(m_n.gradeInversion()).div((createInf(1d).lc(m_n)).sqr()); 
+        CGAScalar result = new CGAScalar(m_n.gp(m_n.gradeInversion()).div((createInf(1d).lc(m_n)).sqr()).compress()); 
         System.out.println(result.toString("squaredSize (Dorst2007)"));
         
         // Alternative implementation

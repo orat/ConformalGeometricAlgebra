@@ -187,12 +187,34 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         return new CGAE3Vector(result);
     }
     
+    /**
+     * Determine squared size directly form the coordinates of the 1-vector.
+     * 
+     * @return squared size/radius squared
+     */
+    public double squaredSizeIntern4(){
+        //TODO
+        // ungetestet
+        // funktioniert vermutlich so nur wenn weight==1 ist. Das muss also noch
+        // entsprechend erweitert werden
+        double[] temp = impl.extractCoordinates(1);
+        return temp[1]+temp[2]+temp[3]-2*temp[4];
+    }
+    
+    public Point3d locationInternt4(){
+        //TODO
+        // ungetestet
+        // funktioniert vermutlich so nur wenn weight==1 ist. Das muss also noch
+        // entsprechend erweitert werden
+        return this.extractE3ToPoint3d();
+    }
+    
     
     // others
     
     @Override
     public CGASphereOPNS undual(){
-        return new CGASphereOPNS(impl.undual());
+        return new CGASphereOPNS(impl.dual().gp(-1));
     }
     
     public boolean isNormalized(){

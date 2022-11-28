@@ -42,7 +42,7 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
     
     @Override
     public CGAKVector undual(){
-        return new CGAKVector(impl.undual());
+        return new CGAKVector(impl.dual().gp(-1));
     }
     @Override
     public CGAKVector dual(){

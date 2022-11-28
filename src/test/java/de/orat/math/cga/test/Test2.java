@@ -281,8 +281,10 @@ public class Test2 {
         // FIXME dual() führt zum gleichen Ergebnis
         // double radiusSquared = ppOPNS.dual().squaredSizeIntern();
         radiusSquared = ppOPNS.squaredSize();
+        // squaredSize (Dorst2007) = (-1.7500000000000007)
+        // radiusSquared (pp OPNS)=-1.7500000000000007
         System.out.println("radiusSquared (pp OPNS)="+String.valueOf(radiusSquared));
-        assertTrue(equals(radiusSquared,radiusSquaredTest)); // failed
+        assertTrue(equals(radiusSquared,radiusSquaredTest)); // failed because location of ppOPNS is not the origin
     }
     
     public void testPointPairIPNS(){
@@ -382,18 +384,18 @@ public class Test2 {
         assert(p3.equals(p3Test));
         
         // Compose circle from three points (OPNS representation)
-        CGAOrientedCircleOPNS c = new CGAOrientedCircleOPNS(p1,p2,p3);
+        CGAOrientedCircleOPNS circ = new CGAOrientedCircleOPNS(p1,p2,p3);
         // location=1.0*eo^e1^e2 - 1.0*eo^e1^e3 + 1.0*eo^e2^e3 + 1.0*e1^e2^e3 
         // + 0.5*e1^e2^ei - 0.5*e1^e3^ei + 0.5*e2^e3^ei (korrekt)
-        System.out.println("c="+c.toString());
+        System.out.println(circ.toString("circ"));
         CGAMultivector cTest = o.op(e1).op(e2).sub(o.op(e1).op(e3)).
                 add(o.op(e2).op(e3)).add(e1.op(e2).op(e3)).
                 add(e1.op(e2).op(inf).gp(0.5d).sub(e1.op(e3).op(inf).gp(0.5d)).
                 add(e2.op(e3).op(inf).gp(0.5d)));
-        System.out.println("cTest="+c.toString());
-        assert(c.equals(cTest));
+        System.out.println("cTest="+circ.toString());
+        assert(circ.equals(cTest));
         
-        double radiusSquared = c.squaredSize();
+        double radiusSquared = circ.squaredSize();
         System.out.println(toString("radiusSquared",radiusSquared));
         
         // composition of a line OPNS based on two points
@@ -503,8 +505,8 @@ public class Test2 {
         // failed da 2.58... es wird aber 0.09 erwartet
         // liegt vermutlich daran dass die Formel von normalisierter Kugel im Ursprung ausgeht
         //FIXME
-        System.out.println(toString("radiusSquared", radiusSquared1));
-        assertTrue(equals(radiusSquared1, 0.3d*0.3d));
+        System.out.println(toString("radiusSquared (sphere1, Dorst)", radiusSquared1));
+        assertTrue(equals(radiusSquared1, 0.3d*0.3d)); // failed, da location nicht im Ursprung ist
         
         
         
@@ -605,6 +607,13 @@ public class Test2 {
         // java: s&l_OPNS=eo^e1 - 0.89*e1^e2 - 0.5*e1^ei
         // ganja.js: -0.89e12-e15 = 0.89e12-0.5e1i + e01 (korrekt)
         System.out.println("s&l="+pp.toString());
+        CGAOrientedPointPairOPNS ppTest = new CGAOrientedPointPairOPNS(o.op(e1).sub(e1.op(e2).gp(0.89)).
+                sub(e1.op(inf).gp(0.5d)));
+        System.out.println(ppTest.toString("s&l test"));
+        //s&l test = (1.0*eo^e1 - 0.89*e1^e2 - 0.5*e1^ei)
+        // stimmt in der zweiten Komponente nicht sehr exakt überein, 3. Nachkommastelle ...
+        //FIXMe
+        //assertTrue(pp.equals(ppTest));
         
         // C3 = ()=>S&S2 sphereIPNS meet sphereIPNS
         CGAOrientedCircleOPNS C3 = new CGAOrientedCircleOPNS(S.vee(S2));
@@ -901,7 +910,7 @@ public class Test2 {
         //Point3d point1 = new Point3d(1,0,0);
         //Point3d point2 = new Point3d(0,1,0);
         //Point3d point3 = new Point3d(-1,0,0);
-        //Point3d c = new Point3d(0,0,0);
+        //Point3d circ = new Point3d(0,0,0);
         
         // um 1 in x verschoben
         Point3d point1 = new Point3d(1+1,0,0);
@@ -958,7 +967,7 @@ public class Test2 {
         CGARoundPointIPNS m = circleIPNS.locationIntern3();
         System.out.println(m.toString("locationIntern3 (Hildenbrand1998, circleIPNS)"));
         Point3d locationIPNS3 = m.location();
-        //assertTrue(equals(c,locationIPNS3));
+        //assertTrue(equals(circ,locationIPNS3));
         
         
         // squaredWeight 
@@ -1003,19 +1012,21 @@ public class Test2 {
         Point3d p2 = new Point3d(1d,0d,0d);
         Point3d p3 = new Point3d(0d,1d,0d);
         Point3d p4 = new Point3d(0d,0d,1d);
+        // damit sollte das Zentrum der Kugel im Ursprung liegen
         CGASphereOPNS sphereOPNS = new CGASphereOPNS(p1,p2,p3,p4);
         System.out.println(sphereOPNS.toString("sphereOPNS"));
         
         // squaredWeight
         double squaredWeight = sphereOPNS.squaredWeight();
-        //squaredWeight(sphereOPNS) = 3.9999999999999964
+        // squaredWeight(sphereOPNS) = 3.9999999999999964
         // Unklar, ob das so stimmt!!!
         //TODO
         
         // attitude
         // attitude(dualRound/dualTangent)=1.9999999999999996*e1^e2^e3^ei
-        //attitude(sphereOPNS) = (0.0,0.0,0.0)
-        // unklar ob das so stimmt
+        // attitude(sphereOPNS) = (0.0,0.0,0.0)
+        // Unklar, ob das so stimmt!!!
+        //TODO
         Vector3d attitude = sphereOPNS.attitude();
         System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
         
@@ -1032,7 +1043,8 @@ public class Test2 {
         
         radiusSquared = sphereOPNS.squaredSize();
         System.out.println(toString("radiusSquared (sphereOPNS, Dorst)",radiusSquared));
-        assertTrue(equals(radiusSquared,1d));
+        // radiusSquared (sphereOPNS, Dorst) = -1.2500000000000004
+        assertTrue(equals(radiusSquared,1d)); // Kugel um Ursprung, damit sollte auch diese Formel funktionieren (failed)
     }
     
     public void testSpheresIPNS(){
@@ -1242,7 +1254,7 @@ public class Test2 {
         System.out.println(toString("p",p));
         double weight = 2d;
         CGARoundPointIPNS cp = new CGARoundPointIPNS(p, weight);
-        System.out.println("cp="+cp.toString());
+        System.out.println(cp.toString("cp"));
         
         // products
         CGAMultivector testgp = cp.gp(cp);
@@ -1257,13 +1269,10 @@ public class Test2 {
         assertTrue(equals(testip.scalarPart(),0));
         
         // squaredWeight
-        System.out.println(toString("squaredWeight",weight*weight));
+        System.out.println(toString("squaredWeight (cp test)",weight*weight));
         double squaredWeight = cp.squaredWeight();
-        System.out.println(toString("squaredWeight (decompose)",squaredWeight)); //(sollte 4 sein)="+String.valueOf(cp.squaredWeight()));
-        // squaredWeight ist aber -4
+        System.out.println(toString("squaredWeight (cp, Dorst)",squaredWeight)); //(sollte 4 sein)="+String.valueOf(cp.squaredWeight()));
         assert(equals(weight*weight, squaredWeight));
-        
-        //RoundAndTangentParameters decomposed = cp.decompose();
         
         // attitude
         Vector3d a1 = cp.attitude();
@@ -1271,25 +1280,21 @@ public class Test2 {
         assert(equals(a1,new Vector3d(0d,0d,0d)));
         
         // locationIPNS
-        Point3d p1 = cp.location(); // ok input = (0.02,0.02,1)
-        // locCP1 lua=0.019999999999999993*e1 + 0.019999999999999993*e2 + 0.9999999999999996*e3
-        // locationFromTangentAndRound=1.0000000000000002*eo + 0.020000000000000004*e1 + 0.020000000000000004*e2 + 1.0000000000000002*e3 + 0.5004000000000001*ei
-
-        // locCP1=(0.020000000000000004,0.020000000000000004,1.0000000000000002) (korrekt)
-        System.out.println(toString("location",p1));
+        Point3d p1 = cp.location(); 
+        System.out.println(toString("location (p, Dorst)",p1));
         assertTrue(equals(p,p1));
         
 
         // squared size
         double squaredSize = cp.squaredSize3();
-        System.out.println(toString("squaredSize (sollte 0 sein, Hitzer2005)",squaredSize));
+        System.out.println(toString("squaredSize (cp, Hitzer2005)",squaredSize));
         assertTrue(equals(squaredSize,0d));
         
         squaredSize = cp.squaredSize();
         // squaredSizeIntern (sollte 0 sein)=2.2512001600000007 (failed)
         System.out.println(toString("squaredSize (sollte 0 sein, Dorst)",squaredSize));
         //FIXME
-        assertTrue(equals(squaredSize,0d));
+        assertTrue(equals(squaredSize,0d)); // failed das location != origin und weight != 0
         
         // Abstände zwischen Punkten
         Point3d p2 = new Point3d(2.02,0.02,1);
@@ -1601,9 +1606,20 @@ public class Test2 {
         Vector3d v = new Vector3d(1,0,0);
         CGATranslator t = new CGATranslator(v);
         CGARoundPointIPNS cp1Transform = new CGARoundPointIPNS(t.transform(cp));
+        // transformed point = (1.25*eo - 0.5*e1 + 1.25*e3 + 0.375*ei)
         System.out.println(cp1Transform.toString("transformed point"));
         Point3d locationTransformed = cp1Transform.location();
-        System.out.println(toString("Transformed point", locationTransformed));
+        // transformed point (location, Dorst) = (-0.40000000000000013,0.0,1.0000000000000004)
+        System.out.println(toString("transformed point (location, Dorst)", locationTransformed));
+        
+        Point3d locationTransformed4 = cp1Transform.locationInternt4();
+        // transformed point (location, 4) = (-0.5,0.0,1.25)
+        System.out.println(toString("transformed point (location, 4)", locationTransformed4));
+        
+        Point3d locationTransformed2 = cp1Transform.locationIntern2().location();
+        // transformed point (location, 2) = (-0.3999999999999998,0.0,0.9999999999999998)
+        System.out.println(toString("transformed point (location, 2)", locationTransformed2));
+        
         Point3d locationTransformedTest = new Point3d(p);
         locationTransformedTest.add(v);
         System.out.println(toString("Transformed point (test)", locationTransformedTest));

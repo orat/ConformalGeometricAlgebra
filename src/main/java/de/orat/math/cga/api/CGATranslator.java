@@ -34,7 +34,7 @@ public class CGATranslator extends CGAVersor {
     public boolean isEven() {
         return true;
     }
-    private void test(){
+    /*private void test(){
         this.grade()
-    }
+    }*/
 }
