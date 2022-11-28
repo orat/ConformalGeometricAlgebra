@@ -34,6 +34,8 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
      * Hildenbrand2013.
      * 
+     * Hint: The direction of the line is from p2 to p1.
+     * 
      * Successfull tested!!!
      * 
      * @param p1 first point on the line
@@ -43,6 +45,15 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     public CGALineOPNS(Point3d p1, Tuple3d p2){
         this((new CGARoundPointIPNS(p1)), (new CGARoundPointIPNS(p2)));
     }
+    /**
+     * 
+     * Hint: The direction of the line is from p2 to p1.
+     * 
+     * @param p1
+     * @param weight1
+     * @param p2
+     * @param weight2 
+     */
     public CGALineOPNS(Point3d p1, double weight1, Tuple3d p2, double weight2){
         this((new CGARoundPointIPNS(p1, weight1)), (new CGARoundPointIPNS(p2, weight2)));
     }

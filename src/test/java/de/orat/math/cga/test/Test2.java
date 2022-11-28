@@ -1427,32 +1427,39 @@ public class Test2 {
     public void testLine() {
         System.out.println("-------------- line --------");
         
-        Point3d p1 = new Point3d(0.0,0.0,0);
+        Point3d p1 = new Point3d(1.0,1.0,0);
+        double weight1 = 2d;
         System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
-        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1, weight1);
         System.out.println("cp1="+cp1);
         
         Point3d p2 = new Point3d(1,0.0,1);
+        double weight2 = -1d;
         System.out.println("p2=("+String.valueOf(p2.x)+","+String.valueOf(p2.y)+","+String.valueOf(p2.z)+")");
-        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2, weight2);
         System.out.println("cp2="+cp2);
         
-        Vector3d n = new Vector3d(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z);
+        Vector3d n = new Vector3d(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
         n.normalize();
         System.out.println(toString("n",n));
         
         
         // line OPNS representation
         
-        CGALineOPNS l_OPNS = new CGALineOPNS(p1, p2);
+        CGALineOPNS l_OPNS = new CGALineOPNS(p1, weight1, p2, weight2);
         // dual line represented as tri-vector
-        // l11= 0.98*no^e1^ni - 0.0196*e1^e2^ni - 0.98*e1^e3^ni
         System.out.println(l_OPNS.toString("l OPNS"));
       
+        CGALineOPNS l_OPNSTest = new CGALineOPNS(o.add(e1.add(e2)).gp(-2d).op(e3.sub(e2)).op(inf));
+        System.out.println(l_OPNSTest.toString("l_OPNSTest"));
+        assertTrue(l_OPNSTest.equals(l_OPNS));
+        
         // attitude
         Vector3d attitude = l_OPNS.attitude();
-        // sollte (0.98,0.0,0.0) 
-        System.out.println(toString("attitude (Dorst2007)",attitude));
+        // l_OPNSTest = (2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei)
+        // attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst) = (1.9999999999999991*e2^ei - 1.9999999999999991*e3^ei)
+        // attitudeIntern ist korrekt, aber output Dorst hat falsches Vorzeichen
+        System.out.println(toString("attitude (l_OPNS, Dorst2007)",attitude));
         assertTrue(equals(n, attitude));
         
         // Kleppe2016 directional component of a line
@@ -1468,8 +1475,7 @@ public class Test2 {
         // locationIPNS = (0.0,0.0,0.0) (failed)
         // Gerade geht offensichtlich nicht durch 0,0.0
         //FIXME
-        System.out.println(toString("location",location));
-        
+        System.out.println(toString("location (line OPNS, Dorst)",location));
         
         // line IPNS representation
         
@@ -1486,6 +1492,11 @@ public class Test2 {
         //FIXME
         System.out.println(toString("attitude (Dorst, lineIPNS)",attitudeDual));
         //assertTrue(equals(n, attitudeDual));
+        
+        Point3d locationIPNS = l_IPNS.location();
+        //FIXME
+        // ist auch fälschlicherweise 0
+        System.out.println(toString("location (line IPNS, Dorst)",locationIPNS));
     }
     
     public void testLinePair(){
