@@ -25,6 +25,13 @@ public class CGAMultivector {
     static int default_ip_type = LEFT_CONTRACTION;
     iCGAMultivector impl;
     
+    // do not change the scale of the following static constants
+    static private final CGAMultivector o = createOrigin(1d);
+    static private final CGAMultivector inf = createInf(1d);
+    static private final CGAMultivector I3 = createI3();
+    static private final CGAMultivector I3i = I3.inverse();
+    static private final CGAMultivector Ii = o.op(I3i).op(inf);
+    
     CGAMultivector(){
         impl = new CGA1Multivector();
     }
@@ -455,7 +462,18 @@ public class CGAMultivector {
      * with the correct sign
      */
     public CGAMultivector dual(){
-        return new CGAMultivector(impl.dual());
+        //FIXME
+        // oder muss ich hier o und inf und I3 mit dem scale des multivectors den
+        // ich dualisieren will nehmen?
+        // Dorst 375
+        return lc(Ii);
+        
+        //  Multivector I = new Multivector(new ScaledBasisBlade((1 << M.getEigenMetric().length)-1, 1.0));
+        // return ip(I._versorInverse(), M, LEFT_CONTRACTION);
+        // unklar, ob die Implementation in der Version 1 für cga so 
+        // auch richtig ist.
+        //FIXME
+        //return new CGAMultivector(impl.dual());
     }
     /**
      * This method is needed, because twice application of the dual operation can 
