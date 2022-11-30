@@ -55,32 +55,15 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        double result =  squaredSizeIntern(this).scalarPart();
+        double result =  squaredSizeIntern1(this).scalarPart();
         // testweise
         //squaredSize3();
         return result;
     }
-    /**
-     * Determination of the squared size of the corresponding geometric object.
-     * 
-     * Implementation following Hitzer2005.
-     * 
-     * @return squared size
-     */
-    public double squaredSize3(){
-        return squaredSize3Intern(this);
+   
+    public CGAScalar squaredSizeIntern1(){
+        return squaredSizeIntern1(this);
     }
-    static double squaredSize3Intern(CGAKVector m){
-        // andere impl
-        // basierend auf Hitzer2005, sollte auch für pointpair funktionieren
-        // scheint zu funktionieren für sphereopns
-        // für circle sollte eigentlich 1.0-->-1.0 geändert werden
-        // (L.ScProd(L))*(1.0/(n.OutProd(L).ScProd(n.OutProd(L))));
-        double result = m.scp(m) / (createInf(1d).op(m)).sqr().scalarPart();
-        System.out.println("squaredSize (Hitzer2004, change sign for circle)="+String.valueOf(result));
-        return result;
-    }
-    
     /**
      * Determination of the squared size of a round centered in the origin. 
      * 
@@ -90,7 +73,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius (maybe negative)
      */
-    static CGAScalar squaredSizeIntern(CGAKVector m){
+    static CGAScalar squaredSizeIntern1(CGAKVector m){
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
         // CGAMultivector m_normalized = m.normalize();
         // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
@@ -107,11 +90,11 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         // following Vince2008 for Sphere, Circle and maybe point-pair
         // failed!!!
         //result = m.gp(m).negate().div((m.op(CGAMultivector.createInf(1d))).sqr());
-        //System.out.println(result.toString("squaredSizeIntern/radiusSquared2"));
+        //System.out.println(result.toString("squaredSizeIntern1/radiusSquared2"));
         
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
-        // also nicht squaredSizeIntern bestimmt werden kann
+        // also nicht squaredSizeIntern1 bestimmt werden kann
         //dual_sphere = self.dual
         //dual_sphere /= (-dual_sphere | self.cga.einf)
         //return math.sqrt(abs(dual_sphere * dual_sphere))
@@ -121,11 +104,32 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         return result;
     }
     
-    private CGAKVector toOrigin(){
+     /**
+     * Determination of the squared size of the corresponding geometric object.
+     * 
+     * Implementation following Hitzer2005.
+     * 
+     * @return squared size
+     */
+    public CGAScalar squaredSizeIntern3(){
+        return squaredSizeIntern3(this);
+    }
+    static CGAScalar squaredSizeIntern3(CGAKVector m){
+        // andere impl
+        // basierend auf Hitzer2005, sollte auch für pointpair funktionieren
+        // scheint zu funktionieren für sphereopns
+        // für circle sollte eigentlich 1.0-->-1.0 geändert werden
+        // (L.ScProd(L))*(1.0/(n.OutProd(L).ScProd(n.OutProd(L))));
+        double result = m.scp(m) / (createInf(1d).op(m)).sqr().compress().scalarPart();
+        System.out.println("squaredSize (Hitzer2004, change sign for circle)="+String.valueOf(result));
+        return new CGAScalar(result);
+    }
+    
+    private CGAOrientedFiniteRoundOPNS toOrigin(){
         Vector3d d = new Vector3d(location());
         d.negate();
         CGATranslator t = new CGATranslator(d);
-        return new CGAKVector(t.transform(this));
+        return new CGAOrientedFiniteRoundOPNS(t.transform(this));
     }
     
     @Override

@@ -167,7 +167,7 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         // implementation following Spencer
         CGAE3Vector result = new CGAE3Vector(CGAMultivector.createOrigin(1d).ip(this.div(weightIntern2()).
                 op(CGAMultivector.createInf(1d))).gp(CGAMultivector.createI3()));
-        System.out.println(result.toString("attitueIntern2 (CGALineIPNS)"));
+        System.out.println(result.toString("attitueIntern2 (CGALineIPNS, Spencer)"));
         return result;
         //return result.direction();
     }

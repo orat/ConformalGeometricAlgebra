@@ -31,6 +31,10 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
      * Create point pair in outer product null space representation 
      * (grade 2 multivector).
      * 
+     * The point pair has a direction from point2 to point1, corresponding to
+     * Hitzer2005. This corresponds to the line defined by two points in outer
+     * product null space representation.
+     * 
      * @param point1
      * @param point2
      */

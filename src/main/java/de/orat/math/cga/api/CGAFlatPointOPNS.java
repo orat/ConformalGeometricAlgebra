@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createInf;
-import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 

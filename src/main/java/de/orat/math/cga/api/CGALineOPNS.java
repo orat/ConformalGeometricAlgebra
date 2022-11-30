@@ -67,9 +67,6 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * 
      * Be careful: The representation is called dual in Hildenbrand2013 but direkt
      * in Dorst2007.
-     * 
-     * TODO
-     * ist das identisch mit einem LineVector p^u^inf?
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(p1.op(p2).op(createInf(1d)));
@@ -85,6 +82,12 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
         return new CGAAttitudeVectorOPNS(super.attitudeIntern());
     }
     
+    public CGAE3Vector attitudeIntern2(){
+        // nach Spencer
+        CGAE3Vector result = this.dual().attitudeIntern2();
+        System.out.println(result.toString("attitudeIntern2 (CGALineOPNS, via dual, Spencer"));
+        return result;
+    }
     /**
      * Determine the normalized attitude of the corresponding geometric object.
      * 

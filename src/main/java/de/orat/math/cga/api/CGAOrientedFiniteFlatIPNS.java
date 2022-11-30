@@ -67,26 +67,26 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * @param probe point
      * @return result as E3
      */
-    public CGAE3Vector locationIntern(Point3d probe){
+    public CGARoundPointIPNS locationIntern(Point3d probe){
         // input probe as normalized point
         // determination of result as normalized dual sphere 
         CGAMultivector m_n = this.normalize(); // scheint keinen Effekt gehabt zu haben
-        CGAMultivector result =  (new CGARoundPointIPNS(probe)).op(m_n).div(m_n).compress();
+        CGARoundPointIPNS result =  new CGARoundPointIPNS((new CGARoundPointIPNS(probe)).op(m_n).div(m_n).compress());
         // (5*eo + 25*e1 + 25*e2 - 47*e3 + 23.5*ei)
         // warum enthält das eine ei component, damit wäre doch r != 0?
-        System.out.println(result.toString("location normalized dual sphere (CGAOrientedFiniteFlatIPNS)"));
+        System.out.println(result.toString("location as normalized dual sphere (CGAOrientedFiniteFlatIPNS, Dorst)"));
         //result.normalize(); // hat nichts gebracht
         //System.out.println(result.toString("location normalized dual sphere 2 (CGAOrientedFiniteFlatIPNS)"));
-        // extract E3 from normalized dual sphere
-        // Dorst2007 p.409
-        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
-        result = oinf.lc(oinf.op(result));
-        System.out.println(result.toString("location E3 (CGAOrientedFiniteFlatIPNS)"));
-        return new CGAE3Vector(result);
+        return result;
     }
     @Override
     public Point3d location(Point3d probe){
-        CGAE3Vector result = locationIntern(probe);
+        CGARoundPointIPNS res = locationIntern(probe);
+        // extract E3 from normalized dual sphere
+        // Dorst2007 p.409
+        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
+        CGAE3Vector result = new CGAE3Vector(oinf.lc(oinf.op(res)));
+        System.out.println(result.toString("location E3 (from CGAOrientedFiniteFlatIPNS, Dorst)"));
         return result.location();
     }
     public FlatAndDirectionParameters decompose(Point3d probePoint){

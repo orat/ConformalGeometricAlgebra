@@ -1,6 +1,7 @@
 package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
+import de.orat.math.cga.api.CGAE3Vector;
 import de.orat.math.cga.api.CGAOrientedCircleIPNS;
 import de.orat.math.cga.api.CGAOrientedCircleOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
@@ -166,16 +167,31 @@ public class Test2 {
         
         // 4.
         // direction of the line
-        Vector3d attitude = line.attitudeIntern().direction();
-        Vector3d attitudeTest = new Vector3d(0d,2d,-2d);
+        CGAE3Vector attitude2 = line.attitudeIntern2();
+        System.out.println(attitude2.toString("attitude2 (line OPNS)"));
+        
+        Vector3d attitude = line.attitudeIntern().direction(); // without normalizationd
+        Vector3d attitudeTest = new Vector3d(p1); 
+        attitudeTest.sub(p2); // // 0,1,-1
+        attitudeTest.scale(Math.sqrt(line.squaredWeight()));
+        System.out.println(toString("attitude Test (scaled with weight)",attitudeTest));
+        // warum p1-p2 und nicht umgekehrt?
+        // was ist das mit weight?
+        //FIXME
+        attitudeTest = new Vector3d(0d,2d,-2d);
+        System.out.println(toString("n (line opns)", attitudeTest)); 
         assertTrue(equals(attitude, attitudeTest));
         
         // weightIntern2 of the line
         double squaredLineWeight = line.squaredWeight();
+        // test
+        line.squaredWeight(new Point3d(0d,0d,0d));
+        Vector3d test = line.attitudeIntern().direction();
+        
         //FIXME mit 8 ist das um einen Faktor 2 zu gross
         // squaredLineWeight = 7.999999999999988
         // squaredLineWeight (test) = 4.0
-        System.out.println(toString("squaredLineWeight",squaredLineWeight));
+        System.out.println(toString("squaredLineWeight (line OPNS)",squaredLineWeight));
         //FIXME Wie bekomme ich das Vorzeichen?
         double lineWeightTest = -2;
         System.out.println(toString("squaredLineWeight (test)",lineWeightTest*lineWeightTest));
@@ -266,11 +282,11 @@ public class Test2 {
         //assertTrue(equals(squaredWeight,weight1*weightIntern2)); 
         
         // 2.
-        // squaredSizeIntern
+        // squaredSizeIntern1
         double radiusSquaredTest = 0.5d;
         System.out.println("radiusSquaredTest="+String.valueOf(radiusSquaredTest));
         
-        double radiusSquared = ppOPNS.squaredSize3();
+        double radiusSquared = ppOPNS.squaredSizeIntern3().scalarPart();
         System.out.println("radiusSquared3 (pp OPNS)="+String.valueOf(radiusSquared));
         assertTrue(equals(radiusSquared,radiusSquaredTest)); 
         
@@ -279,7 +295,7 @@ public class Test2 {
         // die input weights auf 1 zu setzen hat keinen Unterschied gebracht
         //System.out.println(ppOPNS.dual().toString("pp (IPNS)"));
         // FIXME dual() führt zum gleichen Ergebnis
-        // double radiusSquared = ppOPNS.dual().squaredSizeIntern();
+        // double radiusSquared = ppOPNS.dual().squaredSizeIntern1();
         radiusSquared = ppOPNS.squaredSize();
         // squaredSize (Dorst2007) = (-1.7500000000000007)
         // radiusSquared (pp OPNS)=-1.7500000000000007
@@ -308,6 +324,7 @@ public class Test2 {
         double weight2 = -1d;
         CGAOrientedPointPairOPNS ppOPNS = new CGAOrientedPointPairOPNS(p1, weight1, p2, weight2);
         testPointPairIPNS(ppOPNS.dual());
+        System.out.println(ppOPNS.toString("ppOPNS"));
     }
     
     private void testPointPairIPNS(CGAOrientedPointPairIPNS ppIPNS){
@@ -327,7 +344,7 @@ public class Test2 {
         // squaredSize
         double squaredSize = ppIPNS.squaredSize();
         System.out.println(toString("squaredSize (ppIPNS)",squaredSize));
-        squaredSize = ppIPNS.squaredSizeIntern2();
+        squaredSize = ppIPNS.squaredSizeIntern5().scalarPart();
         System.out.println(toString("squaredSize2 (ppIPNS)",squaredSize));
         
         // weight
@@ -480,9 +497,9 @@ public class Test2 {
         
         // test Spencer implementation
         
-        double squaredSize2 = s1.squaredSize2();
-        System.out.println("squaredSize2 (s1)="+String.valueOf(squaredSize2));
-        assertTrue(equals(squaredSize2, radius1*radius1));
+        double squaredSize5 = s1.squaredSizeIntern5().scalarPart();
+        System.out.println("squaredSize2 (s1)="+String.valueOf(squaredSize5));
+        assertTrue(equals(squaredSize5, radius1*radius1));
         double weight2 = s1.weight2();
         System.out.println("weight2 (s1)="+String.valueOf(weight2));
         assertTrue(equals(weight2, weightS1));
@@ -939,16 +956,16 @@ public class Test2 {
         // Wie ist das möglich?
         //FIXME
         double squaredSize = circleIPNS.squaredSize(); // failed!!!!
-        // squaredSizeIntern/radiusSquared = (-1.3906250000000013)
+        // squaredSizeIntern1/radiusSquared = (-1.3906250000000013)
         System.out.println(toString("squaredSize (circleIPNS)",squaredSize));
         
-        double squaredSize2 = circleIPNS.squaredSize2();
-        // squaredSize2 (circleIPNS) = 1.2500000000000007 //ok
+        double squaredSize2 = circleIPNS.squaredSizeIntern5().scalarPart();
+        // squaredSizeIntern5 (circleIPNS) = 1.2500000000000007 //ok
         System.out.println(toString("squaredSize2 (circleIPNS)",squaredSize2));
         assertTrue(equals(squaredSize2,radiusSquared));
         
-        double squaredSize3 = circleIPNS.squaredSize3();
-        // squaredSize3 (circleIPNS) = 1.2500000000000004
+        double squaredSize3 = circleIPNS.squaredSizeIntern3().scalarPart();
+        // squaredSizeIntern3 (circleIPNS) = 1.2500000000000004
         System.out.println(toString("squaredSize3 (circleIPNS)", squaredSize3));
         assertTrue(equals(squaredSize3,radiusSquared));
         
@@ -998,8 +1015,8 @@ public class Test2 {
         //assertTrue(equals(attitudeIPNS,attitudeTest));
         
         
-        // squaredSizeIntern
-        // squaredSizeIntern (circleIPNS) = 1.3906250000000013
+        // squaredSizeIntern1
+        // squaredSizeIntern1 (circleIPNS) = 1.3906250000000013
         //FIXME
         //assert(equals(squaredSize,radiusSquared)); // 1.25 wäre  korrekt
     }
@@ -1036,11 +1053,20 @@ public class Test2 {
         System.out.println(toString("location (sphereOPNS, Dorst)",location));
         assertTrue(equals(new Point3d(0d,0d,0d),location));
         
-        // squared size
-        double radiusSquared = sphereOPNS.squaredSize3();
+        
+        // squared size 
+        
+        // Hitzer
+        double radiusSquared = sphereOPNS.squaredSizeIntern3().scalarPart();
         System.out.println(toString("radiusSquared (sphereOPNS, Hitzer2005)",radiusSquared));        
         assertTrue(equals(radiusSquared,1d));
         
+        // Spencer via dual
+        double radiusSquared5 = sphereOPNS.dual().squaredSizeIntern5().scalarPart();
+        System.out.println(toString("radiusSquared (sphereOPNS via dual, Spencer)",radiusSquared5));        
+        assertTrue(equals(radiusSquared5,1d));
+        
+        // Dorst
         radiusSquared = sphereOPNS.squaredSize();
         System.out.println(toString("radiusSquared (sphereOPNS, Dorst)",radiusSquared));
         // radiusSquared (sphereOPNS, Dorst) = -1.2500000000000004
@@ -1071,13 +1097,13 @@ public class Test2 {
         System.out.println(toString("weight2 (sphereIPNS)", weight2));
         assert(equals(weight2*weight2,weight*weight));
         
-        // squaredSizeIntern
-        double squaredRadius2 = sphereIPNS.squaredSize2();
-        System.out.println(toString("squaredRadius2 (sphereIPNS)", squaredRadius2)); // 4.0 stimmt
-        assertTrue(equals(radius*radius,squaredRadius2));
+        // squaredSizeIntern1
+        double squaredRadius5 = sphereIPNS.squaredSizeIntern5().scalarPart();
+        System.out.println(toString("squaredRadius2 (sphereIPNS)", squaredRadius5)); // 4.0 stimmt
+        assertTrue(equals(radius*radius,squaredRadius5));
         
-        // squaredSizeIntern/squaredRadius
-        // squaredSizeIntern/radiusSquared = (4.2500000000000036) (failed)
+        // squaredSizeIntern1/squaredRadius
+        // squaredSizeIntern1/radiusSquared = (4.2500000000000036) (failed)
         // wenn Kugel im Ursprung: radius2squared = 5.000000000000004 (failed)
         // auch wenn zusätzlich weight auf 1 gesetzt wurde, ändert sich nichts
         double squaredRadius = sphereIPNS.squaredSize();
@@ -1286,13 +1312,13 @@ public class Test2 {
         
 
         // squared size
-        double squaredSize = cp.squaredSize3();
+        double squaredSize = cp.squaredSizeIntern3().scalarPart();
         System.out.println(toString("squaredSize (cp, Hitzer2005)",squaredSize));
         assertTrue(equals(squaredSize,0d));
         
         squaredSize = cp.squaredSize();
-        // squaredSizeIntern (sollte 0 sein)=2.2512001600000007 (failed)
-        System.out.println(toString("squaredSize (sollte 0 sein, Dorst)",squaredSize));
+        // squaredSizeIntern1 (sollte 0 sein)=2.2512001600000007 (failed)
+        System.out.println(toString("squaredSize (CGARoundPointIPNS, sollte 0 sein, Dorst)",squaredSize));
         //FIXME
         assertTrue(equals(squaredSize,0d)); // failed das location != origin und weight != 0
         
@@ -1604,6 +1630,108 @@ public class Test2 {
         assertTrue(equals(yTangentPoint,p));
     }
     
+    public void testSquaredSizeOfRounds(){
+        
+        System.out.println("----------------- squared size of rounds -----");
+        System.out.println("RoundPointIPNS:");
+        Point3d p = new Point3d(0d,-1d,0d); 
+        System.out.println(toString("p", p));
+        double weight = 3d;
+        System.out.println("input weight="+String.valueOf(weight));
+        CGARoundPointIPNS pc = new CGARoundPointIPNS(p, weight);
+        System.out.println(pc.toString("pc"));
+        double squaredRadius1 = pc.squaredSizeIntern1().scalarPart(); // failed
+        // squaredSizeIntern1=-2.2500000000000013
+        System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
+        double squaredRadius2 = pc.squaredSizeIntern5().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
+        double squaredRadius3 = pc.squaredSizeIntern3().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
+        double squaredRadius4 = pc.squaredSizeIntern4().scalarPart(); // failed mit -6
+        // squaredSizeIntern4=-6.0
+        System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
+        double squaredRadius5 = pc.squaredSizeIntern5().scalarPart();
+        System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5)); // ok
+        
+        System.out.println("\nSphereIPNS:");
+        double radius = 2d;
+        System.out.println("input radius="+String.valueOf(radius)+", weight="+String.valueOf(weight));
+        CGASphereIPNS sphereIPNS = new CGASphereIPNS(p, radius, weight);
+        System.out.println(sphereIPNS.toString("sphereIPNS"));
+        squaredRadius1 = sphereIPNS.squaredSizeIntern1().scalarPart(); // failed mit -4.25
+        System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
+        squaredRadius2 = sphereIPNS.squaredSizeIntern5().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
+        squaredRadius3 = sphereIPNS.squaredSizeIntern3().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
+        squaredRadius4 = sphereIPNS.squaredSizeIntern4().scalarPart(); // failed mit 6
+        System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
+        squaredRadius5 = sphereIPNS.squaredSizeIntern5().scalarPart(); // ok
+        System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5)); 
+       
+        // circle
+        System.out.println("\nCircleIPNS:");
+        
+        // Kugel 1
+        Point3d p1 = new Point3d(1d,0d,0d);
+        System.out.println(toString("p1",p1));
+        double weight1 = 1.0d;
+        radius = 1.5d;
+        CGASphereIPNS sphere1 = new CGASphereIPNS(p1, radius, weight1);
+        System.out.println(sphere1.toString("sphere1"));
+        
+        // Kugel 2
+        Point3d p2 = new Point3d(-1d,0d,0d);
+        System.out.println(toString("p2",p2));
+        double weight2 = 1.0d;
+        CGASphereIPNS sphere2 = new CGASphereIPNS(p2, radius, weight2);
+        System.out.println("sphere2="+sphere2.toString());
+        
+        // Circle from two spheres
+        CGAOrientedCircleIPNS circleIPNS = new CGAOrientedCircleIPNS(sphere1, sphere2);
+        Point3d location = new Point3d(0d,0d,0d);
+        Vector3d attitudeTest = new Vector3d(-1,0,0);
+        radius = 1.25;
+        // circle=-2.0*eo^e1 - 1.25*e1^ei (grade 2 ok)
+        System.out.println(circleIPNS.toString("circleIPNS"));
+        
+        System.out.println("input radius="+String.valueOf(radius)+", weight="+String.valueOf(weight));
+        System.out.println(circleIPNS.toString("circleIPNS"));
+        // squaredSize (Dorst2007) = (-1.0000000000000002)
+        squaredRadius1 = circleIPNS.squaredSizeIntern1().scalarPart(); // failed mit -1 falsches Vorzeichen
+        System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
+        //squaredRadius2 = circleIPNS.squaredSizeIntern2().scalarPart(); 
+        //System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
+        squaredRadius3 = circleIPNS.squaredSizeIntern3().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
+        
+        //squaredRadius4 = circleIPNS.squaredSizeIntern4().scalarPart(); // not available
+        //System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
+        squaredRadius5 = circleIPNS.squaredSizeIntern5().scalarPart(); // ok
+        System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5)); 
+        
+        // pointpair
+        System.out.println("\nPointPairIPNS:");
+        Point3d p3 = new Point3d(0d,0d,1d); 
+        double weight3 = 1d;
+        CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radius, weight3);
+        CGAOrientedPointPairIPNS pp = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
+        squaredRadius1 = pp.squaredSizeIntern1().scalarPart(); // failed mit -1 falsches Vorzeichen
+        System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
+        //squaredRadius2 = pp.squaredSizeIntern2().scalarPart(); 
+        //System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
+        squaredRadius3 = pp.squaredSizeIntern3().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
+        
+        //squaredRadius4 = pp.squaredSizeIntern4().scalarPart(); // not available
+        //System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
+        squaredRadius5 = pp.squaredSizeIntern5().scalarPart(); // ok
+        System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5));
+        
+        Point3d[] points = pp.decomposePoints();
+        double r = points[0].distance(points[1])/2d;
+        System.out.println("radius from decomposed points="+String.valueOf(r));
+    }
     public void testTranslation(){
         System.out.println("---------------- translation--------------");
         // transform a point
@@ -1622,10 +1750,6 @@ public class Test2 {
         Point3d locationTransformed = cp1Transform.location();
         // transformed point (location, Dorst) = (-0.40000000000000013,0.0,1.0000000000000004)
         System.out.println(toString("transformed point (location, Dorst)", locationTransformed));
-        
-        Point3d locationTransformed4 = cp1Transform.locationInternt4();
-        // transformed point (location, 4) = (-0.5,0.0,1.25)
-        System.out.println(toString("transformed point (location, 4)", locationTransformed4));
         
         Point3d locationTransformed2 = cp1Transform.locationIntern2().location();
         // transformed point (location, 2) = (-0.3999999999999998,0.0,0.9999999999999998)

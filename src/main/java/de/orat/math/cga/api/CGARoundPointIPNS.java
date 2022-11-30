@@ -200,4 +200,37 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
     public CGARoundPointOPNS undual(){
         return new CGARoundPointOPNS(impl.dual().gp(-1));
     }
+    
+    /*public CGAE3Vector locationIntern1(){
+        // extract E3 from normalized dual sphere
+        // Dorst2007 p.409
+        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
+        CGAMultivector result = oinf.lc(oinf.op(this));
+        System.out.println(result.toString("location as E3 (CGAOrientedFiniteFlatIPNS, Dorst)"));
+        return new CGAE3Vector(result);
+    }*/
+    /**
+     * Detmerination of the midpoint of the sphere.
+     * 
+     * @return location origin/midpoint
+     */
+    /*@Override
+    public Point3d location(){
+        return locationIntern1().extractE3ToPoint3d();
+    }*/
+    
+    @Override
+    public double squaredSize(){
+        // testweise
+        //FIXME
+        double result1 = super.squaredSize(); // Dorst via OPNS
+        double result2 = super.squaredSizeIntern5().scalarPart(); // Spencer
+        double result3 = super.squaredSizeIntern4().scalarPart(); // als dual spheres, direkt auslesen
+        // squaredSize (CGARoundPointIPNS) Dorst: 2.2500000000000018, 
+        // Spencer: 0.0, 
+        // extract coordinates: 0.0
+        System.out.println("squaredSize (CGARoundPointIPNS) Dorst: "+String.valueOf(result1)+
+                ", Spencer: "+String.valueOf(result2)+", extract coordinates: "+String.valueOf(result3));
+        return 0d;
+    }
 }

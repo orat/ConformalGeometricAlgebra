@@ -151,15 +151,15 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * 
      * @return squared size/radius imaginary sphere, if squared radius < 0
      */
-    public double squaredSize2(){
+    public CGAScalar squaredSizeIntern5(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //local radius_squared = ( center .. center ) + 2 * ( no .. blade )
 	//radius_squared = radius_squared:tonumber()
         CGAMultivector center = locationIntern2();
-        CGAMultivector result =  center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d)));
+        CGAScalar result =  new CGAScalar(center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d))).compress());
         System.out.println(result.toString("squaredSize2 (CGASphereIPNS)"));
-        return result.scalarPart();
+        return result;
     }
        
     /**
@@ -192,22 +192,24 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * 
      * @return squared size/radius squared
      */
-    public double squaredSizeIntern4(){
+    public CGAScalar squaredSizeIntern4(){
         //TODO
         // ungetestet
         // funktioniert vermutlich so nur wenn weight==1 ist. Das muss also noch
         // entsprechend erweitert werden
+        // ist das das gleiche wie normalisieren?
         double[] temp = impl.extractCoordinates(1);
-        return temp[1]+temp[2]+temp[3]-2*temp[4];
+        return new CGAScalar(temp[1]+temp[2]+temp[3]-2*temp[4]);
     }
     
-    public Point3d locationInternt4(){
+    // das kann doch gar nicht funktionieren?
+    /*public Point3d locationInternt4(){
         //TODO
         // ungetestet
         // funktioniert vermutlich so nur wenn weight==1 ist. Das muss also noch
         // entsprechend erweitert werden
         return this.extractE3ToPoint3d();
-    }
+    }*/
     
     
     // others

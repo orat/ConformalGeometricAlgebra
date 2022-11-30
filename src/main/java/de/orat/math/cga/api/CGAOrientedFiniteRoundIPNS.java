@@ -90,7 +90,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      */
     public CGARoundPointIPNS locationIntern3(){
         CGARoundPointIPNS result = new CGARoundPointIPNS(this.gp(CGAMultivector.createInf(1d)).gp(this));
-        System.out.println(result.toString("locationIntern3 (CGAOrientedFiniteRoundIPNS)"));
+        System.out.println(result.toString("locationIntern3 (CGAOrientedFiniteRoundIPNS, Hildenbrand)"));
         return result;
     }
     /**
@@ -151,10 +151,13 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return squared size/-radius squared
      */
     public double squaredSize(){
+        return squaredSizeIntern1().scalarPart();
+    }
+    public CGAScalar squaredSizeIntern1(){
         // sign corresponding to errata in Dorst2007
-        CGAMultivector result = CGAOrientedFiniteRoundOPNS.squaredSizeIntern(this.undual());
-        System.out.println(result.toString("squaredSize (CGAOrientedFiniteRoundIPNS)"));
-        return -result.scalarPart();
+        CGAScalar result = CGAOrientedFiniteRoundOPNS.squaredSizeIntern1(this.undual());
+        System.out.println(result.toString("squaredSizeIntern1 (CGAOrientedFiniteRoundIPNS)"));
+        return result;
     }
     /**
      * Squared size (=squared radius only for round, - squared radius for dual round).
@@ -163,11 +166,27 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * 
      * @return squared size/-radius squared
      */
-    public double squaredSize3(){
-        // following Hitzer, sollte bis auf Vorzeichen für circle und sphere funktionieren,
+    public CGAScalar squaredSizeIntern3(){
+        // following Hitzer, sollte das bis auf Vorzeichen für circle und sphere funktionieren,
         // möglicherweise auch für pointpair
         //FIXME oder muss ich this.dual() übergeben?
-        return CGAOrientedFiniteRoundOPNS.squaredSize3Intern(this);
+        return CGAOrientedFiniteRoundOPNS.squaredSizeIntern3(this);
+    }
+    /**
+     * ok for sphereIPNS
+     * failed for circleIPNS Multivector is not invertable: this.negate().ip(CGAMultivector.createInf(1d))
+     * 
+     * @return 
+     */
+    public CGAScalar squaredSizeIntern2(){
+        // https://github.com/pygae/clifford/blob/master/clifford/cga.py
+        // dual_sphere = self.dual
+        // dual_sphere /= (-dual_sphere | self.cga.einf)
+        // return math.sqrt(abs(dual_sphere * dual_sphere))
+        CGAMultivector result = this.div(this.negate().ip(CGAMultivector.createInf(1d)));
+        result = result.sqr().compress();
+        System.out.println(result.toString("squaredSizeIntern2 (CGAOrientedFiniteRoundIPNS)"));
+        return new CGAScalar(result);
     }
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.
@@ -178,15 +197,15 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius squared
      */
-    /*static double squaredSizeIntern(CGAKVector m){
+    /*static double squaredSizeIntern1(CGAKVector m){
         //gp(2) only in the Hildebrand2004 paper (seems to be wrong) but not in 
         // Dorst2007 p.407 - Formel für Round in Dorst also DualRound in meine Notation
         CGAMultivector result = m.gp(m.gradeInversion()).div((createInf(1d).ip(m)).sqr()).gp(-1d);
-        //System.out.println("squaredSizeIntern/radiusSquared="+result.toString());
+        //System.out.println("squaredSizeIntern1/radiusSquared="+result.toString());
         
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
-        // also nicht squaredSizeIntern bestimmt werden kann
+        // also nicht squaredSizeIntern1 bestimmt werden kann
         
         return result.scalarPart();
     }*/

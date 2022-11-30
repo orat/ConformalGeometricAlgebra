@@ -82,7 +82,6 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
     /**
      * Determines the center of this flat point.
      * 
-      * 
      * @return location as euclidean point
      */
     @Override
@@ -111,6 +110,27 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
         return result.extractE3ToPoint3d();
     }
 
+    /**
+     * Determines the center of this flat point.
+     * 
+     * @return location as euclidean point
+     */
+    public CGAE3Vector locationIntern5(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+        // It must be non-zero and of grade 3.
+        // CGAUtil.lua l.263
+        // blade = blade / weight
+        // i = e1 ^ e2 ^ e3
+	// local center = ( no .. blade ) * i
+        // flat point = (-5.5511151231257765E-17*eo^e2 + 0.999999999999999*eo^ei + 0.9999999999999989*e2^ei)
+        CGAMultivector result = (createOrigin(1d).ip(this.gp(1d/weight2()))).gp(createI3()).compress();
+        // CGAFlatPointIPNS.location = (NaN*e1^e3 - Infinity*eo^e1^e2^e3 + NaN*e1^e2^e3^ei)
+        //FIXME stimmt irgendwie gar nicht!
+        System.out.println(result.toString("locationInter5 (CGAFlatPointIPNS)"));
+        return new CGAE3Vector(result);
+    }
+    
     @Override
     public Vector3d attitude() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

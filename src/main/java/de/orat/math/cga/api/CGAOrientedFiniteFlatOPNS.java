@@ -38,7 +38,6 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         // 2009
         // also corresponding to Dorst2007 p407
         // tested for line
-        // Achtung: create(-1d) statt negate() am Ende ändert das Vorezeichen?????
         CGAMultivector result =  createInf(1d).lc(this).negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst)"));
         return new CGAAttitude(result);

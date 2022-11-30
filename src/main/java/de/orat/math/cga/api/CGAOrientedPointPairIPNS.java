@@ -106,9 +106,8 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * Determine weight without a probe point and without determination of the
      * attitute.The sign can not be determined.
      * 
-     * So leave this method private?
-     * 
-     * Implementation is differenct to circle-ipns and also different to sphere-ipns.
+     * Implementation is different to circle in IPNS representation and also 
+     * different to sphere in IPNS representation.
      * 
      * @return weight of the corresponding geometric object
      */
@@ -116,7 +115,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( ( no_ni .. ( blade ^ ni ) ) * i ) ):tonumber()
-        return (createOrigin(1d).op(createInf(1d)).ip(this.op(createInf(1d)))).gp(createI3()).scalarPart();
+        return (createOrigin(1d).op(createInf(1d)).ip(this.op(createInf(1d)))).gp(createI3()).norm();
     }
     
     
@@ -158,25 +157,27 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * Specific implementation, because generic implementation for all rounds
      * does not work.
      * 
-     * scheint nicht zu funktionieren
-     * 
      * @return squaredSize/squaredRadius
      */
-    public double squaredSizeIntern2(){
+    public CGAScalar squaredSizeIntern5(){
         // It must be non-zero and of grade 3
         // CGAUtil.lua l.293 based on center and normal
         //blade = blade / weight
-        CGAMultivector blade = this.gp(1d/weightIntern2());
+        double weight = weightIntern2();
+        System.out.println("weightIntern2 (squaredSizeIntern2, CGAOrientedPointPairIPNS)="+
+                String.valueOf(weight));
+        CGAMultivector blade = this.gp(1d/weight);
+        System.out.println(blade.toString("CGAOrientedPointPairIPNS input to determine squaredRadius"));
         CGAMultivector no = CGAMultivector.createOrigin(1d);
         CGAMultivector no_ni = no.op(CGAMultivector.createInf(1d));
         CGAMultivector center = locationIntern2();
         CGAMultivector normal = attitudeIntern2();
         // local radius_squared = -( center .. center ) + 
         // 2 * ( ( no_ni .. ( no ^ blade ) ) * i + ( center .. normal ) * center ) * normal
-        return center.ip(center).negate().add(
+        CGAMultivector result =  center.ip(center).negate().add(
                 no_ni.ip(no.op(blade)).gp(CGAMultivector.createI3()).
-                        add(center.ip(normal).gp(center)).gp(2d).gp(normal)).scalarPart();
-        //FIXME
-        // da kommt fälschlicherweise 0 raus
+                        add(center.ip(normal).gp(center)).gp(2d).gp(normal));
+        System.out.println(result.toString("squaredSizeIntern (CGAOrientedPointPairIPNS, Spencer)"));
+        return new CGAScalar(result);
     }
 }

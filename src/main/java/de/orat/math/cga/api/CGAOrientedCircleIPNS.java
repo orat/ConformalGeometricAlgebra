@@ -118,7 +118,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * 
      * @return squared size/radius squared
      */
-    public double squaredSize2(){
+    public CGAScalar squaredSizeIntern5(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight2Intern
@@ -129,13 +129,13 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         CGAMultivector inf = createInf(1d);
         CGAMultivector no_ni = o.op(inf);
         CGAMultivector result = center.ip(center).sub((no_ni.ip(o.op(this.gp(1d/weight2()))).add((o.ip(normal).gp(center)))).gp(2d).gp(normal));
-        return Math.abs(result.scalarPart());
+        return new CGAScalar(result);
     }
     
     @Override
-    public double squaredSize3(){
+    public CGAScalar squaredSizeIntern3(){
         // change sign following Hitzer2005
-        return -super.squaredSize3();
+        return new CGAScalar(super.squaredSizeIntern3().negate());
     }
     
     /**
