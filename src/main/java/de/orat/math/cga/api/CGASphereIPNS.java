@@ -107,7 +107,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * @param pointOnSphere point on the sphere
      */
     public CGASphereIPNS(CGARoundPointIPNS location, CGARoundPointIPNS pointOnSphere){
-        this(pointOnSphere.ip(location.op(createInf(1d))));
+        this(pointOnSphere.ip(location.op(inf)));
     }
     /**
      * Create (dual, real) sphere in inner product null space representation 
@@ -140,7 +140,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // also corresponding to Dorst2007 drills 14.9.2, nr. 3
-        return negate().ip(createInf(1d)).scalarPart();
+        return negate().ip(inf).scalarPart();
     }
     
     /**
@@ -181,7 +181,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //blade = blade / weight2
 	//local center = no_ni .. ( blade ^ no_ni )
-        CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
+        CGAMultivector no_inf = createOrigin(1d).op(inf);
         CGAMultivector result = no_inf.ip((gp(1d/weight2())).op(no_inf));
         System.out.println(result.toString("locationIntern2 (CGASphereIPNS, Spencer)"));
         return new CGAE3Vector(result);

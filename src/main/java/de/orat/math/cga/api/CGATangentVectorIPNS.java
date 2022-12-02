@@ -41,7 +41,7 @@ public class CGATangentVectorIPNS extends CGATangentIPNS implements iCGATrivecto
         
         // Dorst2008 Tutorial
         // the 3-blade T = a · (a ∧ u ∧ n∞).
-        return p.ip(p.op(u).op(CGAMultivector.createInf(1d))).compress();
+        return p.ip(p.op(u).op(inf)).compress();
     }
     
     @Override

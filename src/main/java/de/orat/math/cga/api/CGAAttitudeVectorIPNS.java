@@ -55,10 +55,10 @@ public class CGAAttitudeVectorIPNS extends CGAAttitude implements iCGATrivector 
     }
     
     private void testDefiningProperties(){
-        if (!CGAMultivector.createInf(1d).op(this).isNull()){
+        if (!inf.op(this).isNull()){
             throw new IllegalArgumentException("einf^X != 0");
         }
-        if (!CGAMultivector.createInf(1d).ip(this).isNull()){
+        if (!inf.ip(this).isNull()){
             throw new IllegalArgumentException("einf . X != 0");
         }
     }

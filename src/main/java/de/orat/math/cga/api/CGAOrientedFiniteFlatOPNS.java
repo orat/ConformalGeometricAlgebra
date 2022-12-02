@@ -38,7 +38,7 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
         // 2009
         // also corresponding to Dorst2007 p407
         // tested for line
-        CGAMultivector result =  createInf(1d).lc(this).negate().compress();
+        CGAMultivector result =  inf.lc(this).negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst)"));
         return new CGAAttitude(result);
     } 
@@ -155,7 +155,7 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector {
      * @return the project of the given point onto the flat.
      */
     public CGARoundPointIPNS project(CGARoundPointIPNS point){
-        CGAMultivector nino = CGAMultivector.createInf(1d).op(CGAMultivector.createOrigin(1d));
+        CGAMultivector nino = inf.op(CGAMultivector.createOrigin(1d));
         return new CGARoundPointIPNS(point.lc(this).lc(this).op(nino).gp(nino).negate().extractE3ToPoint3d());
         // kommt aufs gleiche raus
         //return new CGARoundPointIPNS(point.negate().lc(this).lc(this).op(nino).gp(nino).extractE3ToPoint3d());

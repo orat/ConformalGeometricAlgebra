@@ -71,15 +71,26 @@ public interface iCGAMultivector {
     
     //TODO
     // implement default implementations
+    /**
+     * Inner product.
+     * 
+     * The signs of the inner product are defined by the grades of the arguments. 
+     * So if the values of the arguments can be degenerated better use left-contraction
+     * to have allways correct signs.
+     * 
+     * @param b
+     * @param type
+     * @return 
+     */
     public iCGAMultivector ip(iCGAMultivector b, int type);
     public iCGAMultivector op(iCGAMultivector b);
     
     
     /**
-     * Scalarproduct.
+     * Scalar product.
      * 
      * @param x
-     * @return 
+     * @return scalar product
      */
     default double scp(iCGAMultivector x) {
         if (this.grade() != x.grade()) 

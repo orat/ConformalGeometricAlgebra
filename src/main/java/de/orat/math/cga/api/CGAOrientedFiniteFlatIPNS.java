@@ -42,7 +42,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         // testweise normalisieren
-        CGAMultivector result = createInf(1d).op(this.normalize()).undual().negate().compress();
+        CGAMultivector result = inf.op(this.normalize()).undual().negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatIPNS, Dorst)"));
         return new CGAAttitude(result);
         
@@ -84,7 +84,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         CGARoundPointIPNS res = locationIntern(probe);
         // extract E3 from normalized dual sphere
         // Dorst2007 p.409
-        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
+        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(inf);
         CGAE3Vector result = new CGAE3Vector(oinf.lc(oinf.op(res)));
         System.out.println(result.toString("location E3 (from CGAOrientedFiniteFlatIPNS, Dorst)"));
         return result.location();

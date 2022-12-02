@@ -62,7 +62,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      */
     private static CGAMultivector create(Point3d c, double weight){
         // local blade = weight * ( 1 - center ^ ni ) * i
-        return (new CGAScalar(1d)).sub(createE3(c).op(createInf(1d))).gp(createI3()).gp(weight);
+        return (new CGAScalar(1d)).sub(createE3(c).op(inf)).gp(createI3()).gp(weight);
     }
     
     /**
@@ -75,7 +75,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
      */
     private double weight2(){
         // local weight = -( no .. ( blade ^ ni ) ) * i
-        return -createOrigin(1d).ip(this.op(createInf(1d))).gp(createI3()).scalarPart();
+        return -createOrigin(1d).ip(this.op(inf)).gp(createI3()).scalarPart();
     }
     
     
@@ -104,7 +104,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
         // Dorst2007 p. 428 or Dorst Drills p. 45
         // funktioniert gut!!!
         CGAMultivector o = CGAMultivector.createOrigin(1d);
-        CGAMultivector oinf = o.op(CGAMultivector.createInf(1d));
+        CGAMultivector oinf = o.op(inf);
         CGAMultivector result = oinf.lc(o.op(this)).div(oinf.lc(this)).negate();
         //System.out.println(result.toString("CGAFlatPointIPNS.location2"));
         return result.extractE3ToPoint3d();

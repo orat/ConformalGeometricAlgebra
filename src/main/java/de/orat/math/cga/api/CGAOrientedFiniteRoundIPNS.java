@@ -25,7 +25,6 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     
     private boolean test(){
         boolean result = false;
-        CGAMultivector inf = createInf(1d);
         if ((inf.op(this).scalarPart() != 0) && (inf.ip(this).scalarPart() != 0) && (this.sqr().scalarPart() != 0d)){
             result = true;
         }
@@ -89,7 +88,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return location of the corresponding geometric object.
      */
     public CGARoundPointIPNS locationIntern3(){
-        CGARoundPointIPNS result = new CGARoundPointIPNS(this.gp(CGAMultivector.createInf(1d)).gp(this));
+        CGARoundPointIPNS result = new CGARoundPointIPNS(this.gp(inf).gp(this));
         System.out.println(result.toString("locationIntern3 (CGAOrientedFiniteRoundIPNS, Hildenbrand)"));
         return result;
     }
@@ -115,7 +114,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     private double weight2(){
         // Implementation following the formulae from CGAUtil Math, Spencer T
         // Parkin 2013. 
-        return ip(createInf(1d)).gp(-1d).scalarPart();
+        return ip(inf).gp(-1d).scalarPart();
     }
     /**
      * Determine location of the round.
@@ -183,7 +182,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
         // dual_sphere = self.dual
         // dual_sphere /= (-dual_sphere | self.cga.einf)
         // return math.sqrt(abs(dual_sphere * dual_sphere))
-        CGAMultivector result = this.div(this.negate().ip(CGAMultivector.createInf(1d)));
+        CGAMultivector result = this.div(this.negate().ip(inf));
         result = result.sqr().compress();
         System.out.println(result.toString("squaredSizeIntern2 (CGAOrientedFiniteRoundIPNS)"));
         return new CGAScalar(result);
@@ -225,7 +224,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      */
     //(point,sphere)=>-point^ni<<sphere<<sphere
     public CGARoundPointIPNS project(CGARoundPointIPNS point){
-        return new CGARoundPointIPNS(point.negate().op(CGAMultivector.createInf(1d)).
+        return new CGARoundPointIPNS(point.negate().op(inf).
                 lc(this).lc(this));
     }
 }

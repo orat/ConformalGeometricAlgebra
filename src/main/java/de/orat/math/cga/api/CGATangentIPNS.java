@@ -42,7 +42,7 @@ class CGATangentIPNS extends CGAKVector {
         CGARoundPointIPNS p = new CGARoundPointIPNS(location);
         // tangentVector=eo^e2 + eo^ei + 0.5e2^ei
         // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
-        return p.op(p.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
+        return p.op(p.negate().lc(u.gradeInversion().gp(inf)));
         // following Dorst2007 page 452
         //return p.op(p.lc(u.gp(CGAMultivector.createInf(1d))));
     }

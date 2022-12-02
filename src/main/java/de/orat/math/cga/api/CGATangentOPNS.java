@@ -42,7 +42,7 @@ class CGATangentOPNS extends CGAKVector {
         // FIXME The given multivector is not of grade 2: 0
         // following Dorst2007 page 406 or Fernandes2009 (supplementary material B)
         // general form: u can be vector (CGAMultivector.createE3(u)), bivector, trivector
-        return o.op(o.negate().lc(u.gradeInversion().gp(CGAMultivector.createInf(1d))));
+        return o.op(o.negate().lc(u.gradeInversion().gp(inf)));
     }
     
     

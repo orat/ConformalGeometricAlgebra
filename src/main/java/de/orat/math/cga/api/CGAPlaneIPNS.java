@@ -14,7 +14,7 @@ import org.jogamp.vecmath.Point3d;
  * 
  * Given two null points p and q, we can construct the dual plane in between them 
  * by simple substraction: π = p − q : subtracting one normalized point from a
- * nother eliminates the o blade and returns a vector of the form π = n + δ ∞ #
+ * nother eliminates the o blade and returns a vector of the form π = n + δ ∞
  * which represents a dual plane with normal n at distance δ from the origin.
  *
  * Planes π = n + δ ∞ are combination of a Euclidean normal vector n plus a
@@ -130,7 +130,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         return Math.sqrt((new CGARoundPointIPNS(P)).distSquare(new CGARoundPointIPNS(createOrigin(1d))));
     }
     private static CGAMultivector createNino(){
-        return createInf(1d).op(createOrigin(1d));
+        return inf.op(createOrigin(1d));
     }
     
     
@@ -146,7 +146,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        CGAMultivector result = createInf(1d).op(this).undual().negate().compress();
+        CGAMultivector result = inf.op(this).undual().negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAPlaneIPNS)"));
         // IPNS plane = (1.0*e3 + 2.0*ei)
         // attitudeIntern(CGAOrientedFiniteFlatIPNS) = - 0.9999999999999996*e1^e2^ei
@@ -174,7 +174,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( no .. ( blade ^ ni ) ) ):tonumber()
-        return createOrigin(1d).ip(this.op(createInf(1d))).norm();
+        return createOrigin(1d).ip(this.op(inf)).norm();
     }
     
     /**
@@ -188,7 +188,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         // blade = blade / weight
 	// local normal = no .. ( blade ^ ni )
         double weight = weight2Intern();
-        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(createInf(1d))).compress();
+        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(inf)).compress();
         // attitudeIntern(CGAPlaneIPNS) = (1.0*e3)
         System.out.println(result.toString("attitudeIntern(CGAPlaneIPNS)"));
         if (weight<=0){

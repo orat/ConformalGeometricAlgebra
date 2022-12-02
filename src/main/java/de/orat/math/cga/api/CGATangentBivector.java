@@ -43,7 +43,7 @@ public class CGATangentBivector extends CGATangentOPNS implements iCGATrivector 
      */
     private static CGATangentBivector createTangentBivector(Point3d p, Vector3d u){
         CGAMultivector cp = new CGARoundPointIPNS(p);
-        return new CGATangentBivector(cp.ip(cp.op(new CGARoundPointIPNS(u)).op(createInf(1d))));
+        return new CGATangentBivector(cp.ip(cp.op(new CGARoundPointIPNS(u)).op(inf)));
     }
     
 }

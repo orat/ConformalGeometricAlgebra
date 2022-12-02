@@ -69,7 +69,7 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * in Dorst2007.
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
-        this(p1.op(p2).op(createInf(1d)));
+        this(p1.op(p2).op(inf));
     }
     
     @Override

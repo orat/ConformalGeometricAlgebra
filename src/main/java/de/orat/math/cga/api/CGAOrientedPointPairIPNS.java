@@ -70,7 +70,6 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
     // Hitzer vorzunehmen.
     private static CGAMultivector createCGAMultivector(Point3d center, Vector3d normal, 
             double r, double weight, boolean sign){
-        CGAMultivector inf=createInf(1d);
         CGAMultivector o = createOrigin(1d);
         CGAMultivector no_inf = o.op(inf);
         CGAMultivector c = createE3(center);
@@ -115,7 +114,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( ( no_ni .. ( blade ^ ni ) ) * i ) ):tonumber()
-        return (createOrigin(1d).op(createInf(1d)).ip(this.op(createInf(1d)))).gp(createI3()).norm();
+        return (createOrigin(1d).op(inf).ip(this.op(inf))).gp(createI3()).norm();
     }
     
     
@@ -129,7 +128,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
         // local normal = -( no_ni .. ( blade ^ ni ) ) * i
-        return new CGAE3Vector(createOrigin(1d).op(createInf(1d)).ip(this.gp(1d/weightIntern2()).op(createInf(1d))).gp(createI3().negate()).compress());
+        return new CGAE3Vector(createOrigin(1d).op(inf).ip(this.gp(1d/weightIntern2()).op(inf)).gp(createI3().negate()).compress());
     }
     
     /**
@@ -140,11 +139,12 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
     public CGAE3Vector locationIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) ) * i
+        //blade = blade / weight
+	//local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) ) * i
+        double weight = weightIntern2();
         CGAMultivector no = createOrigin(1d);
-        CGAMultivector ni = createInf(1d);
-        CGAMultivector no_ni = no.op(ni);
-        CGAMultivector result = attitudeIntern2().negate().gp(no_ni.ip(this.gp(1d/weightIntern2()).op(no.gp(ni)))).gp(createI3());
+        CGAMultivector no_ni = no.op(inf);
+        CGAMultivector result = attitudeIntern2().negate().gp(no_ni.ip(this.gp(1d/weight).op(no.gp(inf)))).gp(createI3());
         System.out.println(result.toString("locationIntern2 (CGAOrientedPointPairIPNS)"));
         return new CGAE3Vector(result);
     }
@@ -169,7 +169,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         CGAMultivector blade = this.gp(1d/weight);
         System.out.println(blade.toString("CGAOrientedPointPairIPNS input to determine squaredRadius"));
         CGAMultivector no = CGAMultivector.createOrigin(1d);
-        CGAMultivector no_ni = no.op(CGAMultivector.createInf(1d));
+        CGAMultivector no_ni = no.op(inf);
         CGAMultivector center = locationIntern2();
         CGAMultivector normal = attitudeIntern2();
         // local radius_squared = -( center .. center ) + 

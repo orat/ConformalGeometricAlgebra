@@ -8,6 +8,6 @@ package de.orat.math.cga.api;
 public class CGAMinkovskiPlane extends CGAKVector implements iCGABivector {
     
     public CGAMinkovskiPlane(){
-        super(createOrigin(1d).op(createInf(1d)));
+        super(createOrigin(1d).op(inf));
     }
 }

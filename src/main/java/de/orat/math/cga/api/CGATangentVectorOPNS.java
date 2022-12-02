@@ -77,7 +77,7 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
         // Warum hier IPNS? ist bei line etc. auch so
         CGARoundPointIPNS p = new CGARoundPointIPNS(location);
         // following Dorst2007 page 452 (specialized form: u from euclidean vector)
-        return p.op(p.lc(CGAMultivector.createE3(u).gp(CGAMultivector.createInf(1d))));
+        return p.op(p.lc(CGAMultivector.createE3(u).gp(inf)));
     }
     
     /**
@@ -113,7 +113,6 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
     @Override
     public Point3d location(){
         // CGATangentVectorOPNS.location (flat point) = (eo^ei + e2^ei)
-        CGAMultivector inf = CGAMultivector.createInf(1d);
         // The "meet" of the line perpendicularly through "this" with the plane that 
         // contains "this".
         // corresponding to Dorst2007 p. 562

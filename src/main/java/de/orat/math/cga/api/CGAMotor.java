@@ -29,7 +29,7 @@ public class CGAMotor extends CGAVersor {
      * @throws IllegalArgumentException if d=(0,0,0)
      */
     public CGAMotor(CGABivector B, Vector3d d){
-        this(B.add(createE3(d).gp(createInf(1d))));
+        this(B.add(createE3(d).gp(inf)));
     }
     
     public MotorParameters decompose(){

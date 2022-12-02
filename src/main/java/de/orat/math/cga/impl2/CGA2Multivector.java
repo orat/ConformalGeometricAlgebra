@@ -317,15 +317,17 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
        return _mVec[0];
     }
     
-    //TODO
-    // bisher nur left contraction implementiert
     @Override
     public iCGAMultivector ip(iCGAMultivector b, int type) {
         switch (type){
             //TODO
+            // Hesteness inner product implementieren
+            case CGA1Multivector.RIGHT_CONTRACTION:
+                return new CGA2Multivector(CGA.binop_Dot((CGA) b, this));
             case CGA1Multivector.LEFT_CONTRACTION:
-            default:
                 return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
+            default:
+                throw new RuntimeException("Inner product type \""+String.valueOf(type)+"\" not yet implemented!");
         }
     }
 

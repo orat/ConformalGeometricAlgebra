@@ -8,7 +8,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * Oriented and weighted rounds are points, point-pairs, circles and spheres/hyper-spheres,
- * here given in inner product null space representation corresponding to direct round in Dorst2007.
+ * here given in outer product null space representation corresponding to direct round in Dorst2007.
  * 
  * Rounds are objects with finite areas/volumes/hyperolumes.
  * 
@@ -22,7 +22,6 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     protected CGAOrientedFiniteRoundOPNS(iCGAMultivector impl){
         super(impl);
     }
-    
     
     // decompose
     
@@ -47,20 +46,28 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.
      * 
-     * ok for dualSphere?
-     * false for pointPair
-     * false für OPNS_Sphere
-     * 
      * @param m round object represented by a multivector
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        double result =  squaredSizeIntern1(this).scalarPart();
+        // ok for dualSphere?
+        // false for pointPair
+        // false für OPNS_Sphere
+        //double result =  squaredSizeIntern1(this).scalarPart();
         // testweise
-        //squaredSize3();
-        return result;
+        CGAMultivector carrierFlat = carrierFlat();
+        System.out.println(carrierFlat.toString("carrierFlat"));
+        
+        CGAScalar result = new CGAScalar(this.gp(this.gradeInversion()).div(carrierFlat().sqr()).compress()); 
+        return result.value();
     }
    
+    /**
+     * Determination of squared size following [Dorst2007].
+     * 
+     * @return squared size
+     * @Deprecated
+    **/
     public CGAScalar squaredSizeIntern1(){
         return squaredSizeIntern1(this);
     }
@@ -72,6 +79,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * 
      * @param m round or dual round object represented by a multivector
      * @return squared size/radius (maybe negative)
+     * @Deprecated
      */
     static CGAScalar squaredSizeIntern1(CGAKVector m){
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
@@ -83,7 +91,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
         // gradeInversion() ist elegant, da ich damit die Formel für pp, circle und sphere
         // verwenden kann
-        CGAScalar result = new CGAScalar(m_n.gp(m_n.gradeInversion()).div((createInf(1d).lc(m_n)).sqr()).compress()); 
+        CGAScalar result = new CGAScalar(m_n.gp(m_n.gradeInversion()).div((inf.lc(m_n)).sqr()).compress()); 
         System.out.println(result.toString("squaredSize (Dorst2007)"));
         
         // Alternative implementation
@@ -120,7 +128,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         // scheint zu funktionieren für sphereopns
         // für circle sollte eigentlich 1.0-->-1.0 geändert werden
         // (L.ScProd(L))*(1.0/(n.OutProd(L).ScProd(n.OutProd(L))));
-        double result = m.scp(m) / (createInf(1d).op(m)).sqr().compress().scalarPart();
+        double result = m.scp(m) / (inf.op(m)).sqr().compress().scalarPart();
         System.out.println("squaredSize (Hitzer2004, change sign for circle)="+String.valueOf(result));
         return new CGAScalar(result);
     }
@@ -143,6 +151,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     }
     @Override
     public CGARoundPointIPNS locationIntern(){
+        // Dorst
         return locationFromTangentAndRoundAsNormalizedSphere(); 
     }
     
@@ -162,6 +171,6 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
      * @return the projected point = -point^ni<<sphere<<sphere
      */
     public CGAOrientedPointPairOPNS project(CGARoundPointIPNS point){
-        return new CGAOrientedPointPairOPNS(point.op(CGAMultivector.createInf(1d)).lc(this).lc(this).negate());
+        return new CGAOrientedPointPairOPNS(point.op(inf).lc(this).lc(this).negate());
     }
 }

@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import static de.orat.math.cga.api.CGAMultivector.inf;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
@@ -15,8 +16,7 @@ interface iCGATrivector extends iCGABlade {
     
     default iCGATrivector createCGATrivector(Tuple3d a, Tuple3d b){
         return (iCGATrivector) (new CGAE3Vector(a)).op(
-                (new CGAE3Vector(b)).op(
-                CGAMultivector.createInf(1d)));
+                (new CGAE3Vector(b)).op(inf));
     }
     
     public double scalarPart();

@@ -26,11 +26,12 @@ public class CGAMultivector {
     iCGAMultivector impl;
     
     // do not change the scale of the following static constants
-    static private final CGAMultivector o = createOrigin(1d);
-    static private final CGAMultivector inf = createInf(1d);
-    static private final CGAMultivector I3 = createI3();
-    static private final CGAMultivector I3i = I3.inverse();
-    static private final CGAMultivector Ii = o.op(I3i).op(inf);
+    static final CGAMultivector o = createOrigin(1d);
+    static final CGAMultivector inf = createInf(1d);
+    static final CGAMultivector I3 = createI3();
+    static final CGAMultivector I3i = I3.inverse();
+    static final CGAMultivector Ii = o.op(I3i).op(inf);
+    static final CGAMultivector E = inf.op(o);
     
     CGAMultivector(){
         impl = new CGA1Multivector();
@@ -160,7 +161,7 @@ public class CGAMultivector {
         //FIXME
         return createOrigin(1d).op(createEx(1d))
                 .op(createEy(1d)).op(createEz(1d))
-                .op(createInf(1d));
+                .op(inf);
     }
    
     /**
@@ -212,7 +213,7 @@ public class CGAMultivector {
         
         // e.g. attitude=1.9999999999999982*e2^e3^ei
         // grade 3, if invoked from a circle 
-        CGAAttitude result = new CGAAttitude(CGAMultivector.createInf(1d).lc(tangentOrRound).op(CGAMultivector.createInf(1d)).negate().compress());
+        CGAAttitude result = new CGAAttitude(inf.lc(tangentOrRound).op(inf).negate().compress());
         System.out.println(result.toString("attitude (round/tangent)"));
         
         return result;
@@ -275,7 +276,6 @@ public class CGAMultivector {
         
         // euclidean part rausziehen, scheint zu funktionieren
         CGAMultivector o = CGAMultivector.createOrigin(1d);
-        CGAMultivector inf = CGAMultivector.createInf(1d);
         CGAMultivector resultEuclidean = o.op(inf).ip(o.op(inf).op(result));
         // location (decomposed) euclidean only = (0.4999999999999998*e2)
         // FIXME nur halb so gross wie ursprünglich
@@ -289,7 +289,6 @@ public class CGAMultivector {
      */
     protected CGAMultivector locationFromTangendAndRound(){
         // corresponds to the errata of the book Dorst2007
-        CGAMultivector inf = createInf(1d);
         CGAMultivector result = (this.gp(inf).gp(this)).div((inf.ip(this)).sqr()).gp(-0.5d);
         System.out.println("locationFromTangentAndRound2="+result.toString());
         return result;
@@ -466,14 +465,14 @@ public class CGAMultivector {
         // oder muss ich hier o und inf und I3 mit dem scale des multivectors den
         // ich dualisieren will nehmen?
         // Dorst 375
-        return lc(Ii);
+        //return lc(Ii);
         
         //  Multivector I = new Multivector(new ScaledBasisBlade((1 << M.getEigenMetric().length)-1, 1.0));
         // return ip(I._versorInverse(), M, LEFT_CONTRACTION);
         // unklar, ob die Implementation in der Version 1 für cga so 
         // auch richtig ist.
         //FIXME
-        //return new CGAMultivector(impl.dual());
+        return new CGAMultivector(impl.dual());
     }
     /**
      * This method is needed, because twice application of the dual operation can 
@@ -576,7 +575,7 @@ public class CGAMultivector {
     }
     
     /**
-     * Inner or dot product.
+     * Inner- or dot-product.
      * 
      * The dot product implemented is per default the left contraction - without 
      * any extensions or modifications. The geometric meaning is usually 
@@ -591,15 +590,21 @@ public class CGAMultivector {
      * The inner product is identical to the scalar product, if the arguments
      * are Euclid vectors.
      * 
-     * @param y right side argument of the inner product
-     * @return inner product of this with a 'y'
+     * @param x right side argument of the inner product
+     * @return inner product of this with a 'x'
      */
-    public CGAMultivector ip(CGAMultivector y){
-        return new CGAMultivector(impl.ip(y.impl, default_ip_type));
+    public CGAMultivector ip(CGAMultivector x){
+        return new CGAMultivector(impl.ip(x.impl, default_ip_type));
     }
     public CGAMultivector rc(CGAMultivector x){
          return new CGAMultivector(impl.ip(x.impl, RIGHT_CONTRACTION));
     }
+    /**
+     * Left contraction.
+     * 
+     * @param x right side argument
+     * @return left contraction
+     */
     public CGAMultivector lc(CGAMultivector x){
          return new CGAMultivector(impl.ip(x.impl, LEFT_CONTRACTION));
     }
@@ -662,13 +667,14 @@ public class CGAMultivector {
     }
     
     /**
-     * Get the grade of the multivector if it is homogenious, else -1
+     * Get the grade (subspace dimension) of the multivector, if it is homogenious, else -1.
      * 
      * The grade is the number of base vectors in a blade. A blade is a multivector
      * with includes only base vectors of the same grade.
      * 
      * @return grade of the blade or -1 if the multivector contains components
-     * of different grades and therefor is not a blade.
+     * of different grades and therefor is not a blade. The result ranges from 0 (scalars)
+     * to n = p+q (pseudoscalars, n-volumens).
      */
     public int grade(){
         return impl.grade();

@@ -22,4 +22,8 @@ public class CGAScalar extends CGAKVector implements iCGAScalar {
     public CGAScalar sqrt(){
         return new CGAScalar(Math.sqrt(this.scalarPart()));
     }
+    
+    public double value(){
+        return scalarPart();
+    }
 }

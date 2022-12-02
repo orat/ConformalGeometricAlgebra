@@ -31,7 +31,7 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
      * @param p3 third point in inner product null space representation
      */
     public CGAPlaneOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2, CGARoundPointIPNS p3){
-        this(p1.op(p2).op(p3).op(createInf(1d)));
+        this(p1.op(p2).op(p3).op(inf));
     }
     
     /**
@@ -42,7 +42,7 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
      * @param p2 point 2
      */
     public CGAPlaneOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
-        this(createInf(1d).op((p1.op(p2)).dual()));
+        this(inf.op((p1.op(p2)).dual()));
     }
     
     /**
@@ -59,7 +59,7 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
     private static CGAMultivector create(Point3d p, Vector3d n){
         CGAMultivector cp = new CGARoundPointIPNS(p);
         CGAMultivector cn = new CGARoundPointIPNS(n);
-        return new CGAMultivector(cp.ip(cn.op(createInf(1d))).impl);
+        return new CGAMultivector(cp.ip(cn.op(inf)).impl);
     }
     
     @Override
@@ -86,7 +86,7 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
         // In eine Hilfsklasse auslagern? und dabei weiteres Argument einführen?
         // Was haben Ebene und Kugel gemeinsame und unterscheiden sich von Circle,point,line?
         //TODO
-        CGAMultivector m = p.op(CGAMultivector.createInf(1d)).lc(this).gp(p.op(CGAMultivector.createInf(1d)));
+        CGAMultivector m = p.op(inf).lc(this).gp(p.op(inf));
         System.out.println("tangent="+m.toString());
         // sollte grade 4 sein ist aber grade 2
         //FIXME

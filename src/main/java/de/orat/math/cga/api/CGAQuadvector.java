@@ -23,7 +23,7 @@ public class CGAQuadvector extends CGAMultivector implements iCGAQuadvector {
     public CGAQuadvector(Tuple3d a,Tuple3d b,Tuple3d c){
          this((new CGAE3Vector(a)).op(
                 (new CGAE3Vector(b)).op(
-                (new CGAE3Vector(c))).op(CGAMultivector.createInf(1d))));
+                (new CGAE3Vector(c))).op(inf)));
     }
     
     /*@Override

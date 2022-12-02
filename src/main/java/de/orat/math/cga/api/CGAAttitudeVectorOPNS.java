@@ -50,12 +50,12 @@ public class CGAAttitudeVectorOPNS extends CGAAttitude implements iCGABivector {
     }
     
     private void testDefiningProperties(){
-        if (!CGAMultivector.createInf(1d).op(this).isNull()){
+        if (!inf.op(this).isNull()){
             throw new IllegalArgumentException("einf^X != 0");
         }
         //FIXME
         // warum geht das nicht, bzw. warum sollte der folgende test eigentlich funktionieren
-        /*if (!CGAMultivector.createInf(1d).ip(this).isNull()){
+        /*if (!inf.ip(this).isNull()){
             throw new IllegalArgumentException("einf . X != 0");
         }*/
     }

@@ -29,7 +29,7 @@ public class CGASphereOPNS extends CGAOrientedFiniteRoundOPNS implements iCGAQua
      * @param p point on the sphere
      */
     public CGASphereOPNS(Point3d o, Point3d p){
-        this((new CGARoundPointIPNS(p)).ip(createInf(1d).op((new CGARoundPointIPNS(o)))));
+        this((new CGARoundPointIPNS(p)).ip(inf.op((new CGARoundPointIPNS(o)))));
     }
     
     public CGASphereOPNS(Point3d o, double r){
@@ -89,7 +89,7 @@ public class CGASphereOPNS extends CGAOrientedFiniteRoundOPNS implements iCGAQua
         // In eine Hilfsklasse auslagern? und dabei weiteres Argument einführen?
         // Was haben Ebene und Kugel gemeinsame und unterscheiden sich von Circle,point,line?
         //TODO
-        CGAMultivector m = p.op(CGAMultivector.createInf(1d)).lc(this).gp(p.op(CGAMultivector.createInf(1d)));
+        CGAMultivector m = p.op(CGAMultivector.inf).lc(this).gp(p.op(inf));
         System.out.println("tangent="+m.toString());
         // tangent=-0.69999*eo^e3 - 0.349997*e2^e3 - 0.69993*e3^ei - 0.49967*eo^e1^e3^ei + 1.39999988*eo^e2^e3^ei + 0.249983*e1^e2^e3^ei
         // woher kommen die grade2 Komponenten? Die sind vermutlich falsch?

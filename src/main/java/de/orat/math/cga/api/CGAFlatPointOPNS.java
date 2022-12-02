@@ -47,7 +47,7 @@ public class CGAFlatPointOPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
     }
     
     public CGAFlatPointOPNS(CGARoundPointIPNS p){
-        this(p.op(createInf(1d)));
+        this(p.op(inf));
     }
     
     
@@ -61,7 +61,7 @@ public class CGAFlatPointOPNS extends CGAOrientedFiniteFlatIPNS implements iCGAB
     public Point3d location(){
         
         CGAMultivector o = CGAMultivector.createOrigin(1d);
-        CGAMultivector oinf = o.op(CGAMultivector.createInf(1d));
+        CGAMultivector oinf = o.op(inf);
         
         // Dorst2007 drills 14.9.2. nr. 5
         CGAMultivector result = oinf.lc(o.op(this)).div(oinf.lc(this)).negate();

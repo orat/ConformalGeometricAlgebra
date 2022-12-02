@@ -28,8 +28,7 @@ public class CGALinePair extends CGAMultivector {
         // X soll eine sum aus 1- und 2-blade sein
         // falsch da sind auch zwei 4-blades mit drin
         CGAMultivector n0 = CGAMultivector.createOrigin(1d);
-        CGAMultivector ni = CGAMultivector.createInf(1d);
-        CGAMultivector X = sub(n0.ip(this).op(createInf(1d)));
+        CGAMultivector X = sub(n0.ip(this).op(inf));
         System.out.println("X="+X.toString());
         
         // scheint korrekt sum aus 3- und 1-blade
@@ -50,7 +49,7 @@ public class CGALinePair extends CGAMultivector {
         // coplanar
         } else if (X2.isNull()){
             // parallel
-            if (Y3.op(ni).isNull()){
+            if (Y3.op(inf).isNull()){
                 Vector3d dir = new Vector3d();
                 //TODO
                 return new Decomposition3d.LinePairParameters(0d, null, dir);

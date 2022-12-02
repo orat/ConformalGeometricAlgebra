@@ -269,12 +269,12 @@ public class Test2 {
         // attitude
         // attitude (round/tangent) = (1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei)
         // attitude(dualRound/dualTangent)=1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei
-        // attitude (pp OPNS) = (0.0,0.0,0.0)
+        // attitude (ppIPNS OPNS) = (0.0,0.0,0.0)
         Vector3d direction = ppOPNS.attitude();
         System.out.println(toString("attitude (pp OPNS)", direction));
         
         // weight
-        // squaredWeight (pp OPNS)=7.999999999999993
+        // squaredWeight (ppIPNS OPNS)=7.999999999999993
         //FIXME ist das richtig so?
         double squaredWeight = ppOPNS.squaredWeight();
         System.out.println("squaredWeight (pp OPNS)="+String.valueOf(squaredWeight));
@@ -293,12 +293,12 @@ public class Test2 {
         //FIXME
         // falsches Ergebnis mit 1,75 statt 0.5
         // die input weights auf 1 zu setzen hat keinen Unterschied gebracht
-        //System.out.println(ppOPNS.dual().toString("pp (IPNS)"));
+        //System.out.println(ppOPNS.dual().toString("ppIPNS (IPNS)"));
         // FIXME dual() führt zum gleichen Ergebnis
         // double radiusSquared = ppOPNS.dual().squaredSizeIntern1();
         radiusSquared = ppOPNS.squaredSize();
         // squaredSize (Dorst2007) = (-1.7500000000000007)
-        // radiusSquared (pp OPNS)=-1.7500000000000007
+        // radiusSquared (ppIPNS OPNS)=-1.7500000000000007
         System.out.println("radiusSquared (pp OPNS)="+String.valueOf(radiusSquared));
         assertTrue(equals(radiusSquared,radiusSquaredTest)); // failed because location of ppOPNS is not the origin
     }
@@ -630,7 +630,7 @@ public class Test2 {
         //s&l test = (1.0*eo^e1 - 0.89*e1^e2 - 0.5*e1^ei)
         // stimmt in der zweiten Komponente nicht sehr exakt überein, 3. Nachkommastelle ...
         //FIXMe
-        //assertTrue(pp.equals(ppTest));
+        //assertTrue(ppIPNS.equals(ppTest));
         
         // C3 = ()=>S&S2 sphereIPNS meet sphereIPNS
         CGAOrientedCircleOPNS C3 = new CGAOrientedCircleOPNS(S.vee(S2));
@@ -1715,22 +1715,32 @@ public class Test2 {
         Point3d p3 = new Point3d(0d,0d,1d); 
         double weight3 = 1d;
         CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radius, weight3);
-        CGAOrientedPointPairIPNS pp = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
-        squaredRadius1 = pp.squaredSizeIntern1().scalarPart(); // failed mit -1 falsches Vorzeichen
+        CGAOrientedPointPairIPNS ppIPNS = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
+        squaredRadius1 = ppIPNS.squaredSizeIntern1().scalarPart(); // failed mit -1 falsches Vorzeichen
         System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
-        //squaredRadius2 = pp.squaredSizeIntern2().scalarPart(); 
+        //squaredRadius2 = ppIPNS.squaredSizeIntern2().scalarPart(); 
         //System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
-        squaredRadius3 = pp.squaredSizeIntern3().scalarPart(); // ok 0
+        squaredRadius3 = ppIPNS.squaredSizeIntern3().scalarPart(); // ok 0
         System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
         
-        //squaredRadius4 = pp.squaredSizeIntern4().scalarPart(); // not available
+        //squaredRadius4 = ppIPNS.squaredSizeIntern4().scalarPart(); // not available
         //System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
-        squaredRadius5 = pp.squaredSizeIntern5().scalarPart(); // ok
+        squaredRadius5 = ppIPNS.squaredSizeIntern5().scalarPart(); // ok
         System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5));
         
-        Point3d[] points = pp.decomposePoints();
+        Point3d[] points = ppIPNS.decomposePoints(); // via undual and following Fernandes
         double r = points[0].distance(points[1])/2d;
         System.out.println("radius from decomposed points="+String.valueOf(r));
+        
+        // location from decomposed Points = (0.0,0.0,0.3437500000000001)
+        // FIXME stimmt das?
+        Point3d locTest = new Point3d(points[0]);
+        locTest.add(points[1]);
+        locTest.scale(1d/2d);
+        System.out.println(toString("location from decomposed Points",locTest));
+        
+        Point3d loc = ppIPNS.locationIntern2().location();
+        System.out.println(toString("locationIntern2",loc));
     }
     public void testTranslation(){
         System.out.println("---------------- translation--------------");

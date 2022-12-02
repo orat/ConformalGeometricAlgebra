@@ -32,7 +32,7 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
      * (grade 2 multivector).
      * 
      * The point pair has a direction from point2 to point1, corresponding to
-     * Hitzer2005. This corresponds to the line defined by two points in outer
+     * [Hitzer2005]. This corresponds to the line defined by two points in outer
      * product null space representation.
      * 
      * @param point1
@@ -45,13 +45,16 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     /**
      * Create point pair in outer product null space representation (grade 2 multivector).
      * 
+     * The point pair has a direction from point2 to point1, corresponding to
+     * [Hitzer2005]. This corresponds to the line defined by two points in outer
+     * product null space representation.
+    
      * @param point1
      * @param weight1
      * @param point2
      * @param weight2
      */
     public CGAOrientedPointPairOPNS(Point3d point1, double weight1, Point3d point2, double weight2){
-        //this((new CGARoundPointIPNS(point1)).op(new CGARoundPointIPNS(point2)).gp(weight));
         this(create(new CGARoundPointIPNS(point1, weight1), new CGARoundPointIPNS(point2, weight2)));
     }
     
@@ -76,14 +79,12 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     
     public Point3d[] decomposePoints(){
         Point3d[] result = new Point3d[2];
-        // vielleicht kann es hier gar keine Rundungsfehler geben, dann brauche ich
-        // hier auch keinen Aufruf von compress().
         CGAScalar sqrt = new CGAScalar(this.ip(this).compress()).sqrt();
-        
-        CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(new CGAScalar(sqrt)).div(CGAMultivector.createInf(1d).ip(this)).compress());
-        System.out.println(p1.toString("p1"));
-        CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(new CGAScalar(sqrt)).div(CGAMultivector.createInf(1d).ip(this)).compress());
+        // following Fernandes (Formelsammlung, attachement)
+        CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
         System.out.println(p2.toString("p2"));
+        CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
+        System.out.println(p1.toString("p1"));
         
         result[0] = p1.location();
         result[1] = p2.location();
