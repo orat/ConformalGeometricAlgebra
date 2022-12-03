@@ -1025,11 +1025,17 @@ public class Test2 {
         System.out.println("----------------- spheres OPNS --------------------");
         
         // Def. Kugel durch 4 Punkte die auf der Kugeloberflächen liegen sollen
-        Point3d p1 = new Point3d(0d,-1d,0d);
-        Point3d p2 = new Point3d(1d,0d,0d);
-        Point3d p3 = new Point3d(0d,1d,0d);
-        Point3d p4 = new Point3d(0d,0d,1d);
-        // damit sollte das Zentrum der Kugel im Ursprung liegen
+        Vector3d v = new Vector3d(1d,0d,0d);
+        double s = 2;
+        Point3d p1 = new Point3d(0d,-1d*s,0d);
+        p1.add(v);
+        Point3d p2 = new Point3d(1d*s,0d,0d);
+        p2.add(v);
+        Point3d p3 = new Point3d(0d,1d*s,0d);
+        p3.add(v);
+        Point3d p4 = new Point3d(0d,0d,1d*s);
+        p4.add(v);
+        // damit sollte das Zentrum der Kugel im Ursprung+v liegen
         CGASphereOPNS sphereOPNS = new CGASphereOPNS(p1,p2,p3,p4);
         System.out.println(sphereOPNS.toString("sphereOPNS"));
         
@@ -1041,8 +1047,7 @@ public class Test2 {
         
         // attitude
         // attitude(dualRound/dualTangent)=1.9999999999999996*e1^e2^e3^ei
-        // attitude(sphereOPNS) = (0.0,0.0,0.0)
-        // Unklar, ob das so stimmt!!!
+        // extract ist noch nicht richtig!!!!
         //TODO
         Vector3d attitude = sphereOPNS.attitude();
         System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
@@ -1051,7 +1056,7 @@ public class Test2 {
         // Kugel im Ursprung, test damit nicht vollständig
         Point3d location = sphereOPNS.location();
         System.out.println(toString("location (sphereOPNS, Dorst)",location));
-        assertTrue(equals(new Point3d(0d,0d,0d),location));
+        //assertTrue(equals(new Point3d(v),location));
         
         
         // squared size 
@@ -1059,18 +1064,18 @@ public class Test2 {
         // Hitzer
         double radiusSquared = sphereOPNS.squaredSizeIntern3().scalarPart();
         System.out.println(toString("radiusSquared (sphereOPNS, Hitzer2005)",radiusSquared));        
-        assertTrue(equals(radiusSquared,1d));
+        assertTrue(equals(radiusSquared,s*s));
         
         // Spencer via dual
         double radiusSquared5 = sphereOPNS.dual().squaredSizeIntern5().scalarPart();
         System.out.println(toString("radiusSquared (sphereOPNS via dual, Spencer)",radiusSquared5));        
-        assertTrue(equals(radiusSquared5,1d));
+        assertTrue(equals(radiusSquared5,s*s));
         
-        // Dorst
+        // Dorst/Hitzer2
         radiusSquared = sphereOPNS.squaredSize();
         System.out.println(toString("radiusSquared (sphereOPNS, Dorst)",radiusSquared));
         // radiusSquared (sphereOPNS, Dorst) = -1.2500000000000004
-        assertTrue(equals(radiusSquared,1d)); // Kugel um Ursprung, damit sollte auch diese Formel funktionieren (failed)
+        assertTrue(equals(radiusSquared,s*s)); // Kugel um Ursprung, damit sollte auch diese Formel funktionieren (failed)
     }
     
     public void testSpheresIPNS(){

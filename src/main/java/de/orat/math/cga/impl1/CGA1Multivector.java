@@ -217,7 +217,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     }
     @Override
     public CGA1Multivector gp(iCGAMultivector x){
-        return new CGA1Multivector(super.gp((CGA1Multivector) x));
+        return new CGA1Multivector(super.gp((CGA1Multivector) x, CGA_METRIC));
     }
     @Override
     public CGA1Multivector gp(double x){

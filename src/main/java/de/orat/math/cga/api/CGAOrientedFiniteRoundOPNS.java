@@ -23,6 +23,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         super(impl);
     }
     
+    
     // decompose
     
     public Vector3d attitude(){
@@ -43,10 +44,16 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         //return attitudeFromDualTangentAndDualRound();
     }
     
+    @Override
+    public CGAOrientedFiniteRoundOPNS normalize(){
+        return new CGAOrientedFiniteRoundOPNS(super.normalize());
+    }
+    
     /**
-     * Determination of the squared size. This is the radiusSquared for a sphere.
+     * Determination of the squared size. 
      * 
-     * @param m round object represented by a multivector
+     * This is the radiusSquared for a k-sphere.
+     * 
      * @return squared size/radius squared
      */
     public double squaredSize(){
@@ -57,8 +64,23 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         // testweise
         CGAMultivector carrierFlat = carrierFlat();
         System.out.println(carrierFlat.toString("carrierFlat"));
+        double squaredWeight = carrierFlat.sqr().scalarPart();
+        System.out.println("carrierFlat weight="+String.valueOf(squaredWeight));
+        System.out.println("oben="+this.gp(this.gradeInversion()).toString());
+        System.out.println("unten="+carrierFlat().sqr().toString());
         
-        CGAScalar result = new CGAScalar(this.gp(this.gradeInversion()).div(carrierFlat().sqr()).compress()); 
+        CGAOrientedFiniteRoundOPNS m = this.normalize();
+        carrierFlat = m.carrierFlat();
+        squaredWeight = carrierFlat.sqr().scalarPart();
+        System.out.println("carrierFlat weight2="+String.valueOf(squaredWeight));
+        // mit Skalarprodukt statt geometrischem Produkt scheint es zu stimmen
+        // aber warum dann?
+        //TODO
+        System.out.println("oben2="+String.valueOf(m.scp(m.gradeInversion()))/*.toString()*/);
+        System.out.println("unten2="+m.carrierFlat().sqr().toString());
+        
+        
+        CGAScalar result = new CGAScalar(m.gp(m.gradeInversion()).div(m.carrierFlat().sqr()).compress()); 
         return result.value();
     }
    

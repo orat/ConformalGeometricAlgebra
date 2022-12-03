@@ -36,7 +36,14 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
     }
     
     /**
-     * Determine the carier flat of a (direkt) round or a (direkt) flat.
+     * Determine the carrier flat (euclidean carrier) of a (direkt) round or a 
+     * (direkt) flat.
+     * 
+     * The carrier flat is the OPNS subspace representation of the minimal (lowest
+     * possible dimension) Euclidean subspace to include the whole geometric object
+     * when it is placed at the origin.
+     * 
+     * The carrier flat is fully position independent.
      * 
      * point pair e.g.  carrierFlat = (-1.9999999999999987*e1 + 1.9999999999999987*e2) mit w=-8
      * carrierFlat ist der Richtungsvektor von p2 nach p1
@@ -46,21 +53,26 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
      * attitude (round/tangent) = (1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei)
      * r wird zu -1.75 bestimmt statt 0.5
      * 
-     * 
      * circle e.g. carrierFlat = (0.9999999999999993*e1^e2 - 0.9999999999999993*e1^e3 + 0.9999999999999993*e2^e3)
      * 
-     * @return 
+     * sphere e.g carrierFlat = (-1.9999999999999987*e1^e2^e3)
+     * 
+     * @return carrier flat (not normalized)
      */
     CGAKVector carrierFlat(){
+        // do not normalize before, so that it is possible to determine the weight
+        // as norm of the carrier flat.
         return new CGAKVector(this.op(inf).negate().rc(E));
     }
     
     /**
-     * Determine the location of the geometric object which is represented by
-     * the k-Vector. For a flat object this is defined by the perpendicular 
+     * Determine the location of the geometric object, which is represented by
+     * the k-Vector. 
+     * 
+     * For a flat object this is defined by the perpendicular 
      * distance vector of the origin to the carrier plane.
      * 
-     * @return 
+     * @return location
      */
     /*@Override
     public Point3d location(){
