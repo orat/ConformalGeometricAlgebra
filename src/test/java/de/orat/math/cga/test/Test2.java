@@ -157,23 +157,23 @@ public class Test2 {
         assert(equals(d,2));
         
         // 3.
-        // line in OPNS representation
-        CGALineOPNS line = new CGALineOPNS(p1cga, p2cga);
-        System.out.println(line.toString("lineOPNS"));
+        // lineOPNS_ in OPNS representation
+        CGALineOPNS lineOPNS_ = new CGALineOPNS(p1cga, p2cga);
+        System.out.println(lineOPNS_.toString("lineOPNS"));
         CGALineOPNS lineTest = new CGALineOPNS(CGAMultivector.createOrigin(1d).add(CGAMultivector.createE3(p1)).
                 gp(-2).op(CGAMultivector.createE3(new Point3d(0d,-1d,1d))).op(CGAMultivector.createInf(1d)));
         System.out.println(lineTest.toString("lineOPNS (test)"));
-        assertTrue(line.equals(lineTest));
+        assertTrue(lineOPNS_.equals(lineTest));
         
         // 4.
-        // direction of the line
-        CGAE3Vector attitude2 = line.attitudeIntern2();
+        // direction of the lineOPNS_
+        CGAE3Vector attitude2 = lineOPNS_.attitudeIntern2();
         System.out.println(attitude2.toString("attitude2 (line OPNS)"));
         
-        Vector3d attitude = line.attitudeIntern().direction(); // without normalizationd
+        Vector3d attitude = lineOPNS_.attitudeIntern().direction(); // without normalizationd
         Vector3d attitudeTest = new Vector3d(p1); 
         attitudeTest.sub(p2); // // 0,1,-1
-        attitudeTest.scale(Math.sqrt(line.squaredWeight()));
+        attitudeTest.scale(Math.sqrt(lineOPNS_.squaredWeight()));
         System.out.println(toString("attitude Test (scaled with weight)",attitudeTest));
         // warum p1-p2 und nicht umgekehrt?
         // was ist das mit weight?
@@ -182,11 +182,17 @@ public class Test2 {
         System.out.println(toString("n (line opns)", attitudeTest)); 
         assertTrue(equals(attitude, attitudeTest));
         
-        // weightIntern2 of the line
-        double squaredLineWeight = line.squaredWeight();
+        CGAMultivector carrierFlat = lineOPNS_.carrierFlat();
+        // anderes Vorzeichen als Dorst
+        //FIXME
+        // failed für OPNS line, warum?
+        System.out.println(carrierFlat.toString("carrierFlat (line OPNS)"));
+        
+        // weightIntern2 of the lineOPNS_
+        double squaredLineWeight = lineOPNS_.squaredWeight();
         // test
-        line.squaredWeight(new Point3d(0d,0d,0d));
-        Vector3d test = line.attitudeIntern().direction();
+        lineOPNS_.squaredWeight(new Point3d(0d,0d,0d));
+        Vector3d test = lineOPNS_.attitudeIntern().direction();
         
         //FIXME mit 8 ist das um einen Faktor 2 zu gross
         // squaredLineWeight = 7.999999999999988
@@ -198,8 +204,8 @@ public class Test2 {
         //assertTrue(equals(squaredLineWeight, lineWeightTest*lineWeightTest));
         
         // 6.
-        // plane through line and origin in OPNS representation
-        CGAPlaneOPNS planeOPNS = new CGAPlaneOPNS(line.op(o));
+        // plane through lineOPNS_ and origin in OPNS representation
+        CGAPlaneOPNS planeOPNS = new CGAPlaneOPNS(lineOPNS_.op(o));
         System.out.println(planeOPNS.toString("planeOPNS"));
         CGAPlaneOPNS planeOPNSTest = new CGAPlaneOPNS(o.op(e1).op(e3).op(inf).sub(o.op(e1).op(e2).op(inf)).add(
                                 o.op(e2).op(e3).op(inf)).gp(2d));
@@ -208,8 +214,10 @@ public class Test2 {
         
         // 7.
         // direction (Normalenvektor?)
-        // attitudeIntern(CGAOrientedFiniteFlatOPNS) = (-1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei)
-        // The given multivector is not of grade 2: -1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei
+        // attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst) = (-1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei)
+        // attitudePlaneOPNS = (0.5773502691896258,0.5773502691896258,-0.5773502691896258)
+        // attitudePlaneOPNS (test) = (2.0*e1^e2^ei + 2.0*e1^e3^ei + 2.0*e2^e3^ei)
+
         Vector3d attitudePlaneOPNS = planeOPNS.attitude();
         attitudePlaneOPNS.normalize();
         System.out.println(toString("attitudePlaneOPNS",attitudePlaneOPNS));
@@ -219,6 +227,11 @@ public class Test2 {
         Vector3d dirTest = new Vector3d(2,2,-2);
         dirTest.normalize();
         assertTrue(equals(attitudePlaneOPNS, dirTest));
+        
+        CGAMultivector carrierFlatPlaneOPNS = planeOPNS.carrierFlat();
+        // carrier flat (plane OPNS) = (0)
+        // failed 
+        System.out.println(carrierFlatPlaneOPNS.toString("carrier flat (plane OPNS)"));
     }
     
     
@@ -272,6 +285,14 @@ public class Test2 {
         // attitude (ppIPNS OPNS) = (0.0,0.0,0.0)
         Vector3d direction = ppOPNS.attitude();
         System.out.println(toString("attitude (pp OPNS)", direction));
+        // attitude (round/tangent) = (1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei)
+        // attitude (CGAOrientedPointPairOPNS)=1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei
+        // attitude (pp OPNS) = (1.9999999999999996,-1.9999999999999996,0.0)
+        // carrier flat (ppOPNS) = (-1.9999999999999987*e1 + 1.9999999999999987*e2)
+        //FIXME
+        // anderes Vorzeichen als Dorst
+        CGAMultivector carrierFlat = ppOPNS.carrierFlat();
+        System.out.println(carrierFlat.toString("carrier flat (ppOPNS)"));
         
         // weight
         // squaredWeight (ppIPNS OPNS)=7.999999999999993
@@ -359,6 +380,14 @@ public class Test2 {
         attitude = ppIPNS.attitudeIntern2().direction();
         System.out.println(toString("attitude2 (ppIPNS)", attitude));
         
+        //attitude (round/tangent) = (2.999999999999998*e3^ei)
+        //attitude=2.999999999999998*e3^ei
+        //attitude (ppIPNS) = (NaN,NaN,NaN)
+        //attitude2 (ppIPNS) = (0.0,0.0,1.0)
+        //carrier flat (ppIPNS) = (2.999999999999998*e3)
+        CGAMultivector carrierFlat = ppIPNS.carrierFlat();
+        System.out.println(carrierFlat.toString("carrier flat (ppIPNS)"));
+        
         // points
         Point3d[] points = ppIPNS.decomposePoints();
         System.out.println(toString("P1 (ppIPNS)", points[0]));
@@ -415,7 +444,7 @@ public class Test2 {
         double radiusSquared = circ.squaredSize();
         System.out.println(toString("radiusSquared",radiusSquared));
         
-        // composition of a line OPNS based on two points
+        // composition of a lineOPNS_ OPNS based on two points
         CGALineOPNS l = new CGALineOPNS(p1,p2);
         // l_OPNS=-1.0*eo^e1^ei + 1.0*eo^e2^ei + 1.0*e1^e2^ei (korrekt)
         System.out.println("l="+l.toString());
@@ -594,7 +623,7 @@ public class Test2 {
         // java: C=-eo^e1^e2 - 1.34*eo^e2^ei + 0.85*e1^e2^ei
         System.out.println("C="+C.toString());
         
-        //L  = up(.9e2)^up(.9e2-1e1)^ni,       // top line
+        //L  = up(.9e2)^up(.9e2-1e1)^ni,       // top lineOPNS_
         // ganja.js: 0.89e124+0.89e125-e145 = -e01i+0.9e12i
         // java: l_OPNS=-1.0*eo^e1^ei + 0.9*e1^e2^ei (korrekt)
         CGALineOPNS L = new CGALineOPNS(new Point3d(0d,0.9d,0d), new Point3d(-1d,0.9d,0d));
@@ -653,7 +682,7 @@ public class Test2 {
         //TODO vermutlich sind bereits der Ausgangs-circleIPNS oder planeIPNS flasch --> überprüfen
         System.out.println("c&p="+C5.toString());
         
-        // For line meet planeIPNS its a bit more involved.
+        // For lineOPNS_ meet planeIPNS its a bit more involved.
         //var lp = up(nino<<(P2&L^no));
         CGARoundPointIPNS lp = new CGARoundPointIPNS(CGAMultivector.createInf(1d).
                 op(CGAMultivector.createOrigin(1d)).lc(P2.vee(L).op(
@@ -706,7 +735,7 @@ public class Test2 {
         System.out.println("C="+C.toString());
         //TODO
         
-        // L  = up(.9e2)^up(.9e2-1e1)^ni,         // top line
+        // L  = up(.9e2)^up(.9e2-1e1)^ni,         // top lineOPNS_
         CGALineOPNS L = new CGALineOPNS(new Point3d(0d,0.9d,0d), new Point3d(-1d,0.9d,0d));
         // ganja.js: 0.89e124+0.89e125-e145 (grade3)
         // java L=-1.0*eo^e1^ei + 0.9*e1^e2^ei (korrekt)
@@ -744,7 +773,7 @@ public class Test2 {
         // java pOnP=1.0*eo - 0.899*e2 + 0.4049*ei (korrekt)
         System.out.println("pOnP="+pOnP.toString());
         
-        // ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on line
+        // ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on lineOPNS_
         CGARoundPointIPNS pConjugate = new CGARoundPointIPNS(p.conjugate());
         // java pConjugate= -eo - 0.5*e2 - 0.125*ei
         // ganja.js: pConjugate = -e0 - 0.5e2 - 0.125ei (korrekt)
@@ -780,10 +809,10 @@ public class Test2 {
         //      0x00008800, ()=>project_point_on_round(p1,S), "p1 on S",    // point on sphereIPNS
         //      0x000000FF, ()=>project_point_on_round(~p1,C), "p1 on C",   // point on circleIPNS
         //  0x00888800, ()=>project_point_on_flat(p1,P),   "p1 on P",   // point on planeIPNS
-        //  0x00008888, ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on line
+        //  0x00008888, ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on lineOPNS_
         //  0xc0FF0000, ()=>plane_through_point_tangent_to_x(p1,S),    // planeIPNS through p1 tangent to S2
         //  0xc000FF00, ()=>plane_through_point_tangent_to_x(p1,P),    // planeIPNS through p1 tangent to P
-        //  0,L,0,C,                                                  // line and circleIPNS
+        //  0,L,0,C,                                                  // lineOPNS_ and circleIPNS
         //  0xE0008800, P,                                            // planeIPNS
         //  0xE0FFFFFF, S                                             // spheres
   
@@ -828,7 +857,7 @@ public class Test2 {
         CGAPlaneIPNS planeIPNSTest = new CGAPlaneIPNS(CGAMultivector.createEz(1d).add(CGAMultivector.createInf(2d)));
         // planeIPNS=1.0*e3 + 2.0*ei
         System.out.println(planeIPNS.toString("planeIPNS"));
-        assertTrue(planeIPNS.equals(planeIPNS));
+        assertTrue(planeIPNS.equals(planeIPNSTest));
         
         //TODO
         // Wie ist die Orientierung dieser Ebene festgelegt?
@@ -858,7 +887,10 @@ public class Test2 {
         // normal (planeIPNS, Kleppe 2) = (0)
         System.out.println(normal.toString("normal (planeIPNS, Kleppe 2)"));
         
-        
+        CGAMultivector carrierFlat = planeIPNS.carrierFlat();
+        System.out.println(carrierFlat.toString("carrierFlat (planeIPNS)"));
+        //carrierFlat (planeIPNS) = (0.9999999999999991*e1^e2)
+        //attitudeIntern (CGAPlaneIPNS) = (0.9999999999999996*e1^e2^ei)
         
         // squaredWeight
         double squaredWeight = planeIPNS.squaredWeight();
@@ -1043,20 +1075,22 @@ public class Test2 {
         double squaredWeight = sphereOPNS.squaredWeight();
         // squaredWeight(sphereOPNS) = 3.9999999999999964
         // Unklar, ob das so stimmt!!!
+        // vielleicht bringt jeder der 4 normierten Punkte weight=1 mit und diese
+        // addieren sich zu 4?
         //TODO
         
         // attitude
-        // attitude(dualRound/dualTangent)=1.9999999999999996*e1^e2^e3^ei
         // extract ist noch nicht richtig!!!!
         //TODO
         Vector3d attitude = sphereOPNS.attitude();
+        // attitude (dualRound/dualTangent)=15.999999999999996*e1^e2^e3^ei
         System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
         
         // location
         // Kugel im Ursprung, test damit nicht vollständig
         Point3d location = sphereOPNS.location();
         System.out.println(toString("location (sphereOPNS, Dorst)",location));
-        //assertTrue(equals(new Point3d(v),location));
+        assertTrue(equals(new Point3d(v),location));
         
         
         // squared size 
@@ -1074,8 +1108,7 @@ public class Test2 {
         // Dorst/Hitzer2
         radiusSquared = sphereOPNS.squaredSize();
         System.out.println(toString("radiusSquared (sphereOPNS, Dorst)",radiusSquared));
-        // radiusSquared (sphereOPNS, Dorst) = -1.2500000000000004
-        assertTrue(equals(radiusSquared,s*s)); // Kugel um Ursprung, damit sollte auch diese Formel funktionieren (failed)
+        assertTrue(equals(radiusSquared,s*s)); 
     }
     
     public void testSpheresIPNS(){
@@ -1113,7 +1146,7 @@ public class Test2 {
         // auch wenn zusätzlich weight auf 1 gesetzt wurde, ändert sich nichts
         double squaredRadius = sphereIPNS.squaredSize();
         System.out.println(toString("squaredRadius (sphereIPNS)", squaredRadius)); // failed
-        //assertTrue(equals(radius*radius,squaredRadius));
+        //assertTrue(equals(radiusSquared*radiusSquared,squaredRadius));
         
         
         // locationIPNS
@@ -1416,7 +1449,7 @@ public class Test2 {
                 e2.op(e3).op(inf)).gp(-2d));
         System.out.println(lineOPNSTest.toString("OPNS line (Test)"));
         assertTrue(lineOPNS.equals(lineOPNSTest));
-        // line=2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei
+        // lineOPNS_=2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei
         // sollte p1 ∧ p2 ∧ ∞ = −2(o + (e1 + e2 )) ∧ (e3 − e2 ) ∧ ∞. sein
         // stimmt
         double squaredWeight = lineOPNS.squaredWeight();
@@ -1475,10 +1508,10 @@ public class Test2 {
         System.out.println(toString("n",n));
         
         
-        // line OPNS representation
+        // lineOPNS_ OPNS representation
         
         CGALineOPNS l_OPNS = new CGALineOPNS(p1, weight1, p2, weight2);
-        // dual line represented as tri-vector
+        // dual lineOPNS_ represented as tri-vector
         System.out.println(l_OPNS.toString("l OPNS"));
       
         CGALineOPNS l_OPNSTest = new CGALineOPNS(o.add(e1.add(e2)).gp(-2d).op(e3.sub(e2)).op(inf));
@@ -1493,7 +1526,7 @@ public class Test2 {
         System.out.println(toString("attitude (l_OPNS, Dorst2007)",attitude));
         assertTrue(equals(n, attitude));
         
-        // Kleppe2016 directional component of a line
+        // Kleppe2016 directional component of a lineOPNS_
         CGAMultivector m = l_OPNS.ip(o).ip(inf);
         System.out.println(m.toString("attitude (Kleppe2016) V1")); // failed liefert 0
         
@@ -1508,10 +1541,10 @@ public class Test2 {
         //FIXME
         System.out.println(toString("location (line OPNS, Dorst)",location));
         
-        // line IPNS representation
+        // lineOPNS_ IPNS representation
         
         CGALineIPNS l_IPNS = l_OPNS.dual();
-        // line represented as bivector
+        // lineOPNS_ represented as bivector
         // l_OPNS*= 0.9799999999999993*e2^e3 + 0.9799999999999995*e2^ei - 0.019599999999999985*e3^ei
         System.out.println(l_IPNS.toString("line (IPNS)"));
        
@@ -1645,23 +1678,27 @@ public class Test2 {
         System.out.println("input weight="+String.valueOf(weight));
         CGARoundPointIPNS pc = new CGARoundPointIPNS(p, weight);
         System.out.println(pc.toString("pc"));
-        double squaredRadius1 = pc.squaredSizeIntern1().scalarPart(); // failed
-        // squaredSizeIntern1=-2.2500000000000013
-        System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
+        double squaredRadius1 = pc.squaredSizeIntern1().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern1 (RoundPointIPNS)="+String.valueOf(squaredRadius1));
+        assertTrue(equals(0d, squaredRadius1));
         double squaredRadius2 = pc.squaredSizeIntern5().scalarPart(); // ok 0
-        System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
+        System.out.println("squaredSizeIntern2 (RoundPointIPNS)="+String.valueOf(squaredRadius2));
+        assertTrue(equals(0d, squaredRadius2));
         double squaredRadius3 = pc.squaredSizeIntern3().scalarPart(); // ok 0
-        System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
-        double squaredRadius4 = pc.squaredSizeIntern4().scalarPart(); // failed mit -6
-        // squaredSizeIntern4=-6.0
-        System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
+        System.out.println("squaredSizeIntern3 (RoundPointIPNS)="+String.valueOf(squaredRadius3));
+        assertTrue(equals(0d, squaredRadius3));
+        double squaredRadius4 = pc.squaredSizeIntern4().scalarPart(); 
+        // squaredSizeIntern4 (RoundPointIPNS)=-6.0
+        System.out.println("squaredSizeIntern4 (RoundPointIPNS)="+String.valueOf(squaredRadius4)); // failed
+        //assertTrue(equals(0d, squaredRadius4));
         double squaredRadius5 = pc.squaredSizeIntern5().scalarPart();
-        System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5)); // ok
+        System.out.println("squaredSizeIntern5 (RoundPointIPNS)="+String.valueOf(squaredRadius5)); // ok
+        assertTrue(equals(0d, squaredRadius5));
         
         System.out.println("\nSphereIPNS:");
-        double radius = 2d;
-        System.out.println("input radius="+String.valueOf(radius)+", weight="+String.valueOf(weight));
-        CGASphereIPNS sphereIPNS = new CGASphereIPNS(p, radius, weight);
+        double radiusSquared = 2d;
+        System.out.println("input radius="+String.valueOf(radiusSquared)+", weight="+String.valueOf(weight));
+        CGASphereIPNS sphereIPNS = new CGASphereIPNS(p, radiusSquared, weight);
         System.out.println(sphereIPNS.toString("sphereIPNS"));
         squaredRadius1 = sphereIPNS.squaredSizeIntern1().scalarPart(); // failed mit -4.25
         System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
@@ -1681,61 +1718,76 @@ public class Test2 {
         Point3d p1 = new Point3d(1d,0d,0d);
         System.out.println(toString("p1",p1));
         double weight1 = 1.0d;
-        radius = 1.5d;
-        CGASphereIPNS sphere1 = new CGASphereIPNS(p1, radius, weight1);
+        radiusSquared = 1.5d;
+        CGASphereIPNS sphere1 = new CGASphereIPNS(p1, radiusSquared, weight1);
         System.out.println(sphere1.toString("sphere1"));
         
         // Kugel 2
         Point3d p2 = new Point3d(-1d,0d,0d);
         System.out.println(toString("p2",p2));
         double weight2 = 1.0d;
-        CGASphereIPNS sphere2 = new CGASphereIPNS(p2, radius, weight2);
+        CGASphereIPNS sphere2 = new CGASphereIPNS(p2, radiusSquared, weight2);
         System.out.println("sphere2="+sphere2.toString());
         
         // Circle from two spheres
         CGAOrientedCircleIPNS circleIPNS = new CGAOrientedCircleIPNS(sphere1, sphere2);
         Point3d location = new Point3d(0d,0d,0d);
         Vector3d attitudeTest = new Vector3d(-1,0,0);
-        radius = 1.25;
+        radiusSquared = 1.25;
+        
         // circle=-2.0*eo^e1 - 1.25*e1^ei (grade 2 ok)
         System.out.println(circleIPNS.toString("circleIPNS"));
+        CGAMultivector circleIPNSTest = o.op(CGAMultivector.createEx(-2d)).sub(CGAMultivector.createEx(1.25d).op(inf));
+        System.out.println(circleIPNSTest.toString("circleIPNSTest"));
+        assertTrue(circleIPNS.equals(circleIPNSTest));
         
-        System.out.println("input radius="+String.valueOf(radius)+", weight="+String.valueOf(weight));
+        System.out.println("input radius (circleIPNS)="+String.valueOf(radiusSquared)+", weight="+String.valueOf(weight));
         System.out.println(circleIPNS.toString("circleIPNS"));
-        // squaredSize (Dorst2007) = (-1.0000000000000002)
-        squaredRadius1 = circleIPNS.squaredSizeIntern1().scalarPart(); // failed mit -1 falsches Vorzeichen
-        System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
+        
+        squaredRadius1 = circleIPNS.squaredSize(); 
+        System.out.println("squaredSizeIntern1 (circleIPNS)="+String.valueOf(squaredRadius1));
+        assertTrue(equals(squaredRadius1, radiusSquared));
+        
+        //FIXME
+        // ex Multivector is not invertable
         //squaredRadius2 = circleIPNS.squaredSizeIntern2().scalarPart(); 
         //System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
-        squaredRadius3 = circleIPNS.squaredSizeIntern3().scalarPart(); // ok 0
-        System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
+        //assertTrue(equals(squaredRadius2, radiusSquared));
         
+        squaredRadius3 = circleIPNS.squaredSizeIntern3().scalarPart(); // ok 0
+        System.out.println("squaredSizeIntern3 (circleIPNS)="+String.valueOf(squaredRadius3));
+        assertTrue(equals(squaredRadius3, radiusSquared));
         //squaredRadius4 = circleIPNS.squaredSizeIntern4().scalarPart(); // not available
         //System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
         squaredRadius5 = circleIPNS.squaredSizeIntern5().scalarPart(); // ok
-        System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5)); 
+        System.out.println("squaredSizeIntern5 (circleIPNS)="+String.valueOf(squaredRadius5)); 
+        assertTrue(equals(squaredRadius5, radiusSquared));
         
         // pointpair
         System.out.println("\nPointPairIPNS:");
         Point3d p3 = new Point3d(0d,0d,1d); 
         double weight3 = 1d;
-        CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radius, weight3);
+        CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radiusSquared, weight3);
         CGAOrientedPointPairIPNS ppIPNS = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
-        squaredRadius1 = ppIPNS.squaredSizeIntern1().scalarPart(); // failed mit -1 falsches Vorzeichen
-        System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
+        
+        Point3d[] points = ppIPNS.decomposePoints(); // via undual and following Fernandes
+        double r = points[0].distance(points[1])/2d;
+        System.out.println("radiusSquared from decomposed points="+String.valueOf(r*r));
+        
+        squaredRadius1 = ppIPNS.squaredSize(); 
+        System.out.println("squaredSizeIntern1 (ppIPNS)="+String.valueOf(squaredRadius1));
+        assertTrue(equals(squaredRadius1, r*r));
         //squaredRadius2 = ppIPNS.squaredSizeIntern2().scalarPart(); 
         //System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
         squaredRadius3 = ppIPNS.squaredSizeIntern3().scalarPart(); // ok 0
-        System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
+        System.out.println("squaredSizeIntern3 (ppIPNS)="+String.valueOf(squaredRadius3));
+        assertTrue(equals(squaredRadius3, r*r));
         
         //squaredRadius4 = ppIPNS.squaredSizeIntern4().scalarPart(); // not available
         //System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
         squaredRadius5 = ppIPNS.squaredSizeIntern5().scalarPart(); // ok
-        System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5));
-        
-        Point3d[] points = ppIPNS.decomposePoints(); // via undual and following Fernandes
-        double r = points[0].distance(points[1])/2d;
-        System.out.println("radius from decomposed points="+String.valueOf(r));
+        System.out.println("squaredSizeIntern5 (ppIPNS)="+String.valueOf(squaredRadius5));
+        assertTrue(equals(squaredRadius5, r*r));
         
         // location from decomposed Points = (0.0,0.0,0.3437500000000001)
         // FIXME stimmt das?
@@ -1747,6 +1799,88 @@ public class Test2 {
         Point3d loc = ppIPNS.locationIntern2().location();
         System.out.println(toString("locationIntern2",loc));
     }
+    
+    
+    
+    
+    public void testAttitudeOfRounds(){
+        
+        System.out.println("----------------- attitude of rounds -----");
+        System.out.println("RoundPointIPNS:");
+        Point3d p = new Point3d(0d,-1d,0d); 
+        System.out.println(toString("p", p));
+        double weight = 3d;
+        System.out.println("input weight="+String.valueOf(weight));
+        CGARoundPointIPNS pc = new CGARoundPointIPNS(p, weight);
+        
+        Vector3d attitude = pc.attitude();
+        // attitude (round/tangent) = (-2.9999999999999973*e1^e2^e3^ei)
+        // attitude (CGAOrientedFiniteRoundIPNS)=-2.9999999999999973*e1^e2^e3^ei
+        // carrierFlat (RoundPointIPNS) = (-2.999999999999997*e1^e2^e3)
+        CGAMultivector carrierFlat = pc.carrierFlat();
+        System.out.println(carrierFlat.toString("carrierFlat (RoundPointIPNS)"));
+        
+        double radiusSquared = 2d;
+        
+        CGASphereIPNS sphereIPNS = new CGASphereIPNS(p, radiusSquared, weight);
+        System.out.println(sphereIPNS.toString("sphereIPNS"));
+        
+        Vector3d attitudeSphereIPNS = sphereIPNS.attitude();
+        // attitude (round/tangent) = (-2.999999999999997*e1^e2^e3^ei)
+        // attitude (CGAOrientedFiniteRoundIPNS)=-2.999999999999997*e1^e2^e3^ei
+        // carrierFlat (sphereIPNS) = (-2.999999999999996*e1^e2^e3)
+        CGAMultivector carrierFlatSphereIPNS = sphereIPNS.carrierFlat();
+        System.out.println(carrierFlatSphereIPNS.toString("carrierFlat (sphereIPNS)"));
+       
+        // circle
+        System.out.println("\nCircleIPNS:");
+        
+        // Kugel 1
+        Point3d p1 = new Point3d(1d,0d,0d);
+        System.out.println(toString("p1",p1));
+        double weight1 = 1.0d;
+        radiusSquared = 1.5d;
+        CGASphereIPNS sphere1 = new CGASphereIPNS(p1, radiusSquared, weight1);
+        System.out.println(sphere1.toString("sphere1"));
+        
+        // Kugel 2
+        Point3d p2 = new Point3d(-1d,0d,0d);
+        System.out.println(toString("p2",p2));
+        double weight2 = 1.0d;
+        CGASphereIPNS sphere2 = new CGASphereIPNS(p2, radiusSquared, weight2);
+        System.out.println("sphere2="+sphere2.toString());
+        
+        // Circle from two spheres
+        CGAOrientedCircleIPNS circleIPNS = new CGAOrientedCircleIPNS(sphere1, sphere2);
+        Point3d location = new Point3d(0d,0d,0d);
+        Vector3d attitudeTest = new Vector3d(-1,0,0);
+        radiusSquared = 1.25;
+        
+        Vector3d attitudeCircleIPNS = circleIPNS.attitude();
+        CGAE3Vector attituceCircleIPNS2 = circleIPNS.attitudeIntern2();
+        // FIXME Vorzeichenfehler
+        // attitude (round/tangent) = (1.9999999999999982*e2^e3^ei)
+        // carrierFlat (circleIPNS) = (-1.9999999999999976*e2^e3)
+        CGAMultivector carrierFlatCircleIPNS = circleIPNS.carrierFlat();
+        System.out.println(carrierFlatCircleIPNS.toString("carrierFlat (circleIPNS)"));
+        
+        // pointpair
+        System.out.println("\nPointPairIPNS:");
+        Point3d p3 = new Point3d(0d,0d,1d); 
+        double weight3 = 1d;
+        CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radiusSquared, weight3);
+        CGAOrientedPointPairIPNS ppIPNS = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
+        
+        Vector3d attitudePPIPNS = ppIPNS.attitude();
+        CGAE3Vector attitudePPIPNS2 = ppIPNS.attitudeIntern2();
+        System.out.println(attitudePPIPNS2.toString("attitudeIntern2 (PPIPNS)"));
+        // attitude (round/tangent) = (1.9999999999999982*e2^ei)
+        // attitude (CGAOrientedFiniteRoundIPNS)=1.9999999999999982*e2^ei
+        // carrierFlat (PPIPNS) = (1.9999999999999976*e2)
+        CGAMultivector carrierFlatPPIPNS = ppIPNS.carrierFlat();
+        System.out.println(carrierFlatPPIPNS.toString("carrierFlat (PPIPNS)"));
+    }
+    
     public void testTranslation(){
         System.out.println("---------------- translation--------------");
         // transform a point

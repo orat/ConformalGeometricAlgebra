@@ -91,7 +91,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
 	// local normal = -no_ni .. ( blade ^ ni )
         CGAMultivector result = 
                 createOrigin(-1d).op(inf).ip(this.gp(1d/weight2()).op(inf)).compress();
-        System.out.println(result.toString("attitudeIntern2 (CGAorientedCircleIPNS)"));
+        System.out.println(result.toString("attitudeIntern2 (CGAOrientedCircleIPNS)"));
         return new CGAE3Vector(result);
     }
     

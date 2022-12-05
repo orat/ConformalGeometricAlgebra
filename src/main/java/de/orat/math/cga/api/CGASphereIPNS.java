@@ -190,11 +190,13 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     /**
      * Determine squared size directly form the coordinates of the 1-vector.
      * 
+     * failed for roundpoint
+     * 
+     * @Deprecated
      * @return squared size/radius squared
      */
     public CGAScalar squaredSizeIntern4(){
         //TODO
-        // ungetestet
         // funktioniert vermutlich so nur wenn weight==1 ist. Das muss also noch
         // entsprechend erweitert werden
         // ist das das gleiche wie normalisieren?

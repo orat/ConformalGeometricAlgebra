@@ -35,35 +35,52 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
         super(value);
     }
     
+     // decompose
+   
     /**
-     * Determine the carrier flat (euclidean carrier) of a (direkt) round or a 
-     * (direkt) flat.
+     * Determine direction/attitude from tangent or round objects in OPNS 
+     * representation.
      * 
-     * The carrier flat is the OPNS subspace representation of the minimal (lowest
-     * possible dimension) Euclidean subspace to include the whole geometric object
-     * when it is placed at the origin.
-     * 
-     * The carrier flat is fully position independent.
-     * 
-     * point pair e.g.  carrierFlat = (-1.9999999999999987*e1 + 1.9999999999999987*e2) mit w=-8
-     * carrierFlat ist der Richtungsvektor von p2 nach p1
-     * attitude (round/tangent) = (1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei)
-     * attitude (CGAOrientedPointPairOPNS)=1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei
-     * attitude (pp OPNS) = (1.9999999999999996,-1.9999999999999996,0.0)
-     * attitude (round/tangent) = (1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei)
-     * r wird zu -1.75 bestimmt statt 0.5
-     * 
-     * circle e.g. carrierFlat = (0.9999999999999993*e1^e2 - 0.9999999999999993*e1^e3 + 0.9999999999999993*e2^e3)
-     * 
-     * sphere e.g carrierFlat = (-1.9999999999999987*e1^e2^e3)
-     * 
-     * @return carrier flat (not normalized)
+     * @ipns true for blade in ipns representation
+     * @return attitude
      */
-    CGAKVector carrierFlat(){
-        // do not normalize before, so that it is possible to determine the weight
-        // as norm of the carrier flat.
-        return new CGAKVector(this.op(inf).negate().rc(E));
+    CGAAttitude attitudeFromTangentAndRound2(boolean ipns){
+        // e.g. -1.9999999999999982*e1^e2^e3^ei 
+        // grade 4 if invoked from a sphere
+        // Dorst2007 p. 562
+        
+        // e.g. attitude=1.9999999999999982*e2^e3^ei
+        // grade 3, if invoked from a circle 
+        CGAKVector m = this;
+        if (ipns) m = m.dual();
+        CGAAttitude result = new CGAAttitude(inf.lc(m).op(inf).negate().compress());
+        System.out.println(result.toString("attitude (round/tangent)"));
+        
+        return result;
     }
+    /**
+     * Determine direction/attitude from tangent or round objects.
+     * 
+     * Hildenbrand2004
+     * 
+     * @return direction/attitude
+     */
+    /*protected CGAMultivector attitudeFromTangentAndRound(){
+        // see errata, dual tangend/round formula Dorst2007
+        CGAMultivector einf = CGAMultivector.createInf(1d);
+        CGAMultivector einfM = CGAMultivector.createInf(-1d);
+        CGAMultivector result = einfM.ip(dual()).op(einf);
+        System.out.println("attitude(round/attitude)="+result.toString());
+        return result;
+    }*/
+    /*protected CGAMultivector attitudeFromDualTangentAndDualRound(){
+        // see errata, dual tangend/round formula Dorst2007
+        CGAMultivector einf = CGAMultivector.createInf(1d);
+        CGAMultivector result = (einf.ip(this)).gp(-1d).op(einf);
+        System.out.println("attitude(round/attitude)="+result.toString());
+        return result;
+    }*/
+    
     
     /**
      * Determine the location of the geometric object, which is represented by

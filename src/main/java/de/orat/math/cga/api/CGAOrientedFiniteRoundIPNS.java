@@ -30,6 +30,27 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
         }
         return result;
     }
+    
+    
+    // decompose
+    
+    /**
+     * Determine the carrier flat (euclidean carrier) of a (dual=IPNS) round.
+     * 
+     * The carrier flat is the OPNS subspace representation of the minimal (lowest
+     * possible dimension) Euclidean subspace to include the whole geometric object
+     * when it is placed at the origin.
+     * 
+     * The carrier flat is fully position independent.
+     * 
+     * @return carrier flat (not normalized)
+     */
+    public CGAKVector carrierFlat(){
+        // do not normalize before, so that it is possible to determine the weight
+        // as norm of the carrier flat.
+        return new CGAKVector(this.undual().op(inf).negate().rc(E));
+    }
+    
     /**
      * The attitude is the normalized direction of the translation of this object 
      * from the origin to its location.
@@ -41,11 +62,14 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * In this case the magnitude of the attitude is the weight and its sign is 
      * the orientation.
      * 
+     * FIXME bei PPIPNS ergibt sich E^inf statt E
+     * extract entsprechend ersetzen...
+     * 
      * @return attitude extraction from the E3 representation inclusive normalization
      */
     public Vector3d attitude(){
         CGAAttitude result = attitudeIntern();
-        System.out.println("attitude="+result.toString());
+        System.out.println("attitude (CGAOrientedFiniteRoundIPNS)="+result.toString());
         Vector3d res = result.extractE3ToVector3d();
         res.normalize();
         return res;
@@ -63,7 +87,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     @Override
     protected CGAAttitude attitudeIntern(){
         // FIXME geht so nur wenn der round im Ursprung ist?
-        return attitudeFromTangentAndRound2((CGAKVector) this.undual());
+        return attitudeFromTangentAndRound2(true/*(CGAKVector) this.undual()*/);
     }
     
     @Override
@@ -136,16 +160,10 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     }*/
     
     /**
-     * Squared size (=squared radius only for round, - squared radius for dual round).
+     * Squared size.
      * 
      * Hint: Squared size is - radius squared. The sign is different to 
      * CGAOrientedFiniteRoundOPNS.
-     * 
-     * precondition:
-     * - normalized sphere located at the origin
-     * 
-     * test failed für circle_ipns
-     * test failed for sphere_ipns
      * 
      * @return squared size/-radius squared
      */
@@ -155,7 +173,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     public CGAScalar squaredSizeIntern1(){
         // sign corresponding to errata in Dorst2007
         CGAScalar result = CGAOrientedFiniteRoundOPNS.squaredSizeIntern1(this.undual());
-        System.out.println(result.toString("squaredSizeIntern1 (CGAOrientedFiniteRoundIPNS)"));
+        //System.out.println(result.toString("squaredSizeIntern1 (CGAOrientedFiniteRoundIPNS)"));
         return result;
     }
     /**

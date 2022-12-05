@@ -197,49 +197,7 @@ public class CGAMultivector {
     }
     
     
-    // decompose
    
-    /**
-     * Determine direction/attitude from tangent or round objects in OPNS 
-     * representation.
-     * 
-     * @param tangentOrRound or its undual if the tangentOrRound is in dual representation
-     * @return attitude
-     */
-    static CGAAttitude attitudeFromTangentAndRound2(CGAKVector tangentOrRound){
-        // e.g. -1.9999999999999982*e1^e2^e3^ei 
-        // grade 4 if invoked from a sphere
-        // Dorst2007 p. 562
-        
-        // e.g. attitude=1.9999999999999982*e2^e3^ei
-        // grade 3, if invoked from a circle 
-        CGAAttitude result = new CGAAttitude(inf.lc(tangentOrRound).op(inf).negate().compress());
-        System.out.println(result.toString("attitude (round/tangent)"));
-        
-        return result;
-    }
-    /**
-     * Determine direction/attitude from tangent or round objects.
-     * 
-     * Hildenbrand2004
-     * 
-     * @return direction/attitude
-     */
-    /*protected CGAMultivector attitudeFromTangentAndRound(){
-        // see errata, dual tangend/round formula Dorst2007
-        CGAMultivector einf = CGAMultivector.createInf(1d);
-        CGAMultivector einfM = CGAMultivector.createInf(-1d);
-        CGAMultivector result = einfM.ip(dual()).op(einf);
-        System.out.println("attitude(round/attitude)="+result.toString());
-        return result;
-    }*/
-    /*protected CGAMultivector attitudeFromDualTangentAndDualRound(){
-        // see errata, dual tangend/round formula Dorst2007
-        CGAMultivector einf = CGAMultivector.createInf(1d);
-        CGAMultivector result = (einf.ip(this)).gp(-1d).op(einf);
-        System.out.println("attitude(round/attitude)="+result.toString());
-        return result;
-    }*/
     /**
      * Determines location from tangent (direct/dual) and round (direct/dual) 
      * objects.

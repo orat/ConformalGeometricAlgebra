@@ -101,6 +101,9 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         return new CGAOrientedPointPairOPNS(impl.dual().gp(-1));
     }
     
+    
+    // decomposition
+    
     /**
      * Determine weight without a probe point and without determination of the
      * attitute.The sign can not be determined.
@@ -121,6 +124,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
     /**
      * Determine the attitude.
      * 
+     * @Deprecated
      * @return attitude
      */
     public CGAE3Vector attitudeIntern2(){

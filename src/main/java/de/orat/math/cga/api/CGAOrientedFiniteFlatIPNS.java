@@ -24,6 +24,28 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         super(m);
     }
     
+    
+    // decompose
+    
+    /**
+     * Determine the carrier flat (euclidean carrier) of a (dual=IPNS) flat.
+     * 
+     * The carrier flat is the OPNS subspace representation of the minimal (lowest
+     * possible dimension) Euclidean subspace to include the whole geometric object
+     * when it is placed at the origin.
+     * 
+     * The carrier flat is fully position independent.
+     * 
+     * plane IPNS: Bivector e.g. (0.9999999999999991*e1^e2)
+     * 
+     * @return carrier flat (not normalized)
+     */
+    public CGAKVector carrierFlat(){
+        // do not normalize before, so that it is possible to determine the weight
+        // as norm of the carrier flat.
+        return new CGAKVector(this.undual().negate().rc(E));
+    }
+    
     public abstract Vector3d attitude();
     
     /**
