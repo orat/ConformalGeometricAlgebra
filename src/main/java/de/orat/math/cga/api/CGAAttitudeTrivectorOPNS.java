@@ -15,10 +15,20 @@ public class CGAAttitudeTrivectorOPNS extends CGAAttitude implements iCGAQuadvec
         super(m);
     }
     
+    
+    // composition
+    
     public CGAAttitudeTrivectorOPNS(Vector3d a, Vector3d b, Vector3d c){
         //FIXME
         // muss statt gp nicht op stehen?
         this((new CGATrivector(a,b,c)).op(createInf(1.0)));
     }
     
+    
+    // decomposition
+    
+    @Override
+    public Vector3d direction(){
+        return new Vector3d(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY);
+    }
 }

@@ -4,14 +4,11 @@ import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
-import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * A round point in inner product null space representation (grade 1 multivector), 
  * corresponding to dual round point in Dorst2007. 
- * 
- * vermutlich ist das ein Finite Point
- * 
  * 
  * no, e1, e2, e3, ni
  * 
@@ -45,7 +42,7 @@ import org.jogamp.vecmath.Point3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGARoundPointIPNS extends CGASphereIPNS {
+public class CGARoundPointIPNS extends CGAOrientedFiniteRoundIPNS {
     
     public CGARoundPointIPNS(CGAMultivector m){
         super(m.compress());
@@ -112,7 +109,11 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
     
     // decomposition
     
-   
+    @Override
+    public CGAAttitudeTrivectorOPNS attitudeIntern(){
+        return new CGAAttitudeTrivectorOPNS(super.attitudeIntern());
+    }
+    
     /*public double squaredWeight(){
         CGAMultivector attitude = determineDirectionFromTangentAndRoundObjectsAsMultivector();
         CGARoundPointIPNS probePoint = new CGARoundPointIPNS(new Point3d(0d,0d,0d));
@@ -155,6 +156,35 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
         return result.extractE3ToPoint3d();
     }*/
     
+    /*public CGAE3Vector locationIntern1(){
+        // extract E3 from normalized dual sphere
+        // Dorst2007 p.409
+        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
+        CGAMultivector result = oinf.lc(oinf.op(this));
+        System.out.println(result.toString("location as E3 (CGAOrientedFiniteFlatIPNS, Dorst)"));
+        return new CGAE3Vector(result);
+    }*/
+    /**
+     * Detmerination of the midpoint of the sphere.
+     * 
+     * @return location origin/midpoint
+     */
+    /*
+    public Point3d location(){
+        return locationIntern1().extractE3ToPoint3d();
+    }*/
+    
+    /**
+     * Squared size.
+     * 
+     * @return squared size
+     * @Override
+     */
+    public double squaredSize(){
+        return 0d;
+    }
+    
+    // etc
     
     /**
      * Normalized round points can be multiplied by scalar factor and 
@@ -166,6 +196,7 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
      * 
      * @return normalized point
      */
+    @Override
     public CGARoundPointIPNS normalize(){
         CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(-1d).ip(this)));
         result.isNormalized = true;
@@ -199,38 +230,5 @@ public class CGARoundPointIPNS extends CGASphereIPNS {
     @Override
     public CGARoundPointOPNS undual(){
         return new CGARoundPointOPNS(impl.dual().gp(-1));
-    }
-    
-    /*public CGAE3Vector locationIntern1(){
-        // extract E3 from normalized dual sphere
-        // Dorst2007 p.409
-        CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(CGAMultivector.createInf(1d));
-        CGAMultivector result = oinf.lc(oinf.op(this));
-        System.out.println(result.toString("location as E3 (CGAOrientedFiniteFlatIPNS, Dorst)"));
-        return new CGAE3Vector(result);
-    }*/
-    /**
-     * Detmerination of the midpoint of the sphere.
-     * 
-     * @return location origin/midpoint
-     */
-    /*@Override
-    public Point3d location(){
-        return locationIntern1().extractE3ToPoint3d();
-    }*/
-    
-    @Override
-    public double squaredSize(){
-        // testweise
-        //FIXME
-        double result1 = super.squaredSize(); // Dorst via OPNS
-        double result2 = super.squaredSizeIntern5().scalarPart(); // Spencer
-        double result3 = super.squaredSizeIntern4().scalarPart(); // als dual spheres, direkt auslesen
-        // squaredSize (CGARoundPointIPNS) Dorst: 2.2500000000000018, 
-        // Spencer: 0.0, 
-        // extract coordinates: 0.0
-        System.out.println("squaredSize (CGARoundPointIPNS) Dorst: "+String.valueOf(result1)+
-                ", Spencer: "+String.valueOf(result2)+", extract coordinates: "+String.valueOf(result3));
-        return 0d;
     }
 }

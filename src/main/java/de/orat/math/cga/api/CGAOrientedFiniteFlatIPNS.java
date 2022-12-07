@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
@@ -46,7 +45,9 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         return new CGAKVector(this.undual().negate().rc(E));
     }
     
-    public abstract Vector3d attitude();
+    public Vector3d attitude(){
+        return attitudeIntern().direction();
+    }
     
     /**
      * TODO
@@ -64,7 +65,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         // testweise normalisieren
-        CGAMultivector result = inf.op(this.normalize()).undual().negate().compress();
+        CGAMultivector result = inf.op(this).undual().negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatIPNS, Dorst)"));
         return new CGAAttitude(result);
         
@@ -111,6 +112,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         System.out.println(result.toString("location E3 (from CGAOrientedFiniteFlatIPNS, Dorst)"));
         return result.location();
     }
+    
     public FlatAndDirectionParameters decompose(Point3d probePoint){
         return new FlatAndDirectionParameters(attitude(), location(probePoint));
     }

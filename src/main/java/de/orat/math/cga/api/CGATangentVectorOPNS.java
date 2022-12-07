@@ -118,7 +118,7 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
         // corresponding to Dorst2007 p. 562
         // hier kommt grade-2 heraus, obwohl nach lua der FlatPoint eigentlich grade-3
         // sein sollte
-        CGAFlatPointIPNS result = new CGAFlatPointIPNS(inf.lc(this).lc(this.op(inf)));
+        CGAFlatPointOPNS result = new CGAFlatPointOPNS(inf.lc(this).lc(this.op(inf)));
         System.out.println(result.toString("CGATangentVectorOPNS.location (flat point)"));
         return result.location();
     }

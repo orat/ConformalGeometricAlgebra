@@ -17,14 +17,20 @@ public class CGAAttitudeBivectorOPNS extends CGAAttitude implements iCGATrivecto
         super(m);
     }
     
+    
+    // composition 
+    
     public CGAAttitudeBivectorOPNS(CGABivector B){
         // muss statt gp nicht op stehen
         //FIXME
         this(B.op(createInf(1.0)));
     }
     
+    
+    // decomposition
+    
+    @Override
     public Vector3d direction(){
-        //System.out.println(this.toString("CGAAttitudeBivectorOPNS"));
         return extractAttitudeFromBivectorEinfRepresentation();
     }
 }

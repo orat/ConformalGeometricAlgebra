@@ -3,6 +3,7 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Point3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * Sphere in inner product null space representation (grade 1 multivector)
@@ -15,8 +16,6 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVector {
-    
-    boolean isNormalized = false;
     
     public CGASphereIPNS(CGAMultivector m){
         super(m);
@@ -129,6 +128,11 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
     
     // decomposition
     
+    @Override
+    public CGAAttitudeTrivectorOPNS attitudeIntern(){
+        return new CGAAttitudeTrivectorOPNS(super.attitudeIntern());
+    }
+    
     /**
      * Determination of weight not based on the attitude.
      * 
@@ -221,9 +225,6 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         return new CGASphereOPNS(impl.dual().gp(-1));
     }
     
-    public boolean isNormalized(){
-        return isNormalized;
-    }
     public boolean isImaginary(){
         throw new RuntimeException("not yet implemented!");
     }

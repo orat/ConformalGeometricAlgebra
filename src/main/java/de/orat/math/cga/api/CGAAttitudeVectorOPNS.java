@@ -38,16 +38,23 @@ public class CGAAttitudeVectorOPNS extends CGAAttitude implements iCGABivector {
         testDefiningProperties();
     }
     
+    
+    // composition 
+    
     public CGAAttitudeVectorOPNS(Vector3d t){
         super((new CGAE3Vector(t)).op(createInf(1.0)));
     }
     
+    
+    // decomposition 
+    
+    @Override
     public Vector3d direction(){
         return extractAttitudeFromEeinfRepresentation();
-        //TODO
-        // mit was muss ich den multivector multiplizieren um die betreffenden 
-        // Komponenten dann mit attitude.extractE3ToVector3d() abspalten zu können?
     }
+    
+    
+    // etc
     
     private void testDefiningProperties(){
         if (!inf.op(this).isNull()){
@@ -59,7 +66,6 @@ public class CGAAttitudeVectorOPNS extends CGAAttitude implements iCGABivector {
             throw new IllegalArgumentException("einf . X != 0");
         }*/
     }
-    
     
     @Override
     public CGAAttitudeVectorIPNS dual(){

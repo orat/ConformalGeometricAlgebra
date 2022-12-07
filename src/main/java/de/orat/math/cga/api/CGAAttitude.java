@@ -1,6 +1,7 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * Attitudes, also called free or direction vectors or free k-blades are elements 
@@ -28,6 +29,16 @@ class CGAAttitude extends CGAKVector {
     protected CGAAttitude(iCGAMultivector impl){
         super(impl);
     }
+    
+    
+    // decomposition
+    
+    public Vector3d direction(){
+        throw new RuntimeException("Implementation only for derviced classes available!");
+    }
+    
+    
+    // etc
     
     @Override
     public CGATangentOPNS inverse(){

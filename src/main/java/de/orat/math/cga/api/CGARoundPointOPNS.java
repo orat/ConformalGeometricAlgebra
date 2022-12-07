@@ -9,7 +9,7 @@ import org.jogamp.vecmath.Point3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGARoundPointOPNS extends CGASphereOPNS {
+public class CGARoundPointOPNS extends CGAOrientedFiniteRoundOPNS {
     
     public CGARoundPointOPNS(CGAMultivector m){
         super(m);
@@ -18,6 +18,10 @@ public class CGARoundPointOPNS extends CGASphereOPNS {
     CGARoundPointOPNS(iCGAMultivector m){
         super(m);
     }
+    
+    
+    // composition
+    
     /**
      * Create a conformal round point in outer product null space representation 
      * (grade 4 multivector).
@@ -37,6 +41,9 @@ public class CGARoundPointOPNS extends CGASphereOPNS {
     public CGARoundPointOPNS(Point3d p, double weight){
         this((new CGARoundPointIPNS(p, weight)).dual());
     }
+    
+    
+    // etc
     
     @Override
     public CGARoundPointIPNS dual(){

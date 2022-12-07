@@ -14,13 +14,22 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedFiniteRoundIPNS extends CGAKVector {
+abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
+    
+    boolean isNormalized = false;
     
     CGAOrientedFiniteRoundIPNS(CGAMultivector m){
         super(m);
     }
     CGAOrientedFiniteRoundIPNS(iCGAMultivector impl){
         super(impl);
+    }
+    
+    
+    // etc
+    
+    public boolean isNormalized(){
+        return isNormalized;
     }
     
     private boolean test(){
@@ -67,14 +76,17 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * 
      * @return attitude extraction from the E3 representation inclusive normalization
      */
-    public Vector3d attitude(){
+    /*public Vector3d attitude(){
         CGAAttitude result = attitudeIntern();
         System.out.println("attitude (CGAOrientedFiniteRoundIPNS)="+result.toString());
         Vector3d res = result.extractE3ToVector3d();
         res.normalize();
         return res;
-    }
+    }*/
     
+    public Vector3d attitude(){
+        return attitudeIntern().direction();
+    }
     /**
      * Determination of the attitude.
      * 
@@ -86,8 +98,7 @@ class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      */
     @Override
     protected CGAAttitude attitudeIntern(){
-        // FIXME geht so nur wenn der round im Ursprung ist?
-        return attitudeFromTangentAndRound2(true/*(CGAKVector) this.undual()*/);
+        return attitudeFromTangentAndRound2(true);
     }
     
     @Override

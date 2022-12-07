@@ -62,11 +62,11 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * @param n (normalized) normal vector of the plane
      * @param d distance of the plane to the origin
      */
-    public CGAPlaneIPNS(Vector3d n, double d){
+    public CGAPlaneIPNS(Vector3d n, double d, double weight){
         this(createEx(n.x)
             .add(createEy(n.y))
             .add(createEz(n.z))
-            .add(createInf(d)));
+            .add(createInf(d)).gp(weight));
     }
    
     /**
@@ -126,11 +126,20 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     }
     
     
+    // etc
+    
     private static double dist2Origin(CGARoundPointIPNS P){
         return Math.sqrt((new CGARoundPointIPNS(P)).distSquare(new CGARoundPointIPNS(createOrigin(1d))));
     }
+    
+    @Deprecated
     private static CGAMultivector createNino(){
         return inf.op(createOrigin(1d));
+    }
+    
+    @Override
+    public CGAPlaneOPNS undual(){
+        return new CGAPlaneOPNS(impl.dual().gp(-1));
     }
     
     
@@ -139,27 +148,43 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     /**
      * Determine the attitude.
      * 
+     * TODO
+     * diese Implementierung folowing Dorst sollte doch auch für line und flat point 
+     * gelten, oder?
+     * 
      * @return attitude
      */
     @Override
     public CGAAttitudeBivectorOPNS attitudeIntern(){
-        // Sign of all coordinates change according to errato to the book Dorst2007
-        // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
-        // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        CGAMultivector result = inf.op(this).undual().negate().compress();
-        System.out.println(result.toString("attitudeIntern (CGAPlaneIPNS)"));
-        // IPNS plane = (1.0*e3 + 2.0*ei)
-        // attitudeIntern(CGAOrientedFiniteFlatIPNS) = - 0.9999999999999996*e1^e2^ei
-        // die bestimmte attitude ist hier grade 3
-        // jetzt bekomme ich
-        // attitude_cga=-0.9999999999999996*e1^e2^ei
-        return new CGAAttitudeBivectorOPNS(result);
+        return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
     }  
+    
     @Override
     public Vector3d attitude(){
-        Vector3d result = (new CGAAttitudeBivectorOPNS(attitudeIntern())).direction();
+        Vector3d result = attitudeIntern().direction();
         result.normalize();
         return result;
+    }
+    
+    /**
+     * Determination of the attitude.
+     * 
+     * @Deprecated
+     * @return attitude as (E3) 1-vector
+     */
+    public CGAE3Vector attitudeIntern2(){
+        // implementation follows
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+        // blade = blade / weight
+	// local normal = no .. ( blade ^ ni )
+        double weight = weight2Intern();
+        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(inf)).compress();
+        // attitudeIntern(CGAPlaneIPNS) = (1.0*e3)
+        System.out.println(result.toString("attitudeIntern(CGAPlaneIPNS)"));
+        if (weight<=0){
+            System.out.println("attitudeIntern(CGAPlaneIPNS) failed because weight="+String.valueOf(weight));
+        }
+        return new CGAE3Vector(result);
     }
     
     /**
@@ -178,27 +203,6 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     }
     
     /**
-     * Determination of the attitude.
-     * 
-     * @return attitude/normal/direction
-     */
-    public CGAE3Vector attitudeIntern2(){
-        // implementation follows
-        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // blade = blade / weight
-	// local normal = no .. ( blade ^ ni )
-        double weight = weight2Intern();
-        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(inf)).compress();
-        // attitudeIntern(CGAPlaneIPNS) = (1.0*e3)
-        System.out.println(result.toString("attitudeIntern(CGAPlaneIPNS)"));
-        if (weight<=0){
-            System.out.println("attitudeIntern(CGAPlaneIPNS) failed because weight="+String.valueOf(weight));
-        }
-        return new CGAE3Vector(result);
-    }
-    
-     
-    /**
      * Determine location.
      * 
      * @return location
@@ -211,13 +215,5 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         System.out.println(result.toString("locationIntern2 (CGAPlaneIPNS)"));
         //return result.extractE3ToPoint3d();
         return new CGAE3Vector(result);
-    }
-    
-    
-    // others 
-    
-    @Override
-    public CGAPlaneOPNS undual(){
-        return new CGAPlaneOPNS(impl.dual().gp(-1));
     }
 }

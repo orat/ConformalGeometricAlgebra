@@ -26,6 +26,10 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
     CGAOrientedPointPairIPNS(iCGAMultivector impl){
         super(impl);
     }
+    
+    
+    // composition
+    
     /**
      * Create point-pair in inner product null space representation 
      * (grade 3 multivector).
@@ -96,6 +100,10 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(weight).gp(createI3());
         return result;
     }
+    
+    
+    // etc
+    
     @Override
     public CGAOrientedPointPairOPNS undual(){
         return new CGAOrientedPointPairOPNS(impl.dual().gp(-1));
@@ -106,33 +114,40 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
     
     /**
      * Determine weight without a probe point and without determination of the
-     * attitute.The sign can not be determined.
+     * attitute.
+     * 
+     * The sign can not be determined.
      * 
      * Implementation is different to circle in IPNS representation and also 
      * different to sphere in IPNS representation.
      * 
+     * @Deprecated
      * @return weight of the corresponding geometric object
      */
     public double weightIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( ( no_ni .. ( blade ^ ni ) ) * i ) ):tonumber()
-        return (createOrigin(1d).op(inf).ip(this.op(inf))).gp(createI3()).norm();
+        return (o.op(inf).ip(this.op(inf))).gp(I3).norm();
     }
     
+    @Override
+    public CGAAttitudeVectorOPNS attitudeIntern(){
+        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRound2(true));
+    }
     
     /**
      * Determine the attitude.
      * 
      * @Deprecated
-     * @return attitude
+     * @return normalized attitude as (E3) 1-vector
      */
     public CGAE3Vector attitudeIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
         // local normal = -( no_ni .. ( blade ^ ni ) ) * i
-        return new CGAE3Vector(createOrigin(1d).op(inf).ip(this.gp(1d/weightIntern2()).op(inf)).gp(createI3().negate()).compress());
+        return new CGAE3Vector(o.op(inf).ip(this.gp(1d/weightIntern2()).op(inf)).gp(createI3().negate()).compress());
     }
     
     /**

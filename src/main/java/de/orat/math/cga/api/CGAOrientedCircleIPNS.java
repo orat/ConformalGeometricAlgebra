@@ -34,10 +34,10 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * 
      * Determination by intersection of a sphere and a plane.
      * 
-     * @param center
-     * @param normal
+     * @param center center of the circle
+     * @param normal normal vector of the carrier plane of the circle
      * @param radius imaginary circle if radius<0
-     * @param weight
+     * @param weight weight
      */
     public CGAOrientedCircleIPNS(Point3d center, Vector3d normal, double radius, double weight){
         this((new CGASphereIPNS(center, radius, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
@@ -53,6 +53,14 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         this(sphere1.op(sphere2));
     }
    
+    
+    // etc
+    
+    @Override
+    public CGAOrientedCircleOPNS undual(){
+        return new CGAOrientedCircleOPNS(impl.dual().gp(-1));
+    }
+    
     
     // decomposition
     
@@ -74,25 +82,6 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         System.out.println(result.toString("weight2 (CGAOrientedCircleIPNS)"));
         // weight2Intern (CGAOrientedCircleIPNS) = (1.9999999999999991*eo^e1^ei)
         return Math.abs(result.norm());
-    }
-    
-    /**
-     * Determine the attitude (normal vector of the carrier plane).
-     * 
-     * test ok
-     * 
-     * @return attitude as (E3) 1-vector
-     */
-    public CGAE3Vector attitudeIntern2(){
-        // Implementation following:
-        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // CGAUtil.lua l.366
-        // blade = blade / weight2Intern
-	// local normal = -no_ni .. ( blade ^ ni )
-        CGAMultivector result = 
-                createOrigin(-1d).op(inf).ip(this.gp(1d/weight2()).op(inf)).compress();
-        System.out.println(result.toString("attitudeIntern2 (CGAOrientedCircleIPNS)"));
-        return new CGAE3Vector(result);
     }
     
     /**
@@ -140,17 +129,37 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
     /**
      * Determine attitude by extraction from bivector^inf representation. 
      * 
-     * @return attutude as euclidean vector
+     * @return attitude as euclidean vector
      */
     @Override
     public Vector3d attitude(){
-        CGAAttitude result = attitudeIntern();
+        return attitudeIntern().direction();
         //System.out.println("attitude="+result.toString());
-        return result.extractAttitudeFromBivectorEinfRepresentation(); //extractE3ToVector3d();
     }
-    
     @Override
-    public CGAOrientedCircleOPNS undual(){
-        return new CGAOrientedCircleOPNS(impl.dual().gp(-1));
+    public CGAAttitudeBivectorOPNS attitudeIntern(){
+        //FIXME
+        // scheint das falsche Vorzeichen zu liefern
+        return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
+    }
+    /**
+     * Determine the attitude (normal vector of the carrier plane).
+     * 
+     * TODO
+     * Vorzeichen passt zu carrierFlat aber value schein normalisiert zu sein
+     * 
+     * @Deprecated 
+     * @return normalized attitude as (E3) 1-vector
+     */
+    public CGAE3Vector attitudeIntern2(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+        // CGAUtil.lua l.366
+        // blade = blade / weight2
+	// local normal = -no_ni .. ( blade ^ ni )
+        CGAMultivector result = 
+                createOrigin(-1d).op(inf).ip(this.gp(1d/weight2()).op(inf)).compress();
+        System.out.println(result.toString("attitudeIntern2 (CGAOrientedCircleIPNS)"));
+        return new CGAE3Vector(result);
     }
 }

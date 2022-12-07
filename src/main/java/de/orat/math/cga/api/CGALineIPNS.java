@@ -24,6 +24,10 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     CGALineIPNS(iCGAMultivector m){
         super(m);
     }
+    
+    
+    // composition
+    
     /**
      * Create line in inner product null space representation (grade 2 multivector).
      * 
@@ -43,6 +47,7 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     public CGALineIPNS(CGARoundPointIPNS point, CGAAttitudeVectorOPNS direction){
         this(point.op(direction));
     }
+    
     /**
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
@@ -75,6 +80,8 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     }
     
     
+    // etc
+    
     @Override
     public CGALineOPNS undual(){
         return new CGALineOPNS(impl.dual().gp(-1));
@@ -96,6 +103,9 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         return true;
     }*/
     
+    
+    // decomposition
+    
     /**
      * Determine the weight (without the sign) without a probe point and without
      * determination of the attitude.
@@ -113,25 +123,6 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     }
     
     /**
-     * @return attitude
-     */
-    /*@Override
-    protected CGAAttitudeVectorOPNS attitudeIntern(){
-        // Infinity da weight == 0 und die Komponenten damit durch 0 geteilt werden
-        // attitudeIntern = (Infinity*e2 - Infinity*eo^e1^e2 - Infinity*e3 + Infinity*eo^e1^e3 + Infinity*eo^e2^e3 + NaN*e1^e2^ei + NaN*e1^e3^ei + NaN*e2^e3^ei)
-        //The given multivector is not of grade 2: Infinity*e2 - Infinity*eo^e1^e2 - Infinity*e3 + Infinity*eo^e1^e3 + Infinity*eo^e2^e3 + NaN*e1^e2^ei + NaN*e1^e3^ei + NaN*e2^e3^ei
-        //FIXME
-        // Implementation following:
-        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // blade = blade / weight
-	// local normal = ( no .. ( blade ^ ni ) ) * i
-        CGAMultivector result =  
-                createOrigin(1d).ip(this.gp(1d/weight()).op(inf)).gp(createI3()).compress();
-        System.out.println(result.toString("attitudeIntern"));
-        return new CGAAttitudeVectorOPNS(result);
-    }*/
-    
-    /**
      * Determine a point on the line which has the closest distance to the origin.
      * 
       * 
@@ -147,22 +138,17 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
                 gp(attitudeIntern())).gp(createI3()).extractE3ToPoint3d());
     }
     
-    // unklar, ob das hier so gut aufgehoben ist, vermutlich klappt nämlich extract
-    // nicht bei Ebenen und Kugeln da ich dann vermutlich einen Bivector bekomme
-    //  nach Abspaltung von einf
-    // dann kann ich den spezifischen extract-Methode in die spezifischen Attitude classen verschieben?
-    // siehe OPNS impl
-    //TODO
     @Override
-    public Vector3d attitude(){
-        Vector3d result = (new CGAAttitudeVectorOPNS(attitudeIntern())).direction(); // aus OPNS impl
-        result.normalize();
-        return result;
-        ///CGAAttitude result = attitudeIntern();
-        //System.out.println("attitude_cga="+result.toString());
-        //return result.extractAttitudeFromEeinfRepresentation();
+    public CGAAttitudeVectorOPNS attitudeIntern(){
+        return new CGAAttitudeVectorOPNS(super.attitudeIntern());
     }
     
+    /**
+     * Determine attitude.
+     * 
+     * @Deprecated
+     * @return normalized attitude as (E3) 1-vector
+     */
     public CGAE3Vector attitudeIntern2(){
         // implementation following Spencer
         CGAE3Vector result = new CGAE3Vector(CGAMultivector.createOrigin(1d).ip(this.div(weightIntern2()).
@@ -171,5 +157,4 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         return result;
         //return result.direction();
     }
-    
 }
