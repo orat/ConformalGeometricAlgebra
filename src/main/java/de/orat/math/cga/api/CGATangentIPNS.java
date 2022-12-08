@@ -12,6 +12,9 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * Pure tangents have zero size but a finite weight. 
  * 
+ * Tangents have a carrier.
+ * TODO determine it
+ * 
  * They are created
  * by wedging any Euclidean element (vector, bivector, or trivector) with the origin o.
  * We explore uses of tangent vectors as generators at the origin of the form ot in Sec-

@@ -33,6 +33,9 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * possible dimension) Euclidean subspace to include the whole geometric object
      * when it is placed at the origin.
      * 
+     * The carrier flat of an element is the smallest grade flat that contains
+     * the element (Dorst2007 p. 445).
+     * 
      * The carrier flat is fully position independent.
      * 
      * plane IPNS: Bivector e.g. (0.9999999999999991*e1^e2)
@@ -60,14 +63,14 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
      * @return attitude
      */
     @Override
-    public CGAAttitude attitudeIntern(){
+    public CGAAttitudeOPNS attitudeIntern(){
         // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         // testweise normalisieren
         CGAMultivector result = inf.op(this).undual().negate().compress();
         System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatIPNS, Dorst)"));
-        return new CGAAttitude(result);
+        return new CGAAttitudeOPNS(result);
         
         /*corresponds to
           Geometric Algebra: A powerful tool for solving geometric problems in visual computing

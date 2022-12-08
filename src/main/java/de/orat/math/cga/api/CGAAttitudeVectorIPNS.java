@@ -29,19 +29,28 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeVectorIPNS extends CGAAttitude implements iCGATrivector {
+public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivector {
     
     public CGAAttitudeVectorIPNS(CGAMultivector m){
         super(m);
         testDefiningProperties();
     }
+    
     protected CGAAttitudeVectorIPNS(iCGAMultivector impl){
         super(impl);
         testDefiningProperties();
     }
+    
+    
+    // composition
+    
     public CGAAttitudeVectorIPNS(Vector3d t){
-        super((new CGAE3Vector(t)).op(createInf(1.0)).dual());
+        super((new CGAE3Vector(t)).op(inf).dual());
     }
+    
+    
+    // decomposition 
+    
     public Vector3d attitude(){
         CGAMultivector attitude = attitudeIntern();
         return attitude.extractAttitudeFromEeinfRepresentation();
@@ -54,6 +63,9 @@ public class CGAAttitudeVectorIPNS extends CGAAttitude implements iCGATrivector 
         return this.undual();
     }
     
+    
+    // etc
+    
     private void testDefiningProperties(){
         if (!inf.op(this).isNull()){
             throw new IllegalArgumentException("einf^X != 0");
@@ -65,6 +77,6 @@ public class CGAAttitudeVectorIPNS extends CGAAttitude implements iCGATrivector 
     
     @Override
     public CGAAttitudeVectorOPNS undual(){
-        return new CGAAttitudeVectorOPNS(impl.dual().gp(-1d));
+        return new CGAAttitudeVectorOPNS(impl.dual());
     }
 }

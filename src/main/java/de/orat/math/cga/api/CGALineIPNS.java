@@ -5,7 +5,10 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Generates the motor algebra. 
+ * Lines in IPNS representation. 
+ * 
+ * Lines generates the motor algebra. They can be interpreted as flattended 
+ * circles passing through infinity.
  * 
  * e1^e2, e1^e3, e2^e3, e1^ni, e2^ni, e3^ni
  * 
@@ -13,6 +16,9 @@ import org.jogamp.vecmath.Vector3d;
  * the central axis l of a circle σ can be found by contraction with infinity: 
  * 
  * ∞⌋σ = l.
+ * 
+ * TODO
+ * CGALineIPNS extends CGAOrientedCircleIPNS with r=inf
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

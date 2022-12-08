@@ -72,7 +72,7 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     
     @Override
     public Vector3d attitude(){
-        CGAAttitude result = attitudeIntern();
+        CGAAttitudeOPNS result = attitudeIntern();
         System.out.println("attitude (CGAOrientedPointPairOPNS)="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
     }

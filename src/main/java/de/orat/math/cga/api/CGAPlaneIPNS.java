@@ -10,7 +10,11 @@ import org.jogamp.vecmath.Point3d;
 
 /**
  * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
- * square to 0. Planes are grade 1. Corresponding to dual plane in Dorst2007.
+ * square to 0. 
+ * 
+ * Planes are grade 1. Corresponding to dual plane in Dorst2007.
+ * 
+ * Planes are flattended spheres.
  * 
  * Given two null points p and q, we can construct the dual plane in between them 
  * by simple substraction: π = p − q : subtracting one normalized point from a

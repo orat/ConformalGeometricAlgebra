@@ -44,7 +44,7 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
      * @ipns true for blade in ipns representation
      * @return attitude
      */
-    CGAAttitude attitudeFromTangentAndRound2(boolean ipns){
+    CGAAttitudeOPNS attitudeFromTangentAndRound2(boolean ipns){
         // e.g. -1.9999999999999982*e1^e2^e3^ei 
         // grade 4 if invoked from a sphere
         // Dorst2007 p. 562
@@ -53,7 +53,7 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
         // grade 3, if invoked from a circle 
         CGAKVector m = this;
         if (ipns) m = m.dual();
-        CGAAttitude result = new CGAAttitude(inf.lc(m).op(inf).negate().compress());
+        CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.lc(m).op(inf).negate().compress());
         System.out.println(result.toString("attitude (round/tangent)"));
         
         return result;

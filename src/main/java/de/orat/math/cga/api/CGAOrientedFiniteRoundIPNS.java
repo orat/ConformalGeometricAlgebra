@@ -46,6 +46,9 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     /**
      * Determine the carrier flat (euclidean carrier) of a (dual=IPNS) round.
      * 
+     * The carrier flat of an element is the smallest grade flat that contains
+     * the element (Dorst2007 p. 445).
+     *
      * The carrier flat is the OPNS subspace representation of the minimal (lowest
      * possible dimension) Euclidean subspace to include the whole geometric object
      * when it is placed at the origin.
@@ -77,7 +80,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return attitude extraction from the E3 representation inclusive normalization
      */
     /*public Vector3d attitude(){
-        CGAAttitude result = attitudeIntern();
+        CGAAttitudeOPNS result = attitudeIntern();
         System.out.println("attitude (CGAOrientedFiniteRoundIPNS)="+result.toString());
         Vector3d res = result.extractE3ToVector3d();
         res.normalize();
@@ -97,7 +100,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return attitude
      */
     @Override
-    protected CGAAttitude attitudeIntern(){
+    protected CGAAttitudeOPNS attitudeIntern(){
         return attitudeFromTangentAndRound2(true);
     }
     

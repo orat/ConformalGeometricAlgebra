@@ -27,6 +27,10 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     CGALineOPNS(iCGAMultivector m){
         super(m);
     }
+    
+    
+    // composition
+    
     /**
      * Create line in outer product null space representation (grade 3 multivector).
      * 
@@ -44,6 +48,7 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     public CGALineOPNS(Point3d p1, Tuple3d p2){
         this((new CGARoundPointIPNS(p1)), (new CGARoundPointIPNS(p2)));
     }
+    
     /**
      * 
      * Hint: The direction of the line is from p2 to p1.
@@ -71,10 +76,16 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
         this(p1.op(p2).op(inf));
     }
     
+    
+    // etc
+    
     @Override
     public CGALineIPNS dual(){
         return new CGALineIPNS(new CGALineIPNS(impl.dual()).compress());
     }
+    
+    
+    // decomposition
     
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
@@ -87,6 +98,7 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
         System.out.println(result.toString("attitudeIntern2 (CGALineOPNS, via dual, Spencer"));
         return result;
     }
+    
     /**
      * Determine the normalized attitude of the corresponding geometric object.
      * 

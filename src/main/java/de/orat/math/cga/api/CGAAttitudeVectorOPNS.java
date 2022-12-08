@@ -27,12 +27,13 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeVectorOPNS extends CGAAttitude implements iCGABivector {
+public class CGAAttitudeVectorOPNS extends CGAAttitudeOPNS implements iCGABivector {
     
     public CGAAttitudeVectorOPNS(CGAMultivector m){
         super(m);
         testDefiningProperties();
     }
+    
     protected CGAAttitudeVectorOPNS(iCGAMultivector impl){
         super(impl);
         testDefiningProperties();
@@ -42,7 +43,7 @@ public class CGAAttitudeVectorOPNS extends CGAAttitude implements iCGABivector {
     // composition 
     
     public CGAAttitudeVectorOPNS(Vector3d t){
-        super((new CGAE3Vector(t)).op(createInf(1.0)));
+        super((new CGAE3Vector(t)).op(inf));
     }
     
     
