@@ -155,9 +155,9 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
      * @Deprecated
      * @return normalized attitude as (E3) 1-vector
      */
-    public CGAE3Vector attitudeIntern2(){
+    public CGAEuclideanVector attitudeIntern2(){
         // implementation following Spencer
-        CGAE3Vector result = new CGAE3Vector(CGAMultivector.createOrigin(1d).ip(this.div(weightIntern2()).
+        CGAEuclideanVector result = new CGAEuclideanVector(CGAMultivector.createOrigin(1d).ip(this.div(weightIntern2()).
                 op(inf)).gp(CGAMultivector.createI3()));
         System.out.println(result.toString("attitueIntern2 (CGALineIPNS, Spencer)"));
         return result;

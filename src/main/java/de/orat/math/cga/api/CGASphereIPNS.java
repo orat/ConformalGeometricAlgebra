@@ -180,7 +180,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * 
      * @return location midpoint/center
      */
-    public CGAE3Vector locationIntern2(){
+    public CGAEuclideanVector locationIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //blade = blade / weight2
@@ -188,7 +188,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         CGAMultivector no_inf = createOrigin(1d).op(inf);
         CGAMultivector result = no_inf.ip((gp(1d/weight2())).op(no_inf));
         System.out.println(result.toString("locationIntern2 (CGASphereIPNS, Spencer)"));
-        return new CGAE3Vector(result);
+        return new CGAEuclideanVector(result);
     }
     
     /**

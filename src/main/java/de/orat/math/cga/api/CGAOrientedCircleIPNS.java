@@ -89,7 +89,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * 
      * @return location
      */
-    public CGAE3Vector locationIntern2(){
+    public CGAEuclideanVector locationIntern2(){
         CGAMultivector no_ni = createOrigin(1d).op(inf);
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
@@ -97,7 +97,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
 	CGAMultivector result = attitudeIntern2().negate().gp(no_ni.ip(
                 this.gp(1d/weight2()).op(createOrigin(1d).gp(inf))));
         System.out.println(result.toString("locationIntern2 (CGAOrientedCircleIPNS)"));
-        return new CGAE3Vector(result);
+        return new CGAEuclideanVector(result);
     }
     
     /**
@@ -151,7 +151,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * @Deprecated 
      * @return normalized attitude as (E3) 1-vector
      */
-    public CGAE3Vector attitudeIntern2(){
+    public CGAEuclideanVector attitudeIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // CGAUtil.lua l.366
@@ -160,6 +160,6 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         CGAMultivector result = 
                 createOrigin(-1d).op(inf).ip(this.gp(1d/weight2()).op(inf)).compress();
         System.out.println(result.toString("attitudeIntern2 (CGAOrientedCircleIPNS)"));
-        return new CGAE3Vector(result);
+        return new CGAEuclideanVector(result);
     }
 }

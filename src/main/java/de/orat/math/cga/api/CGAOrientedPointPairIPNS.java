@@ -142,12 +142,12 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * @Deprecated
      * @return normalized attitude as (E3) 1-vector
      */
-    public CGAE3Vector attitudeIntern2(){
+    public CGAEuclideanVector attitudeIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
         // local normal = -( no_ni .. ( blade ^ ni ) ) * i
-        return new CGAE3Vector(o.op(inf).ip(this.gp(1d/weightIntern2()).op(inf)).gp(createI3().negate()).compress());
+        return new CGAEuclideanVector(o.op(inf).ip(this.gp(1d/weightIntern2()).op(inf)).gp(createI3().negate()).compress());
     }
     
     /**
@@ -155,7 +155,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      *
      * @return location
      */
-    public CGAE3Vector locationIntern2(){
+    public CGAEuclideanVector locationIntern2(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //blade = blade / weight
@@ -165,7 +165,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         CGAMultivector no_ni = no.op(inf);
         CGAMultivector result = attitudeIntern2().negate().gp(no_ni.ip(this.gp(1d/weight).op(no.gp(inf)))).gp(createI3());
         System.out.println(result.toString("locationIntern2 (CGAOrientedPointPairIPNS)"));
-        return new CGAE3Vector(result);
+        return new CGAEuclideanVector(result);
     }
     
     public Point3d[] decomposePoints(){

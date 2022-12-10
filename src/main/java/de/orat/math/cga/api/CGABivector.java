@@ -32,8 +32,8 @@ public class CGABivector extends CGAKVector implements iCGABivector {
      * @param b second vector
      */
     public CGABivector(Tuple3d a, Tuple3d b){
-        this((new CGAE3Vector(a)).op(
-             (new CGAE3Vector(b))));
+        this((new CGAEuclideanVector(a)).op(
+             (new CGAEuclideanVector(b))));
     }
     
     /**
@@ -45,6 +45,6 @@ public class CGABivector extends CGAKVector implements iCGABivector {
      * @param a the euclidian vector
      */
     public CGABivector(Tuple3d a){
-        this((new CGAE3Vector(a)).op(inf));
+        this((new CGAEuclideanVector(a)).op(inf));
     }
 }

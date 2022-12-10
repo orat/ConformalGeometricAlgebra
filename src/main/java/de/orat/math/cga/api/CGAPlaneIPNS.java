@@ -176,7 +176,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * @Deprecated
      * @return attitude as (E3) 1-vector
      */
-    public CGAE3Vector attitudeIntern2(){
+    public CGAEuclideanVector attitudeIntern2(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
@@ -188,7 +188,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         if (weight<=0){
             System.out.println("attitudeIntern(CGAPlaneIPNS) failed because weight="+String.valueOf(weight));
         }
-        return new CGAE3Vector(result);
+        return new CGAEuclideanVector(result);
     }
     
     /**
@@ -211,13 +211,13 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * 
      * @return location
      */
-    public CGAE3Vector locationIntern2(){
+    public CGAEuclideanVector locationIntern2(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = -( no .. blade ) * normal
         CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight2Intern())).gp(attitudeIntern2()).negate();
         System.out.println(result.toString("locationIntern2 (CGAPlaneIPNS)"));
         //return result.extractE3ToPoint3d();
-        return new CGAE3Vector(result);
+        return new CGAEuclideanVector(result);
     }
 }

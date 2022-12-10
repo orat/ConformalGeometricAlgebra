@@ -91,8 +91,8 @@ public class CGAMultivector {
     public static CGAMultivector createEz(double scale){
         return new CGAMultivector(defaultInstance.impl.createEz(scale));
     }
-    public static CGAE3Vector createE3(){
-        return new CGAE3Vector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
+    public static CGAEuclideanVector createE3(){
+        return new CGAEuclideanVector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
     }
     /**
      * Create an E3 Vector or 0-Vector if the given argument is a null-vector.
@@ -100,8 +100,8 @@ public class CGAMultivector {
      * @param v
      * @return E3 vector
     */
-    public static CGAE3Vector createE3(Tuple3d v){
-            return new CGAE3Vector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
+    public static CGAEuclideanVector createE3(Tuple3d v){
+            return new CGAEuclideanVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
     public static CGAMultivector createI3(){
         // da könnte ich doch gleich den richtigen Blade in einem Schritt erzeugen

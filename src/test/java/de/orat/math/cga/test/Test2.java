@@ -1,7 +1,7 @@
 package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
-import de.orat.math.cga.api.CGAE3Vector;
+import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
 import de.orat.math.cga.api.CGAOrientedCircleIPNS;
 import de.orat.math.cga.api.CGAOrientedCircleOPNS;
@@ -168,7 +168,7 @@ public class Test2 {
         
         // 4.
         // direction of the lineOPNS_
-        CGAE3Vector attitude2 = lineOPNS_.attitudeIntern2();
+        CGAEuclideanVector attitude2 = lineOPNS_.attitudeIntern2();
         System.out.println(attitude2.toString("attitude2 (line OPNS)"));
         
         Vector3d attitude = lineOPNS_.attitudeIntern().direction(); // without normalizationd
@@ -1899,7 +1899,7 @@ public class Test2 {
         
         Vector3d attitudeCircleIPNS = circleIPNS.attitude();
         System.out.println(toString("attitude (circleIPNS)",attitudeCircleIPNS));
-        CGAE3Vector attituceCircleIPNS2 = circleIPNS.attitudeIntern2();
+        CGAEuclideanVector attituceCircleIPNS2 = circleIPNS.attitudeIntern2();
         System.out.println(toString("attitude2 (circleIPNS)",attituceCircleIPNS2.direction()));
         // FIXME Vorzeichenfehler
         // attitude (round/tangent) = (1.9999999999999982*e2^e3^ei)
@@ -1916,7 +1916,7 @@ public class Test2 {
         
         Vector3d attitudeppIPNS = ppIPNS.attitude();
         System.out.println(toString("attitude (ppIPNS)", attitudeppIPNS));
-        CGAE3Vector attitudePPIPNS2 = ppIPNS.attitudeIntern2();
+        CGAEuclideanVector attitudePPIPNS2 = ppIPNS.attitudeIntern2();
         System.out.println(attitudePPIPNS2.toString("attitude2 (ppIPNS)"));
         //System.out.println(attitudePPIPNS2.toString("attitudeIntern2 (PPIPNS)"));
         // attitude (round/tangent) = (1.9999999999999982*e2^ei)

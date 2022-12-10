@@ -113,9 +113,9 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
         return new CGAAttitudeVectorOPNS(super.attitudeIntern());
     }
     
-    public CGAE3Vector attitudeIntern2(){
+    public CGAEuclideanVector attitudeIntern2(){
         // nach Spencer
-        CGAE3Vector result = this.dual().attitudeIntern2();
+        CGAEuclideanVector result = this.dual().attitudeIntern2();
         System.out.println(result.toString("attitudeIntern2 (CGALineOPNS, via dual, Spencer"));
         return result;
     }

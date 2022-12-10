@@ -43,7 +43,7 @@ public class CGAAttitudeVectorOPNS extends CGAAttitudeOPNS implements iCGABivect
     // composition 
     
     public CGAAttitudeVectorOPNS(Vector3d t){
-        super((new CGAE3Vector(t)).op(inf));
+        super((new CGAEuclideanVector(t)).op(inf));
     }
     
     

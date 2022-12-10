@@ -15,8 +15,8 @@ interface iCGATrivector extends iCGABlade {
     }
     
     default iCGATrivector createCGATrivector(Tuple3d a, Tuple3d b){
-        return (iCGATrivector) (new CGAE3Vector(a)).op(
-                (new CGAE3Vector(b)).op(inf));
+        return (iCGATrivector) (new CGAEuclideanVector(a)).op(
+                (new CGAEuclideanVector(b)).op(inf));
     }
     
     public double scalarPart();

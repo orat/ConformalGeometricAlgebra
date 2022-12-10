@@ -45,7 +45,7 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     // composition
     
     public CGAAttitudeVectorIPNS(Vector3d t){
-        super((new CGAE3Vector(t)).op(inf).dual());
+        super((new CGAEuclideanVector(t)).op(inf).dual());
     }
     
     

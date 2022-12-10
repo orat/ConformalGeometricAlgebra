@@ -119,7 +119,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAT
      * 
      * @return location as euclidean point
      */
-    public CGAE3Vector locationIntern5(){
+    public CGAEuclideanVector locationIntern5(){
         // Implementation following:
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // It must be non-zero and of grade 3.
@@ -132,7 +132,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAT
         // CGAFlatPointIPNS.location = (NaN*e1^e3 - Infinity*eo^e1^e2^e3 + NaN*e1^e2^e3^ei)
         //FIXME stimmt irgendwie gar nicht!
         System.out.println(result.toString("locationInter5 (CGAFlatPointIPNS)"));
-        return new CGAE3Vector(result);
+        return new CGAEuclideanVector(result);
     }
    
     @Override

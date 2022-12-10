@@ -111,7 +111,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
         // extract E3 from normalized dual sphere
         // Dorst2007 p.409
         CGAMultivector oinf = CGAMultivector.createOrigin(1d).op(inf);
-        CGAE3Vector result = new CGAE3Vector(oinf.lc(oinf.op(res)));
+        CGAEuclideanVector result = new CGAEuclideanVector(oinf.lc(oinf.op(res)));
         System.out.println(result.toString("location E3 (from CGAOrientedFiniteFlatIPNS, Dorst)"));
         return result.location();
     }
