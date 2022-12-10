@@ -39,10 +39,9 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * 
      * Hint: The direction of the line is from p2 to p1.
      * 
-     * Successfull tested!!!
-     * 
      * @param p1 first point on the line
      * @param p2 second point on the line or direction of the line
+     * 
      * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
      */
     public CGALineOPNS(Point3d p1, Tuple3d p2){
@@ -50,8 +49,14 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     }
     
     /**
+     * Create line in outer product null space representation (grade 3 multivector).
+     * 
+     * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
+     * Hildenbrand2013.
      * 
      * Hint: The direction of the line is from p2 to p1.
+     * 
+     * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
      * 
      * @param p1
      * @param weight1
@@ -74,6 +79,22 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(p1.op(p2).op(inf));
+    }
+    
+    /**
+     * Create a line in outer product null space representation (grade 3 multivector)
+     * based on its moment and direction. 
+     * 
+     * The moment bivector is the outer product of two points on the line. Different
+     * to plücker coordinates this moment representation allows to create also
+     * line through the origin. In Euclidean geometry this is not possible due
+     * to the not defined cross product.
+     * 
+     * @param moment
+     * @param direction 
+     */
+    public CGALineOPNS(CGABivector moment, Vector3d direction){
+        this(moment.op(inf).add(CGAMultivector.createE3(direction).gp(inf.op(o))));
     }
     
     

@@ -1,7 +1,7 @@
 package de.orat.math.cga.api;
 
 /**
- * An euclidean bivector (312, e13, e23).
+ * An euclidean bivector (e12, e13, e23).
  * 
  * TODO implement test-classes for the basisblades.
  * 
