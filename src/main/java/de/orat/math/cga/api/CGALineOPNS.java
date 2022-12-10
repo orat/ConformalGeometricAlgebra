@@ -40,11 +40,11 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * Hint: The direction of the line is from p2 to p1.
      * 
      * @param p1 first point on the line
-     * @param p2 second point on the line or direction of the line
+     * @param p2 second point on the line
      * 
      * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
      */
-    public CGALineOPNS(Point3d p1, Tuple3d p2){
+    public CGALineOPNS(Point3d p1, Point3d p2){
         this((new CGARoundPointIPNS(p1)), (new CGARoundPointIPNS(p2)));
     }
     
@@ -95,6 +95,19 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      */
     public CGALineOPNS(CGABivector moment, Vector3d direction){
         this(moment.op(inf).add(CGAMultivector.createE3(direction).gp(inf.op(o))));
+    }
+    /**
+     * Create a line in outer product null space representation (grade 3 multivector)
+     * based on its moment and direction. 
+     * 
+     * TODO
+     * ungetestet
+     * 
+     * @param p euclidean point on the line
+     * @param d euclidean direction of the line
+     */
+    public CGALineOPNS(Point3d p, Vector3d d){
+        this((new CGARoundPointIPNS(p)).op(new CGAAttitudeVectorOPNS(d)));
     }
     
     
