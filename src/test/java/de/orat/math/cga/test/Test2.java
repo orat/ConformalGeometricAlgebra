@@ -25,7 +25,6 @@ import de.orat.math.cga.api.CGATangentVectorOPNS;
 import de.orat.math.cga.api.CGATranslator;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA_METRIC;
-import de.orat.math.cga.util.Decomposition3d.LinePairParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
@@ -1940,7 +1939,7 @@ public class Test2 {
         System.out.println(m1.toString("m1"));
         
         CGALinePair lp = new CGALinePair(l1, m1);
-        LinePairParameters parameters = lp.decomposeLinePair();
+        CGALinePair.LinePairParameters parameters = lp.decomposeLinePair();
         System.out.println(toString("alpha",parameters.alpha()));
         System.out.println(toString("location",parameters.location()));
         System.out.println(toString("attitude",parameters.attitude()));

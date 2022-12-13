@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 

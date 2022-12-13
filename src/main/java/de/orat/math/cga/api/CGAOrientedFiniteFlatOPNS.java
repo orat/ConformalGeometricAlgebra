@@ -1,8 +1,6 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
-import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -31,6 +29,10 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector implements iCGAFlat 
     public iCGAFlat.EuclideanParameters decompose(){
         return new iCGAFlat.EuclideanParameters(attitude(), location(), 
                                       squaredWeight());
+    }
+    
+    public iCGAFlat.EuclideanParameters decompose(Point3d probePoint){
+        return new iCGAFlat.EuclideanParameters(attitude(), location(probePoint), squaredWeight());
     }
     
     /**
@@ -96,9 +98,6 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector implements iCGAFlat 
     
     public abstract Vector3d attitude();
     
-    public FlatAndDirectionParameters decompose(Point3d probePoint){
-        return new FlatAndDirectionParameters(attitude(), location(probePoint));
-    }
     
     /*public CGAFlat undual(){
         return new CGAFlat(impl.undual());

@@ -9,6 +9,7 @@ import org.jogamp.vecmath.Vector3d;
 public interface iCGAFlat {
     
     public EuclideanParameters decompose();
+    public EuclideanParameters decompose(Point3d probePoint);
     public record EuclideanParameters(Vector3d attitude, Point3d location, 
                                       double squaredWeight){}
 }

@@ -1,7 +1,5 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.util.Decomposition3d;
-import de.orat.math.cga.util.Decomposition3d.LinePairParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -15,7 +13,12 @@ public class CGALinePair extends CGAMultivector {
         super(line1.gp(line2).compress().impl);
     }
     
-     
+    
+    // decompose
+    
+    // statt location und atttitude, vielleciht besser location1 und location2?
+    public record LinePairParameters(double alpha, Point3d location, Vector3d attitude){}
+    
     /**
      * Decompose the geometric product of two lines.
      *
@@ -42,21 +45,21 @@ public class CGALinePair extends CGAMultivector {
         
         // identisch
         if (this.isScalar()){
-            return new Decomposition3d.LinePairParameters(0d, null, null);
+            return new LinePairParameters(0d, null, null);
         // coplanar
         } else if (X2.isNull()){
             // parallel
             if (Y3.op(inf).isNull()){
                 Vector3d dir = new Vector3d();
                 //TODO
-                return new Decomposition3d.LinePairParameters(0d, null, dir);
+                return new LinePairParameters(0d, null, dir);
             // coplanar mit Schnittpunkt    
             } else {
                 //TODO
                 double alpha=0;
                 Point3d p = new Point3d();
                 //TODO
-                return new Decomposition3d.LinePairParameters(alpha, p, null);
+                return new LinePairParameters(alpha, p, null);
             }
         // skewed
         } else {
@@ -67,7 +70,7 @@ public class CGALinePair extends CGAMultivector {
          
             double alpha = 0d;
             Vector3d p = new Vector3d(); 
-            return new Decomposition3d.LinePairParameters(alpha, new Point3d(p.x,p.y,p.z), 
+            return new LinePairParameters(alpha, new Point3d(p.x,p.y,p.z), 
                     //TODO indizes?
                     new Vector3d(dValues[0], dValues[1], dValues[2]));
         }
@@ -87,7 +90,7 @@ public class CGALinePair extends CGAMultivector {
       * @param l2l1
       * @return parameters describing the pose of two lines to each other
       */
-    public static Decomposition3d.LinePairParameters decomposeLinePair(CGAMultivector l2l1){
+    public static LinePairParameters decomposeLinePair(CGAMultivector l2l1){
         
         System.out.println("l2l1:"+l2l1.toString());
         
@@ -149,6 +152,6 @@ public class CGALinePair extends CGAMultivector {
         //TODO
         Point3d location = null;
         
-        return new Decomposition3d.LinePairParameters(Math.atan2(cosalpha, sinalpha), location, attitude);
+        return new LinePairParameters(Math.atan2(cosalpha, sinalpha), location, attitude);
     }
 }

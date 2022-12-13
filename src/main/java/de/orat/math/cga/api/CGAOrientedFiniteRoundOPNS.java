@@ -1,8 +1,6 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
-import de.orat.math.cga.util.Decomposition3d;
-import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -190,12 +188,6 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
         // Dorst
         return locationFromTangentAndRoundAsNormalizedSphere(); 
     }
-    
-    public Decomposition3d.RoundAndTangentParameters decomposeMotor(){
-       return new RoundAndTangentParameters(attitude(), 
-                location(), squaredSize());
-    }
-    
     
     // var project_point_on_round = (point,sphere)=>-point^ni<<sphere<<sphere
     // - hat 1

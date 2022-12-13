@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
-import de.orat.math.cga.util.Decomposition3d.FlatAndDirectionParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -32,6 +31,11 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat 
                                       squaredWeight());
     }
     
+    public iCGAFlat.EuclideanParameters decompose(Point3d probePoint){
+        return new iCGAFlat.EuclideanParameters(attitude(), location(probePoint), squaredWeight());
+    }
+    
+     
     /**
      * Determine the carrier flat (euclidean carrier) of a (dual=IPNS) flat.
      * 
@@ -122,11 +126,6 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat 
         return result.location();
     }
     
-    public FlatAndDirectionParameters decompose(Point3d probePoint){
-        return new FlatAndDirectionParameters(attitude(), location(probePoint));
-    }
-    
-     
     /**
      * Extract the direction and location of a line/plane.
      * 

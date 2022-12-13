@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.util.Decomposition3d.RoundAndTangentParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -95,18 +94,7 @@ public class CGATangentOPNS extends CGAKVector implements iCGATangentOrRound {
     public double squaredSize(){
         return 0d;
     }
-    /**
-     * Decompose tangent.
-     * 
-     * Keep in mind: Corresponding to Dorst2007 dual and non-dual is switched.
-     * 
-     * @return direction/attitude and location, size/radius=0
-     */
-    public RoundAndTangentParameters decomposeMotor(){
-        return new RoundAndTangentParameters(attitude(), 
-                location(), squaredSize());
-    }
-    
+   
     
     // etc
     

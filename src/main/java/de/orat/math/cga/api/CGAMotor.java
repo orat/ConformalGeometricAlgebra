@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.util.Decomposition3d.MotorParameters;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -31,6 +30,8 @@ public class CGAMotor extends CGAVersor {
     public CGAMotor(CGABivector B, Vector3d d){
         this(B.add(createE3(d).gp(inf)));
     }
+    
+    public record MotorParameters(Vector3d dir, double alpha){}
     
     public MotorParameters decomposeMotor(){
         double cosAlpha = decomposeScalar();
