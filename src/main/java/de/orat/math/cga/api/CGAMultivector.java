@@ -6,6 +6,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Quat4d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -718,11 +719,25 @@ public class CGAMultivector {
         throw new RuntimeException("CGA Multivector is not of type iCGAFlat");
     }
     
+    public iCGAFlat.EuclideanParameters decomposeFlat(Point3d probePoint){
+        if (this instanceof iCGAFlat flat){
+            return flat.decompose(probePoint);
+        }
+        throw new RuntimeException("CGA Multivector is not of type iCGAFlat");
+    }
+     
     public Vector3d decomposeAttitude(){
         if (this instanceof iCGAAttitude attitude){
             return attitude.direction();
         }
         throw new RuntimeException("CGA Multivector is not of type iCGAAttitude");
+    }
+    
+    public Quat4d decomposeRotor(){
+        if (this instanceof CGARotor rotor){
+            return rotor.decompose();
+        }
+        throw new RuntimeException("CGA Multivector is not of type CGARotor");
     }
     
 }

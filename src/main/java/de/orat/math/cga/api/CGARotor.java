@@ -29,6 +29,9 @@ public class CGARotor extends CGAVersor {
         // test auf 0,2 blades
     }
     
+    
+    // composition 
+    
     /**
      * @param B normalized bivector representing the rotation axis
      * @param theta in radians
@@ -41,12 +44,15 @@ public class CGARotor extends CGAVersor {
         return transform(m);
     }*/
     
+    
+    // decomposition
+    
     /**
      * Decompose rotation around origin.
      * 
      * @return quaternion representing a rotation around the origin
      */
-    public Quat4d decomposeMotor(){
+    public Quat4d decompose(){
         Quat4d result = new Quat4d();
         result.w = impl.extractCoordinates(0)[impl.getOriginIndex()];
         double[] vector = impl.extractCoordinates(2);
