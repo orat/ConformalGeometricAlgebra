@@ -16,14 +16,14 @@ public class CGAScalar extends CGAKVector implements iCGAScalar {
     }
     
     public static CGAScalar atan2(CGAScalar y, CGAScalar x){
-        return new CGAScalar(Math.atan2(y.scalarPart(), x.scalarPart()));
+        return new CGAScalar(Math.atan2(y.decomposeScalar(), x.decomposeScalar()));
     }
     
     public CGAScalar sqrt(){
-        return new CGAScalar(Math.sqrt(this.scalarPart()));
+        return new CGAScalar(Math.sqrt(this.decomposeScalar()));
     }
     
     public double value(){
-        return scalarPart();
+        return decomposeScalar();
     }
 }

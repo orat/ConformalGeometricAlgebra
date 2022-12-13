@@ -10,6 +10,7 @@ import de.orat.math.cga.api.CGAPlaneOPNS;
 import de.orat.math.cga.api.CGAOrientedPointPairOPNS;
 import de.orat.math.cga.api.CGASphereOPNS;
 import de.orat.math.cga.api.CGALineIPNS;
+import de.orat.math.cga.api.CGALinePair;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
@@ -24,6 +25,7 @@ import de.orat.math.cga.api.CGATangentVectorOPNS;
 import de.orat.math.cga.api.CGATranslator;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA_METRIC;
+import de.orat.math.cga.util.Decomposition3d.LinePairParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
@@ -308,7 +310,7 @@ public class Test2 {
         double radiusSquaredTest = 0.5d;
         System.out.println("radiusSquaredTest="+String.valueOf(radiusSquaredTest));
         
-        double radiusSquared = ppOPNS.squaredSizeIntern3().scalarPart();
+        double radiusSquared = ppOPNS.squaredSizeIntern3().decomposeScalar();
         System.out.println("radiusSquared3 (pp OPNS)="+String.valueOf(radiusSquared));
         assertTrue(equals(radiusSquared,radiusSquaredTest)); 
         
@@ -366,7 +368,7 @@ public class Test2 {
         // squaredSize
         double squaredSize = ppIPNS.squaredSize();
         System.out.println(toString("squaredSize (ppIPNS)",squaredSize));
-        squaredSize = ppIPNS.squaredSizeIntern5().scalarPart();
+        squaredSize = ppIPNS.squaredSizeIntern5().decomposeScalar();
         System.out.println(toString("squaredSize2 (ppIPNS)",squaredSize));
         
         // weight
@@ -527,7 +529,7 @@ public class Test2 {
         
         // test Spencer implementation
         
-        double squaredSize5 = s1.squaredSizeIntern5().scalarPart();
+        double squaredSize5 = s1.squaredSizeIntern5().decomposeScalar();
         System.out.println("squaredSize2 (s1)="+String.valueOf(squaredSize5));
         assertTrue(equals(squaredSize5, radius1*radius1));
         double weight2 = s1.weight2();
@@ -992,12 +994,12 @@ public class Test2 {
         // squaredSizeIntern1/radiusSquared = (-1.3906250000000013)
         System.out.println(toString("squaredSize (circleIPNS)",squaredSize));
         
-        double squaredSize2 = circleIPNS.squaredSizeIntern5().scalarPart();
+        double squaredSize2 = circleIPNS.squaredSizeIntern5().decomposeScalar();
         // squaredSizeIntern5 (circleIPNS) = 1.2500000000000007 //ok
         System.out.println(toString("squaredSize2 (circleIPNS)",squaredSize2));
         assertTrue(equals(squaredSize2,radiusSquared));
         
-        double squaredSize3 = circleIPNS.squaredSizeIntern3().scalarPart();
+        double squaredSize3 = circleIPNS.squaredSizeIntern3().decomposeScalar();
         // squaredSizeIntern3 (circleIPNS) = 1.2500000000000004
         System.out.println(toString("squaredSize3 (circleIPNS)", squaredSize3));
         assertTrue(equals(squaredSize3,radiusSquared));
@@ -1097,12 +1099,12 @@ public class Test2 {
         // squared size 
         
         // Hitzer
-        double radiusSquared = sphereOPNS.squaredSizeIntern3().scalarPart();
+        double radiusSquared = sphereOPNS.squaredSizeIntern3().decomposeScalar();
         System.out.println(toString("radiusSquared (sphereOPNS, Hitzer2005)",radiusSquared));        
         assertTrue(equals(radiusSquared,s*s));
         
         // Spencer via dual
-        double radiusSquared5 = sphereOPNS.dual().squaredSizeIntern5().scalarPart();
+        double radiusSquared5 = sphereOPNS.dual().squaredSizeIntern5().decomposeScalar();
         System.out.println(toString("radiusSquared (sphereOPNS via dual, Spencer)",radiusSquared5));        
         assertTrue(equals(radiusSquared5,s*s));
         
@@ -1137,7 +1139,7 @@ public class Test2 {
         assert(equals(weight2*weight2,weight*weight));
         
         // squaredSizeIntern1
-        double squaredRadius5 = sphereIPNS.squaredSizeIntern5().scalarPart();
+        double squaredRadius5 = sphereIPNS.squaredSizeIntern5().decomposeScalar();
         System.out.println(toString("squaredRadius2 (sphereIPNS)", squaredRadius5)); // 4.0 stimmt
         assertTrue(equals(radius*radius,squaredRadius5));
         
@@ -1211,7 +1213,7 @@ public class Test2 {
         
         CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1, 2d);
         System.out.println("cp1="+cp1.toString());
-        //RoundAndTangentParameters decomposed1 = cp1.decompose();
+        //RoundAndTangentParameters decomposed1 = cp1.decomposeMotor();
         Point3d locCP1 = cp1.location();
         System.out.println("loc(cp1) = ("+String.valueOf(locCP1.x)+", "+String.valueOf(locCP1.y)+", "+
                 String.valueOf(locCP1.z)+")");
@@ -1219,7 +1221,7 @@ public class Test2 {
         
         CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2, 2d);
         System.out.println("cp2="+cp2.toString());
-        //RoundAndTangentParameters decomposed2 = cp2.decompose();
+        //RoundAndTangentParameters decomposed2 = cp2.decomposeMotor();
         Point3d locCP2 = cp2.location();
         System.out.println("loc(cp2) = ("+String.valueOf(locCP2.x)+", "+String.valueOf(locCP2.y)+", "+
                 String.valueOf(locCP2.z)+")");
@@ -1227,7 +1229,7 @@ public class Test2 {
         
         // point-pairs IPNS representation (failed)
         CGAOrientedPointPairIPNS pp1 = new CGAOrientedPointPairIPNS(cp1,cp2);
-        //RoundAndTangentParameters decomposed3 = pp1.decompose();
+        //RoundAndTangentParameters decomposed3 = pp1.decomposeMotor();
         // loc(pp1) = (Infinity, Infinity, -Infinity) (ERROR)
         //FIXME
         Point3d location3 = pp1.location();
@@ -1238,14 +1240,14 @@ public class Test2 {
         // spheres
         CGASphereIPNS s1 = new CGASphereIPNS(p1, 2d);
         System.out.println(s1.toString("s1"));
-        //RoundAndTangentParameters decomposed4 = s1.decompose();
+        //RoundAndTangentParameters decomposed4 = s1.decomposeMotor();
         Point3d location4 = s1.location();
         System.out.println(toString("s1loc",location4));
         assertTrue(equals(p1,location4)); 
         
         CGASphereIPNS s2 = new CGASphereIPNS(p2, 3d);
         System.out.println("s2="+s2.toString());
-        //RoundAndTangentParameters decomposed5 = s2.decompose();
+        //RoundAndTangentParameters decomposed5 = s2.decomposeMotor();
         Point3d location5 = s2.location();
         System.out.println("loc(s2) = ("+String.valueOf(location5.x)+", "+String.valueOf(location5.y)+", "+
                 String.valueOf(location5.z)+")");
@@ -1280,7 +1282,7 @@ public class Test2 {
         System.out.println("pp2="+pp2.toString());
         // FIXME e1 und e2 die doppelt so grosse Werte wie erwartet
         // locationFromTangentAndRound=3.250000000000001*eo + 0.06500000000000002*e1 + 0.06500000000000002*e2 + 1.4994000000000005*e3 + 5.088522196198628E-19*eo^e1^e3 + 5.088522196198628E-19*eo^e2^e3 - 0.9996*ei + 7.632783294297935E-19*eo^e1^ei + 7.632783294297935E-19*eo^e2^ei - 3.7001512964707234E-16*eo^e3^ei - 6.9375061251264494E-18*e1^e3^ei - 6.9375061251264494E-18*e2^e3^ei
-        //RoundAndTangentParameters decomposed8 = pp2.decompose();
+        //RoundAndTangentParameters decomposed8 = pp2.decomposeMotor();
         Point3d location8 = pp2.location();
         System.out.println(toString("loc(pp2)",location8));
         Point3d p12 = new Point3d(p1); p12.add(p2); p12.scale(0.5d);
@@ -1331,7 +1333,7 @@ public class Test2 {
         CGAMultivector testip = cp.ip(cp);
         // P.P=1.6653345369377348E-15 (korrekt) sollte praktisch 0 sein
         System.out.println("P.P="+testip);
-        assertTrue(equals(testip.scalarPart(),0));
+        assertTrue(equals(testip.decomposeScalar(),0));
         
         // squaredWeight
         System.out.println(toString("squaredWeight (cp test)",weight*weight));
@@ -1351,7 +1353,7 @@ public class Test2 {
         
 
         // squared size
-        double squaredSize = cp.squaredSizeIntern3().scalarPart();
+        double squaredSize = cp.squaredSizeIntern3().decomposeScalar();
         System.out.println(toString("squaredSize (cp, Hitzer2005)",squaredSize));
         assertTrue(equals(squaredSize,0d));
         
@@ -1381,7 +1383,7 @@ public class Test2 {
         
         CGARoundPointOPNS cpOPNS = cp.undual();
         System.out.println(cpOPNS.toString("cpOPNS"));
-        //RoundAndTangentParameters decomposed = cpOPNS.decompose();
+        //RoundAndTangentParameters decomposed = cpOPNS.decomposeMotor();
         Point3d loc = cp.location();
         System.out.println(toString("p1",p));
         System.out.println(toString("p1 (decomposed)", loc));
@@ -1679,20 +1681,20 @@ public class Test2 {
         System.out.println("input weight="+String.valueOf(weight));
         //CGARoundPointIPNS pc = new CGARoundPointIPNS(p, weight);
         //System.out.println(pc.toString("pc"));
-        //double squaredRadius1 = pc.squaredSizeIntern1().scalarPart(); // ok 0
+        //double squaredRadius1 = pc.squaredSizeIntern1().decomposeScalar(); // ok 0
         //System.out.println("squaredSizeIntern1 (RoundPointIPNS)="+String.valueOf(squaredRadius1));
         //assertTrue(equals(0d, squaredRadius1));
-        //double squaredRadius2 = pc.squaredSizeIntern5().scalarPart(); // ok 0
+        //double squaredRadius2 = pc.squaredSizeIntern5().decomposeScalar(); // ok 0
         //System.out.println("squaredSizeIntern2 (RoundPointIPNS)="+String.valueOf(squaredRadius2));
         //assertTrue(equals(0d, squaredRadius2));
-        //double squaredRadius3 = pc.squaredSizeIntern3().scalarPart(); // ok 0
+        //double squaredRadius3 = pc.squaredSizeIntern3().decomposeScalar(); // ok 0
         //System.out.println("squaredSizeIntern3 (RoundPointIPNS)="+String.valueOf(squaredRadius3));
         //assertTrue(equals(0d, squaredRadius3));
-        //double squaredRadius4 = pc.squaredSizeIntern4().scalarPart(); 
+        //double squaredRadius4 = pc.squaredSizeIntern4().decomposeScalar(); 
         // squaredSizeIntern4 (RoundPointIPNS)=-6.0
         //System.out.println("squaredSizeIntern4 (RoundPointIPNS)="+String.valueOf(squaredRadius4)); // failed
         //assertTrue(equals(0d, squaredRadius4));
-        //double squaredRadius5 = pc.squaredSizeIntern5().scalarPart();
+        //double squaredRadius5 = pc.squaredSizeIntern5().decomposeScalar();
         //System.out.println("squaredSizeIntern5 (RoundPointIPNS)="+String.valueOf(squaredRadius5)); // ok
         //assertTrue(equals(0d, squaredRadius5));
         
@@ -1701,15 +1703,15 @@ public class Test2 {
         System.out.println("input radius="+String.valueOf(radiusSquared)+", weight="+String.valueOf(weight));
         CGASphereIPNS sphereIPNS = new CGASphereIPNS(p, radiusSquared, weight);
         System.out.println(sphereIPNS.toString("sphereIPNS"));
-        double squaredRadius1 = sphereIPNS.squaredSizeIntern1().scalarPart(); // failed mit -4.25
+        double squaredRadius1 = sphereIPNS.squaredSizeIntern1().decomposeScalar(); // failed mit -4.25
         System.out.println("squaredSizeIntern1="+String.valueOf(squaredRadius1));
-        double squaredRadius2 = sphereIPNS.squaredSizeIntern5().scalarPart(); // ok 0
+        double squaredRadius2 = sphereIPNS.squaredSizeIntern5().decomposeScalar(); // ok 0
         System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
-        double squaredRadius3 = sphereIPNS.squaredSizeIntern3().scalarPart(); // ok 0
+        double squaredRadius3 = sphereIPNS.squaredSizeIntern3().decomposeScalar(); // ok 0
         System.out.println("squaredSizeIntern3="+String.valueOf(squaredRadius3));
-        double squaredRadius4 = sphereIPNS.squaredSizeIntern4().scalarPart(); // failed mit 6
+        double squaredRadius4 = sphereIPNS.squaredSizeIntern4().decomposeScalar(); // failed mit 6
         System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
-        double squaredRadius5 = sphereIPNS.squaredSizeIntern5().scalarPart(); // ok
+        double squaredRadius5 = sphereIPNS.squaredSizeIntern5().decomposeScalar(); // ok
         System.out.println("squaredSizeIntern5="+String.valueOf(squaredRadius5)); 
        
         // circle
@@ -1751,16 +1753,16 @@ public class Test2 {
         
         //FIXME
         // ex Multivector is not invertable
-        //squaredRadius2 = circleIPNS.squaredSizeIntern2().scalarPart(); 
+        //squaredRadius2 = circleIPNS.squaredSizeIntern2().decomposeScalar(); 
         //System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
         //assertTrue(equals(squaredRadius2, radiusSquared));
         
-        squaredRadius3 = circleIPNS.squaredSizeIntern3().scalarPart(); // ok 0
+        squaredRadius3 = circleIPNS.squaredSizeIntern3().decomposeScalar(); // ok 0
         System.out.println("squaredSizeIntern3 (circleIPNS)="+String.valueOf(squaredRadius3));
         assertTrue(equals(squaredRadius3, radiusSquared));
-        //squaredRadius4 = circleIPNS.squaredSizeIntern4().scalarPart(); // not available
+        //squaredRadius4 = circleIPNS.squaredSizeIntern4().decomposeScalar(); // not available
         //System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
-        squaredRadius5 = circleIPNS.squaredSizeIntern5().scalarPart(); // ok
+        squaredRadius5 = circleIPNS.squaredSizeIntern5().decomposeScalar(); // ok
         System.out.println("squaredSizeIntern5 (circleIPNS)="+String.valueOf(squaredRadius5)); 
         assertTrue(equals(squaredRadius5, radiusSquared));
         
@@ -1778,15 +1780,15 @@ public class Test2 {
         squaredRadius1 = ppIPNS.squaredSize(); 
         System.out.println("squaredSizeIntern1 (ppIPNS)="+String.valueOf(squaredRadius1));
         assertTrue(equals(squaredRadius1, r*r));
-        //squaredRadius2 = ppIPNS.squaredSizeIntern2().scalarPart(); 
+        //squaredRadius2 = ppIPNS.squaredSizeIntern2().decomposeScalar(); 
         //System.out.println("squaredSizeIntern2="+String.valueOf(squaredRadius2));
-        squaredRadius3 = ppIPNS.squaredSizeIntern3().scalarPart(); // ok 0
+        squaredRadius3 = ppIPNS.squaredSizeIntern3().decomposeScalar(); // ok 0
         System.out.println("squaredSizeIntern3 (ppIPNS)="+String.valueOf(squaredRadius3));
         assertTrue(equals(squaredRadius3, r*r));
         
-        //squaredRadius4 = ppIPNS.squaredSizeIntern4().scalarPart(); // not available
+        //squaredRadius4 = ppIPNS.squaredSizeIntern4().decomposeScalar(); // not available
         //System.out.println("squaredSizeIntern4="+String.valueOf(squaredRadius4));
-        squaredRadius5 = ppIPNS.squaredSizeIntern5().scalarPart(); // ok
+        squaredRadius5 = ppIPNS.squaredSizeIntern5().decomposeScalar(); // ok
         System.out.println("squaredSizeIntern5 (ppIPNS)="+String.valueOf(squaredRadius5));
         assertTrue(equals(squaredRadius5, r*r));
         
@@ -1925,6 +1927,25 @@ public class Test2 {
         CGAMultivector carrierFlatPPIPNS = ppIPNS.carrierFlat();
         System.out.println(carrierFlatPPIPNS.toString("carrierFlat (ppIPNS)\n"));
     }
+    
+    public void testLinePair2(){
+        System.out.println("--------------- test Line pair decomposition -----------------");
+        CGALineOPNS l = new CGALineOPNS(new Point3d(1,0,0), new Vector3d(1,1,0));
+        CGALineOPNS l1 = new CGALineOPNS(new Point3d(1,0,0), new Point3d(2,1,0));
+        System.out.println(l.toString("l"));
+        System.out.println(l1.toString("l1"));
+        CGALineOPNS m = new CGALineOPNS(new Point3d(0,0,1), new Vector3d(0,0,1));
+        CGALineOPNS m1 = new CGALineOPNS(new Point3d(0,0,1), new Point3d(0,0,2));
+        System.out.println(m.toString("m"));
+        System.out.println(m1.toString("m1"));
+        
+        CGALinePair lp = new CGALinePair(l1, m1);
+        LinePairParameters parameters = lp.decomposeLinePair();
+        System.out.println(toString("alpha",parameters.alpha()));
+        System.out.println(toString("location",parameters.location()));
+        System.out.println(toString("attitude",parameters.attitude()));
+    }
+    
     
     public void testTranslation(){
         System.out.println("---------------- translation--------------");

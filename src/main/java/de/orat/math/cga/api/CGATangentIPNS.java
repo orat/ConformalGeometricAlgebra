@@ -24,11 +24,14 @@ import org.jogamp.vecmath.Vector3d;
  * as zero-sized spheres to generate implicit volumes.
  *
  */
-class CGATangentIPNS extends CGAKVector {
+class CGATangentIPNS extends CGAKVector implements iCGATangentOrRound {
     
     CGATangentIPNS(CGAMultivector m){
         super(m.impl);
     }
+    
+    
+    // composition
     
     /**
      * Create a cga tangent object in opns representation corresponding to 
@@ -48,6 +51,14 @@ class CGATangentIPNS extends CGAKVector {
         return p.op(p.negate().lc(u.gradeInversion().gp(inf)));
         // following Dorst2007 page 452
         //return p.op(p.lc(u.gp(CGAMultivector.createInf(1d))));
+    }
+    
+    
+    // decomposition
+    
+    public iCGATangentOrRound.EuclideanParameters decompose(){
+        return new iCGATangentOrRound.EuclideanParameters(attitude(), location(), 
+                                      0d, squaredWeight());
     }
     
     public Vector3d attitude(){
@@ -76,17 +87,9 @@ class CGATangentIPNS extends CGAKVector {
     public double squaredSize(){
         return 0d;
     }
-    /**
-     * Decompose tangent.
-     * 
-     * Keep in mind: Corresponding to Dorst2007 dual and not-dual ist switched.
-     * 
-     * @return direction/attitude and location, size/radius=0
-     */
-    public RoundAndTangentParameters decompose(){
-        return new RoundAndTangentParameters(attitude(), 
-                location(), squaredSize());
-    }
+    
+    
+    // etc
     
     @Override
     public CGATangentIPNS inverse(){

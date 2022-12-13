@@ -32,8 +32,8 @@ public class CGAMotor extends CGAVersor {
         this(B.add(createE3(d).gp(inf)));
     }
     
-    public MotorParameters decompose(){
-        double cosAlpha = scalarPart();
+    public MotorParameters decomposeMotor(){
+        double cosAlpha = decomposeScalar();
         
         double[] bivector = impl.extractCoordinates(2);
         

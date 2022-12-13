@@ -35,7 +35,7 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
         super(value);
     }
     
-     // decompose
+     // decomposeMotor
    
     /**
      * Determine direction/attitude from tangent or round objects in OPNS 

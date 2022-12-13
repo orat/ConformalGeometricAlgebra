@@ -98,7 +98,7 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     }
     /**
      * Create a line in outer product null space representation (grade 3 multivector)
-     * based on its moment and direction. 
+     * based on a point and the direction. 
      * 
      * TODO
      * ungetestet

@@ -46,7 +46,7 @@ public class CGARotor extends CGAVersor {
      * 
      * @return quaternion representing a rotation around the origin
      */
-    public Quat4d decompose(){
+    public Quat4d decomposeMotor(){
         Quat4d result = new Quat4d();
         result.w = impl.extractCoordinates(0)[impl.getOriginIndex()];
         double[] vector = impl.extractCoordinates(2);

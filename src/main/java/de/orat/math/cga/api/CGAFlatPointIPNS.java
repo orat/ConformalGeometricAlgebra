@@ -80,7 +80,7 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAT
      */
     private double weight2(){
         // local weight = -( no .. ( blade ^ ni ) ) * i
-        return -createOrigin(1d).ip(this.op(inf)).gp(createI3()).scalarPart();
+        return -createOrigin(1d).ip(this.op(inf)).gp(createI3()).decomposeScalar();
     }
     
     /**

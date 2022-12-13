@@ -14,7 +14,7 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
+abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat {
      
     CGAOrientedFiniteFlatIPNS(CGAMultivector m){
         super(m);
@@ -25,6 +25,12 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector {
     
     
     // decompose
+    
+    @Override
+    public iCGAFlat.EuclideanParameters decompose(){
+        return new iCGAFlat.EuclideanParameters(attitude(), location(), 
+                                      squaredWeight());
+    }
     
     /**
      * Determine the carrier flat (euclidean carrier) of a (dual=IPNS) flat.

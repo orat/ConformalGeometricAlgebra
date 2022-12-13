@@ -117,7 +117,7 @@ public class CGA2Utils {
     public static void decompose2(CGA2Multivector l1, CGA2Multivector l2){
         CGAMultivector l1l2 = (CGAMultivector) l1.gp(l2);
       
-        double costheta = l1l2.scalarPart();//extractCoordinates(0)[0];
+        double costheta = l1l2.decomposeScalar();//extractCoordinates(0)[0];
         System.out.println("theta="+String.valueOf(Math.acos(costheta)*180/Math.PI));
         //org.jogamp.vecmath.Vector3d d = new org.jogamp.vecmath.Vector3d(l1l2.extractCoordinates(1));
         Vector3d d = l1l2.extractE3ToVector3d();

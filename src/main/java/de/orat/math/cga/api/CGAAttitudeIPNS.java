@@ -7,7 +7,8 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeIPNS extends CGAKVector {
+public class CGAAttitudeIPNS extends CGAKVector implements iCGAAttitude {
+    
     CGAAttitudeIPNS(CGAMultivector m){
         super(m.impl);
     }

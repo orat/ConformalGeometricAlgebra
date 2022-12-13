@@ -14,7 +14,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedFiniteRoundOPNS extends CGAKVector {
+class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRound {
     
     CGAOrientedFiniteRoundOPNS(CGAMultivector m){
         super(m.impl);
@@ -25,6 +25,12 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
     
     
     // decompose
+    
+    @Override
+    public iCGATangentOrRound.EuclideanParameters decompose(){
+        return new iCGATangentOrRound.EuclideanParameters(attitude(), location(), 
+                                      squaredSize(), squaredWeight());
+    }
     
     /**
      * Determine the carrier flat (euclidean carrier) of a (direkt) round.
@@ -158,7 +164,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         // scheint zu funktionieren für sphereopns
         // für circle sollte eigentlich 1.0-->-1.0 geändert werden
         // (L.ScProd(L))*(1.0/(n.OutProd(L).ScProd(n.OutProd(L))));
-        double result = m.scp(m) / (inf.op(m)).sqr().compress().scalarPart();
+        double result = m.scp(m) / (inf.op(m)).sqr().compress().decomposeScalar();
         System.out.println("squaredSize (Hitzer2004, change sign for circle)="+String.valueOf(result));
         return new CGAScalar(result);
     }
@@ -185,7 +191,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector {
         return locationFromTangentAndRoundAsNormalizedSphere(); 
     }
     
-    public Decomposition3d.RoundAndTangentParameters decompose(){
+    public Decomposition3d.RoundAndTangentParameters decomposeMotor(){
        return new RoundAndTangentParameters(attitude(), 
                 location(), squaredSize());
     }

@@ -16,7 +16,7 @@ interface iCGAVector extends iCGABlade {
         return true;
     }
     
-    public double scalarPart();
+    public double decomposeScalar();
     
     @Override
     default void testGrade(){
@@ -24,7 +24,7 @@ interface iCGAVector extends iCGABlade {
         if (grade != 1 && grade != 0) throw new IllegalArgumentException("The given multivector is not not grade 1 or 0! grade()="
                  +String.valueOf(grade));
         // allows null vectors
-        if (grade == 0 && scalarPart() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
+        if (grade == 0 && decomposeScalar() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
                  
     }
 }

@@ -4,6 +4,7 @@ import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -109,6 +110,12 @@ public class CGARoundPointIPNS extends CGAOrientedFiniteRoundIPNS {
     
     // decomposition
     
+    /*@Override
+    public EuclideanParameters decompose(){
+        return new EuclidianParameters(attitude(), location(), 
+                                      0d, squaredWeight());
+    }*/
+    
     @Override
     public CGAAttitudeTrivectorOPNS attitudeIntern(){
         return new CGAAttitudeTrivectorOPNS(super.attitudeIntern());
@@ -139,7 +146,7 @@ public class CGARoundPointIPNS extends CGAOrientedFiniteRoundIPNS {
     /*public Point3d location(){
         // weight corresponding to CGAUtil.lua, line 223ff
         // local weight2 = -blade .. ni
-        double weight = this.negate().ip(CGAMultivector.createInf(1d)).scalarPart();
+        double weight = this.negate().ip(CGAMultivector.createInf(1d)).decomposeScalar();
         //System.out.println("CGARoundPointIPNS.location weight = "+String.valueOf(weight));
         // blade = blade / weight2
         CGAMultivector result = this.gp(1d/weight);
@@ -149,10 +156,10 @@ public class CGARoundPointIPNS extends CGAOrientedFiniteRoundIPNS {
         //local center = no_ni .. ( blade ^ no_ni )
         CGAMultivector no_inf = createOrigin(1d).op(createInf(1d));
         CGAMultivector resultTest = no_inf.ip(result.op(no_inf));
-        System.out.println(resultTest.toString("CGARoundPointIPNS.location decompose test"));
+        System.out.println(resultTest.toString("CGARoundPointIPNS.location decomposeMotor test"));
         
-        System.out.println(this.toString("CGARoundPointIPNS.location decompose"));
-        System.out.println(result.toString("CGARoundPointIPNS.location decompose+normalized"));
+        System.out.println(this.toString("CGARoundPointIPNS.location decomposeMotor"));
+        System.out.println(result.toString("CGARoundPointIPNS.location decomposeMotor+normalized"));
         return result.extractE3ToPoint3d();
     }*/
     
@@ -184,6 +191,7 @@ public class CGARoundPointIPNS extends CGAOrientedFiniteRoundIPNS {
         return 0d;
     }
     
+    
     // etc
     
     /**
@@ -209,22 +217,22 @@ public class CGARoundPointIPNS extends CGAOrientedFiniteRoundIPNS {
      * ganja.js example dual planes/spheres:
      * The distance between two points.
      * var d = (a,b)=>((a<<b).Length*2)**.5;
-     * TODO Wie passt das mit der aktuellen Implementierung zusammen?
-     * - Was bedeutet .Length? vermutlich scalarPart()?
-     * - Warum muss hier keine Vorzeichen korrigiert werden. Das wird vermutlich
-     *   irgendwie mit der method Length() gemacht. 
-     * - Vielleicht eine eigene length() method einführen
-     * 
-     * get Length (){ 
-     *   return options.over?Math.sqrt(Math.abs(this.Mul(this.Conjugate).s.s)):Math.sqrt(Math.abs(this.Mul(this.Conjugate).s)); 
-     * };
+ TODO Wie passt das mit der aktuellen Implementierung zusammen?
+ - Was bedeutet .Length? vermutlich decomposeScalar()?
+ - Warum muss hier keine Vorzeichen korrigiert werden. Das wird vermutlich
+   irgendwie mit der method Length() gemacht. 
+ - Vielleicht eine eigene length() method einführen
+ 
+ get Length (){ 
+   return options.over?Math.sqrt(Math.abs(this.Mul(this.Conjugate).s.s)):Math.sqrt(Math.abs(this.Mul(this.Conjugate).s)); 
+ };
      * 
      * @param p second point to determine the distance to
      * @return squared distance to the given point
      */
     public double distSquare(CGARoundPointIPNS p){
         // Implementation following Dorst2008 drills p. 39
-        return -2*(this.normalize()).ip(p.normalize()).scalarPart();
+        return -2*(this.normalize()).ip(p.normalize()).decomposeScalar();
     }
     
     @Override

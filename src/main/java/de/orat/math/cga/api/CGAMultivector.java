@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.api.iCGATangentOrRound.EuclideanParameters;
 import de.orat.math.cga.impl1.CGA1Multivector;
 import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
@@ -314,10 +315,10 @@ public class CGAMultivector {
      * @return squared weight >0
      */
     protected static double squaredWeight(CGAMultivector attitude, CGARoundPointIPNS probePoint){
-        return Math.abs(probePoint.lc(attitude).sqr().scalarPart());
+        return Math.abs(probePoint.lc(attitude).sqr().decomposeScalar());
         // liefert gleiches Ergebnis
         // CGAMultivector A = probePoint.ip(attitude);
-        //return A.reverse().gp(A).scalarPart();
+        //return A.reverse().gp(A).decomposeScalar();
     }
     
     /**
@@ -505,9 +506,7 @@ public class CGAMultivector {
         return (this.grade() == 4);
     }
     
-    public double scalarPart(){
-        return impl.scalarPart();
-    }
+    
     
     
     // dual operators
@@ -673,6 +672,7 @@ public class CGAMultivector {
         return name+" = ("+toString()+")";
     }
     
+    
     // coordinates extraction
     
     /**
@@ -696,4 +696,33 @@ public class CGAMultivector {
          double[] coordinates = impl.extractCoordinates(3);
          return new Vector3d(coordinates[9], coordinates[8], coordinates[7]);
     }
+    
+    
+    // decompose methods
+    
+    public double decomposeScalar(){
+        return impl.scalarPart();
+    }
+    
+    public iCGATangentOrRound.EuclideanParameters decomposeTangentOrRound(){
+        if (this instanceof iCGATangentOrRound tangentOrRound){
+            return tangentOrRound.decompose();
+        }
+        throw new RuntimeException("CGA Multivector is not of type iCGATangentOrRound");
+    }
+    
+    public iCGAFlat.EuclideanParameters decomposeFlat(){
+        if (this instanceof iCGAFlat flat){
+            return flat.decompose();
+        }
+        throw new RuntimeException("CGA Multivector is not of type iCGAFlat");
+    }
+    
+    public Vector3d decomposeAttitude(){
+        if (this instanceof iCGAAttitude attitude){
+            return attitude.direction();
+        }
+        throw new RuntimeException("CGA Multivector is not of type iCGAAttitude");
+    }
+    
 }

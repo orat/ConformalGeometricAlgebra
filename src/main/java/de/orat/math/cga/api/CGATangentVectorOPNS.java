@@ -95,7 +95,7 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
     }
     
     
-    // decompose Methoden
+    // decomposeMotor Methoden
     
     /*@Override
     public Vector3d attitude(){

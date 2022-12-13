@@ -144,7 +144,7 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // also corresponding to Dorst2007 drills 14.9.2, nr. 3
-        return negate().ip(inf).scalarPart();
+        return negate().ip(inf).decomposeScalar();
     }
     
     /**

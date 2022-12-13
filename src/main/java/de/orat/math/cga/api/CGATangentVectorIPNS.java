@@ -63,5 +63,5 @@ public class CGATangentVectorIPNS extends CGATangentIPNS implements iCGATrivecto
         return new CGATangentVectorIPNS(createOrigin(1.0).gp(new CGAMultivector(t)));
     }*/
     
-    // decompose Methoden
+    // decomposeMotor Methoden
 }

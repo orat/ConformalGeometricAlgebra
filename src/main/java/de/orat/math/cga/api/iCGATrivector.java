@@ -19,12 +19,12 @@ interface iCGATrivector extends iCGABlade {
                 (new CGAEuclideanVector(b)).op(inf));
     }
     
-    public double scalarPart();
+    public double decomposeScalar();
     
     @Override
     default void testGrade(){
         int grade = grade();
         if (grade != 3 && grade != 0) throw new IllegalArgumentException("The given multivector m is not of grade 3!");
-        if (grade == 0 && scalarPart() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
+        if (grade == 0 && decomposeScalar() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
     }
 }

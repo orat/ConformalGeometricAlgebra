@@ -14,7 +14,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
+abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATangentOrRound {
     
     boolean isNormalized = false;
     
@@ -34,7 +34,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     
     private boolean test(){
         boolean result = false;
-        if ((inf.op(this).scalarPart() != 0) && (inf.ip(this).scalarPart() != 0) && (this.sqr().scalarPart() != 0d)){
+        if ((inf.op(this).decomposeScalar() != 0) && (inf.ip(this).decomposeScalar() != 0) && (this.sqr().decomposeScalar() != 0d)){
             result = true;
         }
         return result;
@@ -42,6 +42,12 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     
     
     // decompose
+    
+    @Override
+    public EuclideanParameters decompose(){
+        return new EuclideanParameters(attitude(), location(), 
+                                      squaredSize(), squaredWeight());
+    }
     
     /**
      * Determine the carrier flat (euclidean carrier) of a (dual=IPNS) round.
@@ -152,7 +158,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
     private double weight2(){
         // Implementation following the formulae from CGAUtil Math, Spencer T
         // Parkin 2013. 
-        return ip(inf).gp(-1d).scalarPart();
+        return ip(inf).gp(-1d).decomposeScalar();
     }
     /**
      * Determine location of the round.
@@ -182,7 +188,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
      * @return squared size/-radius squared
      */
     public double squaredSize(){
-        return squaredSizeIntern1().scalarPart();
+        return squaredSizeIntern1().decomposeScalar();
     }
     public CGAScalar squaredSizeIntern1(){
         // sign corresponding to errata in Dorst2007
@@ -238,13 +244,13 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector {
         // hier findet sich eine leicht andere Formel, mit der direkt die size/radius
         // also nicht squaredSizeIntern1 bestimmt werden kann
         
-        return result.scalarPart();
+        return result.decomposeScalar();
     }*/
     
-    public RoundAndTangentParameters decompose(){
+    /*public RoundAndTangentParameters decomposeMotor(){
        return new RoundAndTangentParameters(attitude(), 
                 location(), squaredSize());
-    }
+    }*/
     
     //public abstract boolean isImaginary();
     

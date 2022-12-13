@@ -20,11 +20,14 @@ import org.jogamp.vecmath.Vector3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGATangentOPNS extends CGAKVector {
+public class CGATangentOPNS extends CGAKVector implements iCGATangentOrRound {
     
     CGATangentOPNS(CGAMultivector m){
         super(m.impl);
     }
+    
+    
+    // composition
     
     /**
      * Create a tangent vector in opns representation corresponding to 
@@ -47,6 +50,11 @@ class CGATangentOPNS extends CGAKVector {
     
     
     // decomposition
+    
+    public iCGATangentOrRound.EuclideanParameters decompose(){
+        return new EuclideanParameters(attitude(), location(), 
+                                      0d, squaredWeight());
+    }
     
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
@@ -94,10 +102,13 @@ class CGATangentOPNS extends CGAKVector {
      * 
      * @return direction/attitude and location, size/radius=0
      */
-    public RoundAndTangentParameters decompose(){
+    public RoundAndTangentParameters decomposeMotor(){
         return new RoundAndTangentParameters(attitude(), 
                 location(), squaredSize());
     }
+    
+    
+    // etc
     
     @Override
     public CGATangentOPNS inverse(){

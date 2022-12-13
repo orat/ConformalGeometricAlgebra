@@ -1,9 +1,7 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.util.Decomposition3d;
 import de.orat.math.cga.util.Decomposition3d.LinePairParameters;
-//import de.orat.math.cga.util.Decomposition3d.LinePairParameters;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -13,8 +11,8 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGALinePair extends CGAMultivector {
     
-    public CGALinePair(CGALineIPNS line1, CGALineIPNS line2){
-        super(line1.gp(line2).impl);
+    public CGALinePair(CGALineOPNS line1, CGALineOPNS line2){
+        super(line1.gp(line2).compress().impl);
     }
     
      
@@ -26,19 +24,18 @@ public class CGALinePair extends CGAMultivector {
     public LinePairParameters decomposeLinePair(){
         
         // X soll eine sum aus 1- und 2-blade sein
-        // falsch da sind auch zwei 4-blades mit drin
-        CGAMultivector n0 = CGAMultivector.createOrigin(1d);
-        CGAMultivector X = sub(n0.ip(this).op(inf));
-        System.out.println("X="+X.toString());
+        CGAMultivector X = sub(o.ip(this).op(inf)).compress();
+        System.out.println(X.toString("X"));
         
-        // scheint korrekt sum aus 3- und 1-blade
-        CGAMultivector Y = n0.ip(this);
+        // sum aus 3- und 1-blade
+        CGAMultivector Y = o.ip(this);
         System.out.println("Y="+Y.toString());
         CGAMultivector Y3 = Y.extractGrade(3);
-        System.out.println("Y3="+Y3.toString());
+        System.out.println(Y3.toString("Y3"));
         
         CGAMultivector X2 = X.extractGrade(2);
-        System.out.println("X2="+X2.toString());
+        System.out.println(X2.toString("X2"));
+        
          // quatrieren und test auf !=0
         CGAMultivector X22 = X2.gp(X2);
         
