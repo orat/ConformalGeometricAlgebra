@@ -345,6 +345,9 @@ public class CGAMultivector {
        return new CGAMultivector(impl.meet(mv1.impl,mv2.impl));
     }
     
+    public final CGAMultivector join(final CGAMultivector mv){
+        return new CGAMultivector(impl.join(mv.impl));
+    }
     
     /**
      * Computes the commutation with the specified element.

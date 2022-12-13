@@ -154,6 +154,8 @@ public interface iCGAMultivector {
        return gp(mv2).ip(mv1, LEFT_CONTRACTION);
     }
         
+    public iCGAMultivector join(iCGAMultivector mv);
+    
     // monadic/unary operators
     
     /**

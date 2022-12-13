@@ -467,4 +467,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     public iCGAMultivector extractGrade(int[] G) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public iCGAMultivector join(iCGAMultivector mv) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
