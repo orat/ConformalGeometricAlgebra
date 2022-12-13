@@ -19,7 +19,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS implements iCGABivector {
+public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS implements iCGABivector, iCGAPointPair {
     
     public CGAOrientedPointPairOPNS(CGAMultivector m){
         super(m);
@@ -27,6 +27,10 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     CGAOrientedPointPairOPNS(iCGAMultivector impl){
         super(impl);
     }
+    
+    
+    // composition
+    
     /**
      * Create point pair in outer product null space representation 
      * (grade 2 multivector).
@@ -62,6 +66,9 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
         return point1.op(point2);
     }
     
+    
+    // etc
+    
     @Override
     public CGAOrientedPointPairIPNS dual(){
         return new CGAOrientedPointPairIPNS(impl.dual());
@@ -77,8 +84,8 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
         return result.extractAttitudeFromEeinfRepresentation();
     }
     
-    public Point3d[] decomposePoints(){
-        Point3d[] result = new Point3d[2];
+    public PointPair decomposePoints(){
+        //Point3d[] result = new Point3d[2];
         CGAScalar sqrt = new CGAScalar(this.ip(this).compress()).sqrt();
         // following Fernandes (Formelsammlung, attachement)
         CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
@@ -86,8 +93,8 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
         System.out.println(p1.toString("p1"));
         
-        result[0] = p1.location();
-        result[1] = p2.location();
-        return result;
+        //result[0] = p1.location();
+        //result[1] = p2.location();
+        return new PointPair(p1.location(), p2.location());
     }
 }

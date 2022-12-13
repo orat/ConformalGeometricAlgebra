@@ -18,7 +18,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS implements iCGATrivector  {
+public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS implements iCGATrivector, iCGAPointPair  {
     
     public CGAOrientedPointPairIPNS(CGAMultivector m){
         super(m);
@@ -168,7 +168,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         return new CGAEuclideanVector(result);
     }
     
-    public Point3d[] decomposePoints(){
+    public iCGAPointPair.PointPair decomposePoints(){
         return this.undual().decomposePoints();
     }
     

@@ -1,6 +1,6 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.api.iCGATangentOrRound.EuclideanParameters;
+import de.orat.math.cga.api.iCGAPointPair.PointPair;
 import de.orat.math.cga.impl1.CGA1Multivector;
 import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
@@ -657,6 +657,7 @@ public class CGAMultivector {
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // return div(this.negate().ip(createInf(1d)
     }
+    
     public CGAMultivector negate(){
         return this.gp(-1);
     }
@@ -740,4 +741,10 @@ public class CGAMultivector {
         throw new RuntimeException("CGA Multivector is not of type CGARotor");
     }
     
+    public PointPair decomposePointPair(){
+        if (this instanceof iCGAPointPair pointPair){
+            return pointPair.decomposePoints();
+        }        
+        throw new RuntimeException("CGA Multivector is not of type iCGAPointPair");
+    }
 }

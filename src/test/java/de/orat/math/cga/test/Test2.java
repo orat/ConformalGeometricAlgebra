@@ -23,6 +23,7 @@ import de.orat.math.cga.api.CGASphereIPNS;
 import de.orat.math.cga.api.CGATangentVectorIPNS;
 import de.orat.math.cga.api.CGATangentVectorOPNS;
 import de.orat.math.cga.api.CGATranslator;
+import de.orat.math.cga.api.iCGAPointPair.PointPair;
 import de.orat.math.cga.impl1.CGA1Metric;
 import static de.orat.math.cga.impl1.CGA1Metric.CGA_METRIC;
 import org.jogamp.vecmath.Point3d;
@@ -272,13 +273,13 @@ public class Test2 {
         
         // 4. 
         // beide Punkte wieder aus dem paar rausholen
-        Point3d[] points = ppOPNS.decomposePoints();
-        System.out.println(toString("p1",points[0]));
-        System.out.println(toString("p2", points[1]));
-        boolean p1test = equals(p1, points[0]);
-        boolean p12test = equals(p1, points[1]);
-        boolean p2test = equals(p2, points[1]);
-        boolean p21test = equals(p2, points[0]);
+        PointPair points = ppOPNS.decomposePoints();
+        System.out.println(toString("p1",points.p1()));
+        System.out.println(toString("p2", points.p2()));
+        boolean p1test = equals(p1, points.p1());
+        boolean p12test = equals(p1, points.p2());
+        boolean p2test = equals(p2, points.p2());
+        boolean p21test = equals(p2, points.p1());
         assertTrue((p1test & p2test) || (p12test & p21test));
         
         // attitude
@@ -391,9 +392,9 @@ public class Test2 {
         System.out.println(carrierFlat.toString("carrier flat (ppIPNS)"));
         
         // points
-        Point3d[] points = ppIPNS.decomposePoints();
-        System.out.println(toString("P1 (ppIPNS)", points[0]));
-        System.out.println(toString("P2 (ppIPNS)", points[1]));
+        PointPair points = ppIPNS.decomposePoints();
+        System.out.println(toString("P1 (ppIPNS)", points.p1()));
+        System.out.println(toString("P2 (ppIPNS)", points.p2()));
     }
     
     public static String toString(String name, Tuple3d value){
@@ -1772,8 +1773,8 @@ public class Test2 {
         CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radiusSquared, weight3);
         CGAOrientedPointPairIPNS ppIPNS = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
         
-        Point3d[] points = ppIPNS.decomposePoints(); // via undual and following Fernandes
-        double r = points[0].distance(points[1])/2d;
+        PointPair points = ppIPNS.decomposePoints(); // via undual and following Fernandes
+        double r = points.p1().distance(points.p2())/2d;
         System.out.println("radiusSquared from decomposed points="+String.valueOf(r*r));
         
         squaredRadius1 = ppIPNS.squaredSize(); 
@@ -1793,8 +1794,8 @@ public class Test2 {
         
         // location from decomposed Points = (0.0,0.0,0.3437500000000001)
         // FIXME stimmt das?
-        Point3d locTest = new Point3d(points[0]);
-        locTest.add(points[1]);
+        Point3d locTest = new Point3d(points.p1());
+        locTest.add(points.p2());
         locTest.scale(1d/2d);
         System.out.println(toString("location from decomposed Points",locTest));
         
