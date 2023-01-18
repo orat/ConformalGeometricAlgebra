@@ -1,5 +1,6 @@
 package de.orat.math.cga.test;
 
+import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
@@ -1975,5 +1976,65 @@ public class Test2 {
         System.out.println(toString("Transformed point (test)", locationTransformedTest));
         // Transformed point = (-0.40000000000000013,0.0,1.0000000000000004) failed sollte 1,0,1 sein
         assertTrue(equals(locationTransformed, locationTransformedTest));
+    }
+    
+    public void testTangentFromLineExtraction(){
+        System.out.println("------------- test tanget extraction from line -------------");
+        Point3d p1 = new Point3d(1,0,0);
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
+        System.out.println(cp1.toString("p1"));
+        Point3d p2 = new Point3d(0,1,0);
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
+        System.out.println(cp2.toString("p2"));
+        CGALineOPNS l1 = new CGALineOPNS(p1,p2);
+        System.out.println(l1.toString("l1"));
+        Point3d p3 = new Point3d(0,0,1.2);
+        CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
+        System.out.println(cp3.toString("p3"));
+        Point3d p4 = new Point3d(0,0,-1.2);
+        CGARoundPointIPNS cp4 = new CGARoundPointIPNS(p4);
+        System.out.println(cp4.toString("p4"));
+        CGALineOPNS l2 = new CGALineOPNS(p3,p4);
+        System.out.println(l2.toString("l2"));
+        
+        CGAAttitudeScalarOPNS vee = new CGAAttitudeScalarOPNS(l1.vee(l2));
+        System.out.println(vee.toString("vee"));
+        
+        
+        // dual vector algebra approach
+        Vector3d u1 = new Vector3d(p2);
+        u1.sub(p1);
+        DualVector3d dualVecL1 = new DualVector3d(p1, u1);
+        System.out.println(dualVecL1.toString("L1"));
+        
+        Vector3d u2 = new Vector3d(p4);
+        u2.sub(p3);
+        DualVector3d dualVecL2 = new DualVector3d(p3, u2);
+        System.out.println(dualVecL2.toString("L2"));
+        
+        //DualNumber dn = dualVecL1.dualAngle(dualVecL2);
+        //System.out.println(dn.toString("dn"));
+         
+        /*CGAMultivector m = l.rc(o).rc(inf);
+        System.out.println(m.toString("att(l) Kleppe 2016")); // not normalized aber Richtung korrekt
+        
+        Vector3d v = l.attitude(); // normalized, aber falsches Vorzeichen
+        System.out.println(toString("v",v));
+        
+        CGAMultivector m1 = inf.lc(l).negate(); //o.negate().lc(l);
+        System.out.println(m1.toString("m1")); // not normalized, aber falsche Richtung
+        m1 = m1.rc(o);
+        System.out.println(m1.toString("m1"));*/
+    }
+    
+    public void testEuclideanVector(){
+        System.out.println("-------------- test euclidean vector -----------------");
+        CGAEuclideanVector ev = new CGAEuclideanVector(new Vector3d(1,1,1));
+        CGAMultivector m = ev.ip(ev);
+        System.out.println(m.toString("m.ip(m)"));
+        m = ev.op(ev);
+        System.out.println(m.toString("m.op(m)"));
+        m = ev.dual();
+        System.out.println(m.toString("dual(m)"));
     }
 }

@@ -76,6 +76,8 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * 
      * Be careful: The representation is called dual in Hildenbrand2013 but direkt
      * in Dorst2007.
+     * 
+     * Hint: The direction of the line is from p2 to p1.
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(p1.op(p2).op(inf));

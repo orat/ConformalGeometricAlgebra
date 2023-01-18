@@ -7,25 +7,6 @@ import org.jogamp.vecmath.Vector3d;
  * Also called free or direction vector, elements without position/location in IPNS representation
  * corresponding to dual direction vector or dual free vector in Dorst2007 (grade 3).
  * 
- * It is translation invariant.
- * 
- * This means there is no e0-component in its formula.
- * 
- * A free vector does not have a position. Given the normal vector n, it can be 
- * calculated as follows: n ∧ e ∞ .
- * 
- * Directions are made by wedging any Euclidean element (vector, bivector, or 
- * trivector) with ∞. Directions are invariant under translations 
- * (they do not change if moved), but they can of course be rotated.
- * 
- * Drawn dashed at origin.
- * 
- * It is a one-dimensional attitude, e.g. a direction vector. A line is build from 
- * this by outer product with a point. 
- * 
- * A free vector does not have a position. Given the normal vector n, it can be 
- * calculated as follows: n ∧ e ∞ .
- 
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

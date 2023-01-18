@@ -14,7 +14,7 @@ import org.jogamp.vecmath.Vector3d;
 public class CGAAttitudeScalarOPNS extends CGAAttitudeOPNS {
     
     public CGAAttitudeScalarOPNS(CGAMultivector m) {
-        super(m);
+        super(m.compress());
     }
     
     protected CGAAttitudeScalarOPNS(iCGAMultivector impl){
@@ -39,5 +39,4 @@ public class CGAAttitudeScalarOPNS extends CGAAttitudeOPNS {
     public Vector3d direction(){
         return new Vector3d(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
-    
 }

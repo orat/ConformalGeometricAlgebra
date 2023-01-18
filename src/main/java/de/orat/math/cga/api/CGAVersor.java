@@ -37,6 +37,11 @@ public abstract class CGAVersor extends CGAMultivector {
         return result;
     }
     
+    /**
+     * is even?
+     * 
+     * @return true if versor is even, false if Versor is odd
+     */
     public abstract boolean isEven();
     
     public boolean isVersor(){

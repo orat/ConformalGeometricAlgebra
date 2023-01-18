@@ -4,8 +4,6 @@ import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
-import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Vector3d;
 
 /**
  * A round point in inner product null space representation (grade 1 multivector), 

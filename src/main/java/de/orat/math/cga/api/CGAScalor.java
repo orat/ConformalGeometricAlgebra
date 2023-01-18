@@ -18,6 +18,6 @@ public class CGAScalor extends CGAVersor {
 
     @Override
     public boolean isEven() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return true;
     }
 }
