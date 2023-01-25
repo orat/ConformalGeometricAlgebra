@@ -1988,6 +1988,9 @@ public class Test2 {
         System.out.println(cp2.toString("p2"));
         CGALineOPNS l1 = new CGALineOPNS(p1,p2);
         System.out.println(l1.toString("l1"));
+        Vector3d l1Dir = new Vector3d(p1);
+        l1Dir.sub(p2);
+        System.out.println(toString("l1Dir",l1Dir));
         Point3d p3 = new Point3d(0,0,1.2);
         CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
         System.out.println(cp3.toString("p3"));
@@ -1996,12 +1999,52 @@ public class Test2 {
         System.out.println(cp4.toString("p4"));
         CGALineOPNS l2 = new CGALineOPNS(p3,p4);
         System.out.println(l2.toString("l2"));
+        Vector3d l2Dir = new Vector3d(p3);
+        l2Dir.sub(p4);
+        System.out.println(toString("l2Dir",l2Dir));
         
-        CGAAttitudeScalarOPNS vee = new CGAAttitudeScalarOPNS(l1.vee(l2));
+        // Winkel und gerichteter Abstand 
+        
+        // 1. CGA approach
+        
+        CGAAttitudeScalarOPNS vee = new CGAAttitudeScalarOPNS(l1.normalize().vee(l2.normalize()));
         System.out.println(vee.toString("vee"));
+        //double distCGA = vee.
+        
+        // 2. Vector Algebra approach
+        
+        LineTuple3dComposition l1Vec = new LineTuple3dComposition(p1,l1Dir);
+        LineTuple3dComposition l2Vec = new LineTuple3dComposition(p3,l2Dir);
+        
+        double dist = l1Vec.dist(l2Vec);
+        System.out.println("distl1l2="+String.valueOf(dist));
         
         
-        // dual vector algebra approach
+        // Schnitt-/Aufpunkte bestimmen
+        
+        // L1dir = (-0.9999999999999992*e1 + 0.9999999999999992*e2)
+        CGAEuclideanVector L1Dir = new CGAEuclideanVector(inf.lc(l1).rc(o));
+        System.out.println(L1Dir.toString("L1dir"));
+        
+        Vector3d testL1Dir = L1Dir.direction();
+        testL1Dir.normalize();
+        
+        Vector3d testl1Dir = new Vector3d(l1Dir);
+        testl1Dir.normalize();
+        System.out.println(toString("testl1Dir",testl1Dir)+" ? "+toString("testL1Dir",testL1Dir));
+        // falsche Vorzeichen
+        //assertTrue(testL1Dir.equals(l1Dir));
+        
+        CGAEuclideanVector L2Dir = new CGAEuclideanVector(inf.lc(l2).rc(o));
+        Vector3d testL2Dir = L2Dir.direction();
+        testL2Dir.normalize();
+        l2Dir.normalize();
+        System.out.println(L2Dir.toString("L2dir"));
+        // vermutlich auch falsche Vorzeichen
+        //assertTrue(testL2Dir.equals(l2Dir));
+        
+        // 1. dual vector algebra approach
+        
         Vector3d u1 = new Vector3d(p2);
         u1.sub(p1);
         DualVector3d dualVecL1 = new DualVector3d(p1, u1);
@@ -2027,6 +2070,71 @@ public class Test2 {
         System.out.println(m1.toString("m1"));*/
     }
     
+    public void testNormalVectorOf2Lines(){
+        System.out.println("-------------- test normal vector of two lines -----------------");
+        Point3d p1 = new Point3d(1,0,0);
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
+        System.out.println(cp1.toString("p1"));
+        Point3d p2 = new Point3d(0,1,0);
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
+        System.out.println(cp2.toString("p2"));
+        CGALineOPNS l1 = new CGALineOPNS(p1,p2);
+        System.out.println(l1.toString("l1"));
+        Vector3d l1Dir = new Vector3d(p1);
+        l1Dir.sub(p2);
+        System.out.println(toString("l1Dir",l1Dir));
+        Point3d p3 = new Point3d(0,0,1.2);
+        CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
+        System.out.println(cp3.toString("p3"));
+        Point3d p4 = new Point3d(0,0,-1.2);
+        CGARoundPointIPNS cp4 = new CGARoundPointIPNS(p4);
+        System.out.println(cp4.toString("p4"));
+        CGALineOPNS l2 = new CGALineOPNS(p3,p4);
+        System.out.println(l2.toString("l2"));
+        Vector3d l2Dir = new Vector3d(p3);
+        l2Dir.sub(p4);
+        System.out.println(toString("l2Dir",l2Dir));
+        
+        Vector3d n = new Vector3d();
+        n.cross(l1Dir,l2Dir);
+        System.out.println(toString("n (euclidean)",n));
+        
+        CGAMultivector u1CGA = inf.lc(l1).rc(o).normalize();
+        System.out.println(u1CGA.toString("u1CGA"));
+        CGAMultivector u2CGA = inf.lc(l2).rc(o).normalize();
+        System.out.println(u2CGA.toString("u2CGA"));
+        
+        // Test common normal mit CGA - Vergleich mit Kreuzprodukt im Euclidean space
+        CGAMultivector nCGA = u1CGA.op(u2CGA).gp(CGAMultivector.createI3().inverse());
+        System.out.println(nCGA.toString("n (CGA)"));
+        Vector3d nNormalized = new Vector3d(n);
+        nNormalized.normalize();
+        //System.out.println(toString("nNormalized",nNormalized));
+        Vector3d nCGANormalized = new Vector3d(nCGA.extractE3ToVector3d());
+        nCGANormalized.normalize();
+        //System.out.println(toString("nCGAExtractE3Normalized",nCGANormalized));
+        assertTrue(nNormalized.equals(nCGANormalized));
+        
+        // test skewed lines closest points
+        CGAPlaneOPNS pi2 = new CGAPlaneOPNS(l2.op(nCGA));
+        System.out.println(pi2.toString("pi2"));
+        
+        // pi2 durch euclid konstruieren
+        Vector3d npi2 = new Vector3d();
+        npi2.cross(l2Dir,n);
+        CGAPlaneIPNS pi2IPNS = new CGAPlaneIPNS(npi2,p1);
+        System.out.println(pi2IPNS.toString("pi2 (IPNS)"));
+        CGAPlaneOPNS pi2OPNS = pi2IPNS.undual();
+        System.out.println(pi2OPNS.toString("pi2 (OPNS)"));
+        
+        CGARoundPointOPNS c1 = new CGARoundPointOPNS(pi2.vee(l1));
+        System.out.println(c1.toString("c1 (OPNS)"));
+        CGAMultivector c1NormalizedDualSphere = c1.div(inf.lc(c1)).negate();
+        System.out.println(c1NormalizedDualSphere.toString("c1 (normalizedDualSphere)"));
+        CGAMultivector c1Euclid = o.op(inf).lc(o.op(inf).op(c1NormalizedDualSphere));
+        System.out.println(c1Euclid.toString("c1 (euclid)"));
+    }
+    
     public void testEuclideanVector(){
         System.out.println("-------------- test euclidean vector -----------------");
         CGAEuclideanVector ev = new CGAEuclideanVector(new Vector3d(1,1,1));
@@ -2036,5 +2144,20 @@ public class Test2 {
         System.out.println(m.toString("m.op(m)"));
         m = ev.dual();
         System.out.println(m.toString("dual(m)"));
+    }
+    
+    public void testEpsilon0Contraction(){
+        System.out.println("----------------- test epsilon_0 projection of attitude scalar ---------------");
+        CGAAttitudeScalarOPNS test1 = new CGAAttitudeScalarOPNS(1d);
+        System.out.println(test1.toString("r=1: "));
+        CGAMultivector test2 = test1.rc(o).negate();
+        System.out.println(test2.toString("r=1(decomposed): "));
+        CGAAttitudeScalarOPNS test3 = new CGAAttitudeScalarOPNS(0d);
+        System.out.println(test3.toString("r=0: "));
+    }
+    
+    public void testinf(){
+        CGAMultivector test = inf.op(inf);
+        System.out.println(test.toString("infsquare"));
     }
 }

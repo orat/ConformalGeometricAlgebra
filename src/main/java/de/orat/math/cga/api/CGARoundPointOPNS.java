@@ -12,7 +12,7 @@ import org.jogamp.vecmath.Point3d;
 public class CGARoundPointOPNS extends CGAOrientedFiniteRoundOPNS {
     
     public CGARoundPointOPNS(CGAMultivector m){
-        super(m);
+        super(m.compress());
     }
     
     CGARoundPointOPNS(iCGAMultivector m){

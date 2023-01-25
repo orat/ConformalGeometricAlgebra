@@ -41,7 +41,7 @@ import org.jogamp.vecmath.Point3d;
 public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVector {
     
     public CGAPlaneIPNS(CGAMultivector m){
-        super(m);
+        super(m.compress());
     }
     CGAPlaneIPNS(iCGAMultivector m){
         super(m);
@@ -52,19 +52,16 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     
     /**
      * Create plane in inner product null space representation (grade 1 multivector)
-     * based on the parameters of the Hesse-Normal-Form of a plane.
-     * 
-     * Be careful: This corresponds to dual plane in Dorst2007.
-     * 
-     * Successful tested!!!
-     * 
-     * TODO
-     * - Ein nicht normalisiertes n liefert anderen Multivektor, aber könnte der
-     * nicht die gleiche Ebene representieren?
-     * - weight hinzufügen
+     * based on the parameters of the Hesse-Normal-Form Be careful: This corresponds to dual plane in Dorst2007.of a plane.
+    Successful tested!!!
+ 
+ TODO
+ - Ein nicht normalisiertes n liefert anderen Multivektor, aber könnte der
+ nicht die gleiche Ebene representieren?
      * 
      * @param n (normalized) normal vector of the plane
-     * @param d distance of the plane to the origin
+     * @param d distance of the plane to
+     * @param weight the origin
      */
     public CGAPlaneIPNS(Vector3d n, double d, double weight){
         this(createEx(n.x)
@@ -72,7 +69,22 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
             .add(createEz(n.z))
             .add(createInf(d)).gp(weight));
     }
-   
+    /**
+     * 
+     * @param n
+     * @param d 
+     */
+    public CGAPlaneIPNS(Vector3d n, double d){
+        this(n,d,1d);
+    }
+    /**
+     * 
+     * @param n
+     * @param p 
+     */
+    public CGAPlaneIPNS(Vector3d n, Point3d p){
+        this(n,(new Vector3d(p)).dot(n));
+    }
     /**
      * Composition of a plane based on a point, a normal vector and the weight. 
      * 
@@ -126,7 +138,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * wie beschaffe ich mir das richtige? Was liefert ganja.js
      */
     public CGAPlaneIPNS(CGARoundPointIPNS P){
-        this(createInf(dist2Origin(P)).add(P.op(createNino()).gp(createNino()).normalize()));
+        this(createInf(dist2Origin(P)).add(P.op(E).gp(E).normalize()));
     }
     
     
@@ -136,14 +148,15 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         return Math.sqrt((new CGARoundPointIPNS(P)).distSquare(new CGARoundPointIPNS(createOrigin(1d))));
     }
     
-    @Deprecated
+    // use CGAMultivector.E instead
+    /*@Deprecated
     private static CGAMultivector createNino(){
         return inf.op(createOrigin(1d));
-    }
+    }*/
     
     @Override
     public CGAPlaneOPNS undual(){
-        return new CGAPlaneOPNS(impl.dual().gp(-1));
+        return new CGAPlaneOPNS((new CGAMultivector(impl.dual().gp(-1))).compress());
     }
     
     

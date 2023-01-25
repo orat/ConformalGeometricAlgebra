@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
-import org.jogamp.vecmath.Point3d;
 
 /**
  * A k-Vector is a multivector which is a linear combination of the 32 basis blades 

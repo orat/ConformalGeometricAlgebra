@@ -235,6 +235,7 @@ public class DualVector3d {
         double y = test.dot(n);
         return Math.atan2(y, x);
     }
+    
     /**
      * Creates a unit dual vector by normalization.
      * 

@@ -22,6 +22,12 @@ public class CGAAttitudeScalarOPNS extends CGAAttitudeOPNS {
     }
     
     
+    // composition
+    
+    public CGAAttitudeScalarOPNS(double scalar){
+        super(createInf(scalar));
+    }
+    
     // etc
     
     @Override

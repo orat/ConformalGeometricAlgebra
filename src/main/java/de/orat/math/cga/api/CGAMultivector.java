@@ -93,9 +93,9 @@ public class CGAMultivector {
     public static CGAMultivector createEz(double scale){
         return new CGAMultivector(defaultInstance.impl.createEz(scale));
     }
-    public static CGAEuclideanVector createE3(){
+    /*public static CGAEuclideanVector createE3(){
         return new CGAEuclideanVector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
-    }
+    }*/
     /**
      * Create an E3 Vector or 0-Vector if the given argument is a null-vector.
      * 
@@ -105,6 +105,7 @@ public class CGAMultivector {
     public static CGAEuclideanVector createE3(Tuple3d v){
             return new CGAEuclideanVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
+    // sollte identisch zur createE3 sein? Nein!
     public static CGAMultivector createI3(){
         // da könnte ich doch gleich den richtigen Blade in einem Schritt erzeugen
         //FIXME
@@ -597,9 +598,9 @@ public class CGAMultivector {
         //FIXME muss hier nicht dual() statt undual() stehen?
         // es scheint aber so zu funktionieren
         // a&b = !(!a^!b)
-        return dual().op(x.dual()).undual();
+        return dual().op(x.dual()).dual();
         //TODO besser die default impl im interface aufrufen?
-        //return new CGAMultivector(impl.vee(x));
+        //return new CGAMultivector(impl.vee(x.impl));
     }
     
     public CGAMultivector add(CGAMultivector b){
