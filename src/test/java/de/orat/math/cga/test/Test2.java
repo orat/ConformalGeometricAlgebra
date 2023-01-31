@@ -19,7 +19,7 @@ import de.orat.math.cga.api.CGAPlaneIPNS;
 import de.orat.math.cga.api.CGAOrientedPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
 import de.orat.math.cga.api.CGARoundPointOPNS;
-import de.orat.math.cga.api.CGAScalar;
+import de.orat.math.cga.api.CGAScalarOPNS;
 import de.orat.math.cga.api.CGASphereIPNS;
 import de.orat.math.cga.api.CGATangentVectorIPNS;
 import de.orat.math.cga.api.CGATangentVectorOPNS;
@@ -31,6 +31,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static de.orat.math.cga.api.CGAMultivector.I0;
+import de.orat.math.cga.api.CGAScalor;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -845,7 +847,7 @@ public class Test2 {
         System.out.println("------------------Basis blades--------------");
         CGAMultivector m = CGAMultivector.createOrigin(1d).ip(CGAMultivector.createInf(1d));
         System.out.println("e0.einf="+m.toString());
-        assertTrue(m.equals(new CGAScalar(-1d)));
+        assertTrue(m.equals(new CGAScalarOPNS(-1d)));
     }
     
     public void testPlane(){
@@ -2070,19 +2072,60 @@ public class Test2 {
         System.out.println(m1.toString("m1"));*/
     }
     
-    public void testNormalVectorOf2Lines(){
-        System.out.println("-------------- test normal vector of two lines -----------------");
+    public void testIntersectionPointOfIntersectingLines(){
+        System.out.println("-------------- test intersecting lines intersection point (Lasenby) -----------------");
         Point3d p1 = new Point3d(1,0,0);
+        System.out.println(toString("p1 (euclid)",p1));
         CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
         System.out.println(cp1.toString("p1"));
         Point3d p2 = new Point3d(0,1,0);
+        System.out.println(toString("p2 (euclid)",p2));
         CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
         System.out.println(cp2.toString("p2"));
         CGALineOPNS l1 = new CGALineOPNS(p1,p2);
         System.out.println(l1.toString("l1"));
         Vector3d l1Dir = new Vector3d(p1);
         l1Dir.sub(p2);
-        System.out.println(toString("l1Dir",l1Dir));
+        l1Dir.normalize();
+        System.out.println(toString("l1Dir (euclid)",l1Dir));
+        Point3d p3 = new Point3d(0.5,0.5,1);
+        CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
+        System.out.println(cp3.toString("p3"));
+        Point3d p4 = new Point3d(0.5,0.5,-1);
+        CGARoundPointIPNS cp4 = new CGARoundPointIPNS(p4);
+        System.out.println(cp4.toString("p4"));
+        CGALineOPNS l2 = new CGALineOPNS(p3,p4);
+        System.out.println(l2.toString("l2"));
+        Vector3d l2Dir = new Vector3d(p3);
+        l2Dir.sub(p4);
+        l2Dir.normalize();
+        System.out.println(toString("l2Dir (eudlid)",l2Dir));
+        
+        // Intersection nach Lasenby
+        CGARoundPointIPNS m = intersect(l1.normalize(), l2.normalize(), 
+                new CGARoundPointIPNS(o)/*new CGARoundPointIPNS(new Point3d(2d,2d,2d))*/);
+        System.out.println(m.toString("intersect(Lasenby)"));
+         CGARoundPointIPNS m2 = intersect(l1.normalize(), l2.normalize(), 
+                new CGARoundPointIPNS(new Point3d(2d,2d,1d)));
+        System.out.println(m2.toString("intersect(Lasenby)"));
+       
+    }
+    public void testSkewedLinesClosestPoints(){
+        System.out.println("-------------- test skewed lines closest points -----------------");
+        Point3d p1 = new Point3d(1,0,0);
+        System.out.println(toString("p1 (euclid)",p1));
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
+        System.out.println(cp1.toString("p1"));
+        Point3d p2 = new Point3d(0,1,0);
+        System.out.println(toString("p2 (euclid)",p2));
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
+        System.out.println(cp2.toString("p2"));
+        CGALineOPNS l1 = new CGALineOPNS(p1,p2);
+        System.out.println(l1.toString("l1"));
+        Vector3d l1Dir = new Vector3d(p1);
+        l1Dir.sub(p2);
+        l1Dir.normalize();
+        System.out.println(toString("l1Dir (euclid)",l1Dir));
         Point3d p3 = new Point3d(0,0,1.2);
         CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
         System.out.println(cp3.toString("p3"));
@@ -2093,16 +2136,33 @@ public class Test2 {
         System.out.println(l2.toString("l2"));
         Vector3d l2Dir = new Vector3d(p3);
         l2Dir.sub(p4);
-        System.out.println(toString("l2Dir",l2Dir));
+        l2Dir.normalize();
+        System.out.println(toString("l2Dir (eudlid)",l2Dir));
         
         Vector3d n = new Vector3d();
         n.cross(l1Dir,l2Dir);
-        System.out.println(toString("n (euclidean)",n));
+        n.normalize();
+        System.out.println(toString("n (l1 X l2, euclidean)",n));
         
         CGAMultivector u1CGA = inf.lc(l1).rc(o).normalize();
         System.out.println(u1CGA.toString("u1CGA"));
+        Vector3d u1vec = u1CGA.extractE3ToVector3d();
+        System.out.println(toString("u1vec",u1vec));
+        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
+         
+        CGAMultivector u1CGAa = l1.rc(o).rc(inf).normalize();
+        // Kleppe2016 hat anderes Vorzeichen
+        System.out.println(u1CGAa.toString("u1CGA [Kleppe2016]"));
+        
         CGAMultivector u2CGA = inf.lc(l2).rc(o).normalize();
         System.out.println(u2CGA.toString("u2CGA"));
+        Vector3d u2vec = u2CGA.extractE3ToVector3d();
+        System.out.println(toString("u2vec",u2vec));
+        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
+        
+        CGAMultivector u2CGAa = l2.rc(o).rc(inf).normalize();
+        // Kleppe2016 hat anderes Vorzeichen
+        System.out.println(u2CGAa.toString("u2CGA [Kleppe2016]"));
         
         // Test common normal mit CGA - Vergleich mit Kreuzprodukt im Euclidean space
         CGAMultivector nCGA = u1CGA.op(u2CGA).gp(CGAMultivector.createI3().inverse());
@@ -2116,23 +2176,47 @@ public class Test2 {
         assertTrue(nNormalized.equals(nCGANormalized));
         
         // test skewed lines closest points
+        nCGA.normalize();
         CGAPlaneOPNS pi2 = new CGAPlaneOPNS(l2.op(nCGA));
         System.out.println(pi2.toString("pi2"));
+        CGAPlaneOPNS pi2n = pi2.normalize();
+        System.out.println(pi2n.toString("pi2 (normalize)"));
         
         // pi2 durch euclid konstruieren
         Vector3d npi2 = new Vector3d();
+        l2Dir.normalize();
+        n.normalize();
         npi2.cross(l2Dir,n);
-        CGAPlaneIPNS pi2IPNS = new CGAPlaneIPNS(npi2,p1);
-        System.out.println(pi2IPNS.toString("pi2 (IPNS)"));
+        CGAPlaneIPNS pi2IPNS = new CGAPlaneIPNS(npi2,p3);
+        //System.out.println(pi2IPNS.toString("pi2 (IPNS)"));
         CGAPlaneOPNS pi2OPNS = pi2IPNS.undual();
         System.out.println(pi2OPNS.toString("pi2 (OPNS)"));
+        assertTrue(pi2OPNS.equals(pi2n));
         
-        CGARoundPointOPNS c1 = new CGARoundPointOPNS(pi2.vee(l1));
+        // Intersection nach Lasenby
+        CGAMultivector m = intersect(l1.normalize(), l2.normalize(), new CGARoundPointIPNS(new Point3d(2d,2d,2d)));
+        System.out.println(m.toString("intersect"));
+        
+        //TODO stimmt nicht mit c1Dual überein
+        //CGARoundPointOPNS c1 = new CGARoundPointOPNS(pi2.vee(l1));
+        
+        // nach ganja.js example
+        CGAMultivector c1cga = I0.lc(pi2.vee(l1).op(o));
+        System.out.println(c1cga.toString("c1cga"));
+        Point3d p1p = c1cga.extractE3ToPoint3d();
+        CGARoundPointOPNS c1 = new CGARoundPointOPNS(p1p);
+        
         System.out.println(c1.toString("c1 (OPNS)"));
         CGAMultivector c1NormalizedDualSphere = c1.div(inf.lc(c1)).negate();
         System.out.println(c1NormalizedDualSphere.toString("c1 (normalizedDualSphere)"));
         CGAMultivector c1Euclid = o.op(inf).lc(o.op(inf).op(c1NormalizedDualSphere));
         System.out.println(c1Euclid.toString("c1 (euclid)"));
+        
+        // Vergleich mit dual vector space Berechnung
+        Plane4d pi2Dual = new Plane4d(npi2,p3);
+        DualVector3d l1Dual = new DualVector3d(p1, l1Dir);
+        Point3d p1Dual = pi2Dual.intersect(l1Dual);
+        System.out.println(toString("c1 (dual)",p1Dual));
     }
     
     public void testEuclideanVector(){
@@ -2159,5 +2243,37 @@ public class Test2 {
     public void testinf(){
         CGAMultivector test = inf.op(inf);
         System.out.println(test.toString("infsquare"));
+    }
+    
+    public void testScalar(){
+        System.out.println("----------------- test Scalar --------------------");
+        CGAMultivector test = new CGAScalarOPNS(3d);
+         System.out.println(test.toString("scalar"));
+        CGAMultivector test2 = test.dual();
+        System.out.println(test2.toString("scalar.dual"));
+    }
+    
+    /**
+     * Determine closest point.
+     * 
+     * Sollte mindestens für Linien funktionieren die sich schneiden. 
+     * - Was passiert bei Linien, die sich nicht schneiden?
+     * - scheint bisher nur zu funktionieren, wenn ich "o" als beliebigen Punkt x übergeben
+     * - es sieht so aus, als müsste der Punkt in der Ebene liegen in der sich die Geraden schneiden
+     * - ist CGARoundPointIPNS x überhaupt richtig?
+     * 
+     * @param l1 normalized line 1
+     * @param l2 normalized line 2
+     * @param x any aritray point, use epsilon_0 as default
+     * @return closest point on l1 (equals intersection point if the two lines intersect)
+     */
+    private static CGARoundPointIPNS intersect(CGALineOPNS l1, CGALineOPNS l2, CGARoundPointIPNS x){
+        CGAMultivector l1ss = l1.sub(l2.gp(l1).gp(l2));
+        CGAMultivector xs = l1ss.gp(x).gp(l1ss);
+        CGAMultivector xss = x.add(xs).gp(0.5d);
+        CGAMultivector xsss = l2.gp(xss).gp(l2);
+        CGAMultivector ps = xss.add(xsss).gp(0.5);
+        //return ps.gp(inf).gp(ps).negate().gp(1d/(ps.rc(inf).sqr().decomposeScalar()*2d));
+        return new CGARoundPointIPNS(ps.gp(inf).gp(ps).negate().div(ps.rc(inf).sqr().gp(2d)));
     }
 }

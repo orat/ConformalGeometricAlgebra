@@ -88,9 +88,9 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
         CGAMultivector c = createE3(center);
         CGAMultivector sr2;
         if (radius >0){
-            sr2 = new CGAScalar(radius*radius);
+            sr2 = new CGAScalarOPNS(radius*radius);
         } else {
-            sr2 = new CGAScalar(-radius*radius);
+            sr2 = new CGAScalarOPNS(-radius*radius);
         }
         /*CGAMultivector test1 = createOrigin(1d).add(c);
         CGAMultivector test2 = c.ip(c);
@@ -155,13 +155,13 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * 
      * @return squared size/radius imaginary sphere, if squared radius < 0
      */
-    public CGAScalar squaredSizeIntern5(){
+    public CGAScalarOPNS squaredSizeIntern5(){
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         //local radius_squared = ( center .. center ) + 2 * ( no .. blade )
 	//radius_squared = radius_squared:tonumber()
         CGAMultivector center = locationIntern2();
-        CGAScalar result =  new CGAScalar(center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d))).compress());
+        CGAScalarOPNS result =  new CGAScalarOPNS(center.ip(center).add((createOrigin(1d).ip(this.gp(1d/weight2())).gp(2d))).compress());
         System.out.println(result.toString("squaredSize2 (CGASphereIPNS)"));
         return result;
     }
@@ -199,13 +199,13 @@ public class CGASphereIPNS extends CGAOrientedFiniteRoundIPNS implements iCGAVec
      * @Deprecated
      * @return squared size/radius squared
      */
-    public CGAScalar squaredSizeIntern4(){
+    public CGAScalarOPNS squaredSizeIntern4(){
         //TODO
         // funktioniert vermutlich so nur wenn weight==1 ist. Das muss also noch
         // entsprechend erweitert werden
         // ist das das gleiche wie normalisieren?
         double[] temp = impl.extractCoordinates(1);
-        return new CGAScalar(temp[1]+temp[2]+temp[3]-2*temp[4]);
+        return new CGAScalarOPNS(temp[1]+temp[2]+temp[3]-2*temp[4]);
     }
     
     // das kann doch gar nicht funktionieren?

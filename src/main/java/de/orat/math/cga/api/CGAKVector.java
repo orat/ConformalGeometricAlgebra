@@ -92,7 +92,7 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
      */
     /*@Override
     public Point3d location(){
-        CGAMultivector result = carrierFlat().inverse().gp(this.op((new CGAScalar(1d).add(E)))).rc(E);
+        CGAMultivector result = carrierFlat().inverse().gp(this.op((new CGAScalar(1d).add(I0)))).rc(I0);
         return result.extractE3ToPoint3d();
     }*/
     

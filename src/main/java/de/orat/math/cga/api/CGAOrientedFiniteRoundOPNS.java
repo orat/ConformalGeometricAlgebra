@@ -56,7 +56,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
     public CGAKVector carrierFlat(){
         // do not normalize before, so that it is possible to determine the weight
         // as norm of the carrier flat.
-        return new CGAKVector(this.op(inf).negate().rc(E));
+        return new CGAKVector(this.op(inf).negate().rc(I0));
     }
     
     public Vector3d attitude(){
@@ -92,7 +92,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
     public double squaredSize(){
         CGAOrientedFiniteRoundOPNS m = this.normalize();
         //FIXME muss ich wirklich normalisieren?
-        CGAScalar result = new CGAScalar(m.gp(m.gradeInversion()).div(m.carrierFlat().sqr()).compress()); 
+        CGAScalarOPNS result = new CGAScalarOPNS(m.gp(m.gradeInversion()).div(m.carrierFlat().sqr()).compress()); 
         return result.value();
     }
    
@@ -102,7 +102,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
      * @return squared size
      * @Deprecated
     **/
-    public CGAScalar squaredSizeIntern1(){
+    public CGAScalarOPNS squaredSizeIntern1(){
         return squaredSizeIntern1(this);
     }
     /**
@@ -115,7 +115,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
      * @return squared size/radius (maybe negative)
      * @Deprecated
      */
-    static CGAScalar squaredSizeIntern1(CGAKVector m){
+    static CGAScalarOPNS squaredSizeIntern1(CGAKVector m){
         // following Dorst2008 p.407/08 (+errata: ohne Vorzeichen), corresponds to drills 14.9.2
         // CGAMultivector m_normalized = m.normalize();
         // testweise vorher normalisieren: produziert nur ein negatives Vorzeichen
@@ -125,7 +125,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
         CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
         // gradeInversion() ist elegant, da ich damit die Formel für pp, circle und sphere
         // verwenden kann
-        CGAScalar result = new CGAScalar(m_n.gp(m_n.gradeInversion()).div((inf.lc(m_n)).sqr()).compress()); 
+        CGAScalarOPNS result = new CGAScalarOPNS(m_n.gp(m_n.gradeInversion()).div((inf.lc(m_n)).sqr()).compress()); 
         System.out.println(result.toString("squaredSize (Dorst2007)"));
         
         // Alternative implementation
@@ -153,10 +153,10 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
      * 
      * @return squared size
      */
-    public CGAScalar squaredSizeIntern3(){
+    public CGAScalarOPNS squaredSizeIntern3(){
         return squaredSizeIntern3(this);
     }
-    static CGAScalar squaredSizeIntern3(CGAKVector m){
+    static CGAScalarOPNS squaredSizeIntern3(CGAKVector m){
         // andere impl
         // basierend auf Hitzer2005, sollte auch für pointpair funktionieren
         // scheint zu funktionieren für sphereopns
@@ -164,7 +164,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
         // (L.ScProd(L))*(1.0/(n.OutProd(L).ScProd(n.OutProd(L))));
         double result = m.scp(m) / (inf.op(m)).sqr().compress().decomposeScalar();
         System.out.println("squaredSize (Hitzer2004, change sign for circle)="+String.valueOf(result));
-        return new CGAScalar(result);
+        return new CGAScalarOPNS(result);
     }
     
     private CGAOrientedFiniteRoundOPNS toOrigin(){

@@ -55,7 +55,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat 
     public CGAKVector carrierFlat(){
         // do not normalize before, so that it is possible to determine the weight
         // as norm of the carrier flat.
-        return new CGAKVector(this.undual().negate().rc(E));
+        return new CGAKVector(this.undual().negate().rc(I0));
     }
     
     public Vector3d attitude(){
@@ -138,7 +138,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat 
         //        .ip(Multivector.createBasisVector(4), RIGHT_CONTRACTION);
         
         // use dualFlat in Dorst2007
-        // damit bekomme ich die attitude in der Form E.op(einfM)
+        // damit bekomme ich die attitude in der Form I0.op(einfM)
         // für attitude ist ein Vorzeichen nach Dorst2007 zu erwarten, scheint aber nicht zu stimmen
         CGAMultivector attitude = createInf(1d).op(this).undual();
         // attitude=-5.551115123125783E-17*no^e1^e2 + 0.9999999999999996*e1^e2^ni

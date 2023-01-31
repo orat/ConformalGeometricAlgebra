@@ -33,7 +33,7 @@ public class CGAMultivector {
     static final CGAMultivector I3 = createI3();
     static final CGAMultivector I3i = I3.inverse();
     static final CGAMultivector Ii = o.op(I3i).op(inf);
-    static final CGAMultivector E = inf.op(o);
+    public static final CGAMultivector I0 = inf.op(o);
     
     CGAMultivector(){
         impl = new CGA1Multivector();
@@ -167,6 +167,10 @@ public class CGAMultivector {
                 .op(inf);
     }
    
+    public static CGAMultivector createE(double value){
+        return createI().gp(value);
+    }
+    
     /**
      * Create a parallelogram (area formed by two anchored vectors).
      * 
@@ -277,7 +281,7 @@ public class CGAMultivector {
     // bekomme ich da nicht immer einen AttitudeVector zurück?
     //FIXME
     /**
-     * Determine the attitude/direction as (E inf). 
+     * Determine the attitude/direction as (I0 inf). 
      * 
      * @return 
      */
@@ -456,8 +460,8 @@ public class CGAMultivector {
      * 
      * @return square, equals the ip results in a scalar.
      */
-    public CGAScalar sqr(){
-        return new CGAScalar(ip(this).compress());
+    public CGAScalarOPNS sqr(){
+        return new CGAScalarOPNS(ip(this).compress());
     } 
     public double squaredNorm(){
         return impl.lengthSquared();
@@ -571,7 +575,7 @@ public class CGAMultivector {
          return new CGAMultivector(impl.ip(x.impl, LEFT_CONTRACTION));
     }
     public CGAMultivector gp(CGAMultivector x){
-        return new CGAMultivector(impl.gp(x.impl));
+        return new CGAMultivector(impl.gp(x.impl).getCompressed());
     }
     public CGAMultivector gp(double x){
         return new CGAMultivector(impl.gp(x));
@@ -655,7 +659,7 @@ public class CGAMultivector {
         // or should I use normalize2() corresponding to ganja.js?
         // mit normalize2() schlägt die Normalisierung einer line fehl, d.h. die
         // Bestimmung der length() liefert dann 0.
-        return new CGAMultivector(impl.normalize());
+        return new CGAMultivector(impl.normalize().getCompressed());
         // alternativ
         //return div(createInf(-1d).ip(this));
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
@@ -682,7 +686,7 @@ public class CGAMultivector {
     // coordinates extraction
     
     /**
-     * Extract attitude/direction from E^einf multivector representation.
+     * Extract attitude/direction from I0^einf multivector representation.
      * 
      * @return direction/attitude
      */

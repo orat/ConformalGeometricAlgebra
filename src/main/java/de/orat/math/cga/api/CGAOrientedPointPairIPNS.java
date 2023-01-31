@@ -80,9 +80,9 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
         CGAMultivector n = createE3(normal);
         CGAMultivector sr2;
         if (sign){
-            sr2 = new CGAScalar(-r*r);
+            sr2 = new CGAScalarOPNS(-r*r);
         } else {
-            sr2 = new CGAScalar(r*r);
+            sr2 = new CGAScalarOPNS(r*r);
         }
         // code scheint nicht mit der Formel im pdf übereinzustimmen
         // (das erste "-" ist im pdf ein "+"
@@ -178,7 +178,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * 
      * @return squaredSize/squaredRadius
      */
-    public CGAScalar squaredSizeIntern5(){
+    public CGAScalarOPNS squaredSizeIntern5(){
         // It must be non-zero and of grade 3
         // CGAUtil.lua l.293 based on center and normal
         //blade = blade / weight
@@ -197,6 +197,6 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
                 no_ni.ip(no.op(blade)).gp(CGAMultivector.createI3()).
                         add(center.ip(normal).gp(center)).gp(2d).gp(normal));
         System.out.println(result.toString("squaredSizeIntern (CGAOrientedPointPairIPNS, Spencer)"));
-        return new CGAScalar(result);
+        return new CGAScalarOPNS(result);
     }
 }

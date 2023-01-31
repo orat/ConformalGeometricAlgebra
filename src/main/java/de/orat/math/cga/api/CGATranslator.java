@@ -27,7 +27,7 @@ public class CGATranslator extends CGAVersor {
     
     public CGATranslator(Vector3d d){
         //this(createInf(1d).gp(createE3(d)).gp(0.5).exp());
-        this((new CGAScalar(1d)).sub(createE3(d).gp(inf.gp(0.5d))));
+        this((new CGAScalarOPNS(1d)).sub(createE3(d).gp(inf.gp(0.5d))));
     }
 
     @Override

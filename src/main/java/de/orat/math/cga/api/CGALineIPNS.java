@@ -121,10 +121,10 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
      * FIXME für CGALineIPNS = (-2*e1^e2 - 2*e1^e3 - 2*e1^ei + 2*e2^ei + 2*e3^ei)
      * ergibt sich hier 0, warum?
      */
-    private CGAScalar weightIntern2(){
+    private CGAScalarOPNS weightIntern2(){
         // following Parkin2013 CGAUtilMath.pdf, lua implementation
         // local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
-        return new CGAScalar((createOrigin(1d).ip(this.op(inf))).
+        return new CGAScalarOPNS((createOrigin(1d).ip(this.op(inf))).
                 gp(createI3()).norm());
     }
     

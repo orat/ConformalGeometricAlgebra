@@ -65,7 +65,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
     public CGAKVector carrierFlat(){
         // do not normalize before, so that it is possible to determine the weight
         // as norm of the carrier flat.
-        return new CGAKVector(this.undual().op(inf).negate().rc(E));
+        return new CGAKVector(this.undual().op(inf).negate().rc(I0));
     }
     
     /**
@@ -189,9 +189,9 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
     public double squaredSize(){
         return squaredSizeIntern1().decomposeScalar();
     }
-    public CGAScalar squaredSizeIntern1(){
+    public CGAScalarOPNS squaredSizeIntern1(){
         // sign corresponding to errata in Dorst2007
-        CGAScalar result = CGAOrientedFiniteRoundOPNS.squaredSizeIntern1(this.undual());
+        CGAScalarOPNS result = CGAOrientedFiniteRoundOPNS.squaredSizeIntern1(this.undual());
         //System.out.println(result.toString("squaredSizeIntern1 (CGAOrientedFiniteRoundIPNS)"));
         return result;
     }
@@ -202,7 +202,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
      * 
      * @return squared size/-radius squared
      */
-    public CGAScalar squaredSizeIntern3(){
+    public CGAScalarOPNS squaredSizeIntern3(){
         // following Hitzer, sollte das bis auf Vorzeichen für circle und sphere funktionieren,
         // möglicherweise auch für pointpair
         //FIXME oder muss ich this.dual() übergeben?
@@ -214,7 +214,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
      * 
      * @return 
      */
-    public CGAScalar squaredSizeIntern2(){
+    public CGAScalarOPNS squaredSizeIntern2(){
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
         // dual_sphere = self.dual
         // dual_sphere /= (-dual_sphere | self.cga.einf)
@@ -222,7 +222,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
         CGAMultivector result = this.div(this.negate().ip(inf));
         result = result.sqr().compress();
         System.out.println(result.toString("squaredSizeIntern2 (CGAOrientedFiniteRoundIPNS)"));
-        return new CGAScalar(result);
+        return new CGAScalarOPNS(result);
     }
     /**
      * Determination of the squared size. This is the radiusSquared for a sphere.

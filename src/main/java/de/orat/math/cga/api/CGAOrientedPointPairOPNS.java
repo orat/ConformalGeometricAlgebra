@@ -86,7 +86,7 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     
     public PointPair decomposePoints(){
         //Point3d[] result = new Point3d[2];
-        CGAScalar sqrt = new CGAScalar(this.ip(this).compress()).sqrt();
+        CGAScalarOPNS sqrt = new CGAScalarOPNS(this.ip(this).compress()).sqrt();
         // following Fernandes (Formelsammlung, attachement)
         CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
         System.out.println(p2.toString("p2"));

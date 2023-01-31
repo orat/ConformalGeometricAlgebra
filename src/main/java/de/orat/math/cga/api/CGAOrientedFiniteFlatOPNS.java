@@ -49,7 +49,7 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector implements iCGAFlat 
     public CGAKVector carrierFlat(){
         // do not normalize before, so that it is possible to determine the weight
         // as norm of the carrier flat.
-        return new CGAKVector(this.negate().rc(E));
+        return new CGAKVector(this.negate().rc(I0));
     }
     
     /**
@@ -122,7 +122,7 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector implements iCGAFlat 
         //CGAMultivector vector = new CGA1Multivector(Multivector.createBasisVector(4).op(this).dual(CGA1Metric.CGA_METRIC));
         //System.out.println("dirvec="+vector.toString(CGA1Metric.baseVectorNames)); // ==0
         
-        // Bestimmung von E einf M
+        // Bestimmung von I0 einf M
         // stimmt nicht
         //CGA1Multivector dir = CGA1Multivector.createBasisVector(4,-1d).ip(this, LEFT_CONTRACTION);
         // Vector3d attitude = dir.extractAttitudeFromEeinfRepresentation();

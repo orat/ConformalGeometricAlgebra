@@ -79,12 +79,13 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     }
     /**
      * 
-     * @param n
-     * @param p 
+     * @param n normalized vector of the plane
+     * @param p point laying in the plane
      */
     public CGAPlaneIPNS(Vector3d n, Point3d p){
         this(n,(new Vector3d(p)).dot(n));
     }
+   
     /**
      * Composition of a plane based on a point, a normal vector and the weight. 
      * 
@@ -138,7 +139,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * wie beschaffe ich mir das richtige? Was liefert ganja.js
      */
     public CGAPlaneIPNS(CGARoundPointIPNS P){
-        this(createInf(dist2Origin(P)).add(P.op(E).gp(E).normalize()));
+        this(createInf(dist2Origin(P)).add(P.op(I0).gp(I0).normalize()));
     }
     
     
@@ -148,7 +149,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         return Math.sqrt((new CGARoundPointIPNS(P)).distSquare(new CGARoundPointIPNS(createOrigin(1d))));
     }
     
-    // use CGAMultivector.E instead
+    // use CGAMultivector.I0 instead
     /*@Deprecated
     private static CGAMultivector createNino(){
         return inf.op(createOrigin(1d));

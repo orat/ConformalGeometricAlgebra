@@ -2,7 +2,6 @@ package de.orat.math.cga.api;
 
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
-import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
@@ -63,8 +62,12 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
     }
     
     @Override
-    public CGAPlaneIPNS undual(){
+    public CGAPlaneIPNS dual(){
         return new CGAPlaneIPNS(impl.dual().gp(-1));
+    }
+    
+    public CGAPlaneOPNS normalize(){
+        return new CGAPlaneOPNS(super.normalize());
     }
     /**
      * Plane through p tangent to this.

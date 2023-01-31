@@ -119,7 +119,10 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     public CGALineIPNS dual(){
         return new CGALineIPNS(new CGALineIPNS(impl.dual()).compress());
     }
-    
+    @Override
+    public CGALineOPNS normalize(){
+        return new CGALineOPNS(super.normalize());
+    }
     
     // decomposition
     
