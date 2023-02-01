@@ -26,4 +26,8 @@ public class CGAScalarOPNS extends CGAKVector implements iCGAScalarOPNS {
     public double value(){
         return decomposeScalar();
     }
+    
+    public CGAScalarIPNS dual(){
+        return new CGAScalarIPNS(super.dual());
+    }
 }

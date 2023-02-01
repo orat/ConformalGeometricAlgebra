@@ -32,6 +32,7 @@ import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.orat.math.cga.api.CGAMultivector.I0;
+import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGAScalor;
 
 /**
@@ -2247,10 +2248,13 @@ public class Test2 {
     
     public void testScalar(){
         System.out.println("----------------- test Scalar --------------------");
-        CGAMultivector test = new CGAScalarOPNS(3d);
-         System.out.println(test.toString("scalar"));
-        CGAMultivector test2 = test.dual();
+        CGAScalarOPNS test = new CGAScalarOPNS(3d);
+        System.out.println(test.toString("scalar"));
+        CGAScalarIPNS test2 = test.dual();
         System.out.println(test2.toString("scalar.dual"));
+        System.out.println("scalar.dual.decompose "+String.valueOf(test2.value()));
+        test = test2.undual();
+        System.out.println("scalar.dual.undual.decompose "+String.valueOf(test.value()));
     }
     
     /**
