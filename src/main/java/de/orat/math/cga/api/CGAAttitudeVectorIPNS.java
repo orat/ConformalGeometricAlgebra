@@ -4,8 +4,9 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Also called free or direction vector, elements without position/location in IPNS representation
- * corresponding to dual direction vector or dual free vector in Dorst2007 (grade 3).
+ * Also called free or direction vector, elements without position/location in 
+ * IPNS representation corresponding to dual direction vector or dual free 
+ * vector in Dorst2007 (grade 3).
  * 
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

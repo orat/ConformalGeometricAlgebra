@@ -2103,14 +2103,226 @@ public class Test2 {
         System.out.println(toString("l2Dir (eudlid)",l2Dir));
         
         // Intersection nach Lasenby
+        // mit reflection of o funktioniert es
         CGARoundPointIPNS m = intersect(l1.normalize(), l2.normalize(), 
                 new CGARoundPointIPNS(o)/*new CGARoundPointIPNS(new Point3d(2d,2d,2d))*/);
-        System.out.println(m.toString("intersect(Lasenby)"));
-         CGARoundPointIPNS m2 = intersect(l1.normalize(), l2.normalize(), 
+        System.out.println(m.toString("intersect(Lasenby, o)"));
+        
+        // funktioniert nicht!
+        CGARoundPointIPNS m2 = intersect(l1.normalize(), l2.normalize(), 
                 new CGARoundPointIPNS(new Point3d(2d,2d,1d)));
-        System.out.println(m2.toString("intersect(Lasenby)"));
+        System.out.println(m2.toString("intersect(Lasenby, 2,2,1)"));
+        
+        CGAMultivector l2l1 = l2.normalize().gp(l1.normalize());
+        System.out.println(l2l1.toString("l2l1"));
        
     }
+    
+    public void testOrthogonalLineOfParallelLinesByReflection(){
+        System.out.println("-------------- test parallel lines orthogonal line by reflection -----------------");
+        Point3d p1 = new Point3d(1,0,0);
+        System.out.println(toString("p1 (euclid)",p1));
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
+        System.out.println(cp1.toString("p1"));
+        Point3d p2 = new Point3d(0,1,0);
+        System.out.println(toString("p2 (euclid)",p2));
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
+        System.out.println(cp2.toString("p2"));
+        CGALineOPNS l1 = new CGALineOPNS(p1,p2);
+        System.out.println(l1.toString("l1"));
+        Vector3d l1Dir = new Vector3d(p1);
+        l1Dir.sub(p2);
+        l1Dir.normalize();
+        System.out.println(toString("l1Dir (euclid)",l1Dir));
+        Point3d p3 = new Point3d(1,0,1);
+        CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
+        System.out.println(cp3.toString("p3"));
+        Point3d p4 = new Point3d(0,1,1);
+        CGARoundPointIPNS cp4 = new CGARoundPointIPNS(p4);
+        System.out.println(cp4.toString("p4"));
+        CGALineOPNS l2 = new CGALineOPNS(p3,p4);
+        System.out.println(l2.toString("l2"));
+        Vector3d l2Dir = new Vector3d(p3);
+        l2Dir.sub(p4);
+        l2Dir.normalize();
+        System.out.println(toString("l2Dir (euclid)",l2Dir));
+        
+        // Diese Subtraktion führt irgendwie zur Orthogonalisierung im Falle von
+        // skewed lines
+        //FIXME
+        CGALineOPNS l1Orthogonal = new CGALineOPNS(l1.sub(l2.gp(l1).gp(l2)));
+        System.out.println(l1Orthogonal.toString("l1 (orthogonal)"));
+        
+        CGAMultivector u1Orthogonal = inf.lc(l1Orthogonal).rc(o).normalize();
+        System.out.println(u1Orthogonal.toString("u1 (orthogonal)"));
+        Vector3d u1vec = u1Orthogonal.extractE3ToVector3d();
+        // Der Vektor scheint zum Richtungsvektor von l1 zu degenerieren, statt
+        // zum benötigten Vektor zwischen beiden Geraden
+        // Warum ist das so? Geht das auch anders?
+        //FIXME
+        System.out.println(toString("u1vec",u1vec));
+        
+        CGAMultivector l2l1 = l2.normalize().gp(l1.normalize());
+        System.out.println(l2l1.toString("l2l1"));
+    }
+    public void testIntersectionPointOfParallelLines(){
+        System.out.println("-------------- test parallel lines by regressive product -----------------");
+        Point3d p1 = new Point3d(1,0,0);
+        System.out.println(toString("p1 (euclid)",p1));
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
+        System.out.println(cp1.toString("p1"));
+        Point3d p2 = new Point3d(0,1,0);
+        System.out.println(toString("p2 (euclid)",p2));
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
+        System.out.println(cp2.toString("p2"));
+        CGALineOPNS l1 = new CGALineOPNS(p1,p2);
+        System.out.println(l1.toString("l1"));
+        Vector3d l1Dir = new Vector3d(p1);
+        l1Dir.sub(p2);
+        l1Dir.normalize();
+        System.out.println(toString("l1Dir (euclid)",l1Dir));
+        Point3d p3 = new Point3d(1,0,1);
+        CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
+        System.out.println(cp3.toString("p3"));
+        Point3d p4 = new Point3d(0,1,1);
+        CGARoundPointIPNS cp4 = new CGARoundPointIPNS(p4);
+        System.out.println(cp4.toString("p4"));
+        CGALineOPNS l2 = new CGALineOPNS(p3,p4);
+        System.out.println(l2.toString("l2"));
+        Vector3d l2Dir = new Vector3d(p3);
+        l2Dir.sub(p4);
+        l2Dir.normalize();
+        System.out.println(toString("l2Dir (eudlid)",l2Dir));
+        
+        // Richtungsvector von l1 nach Dorst2007
+        CGAMultivector u1CGA = inf.lc(l1).rc(o).normalize();
+        System.out.println(u1CGA.toString("u1CGA"));
+        Vector3d u1vec = u1CGA.extractE3ToVector3d();
+        System.out.println(toString("u1vec",u1vec));
+        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
+         
+        // Richtungsvector nach Kleppe1016
+        //CGAMultivector u1CGAa = l1.rc(o).rc(inf).normalize();
+        // Kleppe2016 hat anderes Vorzeichen
+        //System.out.println(u1CGAa.toString("u1CGA [Kleppe2016]"));
+        
+        CGAMultivector u2CGA = inf.lc(l2).rc(o).normalize();
+        System.out.println(u2CGA.toString("u2CGA"));
+        Vector3d u2vec = u2CGA.extractE3ToVector3d();
+        System.out.println(toString("u2vec",u2vec));
+        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
+        
+        //CGAMultivector u2CGAa = l2.rc(o).rc(inf).normalize();
+        // Kleppe2016 hat anderes Vorzeichen
+        //System.out.println(u2CGAa.toString("u2CGA [Kleppe2016]"));
+        
+        CGAMultivector nCGA = u1CGA.op(u2CGA).gp(CGAMultivector.createI3().inverse());
+        System.out.println(nCGA.toString("n (CGA)"));
+        //Vector3d nNormalized = new Vector3d(n);
+        //nNormalized.normalize();
+        //System.out.println(toString("nNormalized",nNormalized));
+        //Vector3d nCGANormalized = new Vector3d(nCGA.extractE3ToVector3d());
+        //nCGANormalized.normalize();
+        //System.out.println(toString("nCGAExtractE3Normalized",nCGANormalized));
+        //assertTrue(nNormalized.equals(nCGANormalized));
+        
+        
+        // test skewed lines closest points
+        // TODO brauche ich normalisiert oder nicht normalisiert?
+        nCGA.normalize(); //FIXME hier fliege ich raus mit null multivector, normalized failed
+        CGAPlaneOPNS pi2 = new CGAPlaneOPNS(l2.op(nCGA));
+        System.out.println(pi2.toString("pi2"));
+        CGAPlaneOPNS pi2n = pi2.normalize();
+        System.out.println(pi2n.toString("pi2 (normalize)"));
+        
+        
+        // nach ganja.js example c1 bestimmen
+        CGAMultivector c1cga = I0.lc(pi2n.vee(l1).op(o));
+        System.out.println(c1cga.toString("c1cga"));
+        //Point3d p1p = c1cga.extractE3ToPoint3d();
+        //CGARoundPointOPNS c1 = new CGARoundPointOPNS(p1p);
+        
+    }
+    
+    public void testIntersectionPointOfIntersectingLines2(){
+        System.out.println("-------------- test intersecting lines by regressive product -----------------");
+        Point3d p1 = new Point3d(1,0,0);
+        System.out.println(toString("p1 (euclid)",p1));
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1);
+        System.out.println(cp1.toString("p1"));
+        Point3d p2 = new Point3d(0,1,0);
+        System.out.println(toString("p2 (euclid)",p2));
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2);
+        System.out.println(cp2.toString("p2"));
+        CGALineOPNS l1 = new CGALineOPNS(p1,p2);
+        System.out.println(l1.toString("l1"));
+        Vector3d l1Dir = new Vector3d(p1);
+        l1Dir.sub(p2);
+        l1Dir.normalize();
+        System.out.println(toString("l1Dir (euclid)",l1Dir));
+        Point3d p3 = new Point3d(0.5,0.5,1);
+        CGARoundPointIPNS cp3 = new CGARoundPointIPNS(p3);
+        System.out.println(cp3.toString("p3"));
+        Point3d p4 = new Point3d(0.5,0.5,-1);
+        CGARoundPointIPNS cp4 = new CGARoundPointIPNS(p4);
+        System.out.println(cp4.toString("p4"));
+        CGALineOPNS l2 = new CGALineOPNS(p3,p4);
+        System.out.println(l2.toString("l2"));
+        Vector3d l2Dir = new Vector3d(p3);
+        l2Dir.sub(p4);
+        l2Dir.normalize();
+        System.out.println(toString("l2Dir (eudlid)",l2Dir));
+        
+        // Richtungsvector von l1 nach Dorst2007
+        CGAMultivector u1CGA = inf.lc(l1).rc(o).normalize();
+        System.out.println(u1CGA.toString("u1CGA"));
+        Vector3d u1vec = u1CGA.extractE3ToVector3d();
+        System.out.println(toString("u1vec",u1vec));
+        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
+         
+        // Richtungsvector nach Kleppe1016
+        //CGAMultivector u1CGAa = l1.rc(o).rc(inf).normalize();
+        // Kleppe2016 hat anderes Vorzeichen
+        //System.out.println(u1CGAa.toString("u1CGA [Kleppe2016]"));
+        
+        CGAMultivector u2CGA = inf.lc(l2).rc(o).normalize();
+        System.out.println(u2CGA.toString("u2CGA"));
+        Vector3d u2vec = u2CGA.extractE3ToVector3d();
+        System.out.println(toString("u2vec",u2vec));
+        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
+        
+        //CGAMultivector u2CGAa = l2.rc(o).rc(inf).normalize();
+        // Kleppe2016 hat anderes Vorzeichen
+        //System.out.println(u2CGAa.toString("u2CGA [Kleppe2016]"));
+        
+        CGAMultivector nCGA = u1CGA.op(u2CGA).gp(CGAMultivector.createI3().inverse());
+        System.out.println(nCGA.toString("n (CGA)"));
+        //Vector3d nNormalized = new Vector3d(n);
+        //nNormalized.normalize();
+        //System.out.println(toString("nNormalized",nNormalized));
+        //Vector3d nCGANormalized = new Vector3d(nCGA.extractE3ToVector3d());
+        //nCGANormalized.normalize();
+        //System.out.println(toString("nCGAExtractE3Normalized",nCGANormalized));
+        //assertTrue(nNormalized.equals(nCGANormalized));
+        
+        
+        // test skewed lines closest points
+        // TODO brauche ich normalisiert oder nicht normalisiert?
+        nCGA.normalize();
+        CGAPlaneOPNS pi2 = new CGAPlaneOPNS(l2.op(nCGA));
+        System.out.println(pi2.toString("pi2"));
+        CGAPlaneOPNS pi2n = pi2.normalize();
+        System.out.println(pi2n.toString("pi2 (normalize)"));
+        
+        
+        // nach ganja.js example c1 bestimmen
+        CGAMultivector c1cga = I0.lc(pi2n.vee(l1).op(o));
+        System.out.println(c1cga.toString("c1cga"));
+        //Point3d p1p = c1cga.extractE3ToPoint3d();
+        //CGARoundPointOPNS c1 = new CGARoundPointOPNS(p1p);
+        
+    }
+        
     public void testSkewedLinesClosestPoints(){
         System.out.println("-------------- test skewed lines closest points -----------------");
         Point3d p1 = new Point3d(1,0,0);
@@ -2165,16 +2377,23 @@ public class Test2 {
         // Kleppe2016 hat anderes Vorzeichen
         System.out.println(u2CGAa.toString("u2CGA [Kleppe2016]"));
         
-        // Test common normal mit CGA - Vergleich mit Kreuzprodukt im Euclidean space
+        // "Common normal" mit CGA (funktioniert nicht für parallele Linien)
         CGAMultivector nCGA = u1CGA.op(u2CGA).gp(CGAMultivector.createI3().inverse());
         System.out.println(nCGA.toString("n (CGA)"));
-        Vector3d nNormalized = new Vector3d(n);
-        nNormalized.normalize();
-        //System.out.println(toString("nNormalized",nNormalized));
         Vector3d nCGANormalized = new Vector3d(nCGA.extractE3ToVector3d());
         nCGANormalized.normalize();
         //System.out.println(toString("nCGAExtractE3Normalized",nCGANormalized));
+        
+        // Vergleich "common normal" mit Kreuzprodukt im Euclidean space
+        Vector3d nNormalized = new Vector3d(n);
+        nNormalized.normalize();
+        //System.out.println(toString("nNormalized",nNormalized));
         assertTrue(nNormalized.equals(nCGANormalized));
+        
+        // "Common normal" mit CGA und reflection
+        CGAMultivector nCGA2 = inf.lc(l1.sub(l2.gp(l1).gp(l2))).rc(o).normalize();
+        System.out.println(nCGA.toString("n (CGA reflection)"));
+        
         
         // test skewed lines closest points
         nCGA.normalize();
@@ -2201,7 +2420,7 @@ public class Test2 {
         //TODO stimmt nicht mit c1Dual überein
         //CGARoundPointOPNS c1 = new CGARoundPointOPNS(pi2.vee(l1));
         
-        // nach ganja.js example
+        // nach ganja.js example c1 bestimmen
         CGAMultivector c1cga = I0.lc(pi2.vee(l1).op(o));
         System.out.println(c1cga.toString("c1cga"));
         Point3d p1p = c1cga.extractE3ToPoint3d();
@@ -2246,6 +2465,11 @@ public class Test2 {
         System.out.println(test.toString("infsquare"));
     }
     
+    public void testgp(){
+        System.out.println("------------------  test gp ---------------------");
+        CGAMultivector test = CGAMultivector.createE3(new Vector3d(1,2,3)).gp(CGAMultivector.createI3());
+        System.out.println(test.toString("test"));
+    }
     public void testScalar(){
         System.out.println("----------------- test Scalar --------------------");
         CGAScalarOPNS test = new CGAScalarOPNS(3d);

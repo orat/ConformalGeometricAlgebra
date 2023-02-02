@@ -37,7 +37,9 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
      * Hildenbrand2013.
      * 
-     * Hint: The direction of the line is from p2 to p1.
+     * The direction of the line is from p2 to p1.
+     * 
+     * The line is not!!! normalized.
      * 
      * @param p1 first point on the line
      * @param p2 second point on the line
