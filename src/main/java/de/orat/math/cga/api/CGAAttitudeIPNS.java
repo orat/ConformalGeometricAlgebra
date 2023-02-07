@@ -33,7 +33,7 @@ public class CGAAttitudeIPNS extends CGAKVector implements iCGAAttitude {
     }
     
     @Override
-    public CGAAttitudeIPNS dual(){
-        return (CGAAttitudeIPNS) super.dual();
+    public CGAAttitudeOPNS undual(){
+        return (CGAAttitudeOPNS) super.undual();
     }
 }

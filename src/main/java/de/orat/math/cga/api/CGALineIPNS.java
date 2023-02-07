@@ -163,4 +163,8 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         return result;
         //return result.direction();
     }
+    
+    public CGALineIPNS normalize(){
+        return new CGALineIPNS(super.normalize().compress());
+    }
 }

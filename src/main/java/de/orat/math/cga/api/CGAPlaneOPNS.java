@@ -67,7 +67,7 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
     }
     
     public CGAPlaneOPNS normalize(){
-        return new CGAPlaneOPNS(super.normalize());
+        return new CGAPlaneOPNS(super.normalize().compress());
     }
     /**
      * Plane through p tangent to this.

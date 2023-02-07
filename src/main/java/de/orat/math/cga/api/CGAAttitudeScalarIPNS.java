@@ -4,26 +4,31 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * The attitude of a flat point contains only the component inf.
+ * e1^e2^e3^ei
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAAttitudeScalarOPNS extends CGAAttitudeOPNS {
+public class CGAAttitudeScalarIPNS extends CGAAttitudeIPNS {
     
-    public CGAAttitudeScalarOPNS(CGAMultivector m) {
+    public CGAAttitudeScalarIPNS(CGAMultivector m) {
         super(m.compress());
     }
     
-    protected CGAAttitudeScalarOPNS(iCGAMultivector impl){
+    protected CGAAttitudeScalarIPNS(iCGAMultivector impl){
         super(impl);
     }
     
     
     // composition
     
-    public CGAAttitudeScalarOPNS(double scalar){
+    public CGAAttitudeScalarIPNS(double scalar){
         super(createInf(scalar));
+        //TODO wie kann ich das direkt ohne dual bauen?
+        //FIXME mit dem dual wechselt das Vorzeichen. Ist das korrekt?
+        impl = impl.dual();
+        //compress();
     }
+    
     
     // etc
     
@@ -32,12 +37,13 @@ public class CGAAttitudeScalarOPNS extends CGAAttitudeOPNS {
         // test sollte noch darauf erfolgen dass nur die component inf != 0 ist
         //TODO
         int grade = grade();
-        if (grade != 1 && grade != 0) throw new IllegalArgumentException("The given multivector is not of grade 1 or a null vector:");
+        if (grade != 4 && grade != 0) throw new IllegalArgumentException("The given multivector is not of grade 4 or a null vector:");
     }
     
-    public CGAAttitudeScalarIPNS dual(){
-        return new CGAAttitudeScalarIPNS(super.dual().compress());
+    public CGAAttitudeScalarOPNS undual(){
+        return new CGAAttitudeScalarOPNS(super.dual().negate().compress());
     }
+    
     
     // decomposition
     

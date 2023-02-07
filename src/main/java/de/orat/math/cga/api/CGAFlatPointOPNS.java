@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createInf;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -37,20 +36,18 @@ public class CGAFlatPointOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAB
     }
    
     /**
+     * FIXME
+     * weight muss noch berücksichtigt werden
      * @param c location
      * @param weight weight
-     * 
-     * FIXME ist hier CGARoundPointIPNS richtig?
      */
     public CGAFlatPointOPNS(Point3d c, double weight){
-        this(new CGARoundPointIPNS(c, weight));
-    }
-    
-    public CGAFlatPointOPNS(CGARoundPointIPNS p){
-        this(p.op(inf));
+        this(CGAMultivector.createE3(c).add(o).op(inf));
+        //this((new CGAFlatPointIPNS(c, weight)).undual());
     }
     
     
+    // decoposition
     
     /**
      * Determines the center of this flat point.
@@ -60,7 +57,7 @@ public class CGAFlatPointOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAB
     @Override
     public Point3d location(){
         
-        CGAMultivector o = CGAMultivector.createOrigin(1d);
+        //CGAMultivector o = CGAMultivector.createOrigin(1d);
         CGAMultivector oinf = o.op(inf);
         
         // Dorst2007 drills 14.9.2. nr. 5
@@ -70,7 +67,13 @@ public class CGAFlatPointOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAB
     }
 
     @Override
+    // The attitude of a flat point contains only the component inf.
+    //TODO
     public Vector3d attitude() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public CGAFlatPointIPNS dual(){
+        return new CGAFlatPointIPNS(super.dual().compress());
     }
 }

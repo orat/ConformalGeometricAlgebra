@@ -4,6 +4,7 @@ import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
+import de.orat.math.cga.api.CGAFlatPointOPNS;
 import de.orat.math.cga.api.CGAOrientedCircleIPNS;
 import de.orat.math.cga.api.CGAOrientedCircleOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
@@ -2229,16 +2230,16 @@ public class Test2 {
         
         // test skewed lines closest points
         // TODO brauche ich normalisiert oder nicht normalisiert?
-        nCGA.normalize(); //FIXME hier fliege ich raus mit null multivector, normalized failed
+        //nCGA.normalize(); //FIXME hier fliege ich raus mit null multivector, normalized failed
         CGAPlaneOPNS pi2 = new CGAPlaneOPNS(l2.op(nCGA));
         System.out.println(pi2.toString("pi2"));
-        CGAPlaneOPNS pi2n = pi2.normalize();
-        System.out.println(pi2n.toString("pi2 (normalize)"));
+        //CGAPlaneOPNS pi2n = pi2.normalize();
+        //System.out.println(pi2n.toString("pi2 (normalize)"));
         
         
         // nach ganja.js example c1 bestimmen
-        CGAMultivector c1cga = I0.lc(pi2n.vee(l1).op(o));
-        System.out.println(c1cga.toString("c1cga"));
+        //CGAMultivector c1cga = I0.lc(pi2n.vee(l1).op(o));
+        //System.out.println(c1cga.toString("c1cga"));
         //Point3d p1p = c1cga.extractE3ToPoint3d();
         //CGARoundPointOPNS c1 = new CGARoundPointOPNS(p1p);
         
@@ -2465,6 +2466,22 @@ public class Test2 {
         System.out.println(test.toString("infsquare"));
     }
     
+    public void testNullVectors(){
+        System.out.println("----------------- null vectors -----------------");
+        CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Point3d(1,0,0));
+        CGARoundPointIPNS p2 = new CGARoundPointIPNS(inf);
+        CGAMultivector test = p1.gp(p2);
+        // test gp = (-1 + eo^ei + *e1^ei)
+        System.out.println(test.toString("test gp"));
+    }
+    public void testAttitudeScalar(){
+        CGAAttitudeScalarOPNS test = new CGAAttitudeScalarOPNS(5);
+        System.out.println("----------------- CGA Attitude Scalar -----------------");
+        System.out.println(test.toString("opns"));
+        // ipns = (-8.881784197001252E-16*eo^e1^e2^e3 - 4.999999999999997*e1^e2^e3^ei)
+        System.out.println(test.dual().toString("ipns"));
+    }
+    
     public void testgp(){
         System.out.println("------------------  test gp ---------------------");
         CGAMultivector test = CGAMultivector.createE3(new Vector3d(1,2,3)).gp(CGAMultivector.createI3());
@@ -2479,6 +2496,32 @@ public class Test2 {
         System.out.println("scalar.dual.decompose "+String.valueOf(test2.value()));
         test = test2.undual();
         System.out.println("scalar.dual.undual.decompose "+String.valueOf(test.value()));
+    }
+    
+    public void testFlatPoints(){
+        System.out.println("----------------- test flat points --------------------");
+        CGAFlatPointOPNS fp1 = new CGAFlatPointOPNS(new Point3d(1,2,3),1d);
+        System.out.println(fp1.toString("flatpoint opns"));
+        System.out.println(fp1.dual().toString("to ipns"));
+        
+        CGAFlatPointIPNS fp2 = new CGAFlatPointIPNS(new Point3d(1,2,3),1d);
+        System.out.println(fp2.toString("flatpoint ipns"));
+        System.out.println(fp2.undual().toString("to opns"));
+        
+        //FIXME die dual varianten haben falsches Vorzeichen!
+        // muss dual/undual hier anders implementiert werden?
+        
+        
+        // testweise flat-point aus Schnitt von Ebene und Gerade erzeugen
+        //TODO
+        CGAPlaneIPNS plane = new CGAPlaneIPNS(new Point3d(1,2,3), new Vector3d(0,0,1),1d).normalize();
+        System.out.println(plane.toString("plane"));
+        CGALineIPNS line = new CGALineIPNS(new Point3d(1,2,3), new Vector3d(0,0,1),1d).normalize();
+        System.out.println(line.toString("line"));
+        CGAMultivector m = plane.vee(line);
+        // warum kommt da 0 raus?
+        //FIXME
+        System.out.println(m.toString("intersec point"));
     }
     
     /**

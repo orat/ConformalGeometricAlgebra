@@ -234,4 +234,8 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
         //return result.extractE3ToPoint3d();
         return new CGAEuclideanVector(result);
     }
+    
+    public CGAPlaneIPNS normalize(){
+        return new CGAPlaneIPNS(super.normalize().compress());
+    }
 }
