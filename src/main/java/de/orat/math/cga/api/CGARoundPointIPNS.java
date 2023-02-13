@@ -41,7 +41,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGARoundPointIPNS extends CGAOrientedFiniteRoundIPNS {
+public class CGARoundPointIPNS extends CGARoundIPNS {
     
     public CGARoundPointIPNS(CGAMultivector m){
         super(m.compress());

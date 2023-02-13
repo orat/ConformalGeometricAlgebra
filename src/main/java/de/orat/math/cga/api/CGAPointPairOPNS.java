@@ -19,12 +19,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS implements iCGABivector, iCGAPointPair {
+public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGAPointPair {
     
-    public CGAOrientedPointPairOPNS(CGAMultivector m){
+    public CGAPointPairOPNS(CGAMultivector m){
         super(m);
     }
-    CGAOrientedPointPairOPNS(iCGAMultivector impl){
+    CGAPointPairOPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -42,7 +42,7 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
      * @param point1
      * @param point2
      */
-    public CGAOrientedPointPairOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
+    public CGAPointPairOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
         this(create(point1, point2));
     }
     
@@ -58,7 +58,7 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
      * @param point2
      * @param weight2
      */
-    public CGAOrientedPointPairOPNS(Point3d point1, double weight1, Point3d point2, double weight2){
+    public CGAPointPairOPNS(Point3d point1, double weight1, Point3d point2, double weight2){
         this(create(new CGARoundPointIPNS(point1, weight1), new CGARoundPointIPNS(point2, weight2)));
     }
     
@@ -70,8 +70,8 @@ public class CGAOrientedPointPairOPNS extends CGAOrientedFiniteRoundOPNS impleme
     // etc
     
     @Override
-    public CGAOrientedPointPairIPNS dual(){
-        return new CGAOrientedPointPairIPNS(impl.dual());
+    public CGAPointPairIPNS dual(){
+        return new CGAPointPairIPNS(impl.dual());
     }
     
     

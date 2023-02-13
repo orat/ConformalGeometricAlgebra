@@ -18,12 +18,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS implements iCGATrivector, iCGAPointPair  {
+public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCGAPointPair  {
     
-    public CGAOrientedPointPairIPNS(CGAMultivector m){
+    public CGAPointPairIPNS(CGAMultivector m){
         super(m);
     }
-    CGAOrientedPointPairIPNS(iCGAMultivector impl){
+    CGAPointPairIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -42,10 +42,10 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * @param sphere2
      * @param sphere3
      */
-    public CGAOrientedPointPairIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, CGASphereIPNS sphere3){
+    public CGAPointPairIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2, CGASphereIPNS sphere3){
         this(sphere1.op(sphere2).op(sphere3));
     }
-    public CGAOrientedPointPairIPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
+    public CGAPointPairIPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(p1.op(p2).dual());
     }
     
@@ -65,7 +65,7 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
      * @param weight 
      * @param real true for a real point-pair else for a imaginary point pair
      */
-    public CGAOrientedPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean real){
+    public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean real){
         this(createCGAMultivector(c,n,r,weight, real));
     }
     
@@ -105,8 +105,8 @@ public class CGAOrientedPointPairIPNS extends CGAOrientedFiniteRoundIPNS impleme
     // etc
     
     @Override
-    public CGAOrientedPointPairOPNS undual(){
-        return new CGAOrientedPointPairOPNS(impl.dual().gp(-1));
+    public CGAPointPairOPNS undual(){
+        return new CGAPointPairOPNS(impl.dual().gp(-1));
     }
     
     

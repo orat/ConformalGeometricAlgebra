@@ -13,14 +13,14 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATangentOrRound {
+abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     
     boolean isNormalized = false;
     
-    CGAOrientedFiniteRoundIPNS(CGAMultivector m){
+    CGARoundIPNS(CGAMultivector m){
         super(m);
     }
-    CGAOrientedFiniteRoundIPNS(iCGAMultivector impl){
+    CGARoundIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -86,7 +86,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
      */
     /*public Vector3d attitude(){
         CGAAttitudeOPNS result = attitudeIntern();
-        System.out.println("attitude (CGAOrientedFiniteRoundIPNS)="+result.toString());
+        System.out.println("attitude (CGARoundIPNS)="+result.toString());
         Vector3d res = result.extractE3ToVector3d();
         res.normalize();
         return res;
@@ -191,8 +191,8 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
     }
     public CGAScalarOPNS squaredSizeIntern1(){
         // sign corresponding to errata in Dorst2007
-        CGAScalarOPNS result = CGAOrientedFiniteRoundOPNS.squaredSizeIntern1(this.undual());
-        //System.out.println(result.toString("squaredSizeIntern1 (CGAOrientedFiniteRoundIPNS)"));
+        CGAScalarOPNS result = CGARoundOPNS.squaredSizeIntern1(this.undual());
+        //System.out.println(result.toString("squaredSizeIntern1 (CGARoundIPNS)"));
         return result;
     }
     /**
@@ -206,7 +206,7 @@ abstract class CGAOrientedFiniteRoundIPNS extends CGAKVector implements iCGATang
         // following Hitzer, sollte das bis auf Vorzeichen für circle und sphere funktionieren,
         // möglicherweise auch für pointpair
         //FIXME oder muss ich this.dual() übergeben?
-        return CGAOrientedFiniteRoundOPNS.squaredSizeIntern3(this);
+        return CGARoundOPNS.squaredSizeIntern3(this);
     }
     /**
      * ok for sphereIPNS

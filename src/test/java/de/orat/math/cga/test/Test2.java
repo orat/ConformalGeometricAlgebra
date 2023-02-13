@@ -5,11 +5,11 @@ import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
 import de.orat.math.cga.api.CGAFlatPointOPNS;
-import de.orat.math.cga.api.CGAOrientedCircleIPNS;
-import de.orat.math.cga.api.CGAOrientedCircleOPNS;
+import de.orat.math.cga.api.CGACircleIPNS;
+import de.orat.math.cga.api.CGACircleOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
-import de.orat.math.cga.api.CGAOrientedPointPairOPNS;
+import de.orat.math.cga.api.CGAPointPairOPNS;
 import de.orat.math.cga.api.CGASphereOPNS;
 import de.orat.math.cga.api.CGALineIPNS;
 import de.orat.math.cga.api.CGALinePair;
@@ -17,7 +17,7 @@ import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.api.CGAPlaneIPNS;
-import de.orat.math.cga.api.CGAOrientedPointPairIPNS;
+import de.orat.math.cga.api.CGAPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
 import de.orat.math.cga.api.CGARoundPointOPNS;
 import de.orat.math.cga.api.CGAScalarOPNS;
@@ -255,7 +255,7 @@ public class Test2 {
         double weight2 = -1d;
         
         // 1.
-        CGAOrientedPointPairOPNS ppOPNS = new CGAOrientedPointPairOPNS(p1, weight1, p2, weight2);
+        CGAPointPairOPNS ppOPNS = new CGAPointPairOPNS(p1, weight1, p2, weight2);
         // ppOPNS = (2.0*eo^e1 - 2.0*eo^e2 - 2.0*e1^e2 - 1.0*e1^ei + 1.0*e2^ei) (korrekt)
         System.out.println(ppOPNS.toString("pp"));
         CGAMultivector ppTest = CGAMultivector.createOrigin(2d).op(CGAMultivector.createEx(1d)).sub(
@@ -294,7 +294,7 @@ public class Test2 {
         Vector3d direction = ppOPNS.attitude();
         System.out.println(toString("attitude (pp OPNS)", direction));
         // attitude (round/tangent) = (1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei)
-        // attitude (CGAOrientedPointPairOPNS)=1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei
+        // attitude (CGAPointPairOPNS)=1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei
         // attitude (pp OPNS) = (1.9999999999999996,-1.9999999999999996,0.0)
         // carrier flat (ppOPNS) = (-1.9999999999999987*e1 + 1.9999999999999987*e2)
         //FIXME
@@ -340,7 +340,7 @@ public class Test2 {
         double r = 2d;
         double weight = 3d;
         boolean sign = true;
-        CGAOrientedPointPairIPNS ppIPNS = new CGAOrientedPointPairIPNS(c, n, r, weight, sign);
+        CGAPointPairIPNS ppIPNS = new CGAPointPairIPNS(c, n, r, weight, sign);
         System.out.println(ppIPNS.toString("ppIPNS"));
         testPointPairIPNS(ppIPNS);
         
@@ -351,12 +351,12 @@ public class Test2 {
         Point3d p2 = new Point3d(0d,1d,0d);
         System.out.println(toString("p2",p2));
         double weight2 = -1d;
-        CGAOrientedPointPairOPNS ppOPNS = new CGAOrientedPointPairOPNS(p1, weight1, p2, weight2);
+        CGAPointPairOPNS ppOPNS = new CGAPointPairOPNS(p1, weight1, p2, weight2);
         testPointPairIPNS(ppOPNS.dual());
         System.out.println(ppOPNS.toString("ppOPNS"));
     }
     
-    private void testPointPairIPNS(CGAOrientedPointPairIPNS ppIPNS){
+    private void testPointPairIPNS(CGAPointPairIPNS ppIPNS){
         
         System.out.println("------- test ppp IPNS ---------");
         // location
@@ -438,7 +438,7 @@ public class Test2 {
         assert(p3.equals(p3Test));
         
         // Compose circle from three points (OPNS representation)
-        CGAOrientedCircleOPNS circ = new CGAOrientedCircleOPNS(p1,p2,p3);
+        CGACircleOPNS circ = new CGACircleOPNS(p1,p2,p3);
         // location=1.0*eo^e1^e2 - 1.0*eo^e1^e3 + 1.0*eo^e2^e3 + 1.0*e1^e2^e3 
         // + 0.5*e1^e2^ei - 0.5*e1^e3^ei + 0.5*e2^e3^ei (korrekt)
         System.out.println(circ.toString("circ"));
@@ -592,7 +592,7 @@ public class Test2 {
 
         // You can use the regressive product to calculate intersections..
         //var location = ()=>s&p1;
-        CGAOrientedCircleOPNS c = new CGAOrientedCircleOPNS(s.vee(p));
+        CGACircleOPNS c = new CGACircleOPNS(s.vee(p));
         // ganja.js: location=-1.11e123 - 0.48e124 - 0.03e125 - 0.40e134 + 0.48e135 + 
         // 0.22e145 - 1.11e234 -1.11e235-0.44e245-0.89e345
         // java: location=0.447*eo^e1^e2 - 0.89*eo^e1^e3 - 1.118*e1^e2^e3 
@@ -626,7 +626,7 @@ public class Test2 {
         CGAPlaneIPNS plane = new CGAPlaneIPNS(new Vector3d(0d,0d,1d), 0d,0d);
         System.out.println("plane="+plane.toString());
         //C  = !(up(1.4e1)-.125*ni)&!(1e3),    // right circleIPNS
-        CGAOrientedCircleOPNS C = new CGAOrientedCircleOPNS(S2.vee(plane.dual()));
+        CGACircleOPNS C = new CGACircleOPNS(S2.vee(plane.dual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245 = 1.3e02i + 0.85e12i -e012 (korrekt)
         // java: C=-eo^e1^e2 - 1.34*eo^e2^ei + 0.85*e1^e2^ei
         System.out.println("C="+C.toString());
@@ -651,17 +651,17 @@ public class Test2 {
         
         // The intersections of the big sphereIPNS with the other 4 objects.
         //var C1 = ()=>S&P sphereIPNS meets planeIPNS
-        CGAOrientedCircleOPNS C1 = new CGAOrientedCircleOPNS(S.vee(P));
+        CGACircleOPNS C1 = new CGACircleOPNS(S.vee(P));
         // ganja.js: 0.89e123+e135 = 0.89e123 + 0.5e13i + e013 (korrekt)
         // java: C1=eo^e1^e3 + 0.9*e1^e2^e3 + 0.49*e1^e3^ei
         System.out.println("C1="+C1.toString());
         
         // C2 = ()=>S&L 
-        CGAOrientedPointPairOPNS pp = new CGAOrientedPointPairOPNS(S.vee(L));
+        CGAPointPairOPNS pp = new CGAPointPairOPNS(S.vee(L));
         // java: s&l_OPNS=eo^e1 - 0.89*e1^e2 - 0.5*e1^ei
         // ganja.js: -0.89e12-e15 = 0.89e12-0.5e1i + e01 (korrekt)
         System.out.println("s&l="+pp.toString());
-        CGAOrientedPointPairOPNS ppTest = new CGAOrientedPointPairOPNS(o.op(e1).sub(e1.op(e2).gp(0.89)).
+        CGAPointPairOPNS ppTest = new CGAPointPairOPNS(o.op(e1).sub(e1.op(e2).gp(0.89)).
                 sub(e1.op(inf).gp(0.5d)));
         System.out.println(ppTest.toString("s&l test"));
         //s&l test = (1.0*eo^e1 - 0.89*e1^e2 - 0.5*e1^ei)
@@ -670,20 +670,20 @@ public class Test2 {
         //assertTrue(ppIPNS.equals(ppTest));
         
         // C3 = ()=>S&S2 sphereIPNS meet sphereIPNS
-        CGAOrientedCircleOPNS C3 = new CGAOrientedCircleOPNS(S.vee(S2));
+        CGACircleOPNS C3 = new CGACircleOPNS(S.vee(S2));
         // ganja.js: -1.35e123+1.39e235 = -1.35e123+0.7e23i+1.39e023
         // java: s&s=1.4*eo^e2^e3 - 1.35*e1^e2^e3 - 0.7*e2^e3^ei (korrekt)
         System.out.println("s&s="+C3.toString());
         
         // C4 = ()=>S&C 
-        CGAOrientedPointPairOPNS C4 = new CGAOrientedPointPairOPNS(S.vee(C));
+        CGAPointPairOPNS C4 = new CGAPointPairOPNS(S.vee(C));
         // java s&location=1.39*eo^e2 - 1.35*e1^e2 - 0.69*e2^ei
         // ganja -1.35e12+1.39e25
         // TODO
         System.out.println("s&c="+C4.toString());
         
         // C5 = ()=>C&P2;  circleIPNS meet planeIPNS
-        CGAOrientedPointPairOPNS C5 = new CGAOrientedPointPairOPNS(C.vee(P2));
+        CGAPointPairOPNS C5 = new CGAPointPairOPNS(C.vee(P2));
         // ganja.js: 1.7e12-1.02e24-2.02e25 = 1.7e12 
         // java: location&p1=eo^e2 + 1.7*e1^e2 + 3.23*e2^ei
         //FIXME stimmt nur in einer Komponente überein
@@ -736,7 +736,7 @@ public class Test2 {
         System.out.println("sphere="+sphere.toString());
         // sphereIPNS=-eo^e1^e2^e3 - 1.34*eo^e2^e3^ei - 0.8545*e1^e2^e3^ei
         //TODO
-        CGAOrientedCircleOPNS C = new CGAOrientedCircleOPNS(sphere.vee((
+        CGACircleOPNS C = new CGACircleOPNS(sphere.vee((
                 new CGAPlaneIPNS(new Vector3d(0d,0d,1d),0d, 0d)).dual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245
         // C=-eo^e1^e2 + 1.34*eo^e2^ei + 0.855*e1^e2^ei
@@ -761,14 +761,14 @@ public class Test2 {
         // project point on sphereIPNS
         // var project_point_on_round            = (point,sphereIPNS)=>-point^ni<<sphere<<sphere
         // ()=>project_point_on_round(p1,S), "p1 on S"
-        CGAOrientedPointPairOPNS pOnS = S.project(p);
+        CGAPointPairOPNS pOnS = S.project(p);
         // ganja.js: 0.7e12-1.89e14-0.49e15+0.30e24+0.80e25-1.95e45 = 0.7e12-1.19e1i-1.44e01+0.55e2i-0.5e02+1.95e0i
         // java POnS=-1.4*eo^e1 - 0.5*eo^e2 + 0.7*e1^e2 + 1.96*eo^ei - 1.197*e1^ei + 0.557*e2^ei (korrekt)
         System.out.println("POnS="+pOnS.toString());
         
         //()=>project_point_on_round(~p1,C), "p1 on C",   // point on circleIPNS
         // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
-        CGAOrientedPointPairOPNS pOnC = C.project(new CGARoundPointIPNS(p.conjugate()));
+        CGAPointPairOPNS pOnC = C.project(new CGARoundPointIPNS(p.conjugate()));
         // ganja.js -0.70e12 + 1.89e14+0.49e15+0.30e24+0.80e25-1.95e4 = -0.7e12+1.19e1i-1.44e01+0.55e2i-0.5e02
         // java pOnC=1.4*eo^e1 - 0.5*eo^e2 - 0.7*e1^e2 + 1.96*eo^ei + 1.197*e1^ei + 0.553*e2^ei
         System.out.println("pOnC="+pOnC.toString()); // (korrekt)
@@ -953,7 +953,7 @@ public class Test2 {
         System.out.println("sphere2="+sphere2.toString());
         
         // Circle from two spheres
-        CGAOrientedCircleIPNS circleIPNS = new CGAOrientedCircleIPNS(sphere1, sphere2);
+        CGACircleIPNS circleIPNS = new CGACircleIPNS(sphere1, sphere2);
         Point3d location = new Point3d(0d,0d,0d);
         Vector3d attitudeTest = new Vector3d(-1,0,0);
         // circle=-2.0*eo^e1 - 1.25*e1^ei (grade 2 ok)
@@ -976,18 +976,18 @@ public class Test2 {
         Point3d c = new Point3d(1,0,0);
         attitudeTest = new Vector3d(0,0,-1);
         
-        CGAOrientedCircleOPNS circleOPNS = new CGAOrientedCircleOPNS(point1, point2, point3);
+        CGACircleOPNS circleOPNS = new CGACircleOPNS(point1, point2, point3);
         System.out.println(circleOPNS.toString("circleOPNS2"));
         
         double radiusSquared = 1d;
         double squaredWeight = 4d;
         
-        CGAOrientedCircleIPNS circleIPNS2 = circleOPNS.dual();
+        CGACircleIPNS circleIPNS2 = circleOPNS.dual();
         System.out.println(circleIPNS2.toString("circleIPNS2"));
         
         testCircleIPNS(circleIPNS2, c, radiusSquared, squaredWeight, attitudeTest);
     }
-    private void testCircleIPNS(CGAOrientedCircleIPNS circleIPNS, Point3d c, 
+    private void testCircleIPNS(CGACircleIPNS circleIPNS, Point3d c, 
                                 double radiusSquared, double squaredWeight, Vector3d attitudeTest){
         System.out.println("---------------------------------------------");
         // squared Size
@@ -1233,7 +1233,7 @@ public class Test2 {
         assertTrue(equals(p2,locCP2));
         
         // point-pairs IPNS representation (failed)
-        CGAOrientedPointPairIPNS pp1 = new CGAOrientedPointPairIPNS(cp1,cp2);
+        CGAPointPairIPNS pp1 = new CGAPointPairIPNS(cp1,cp2);
         //RoundAndTangentParameters decomposed3 = pp1.decomposeMotor();
         // loc(pp1) = (Infinity, Infinity, -Infinity) (ERROR)
         //FIXME
@@ -1259,7 +1259,7 @@ public class Test2 {
         assertTrue(equals(p2,location5));
         
         // circles (failed)
-        CGAOrientedCircleIPNS c1 = new CGAOrientedCircleIPNS(s1,s2);
+        CGACircleIPNS c1 = new CGACircleIPNS(s1,s2);
         // c1=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 - 1.0*eo^ei - 0.02*e1^ei - 0.02*e2^ei + 0.49960000000000004*e3^ei
         System.out.println(c1.toString("c1"));
         Point3d location6 = c1.location();
@@ -1282,7 +1282,7 @@ public class Test2 {
         //assertTrue(equals(p1,location7));
         
         // point pair OPNS (failed)
-        CGAOrientedPointPairOPNS pp2 = new CGAOrientedPointPairOPNS(p1, 1d ,p2, 1d);
+        CGAPointPairOPNS pp2 = new CGAPointPairOPNS(p1, 1d ,p2, 1d);
         // ppOPNS=1.0*eo^e3 + 0.02*e1^e3 + 0.02*e2^e3 + 1.5*eo^ei + 0.030000000000000002*e1^ei + 0.030000000000000002*e2^ei + 0.9996*e3^ei
         System.out.println("pp2="+pp2.toString());
         // FIXME e1 und e2 die doppelt so grosse Werte wie erwartet
@@ -1295,7 +1295,7 @@ public class Test2 {
         //assertTrue(equals(p12,location8));
         
          // point-pairs OPNS represenation locationIPNS (failed)
-        CGAOrientedPointPairOPNS pp1OPNS = new CGAOrientedPointPairOPNS(cp1,cp2);
+        CGAPointPairOPNS pp1OPNS = new CGAPointPairOPNS(cp1,cp2);
         Point3d locPPOPNS = pp1OPNS.location();
         // pp1OPNS = (0.06500000000000002,0.06500000000000002,1.4994000000000005)
         // locPPOPNSTest = (0.02,0.02,1.5)
@@ -1313,7 +1313,7 @@ public class Test2 {
         //assertTrue(equals(p1, location9));
         
         // circles
-        CGAOrientedCircleOPNS c1b = new CGAOrientedCircleOPNS(p1,p2,p3);
+        CGACircleOPNS c1b = new CGACircleOPNS(p1,p2,p3);
         System.out.println(c1b.toString("c1b"));
         Point3d location10 = c1b.location();
         System.out.println(toString("loc(c1b)",location10));
@@ -1738,7 +1738,7 @@ public class Test2 {
         System.out.println("sphere2="+sphere2.toString());
         
         // Circle from two spheres
-        CGAOrientedCircleIPNS circleIPNS = new CGAOrientedCircleIPNS(sphere1, sphere2);
+        CGACircleIPNS circleIPNS = new CGACircleIPNS(sphere1, sphere2);
         Point3d location = new Point3d(0d,0d,0d);
         Vector3d attitudeTest = new Vector3d(-1,0,0);
         radiusSquared = 1.25;
@@ -1776,7 +1776,7 @@ public class Test2 {
         Point3d p3 = new Point3d(0d,0d,1d); 
         double weight3 = 1d;
         CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radiusSquared, weight3);
-        CGAOrientedPointPairIPNS ppIPNS = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
+        CGAPointPairIPNS ppIPNS = new CGAPointPairIPNS(sphere1, sphere2, sphere3);
         
         PointPair points = ppIPNS.decomposePoints(); // via undual and following Fernandes
         double r = points.p1().distance(points.p2())/2d;
@@ -1899,7 +1899,7 @@ public class Test2 {
         //System.out.println("sphere2="+sphere2.toString());
         
         // Circle from two spheres
-        CGAOrientedCircleIPNS circleIPNS = new CGAOrientedCircleIPNS(sphere1, sphere2);
+        CGACircleIPNS circleIPNS = new CGACircleIPNS(sphere1, sphere2);
         Point3d location = new Point3d(0d,0d,0d);
         Vector3d attitudeTest = new Vector3d(-1,0,0);
         radiusSquared = 1.25;
@@ -1919,7 +1919,7 @@ public class Test2 {
         Point3d p3 = new Point3d(0d,0d,1d); 
         double weight3 = 1d;
         CGASphereIPNS sphere3 = new CGASphereIPNS(p3, radiusSquared, weight3);
-        CGAOrientedPointPairIPNS ppIPNS = new CGAOrientedPointPairIPNS(sphere1, sphere2, sphere3);
+        CGAPointPairIPNS ppIPNS = new CGAPointPairIPNS(sphere1, sphere2, sphere3);
         
         Vector3d attitudeppIPNS = ppIPNS.attitude();
         System.out.println(toString("attitude (ppIPNS)", attitudeppIPNS));

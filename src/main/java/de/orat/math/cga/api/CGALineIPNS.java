@@ -46,7 +46,7 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         this(plane1.op(plane2));
     }
     
-    public CGALineIPNS(CGAOrientedPointPairIPNS pointPair){
+    public CGALineIPNS(CGAPointPairIPNS pointPair){
         this(pointPair.op(inf));
     }
      

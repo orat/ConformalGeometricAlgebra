@@ -12,12 +12,12 @@ import org.jogamp.vecmath.Point3d;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedCircleOPNS extends CGAOrientedFiniteRoundOPNS implements iCGATrivector {
+public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
     
-    public CGAOrientedCircleOPNS(CGAMultivector m){
+    public CGACircleOPNS(CGAMultivector m){
         super(m);
     }
-    CGAOrientedCircleOPNS(iCGAMultivector m){
+    CGACircleOPNS(iCGAMultivector m){
         super(m);
     }
     /**
@@ -28,7 +28,7 @@ public class CGAOrientedCircleOPNS extends CGAOrientedFiniteRoundOPNS implements
      * @param point2
      * @param point3
      */
-    public CGAOrientedCircleOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2, CGARoundPointIPNS point3){
+    public CGACircleOPNS(CGARoundPointIPNS point1, CGARoundPointIPNS point2, CGARoundPointIPNS point3){
         this(point1.op(point2).op(point3));
     }
     
@@ -39,15 +39,15 @@ public class CGAOrientedCircleOPNS extends CGAOrientedFiniteRoundOPNS implements
      * @param point2
      * @param point3
      */
-    public CGAOrientedCircleOPNS(Point3d point1, Point3d point2, Point3d point3){
+    public CGACircleOPNS(Point3d point1, Point3d point2, Point3d point3){
          this((new CGARoundPointIPNS(point1)).op((new CGARoundPointIPNS(point2))).op((new CGARoundPointIPNS(point3))));
     }
-    public CGAOrientedCircleOPNS(Point3d point1, double weight1, Point3d point2, double weight2, Point3d point3, double weight3){
+    public CGACircleOPNS(Point3d point1, double weight1, Point3d point2, double weight2, Point3d point3, double weight3){
          this((new CGARoundPointIPNS(point1, weight1)).op((new CGARoundPointIPNS(point2, weight2))).op((new CGARoundPointIPNS(point3, weight3))));
     }
    
     @Override
-    public CGAOrientedCircleIPNS dual(){
-        return new CGAOrientedCircleIPNS(impl.dual());
+    public CGACircleIPNS dual(){
+        return new CGACircleIPNS(impl.dual());
     }
 }

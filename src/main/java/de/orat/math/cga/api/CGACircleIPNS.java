@@ -11,12 +11,12 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements iCGABivector {
+public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     
-    public CGAOrientedCircleIPNS(CGAMultivector m){
+    public CGACircleIPNS(CGAMultivector m){
         super(m);
     }
-    protected CGAOrientedCircleIPNS(iCGAMultivector impl){
+    protected CGACircleIPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -39,7 +39,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * @param radius imaginary circle if radius<0
      * @param weight weight
      */
-    public CGAOrientedCircleIPNS(Point3d center, Vector3d normal, double radius, double weight){
+    public CGACircleIPNS(Point3d center, Vector3d normal, double radius, double weight){
         this((new CGASphereIPNS(center, radius, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
     
@@ -49,7 +49,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
      * @param sphere1 first sphere
      * @param sphere2 second sphere
      */
-    public CGAOrientedCircleIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2){
+    public CGACircleIPNS(CGASphereIPNS sphere1, CGASphereIPNS sphere2){
         this(sphere1.op(sphere2));
     }
    
@@ -57,8 +57,8 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
     // etc
     
     @Override
-    public CGAOrientedCircleOPNS undual(){
-        return new CGAOrientedCircleOPNS(impl.dual().gp(-1));
+    public CGACircleOPNS undual(){
+        return new CGACircleOPNS(impl.dual().gp(-1));
     }
     
     
@@ -80,7 +80,7 @@ public class CGAOrientedCircleIPNS extends CGAOrientedFiniteRoundIPNS implements
         //FIXME warum Math.abs()? Warum bekomme ich hier das Vorzeichen nicht?
         CGAMultivector result =  createOrigin(1d).op(inf.ip(this.op(inf)));
         System.out.println(result.toString("weight2 (CGAOrientedCircleIPNS)"));
-        // weight2Intern (CGAOrientedCircleIPNS) = (1.9999999999999991*eo^e1^ei)
+        // weight2Intern (CGACircleIPNS) = (1.9999999999999991*eo^e1^ei)
         return Math.abs(result.norm());
     }
     

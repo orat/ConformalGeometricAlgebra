@@ -10,14 +10,18 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * Rounds are objects with finite areas/volumes/hyperolumes.
  * 
+ * TODO
+ * - welcher code hier ist spezifisch für oriented? diesen auslagern und die Klasse
+ *   hier umbenennen in CGARoundOPNS
+ * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRound {
+class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     
-    CGAOrientedFiniteRoundOPNS(CGAMultivector m){
+    CGARoundOPNS(CGAMultivector m){
         super(m.impl);
     }
-    protected CGAOrientedFiniteRoundOPNS(iCGAMultivector impl){
+    protected CGARoundOPNS(iCGAMultivector impl){
         super(impl);
     }
     
@@ -78,8 +82,8 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
     }
     
     @Override
-    public CGAOrientedFiniteRoundOPNS normalize(){
-        return new CGAOrientedFiniteRoundOPNS(super.normalize());
+    public CGARoundOPNS normalize(){
+        return new CGARoundOPNS(super.normalize());
     }
     
     /**
@@ -90,7 +94,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        CGAOrientedFiniteRoundOPNS m = this.normalize();
+        CGARoundOPNS m = this.normalize();
         //FIXME muss ich wirklich normalisieren?
         CGAScalarOPNS result = new CGAScalarOPNS(m.gp(m.gradeInversion()).div(m.carrierFlat().sqr()).compress()); 
         return result.value();
@@ -167,11 +171,11 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
         return new CGAScalarOPNS(result);
     }
     
-    private CGAOrientedFiniteRoundOPNS toOrigin(){
+    private CGARoundOPNS toOrigin(){
         Vector3d d = new Vector3d(location());
         d.negate();
         CGATranslator t = new CGATranslator(d);
-        return new CGAOrientedFiniteRoundOPNS(t.transform(this));
+        return new CGARoundOPNS(t.transform(this));
     }
     
     @Override
@@ -198,7 +202,7 @@ class CGAOrientedFiniteRoundOPNS extends CGAKVector implements iCGATangentOrRoun
      * @param point if the round is a sphere or the conjugate of the point if the round is a circle
      * @return the projected point = -point^ni<<sphere<<sphere
      */
-    public CGAOrientedPointPairOPNS project(CGARoundPointIPNS point){
-        return new CGAOrientedPointPairOPNS(point.op(inf).lc(this).lc(this).negate());
+    public CGAPointPairOPNS project(CGARoundPointIPNS point){
+        return new CGAPointPairOPNS(point.op(inf).lc(this).lc(this).negate());
     }
 }
