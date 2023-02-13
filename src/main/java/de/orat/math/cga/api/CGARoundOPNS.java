@@ -11,8 +11,7 @@ import org.jogamp.vecmath.Vector3d;
  * Rounds are objects with finite areas/volumes/hyperolumes.
  * 
  * TODO
- * - welcher code hier ist spezifisch für oriented? diesen auslagern und die Klasse
- *   hier umbenennen in CGARoundOPNS
+ * - welcher code hier ist spezifisch für orientedFinite? diesen auslagern?
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -51,6 +50,7 @@ class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
      * attitude (round/tangent) = (1.9999999999999996*e1^ei - 1.9999999999999996*e2^ei)
      * r wird zu -1.75 bestimmt statt 0.5
      * 
+     * bivector
      * circle e.g. carrierFlat = (0.9999999999999993*e1^e2 - 0.9999999999999993*e1^e3 + 0.9999999999999993*e2^e3)
      * 
      * sphere e.g carrierFlat = (-1.9999999999999987*e1^e2^e3)

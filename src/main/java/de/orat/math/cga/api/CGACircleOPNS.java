@@ -46,6 +46,10 @@ public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
          this((new CGARoundPointIPNS(point1, weight1)).op((new CGARoundPointIPNS(point2, weight2))).op((new CGARoundPointIPNS(point3, weight3))));
     }
    
+    public CGABivector carrierFlat(){
+        return new CGABivector(super.carrierFlat());
+    }
+    
     @Override
     public CGACircleIPNS dual(){
         return new CGACircleIPNS(impl.dual());

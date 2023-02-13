@@ -5,11 +5,15 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * (Oriented finite) flats are rounds containing the the infinity inf., e.g. flat
+ * (Oriented finite) flats are rounds containing the infinity inf., e.g. flat
  * points, lines, planes, hyperplanes (k-dimensional flats).
  * 
  * All in outer product null space representation, corresponding to direct flat
  * in Dorst2007.
+ * 
+ * FIXME
+ * - sollte das nicht CGAFlatOPNS sein?
+ * - Warum oriented? warum finite?
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
