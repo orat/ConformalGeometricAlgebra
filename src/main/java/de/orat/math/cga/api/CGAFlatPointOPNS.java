@@ -32,7 +32,7 @@ import org.jogamp.vecmath.Vector3d;
 public class CGAFlatPointOPNS extends CGAOrientedFiniteFlatOPNS implements iCGABivector {
     
     public CGAFlatPointOPNS(CGAMultivector m){
-        super(m);
+        super(m.compress());
     }
    
     /**

@@ -2408,7 +2408,7 @@ public class Test2 {
         l2Dir.normalize();
         n.normalize();
         npi2.cross(l2Dir,n);
-        CGAPlaneIPNS pi2IPNS = new CGAPlaneIPNS(npi2,p3);
+        CGAPlaneIPNS pi2IPNS = new CGAPlaneIPNS(p3,npi2);
         //System.out.println(pi2IPNS.toString("pi2 (IPNS)"));
         CGAPlaneOPNS pi2OPNS = pi2IPNS.undual();
         System.out.println(pi2OPNS.toString("pi2 (OPNS)"));
@@ -2514,13 +2514,11 @@ public class Test2 {
         
         // testweise flat-point aus Schnitt von Ebene und Gerade erzeugen
         //TODO
-        CGAPlaneIPNS plane = new CGAPlaneIPNS(new Point3d(1,2,3), new Vector3d(0,0,1),1d).normalize();
+        CGAPlaneOPNS plane = new CGAPlaneOPNS(new Point3d(1,2,3), new Vector3d(0,0,1)).normalize();
         System.out.println(plane.toString("plane"));
-        CGALineIPNS line = new CGALineIPNS(new Point3d(1,2,3), new Vector3d(0,0,1),1d).normalize();
+        CGALineOPNS line = new CGALineOPNS(new Point3d(1,2,3), new Vector3d(0,0,1)).normalize();
         System.out.println(line.toString("line"));
-        CGAMultivector m = plane.vee(line);
-        // warum kommt da 0 raus?
-        //FIXME
+        CGAFlatPointOPNS m = new CGAFlatPointOPNS(plane.vee(line));
         System.out.println(m.toString("intersec point"));
     }
     

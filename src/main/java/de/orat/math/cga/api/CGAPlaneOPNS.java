@@ -48,17 +48,20 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
      * Create dual plane from a point on the plane an its normal vector (in outer product
      * null space representation).
      * 
+     * FIXME stimmt die create()-methode so überhaupt????
+     * 
      * @param p result on the plane.
      * @param n normal vector.
      */
     public CGAPlaneOPNS(Point3d p, Vector3d n){
         this(create(p,n));
     }
-    
     private static CGAMultivector create(Point3d p, Vector3d n){
-        CGAMultivector cp = new CGARoundPointIPNS(p);
-        CGAMultivector cn = new CGARoundPointIPNS(n);
-        return new CGAMultivector(cp.ip(cn.op(inf)).impl);
+        //TODO vermutlich falsch
+        //CGAMultivector cp = new CGARoundPointIPNS(p);
+        //CGAMultivector cn = new CGARoundPointIPNS(n);
+        //return new CGAMultivector(cp.ip(cn.op(inf)).impl);
+        return (new CGAPlaneIPNS(p, n)).undual();
     }
     
     @Override

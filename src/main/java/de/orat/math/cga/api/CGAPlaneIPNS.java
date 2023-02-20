@@ -82,7 +82,7 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * @param n normalized vector of the plane
      * @param p point laying in the plane
      */
-    public CGAPlaneIPNS(Vector3d n, Point3d p){
+    public CGAPlaneIPNS(Point3d p, Vector3d n){
         this(n,(new Vector3d(p)).dot(n));
     }
    
