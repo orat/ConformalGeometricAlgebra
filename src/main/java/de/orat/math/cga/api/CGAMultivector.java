@@ -28,11 +28,11 @@ public class CGAMultivector {
     iCGAMultivector impl;
     
     // do not change the scale of the following static constants
-    static final CGAMultivector o = createOrigin(1d);
-    static final CGAMultivector inf = createInf(1d);
-    static final CGAMultivector I3 = createI3();
-    static final CGAMultivector I3i = I3.inverse();
-    static final CGAMultivector Ii = o.op(I3i).op(inf);
+    public static final CGAMultivector o = createOrigin(1d);
+    public static final CGAMultivector inf = createInf(1d);
+    public static final CGAMultivector I3 = createI3();
+    public static final CGAMultivector I3i = I3.inverse();
+    public static final CGAMultivector Ii = o.op(I3i).op(inf);
     public static final CGAMultivector I0 = inf.op(o);
     
     CGAMultivector(){
@@ -123,7 +123,7 @@ public class CGAMultivector {
         return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     
-    double[] extractCoordinates(){
+    public double[] extractCoordinates(){
         return impl.extractCoordinates();
     }
     /**

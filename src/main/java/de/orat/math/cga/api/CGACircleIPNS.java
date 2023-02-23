@@ -42,7 +42,9 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     public CGACircleIPNS(Point3d center, Vector3d normal, double radius, double weight){
         this((new CGASphereIPNS(center, radius, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
-    
+    public CGACircleIPNS(Point3d center, Vector3d normal, double radius){
+         this(center, normal, radius, 1d);
+    }
     /**
      * Create a circle by intersection of two spheres.
      * 

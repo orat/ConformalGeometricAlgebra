@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Flat points (grade-3). 
+ * Flat points (grade 3). 
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -24,6 +24,9 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAT
      */
     public CGAFlatPointIPNS(Point3d c, double weight){
         this(create(c, weight));
+    }
+    public CGAFlatPointIPNS(Point3d c){
+        this(create(c, 1d));
     }
     
     /**

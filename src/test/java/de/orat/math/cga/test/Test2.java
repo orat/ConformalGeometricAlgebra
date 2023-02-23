@@ -33,6 +33,7 @@ import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.orat.math.cga.api.CGAMultivector.I0;
+import static de.orat.math.cga.api.CGAMultivector.I3;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGAScalor;
 
@@ -2513,13 +2514,20 @@ public class Test2 {
         
         
         // testweise flat-point aus Schnitt von Ebene und Gerade erzeugen
-        //TODO
         CGAPlaneOPNS plane = new CGAPlaneOPNS(new Point3d(1,2,3), new Vector3d(0,0,1)).normalize();
         System.out.println(plane.toString("plane"));
         CGALineOPNS line = new CGALineOPNS(new Point3d(1,2,3), new Vector3d(0,0,1)).normalize();
         System.out.println(line.toString("line"));
         CGAFlatPointOPNS m = new CGAFlatPointOPNS(plane.vee(line));
         System.out.println(m.toString("intersec point"));
+        CGAMultivector meuclid = I0.lc(m.op(o));
+        // falsches Vorzeichen
+        //FIXME
+        System.out.println(meuclid.toString("intersec point euclid 1"));
+        
+        CGAMultivector meuclid2 = o.lc(m).div(m);
+        System.out.println(meuclid2.toString("intersec point euclid 2"));
+        
     }
     
     /**

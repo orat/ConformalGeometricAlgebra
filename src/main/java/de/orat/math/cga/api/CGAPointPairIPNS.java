@@ -61,12 +61,21 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      * 
      * @param c center
      * @param n normal
-     * @param r radius
+     * @param r radius > 0
      * @param weight 
      * @param real true for a real point-pair else for a imaginary point pair
      */
     public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean real){
         this(createCGAMultivector(c,n,r,weight, real));
+    }
+    public CGAPointPairIPNS(Point3d c, Vector3d n, double r, boolean real){
+        this(createCGAMultivector(c,n,r,1d, real));
+    }
+    public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight){
+        this(createCGAMultivector(c,n,r,weight));
+    }
+    public CGAPointPairIPNS(Point3d c, Vector3d n, double r){
+        this(createCGAMultivector(c,n,r,1d));
     }
     
     // The given multivector m is not of grade 3! 4.5*e1^e2^ei - 3.0*eo^e1^e2^ei
@@ -100,7 +109,44 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(weight).gp(createI3());
         return result;
     }
-    
+    /**
+     * Create point pair in ipns representation based on euclidean objects.
+     * 
+     * @param center
+     * @param normal
+     * @param r >0 for real pointpair, <0 for imaginary pointpait
+     * @param weight
+     * @return 
+     */
+    private static CGAMultivector createCGAMultivector(Point3d center, Vector3d normal, 
+            double r, double weight){
+        CGAMultivector o = createOrigin(1d);
+        CGAMultivector no_inf = o.op(inf);
+        CGAMultivector c = createE3(center);
+        CGAMultivector n = createE3(normal);
+        CGAMultivector sr2;
+        
+        if (r<0){
+            sr2 = new CGAScalarOPNS(-r*r);
+        } else {
+            sr2 = new CGAScalarOPNS(r*r);
+        }
+        // code scheint nicht mit der Formel im pdf übereinzustimmen
+        // (das erste "-" ist im pdf ein "+"
+        // local blade = weight * ( no ^ normal + center ^ normal ^ no_ni - ( center .. normal ) -
+        //( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
+        
+
+        //return o.op(n).add(c.op(n).op(no_inf).sub(c.ip(n))).sub(c.ip(n).gp(c).
+        //        sub(c.ip(c).add(sr2)).gp(n).gp(0.5d)).op(inf)
+        //        .gp(createI3()).gp(weight);
+        
+        CGAMultivector a =  o.op(n).add(c.op(n).op(no_inf)).sub(c.ip(n));
+        CGAMultivector b = c.ip(n).gp(c);
+        CGAMultivector d = c.ip(c).add(sr2).gp(0.5).gp(n);
+        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(weight).gp(createI3());
+        return result;
+    }
     
     // etc
     

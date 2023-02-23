@@ -50,8 +50,8 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         this(pointPair.op(inf));
     }
      
-    public CGALineIPNS(CGARoundPointIPNS point, CGAAttitudeVectorOPNS direction){
-        this(point.op(direction));
+    public CGALineIPNS(CGARoundPointIPNS point, CGAAttitudeVectorOPNS attitude){
+        this(point.op(attitude));
     }
     
     /**
@@ -59,17 +59,23 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @param c location
-     * @param direction normalized direction
+     * @param attitude normalized attitude
      * @param weight 
-     * @throws IllegalArgumentException if direction is (0,0,0)
+     * @throws IllegalArgumentException if attitude is (0,0,0)
      */
-    public CGALineIPNS(Point3d c, Vector3d direction, double weight){
+    public CGALineIPNS(Point3d c, Vector3d attitude, double weight){
         // FIXME
         // ungeklärt, was passiert wenn c=(0,0,0)--> das sollte möglich sein
         // local blade = weight * ( normal + ( center ^ normal ) * ni ) * i
-        this(createE3(direction).add(createE3(c).op(createE3(direction)).gp(inf)).
+        this(createE3(attitude).add(createE3(c).op(createE3(attitude)).gp(inf)).
                 gp(createI3()).gp(weight));
     }
+    public CGALineIPNS(Point3d c, Vector3d attitude){
+        this(c, attitude, 1d);
+    }
+    
+    //TODO
+    // durch zwei Punkte konstruieren?
     
     public CGALineIPNS(CGABivector B, double d){
         this(B.add(createInf(d)));

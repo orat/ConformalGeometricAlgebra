@@ -15,6 +15,9 @@ public class CGAOrientedPointIPNS extends CGACircleIPNS{
     protected CGAOrientedPointIPNS(iCGAMultivector impl){
         super(impl);
     }
+    public CGAOrientedPointIPNS(Point3d p, Vector3d v){
+        super(create(v,p));
+    }
     //TODO
     // not yet tested!!!
     private static CGAMultivector create(Vector3d v, Point3d p){
