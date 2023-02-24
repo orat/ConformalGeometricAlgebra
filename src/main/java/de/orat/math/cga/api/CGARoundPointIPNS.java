@@ -94,7 +94,7 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
      */
     private static CGAMultivector create(Tuple3d p, double weight){
         // old version
-        CGAMultivector result = (createOrigin(1d)
+        CGAMultivector result = (o
                 .add(createEx(p.x))
                 .add(createEy(p.y))
                 .add(createEz(p.z))

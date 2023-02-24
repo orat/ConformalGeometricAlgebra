@@ -30,9 +30,6 @@ public class CGAScalarIPNS extends CGAKVector implements iCGAScalarIPNS {
         return decomposeScalar();
     }
     
-    /*public CGAKVector dual(){
-        throw new RuntimeException("not allowed - used undual() instead!");
-    }*/
     public CGAScalarOPNS undual(){
         return new CGAScalarOPNS(super.undual());
     }

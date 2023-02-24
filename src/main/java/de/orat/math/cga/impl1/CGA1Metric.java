@@ -77,6 +77,14 @@ public class CGA1Metric {
         return gradeCoordinatesMap.get(bitsetMap.get(bitset));
     }
     
+    public String[] basisBladeNames(){
+        String[] result = new String[]{"","e0","e1","e01","e2","e02","e12","e012","e03","e13","e013" };
+        /*result[0]=""; // scalar
+        for (int i=1;i<32;i++){
+            
+        }*/
+        return result;
+    }
     /**
      * Create index table for CGA.
      * 

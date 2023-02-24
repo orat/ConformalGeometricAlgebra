@@ -496,6 +496,8 @@ public interface iCGAMultivector {
     public double[] extractCoordinates(int grade);
     public void setCoordinates(int grade, double[] values);
     
+    public String[] basisBladeNames();
+    
     public iCGAMultivector exp();
    
 }

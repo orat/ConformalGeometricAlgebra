@@ -126,6 +126,10 @@ public class CGAMultivector {
     public double[] extractCoordinates(){
         return impl.extractCoordinates();
     }
+    public String[] basisBladeNames(){
+        return impl.basisBladeNames();
+    }
+    
     /**
      * Comparison of two multivectors.
      * 

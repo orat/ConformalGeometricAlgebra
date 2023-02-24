@@ -2491,12 +2491,35 @@ public class Test2 {
     public void testScalar(){
         System.out.println("----------------- test Scalar --------------------");
         CGAScalarOPNS test = new CGAScalarOPNS(3d);
-        System.out.println(test.toString("scalar"));
+        System.out.println(test.toString("scalar (opns)"));
         CGAScalarIPNS test2 = test.dual();
-        System.out.println(test2.toString("scalar.dual"));
-        System.out.println("scalar.dual.decompose "+String.valueOf(test2.value()));
+        System.out.println(test2.toString("scalar (opns).dual()"));
+        System.out.println("scalar (opns).dual().decompose() "+String.valueOf(test2.value()));
         test = test2.undual();
-        System.out.println("scalar.dual.undual.decompose "+String.valueOf(test.value()));
+        System.out.println("scalar (opns).dual().undual().decompose()"+String.valueOf(test.value()));
+        
+        // ipns
+        CGAScalarIPNS test3 = new CGAScalarIPNS(4d);
+        System.out.println(test3.toString("scalar (ipns)"));
+        double[] coordinates = test3.extractCoordinates();
+        System.out.println(toString("test3", coordinates));
+        CGAScalarOPNS test4 = test3.undual();
+        System.out.println(test4.toString("scalar (ipns).undual()"));
+        coordinates = test4.extractCoordinates();
+        System.out.println(toString("test4", coordinates));
+    }
+    
+    public static String toString(String name, double[] coordinates){
+        StringBuilder result = new StringBuilder();
+        result.append(name);
+        result.append("=(");
+        for (int i=0;i<coordinates.length;i++){
+            result.append(String.valueOf(coordinates[i]));
+            result.append(",");
+        }
+        result.deleteCharAt(result.length()-1);
+        result.append(")");
+        return result.toString();
     }
     
     public void testFlatPoints(){

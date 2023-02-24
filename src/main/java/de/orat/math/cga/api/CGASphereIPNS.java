@@ -28,10 +28,9 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     // composition
     
     /**
-     * Create sphere in inner product null space representation 
-     * (grade 1 multivector).
+     * Create sphere in inner product null space representation (grade 1).
      * 
-     * Multiplication of the resulting multivector by double alpha is possible.
+     * Multiplication of the resulting multivector by a double alpha is possible.
      * 
      * Dorst2007 page 363 == Hildenbrand1998 page 29
      * 
@@ -41,19 +40,31 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     public CGASphereIPNS(CGARoundPointIPNS location, double r){
         this(create(location, r));
     }
+    /**
+     * Create a real or imaginary normalized sphere.
+     * 
+     * @param location
+     * @param r, if r<0 create a imaginary sphere
+     * @return sphere
+     */
     // (P,r)=>!(P-r**2*.5*ni)
-    private static CGAMultivector create(CGARoundPointIPNS location, double r){
+    private static CGASphereIPNS create(CGARoundPointIPNS location, double r){
         if (!location.isNormalized()) throw new IllegalArgumentException("The given location is not normalized!");
-        CGARoundPointIPNS result = new CGARoundPointIPNS(location.sub(createInf(0.5*r*r)));
+        CGASphereIPNS result;
+        if (r>0){
+            result = new CGASphereIPNS(location.sub(createInf(0.5*r*r)));
+        // imaginary sphere
+        } else {
+            result = new CGASphereIPNS(location.add(createInf(0.5*r*r)));
+        }
         result.isNormalized = true;
         return result;
     }
     
     /**
-     * Create sphere in inner product null space representation 
-     * (grade 1 multivector).
+     * Create sphere in inner product null space representation (grade 1).
      * 
-     * @param location multivector representation of a point
+     * @param location multivector ipns representation of a point
      * @param r radius of the sphere, r<0 if imaginary sphere
      * @param weight weight2
      */
@@ -96,7 +107,7 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
         CGAMultivector test2 = c.ip(c);
         System.out.println(test1.toString("CGASphereIPNS test1"));
         System.out.println(test2.toString("CGASphereIPNS test2"));*/
-        return createOrigin(1d).add(c).add(c.ip(c).sub(sr2).gp(createInf(0.5d))).gp(weight);
+        return o.add(c).add(c.ip(c).sub(sr2).gp(createInf(0.5d))).gp(weight);
     }
     
     /**
