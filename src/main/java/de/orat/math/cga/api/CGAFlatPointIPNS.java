@@ -46,7 +46,9 @@ public class CGAFlatPointIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAT
      */
     private static CGAMultivector create(Point3d c, double weight){
         // local blade = weight * ( 1 - center ^ ni ) * i
-        return (new CGAScalarOPNS(1d)).sub(createE3(c).op(inf)).gp(createI3()).gp(weight);
+        //return (new CGAScalarOPNS(1d)).sub(createE3(c).op(inf)).gp(I3).gp(weight);
+        // umgedreht damit Vorzeichen zur opns represenation passt
+        return (createE3(c).op(inf).sub(new CGAScalarOPNS(1d))).gp(I3).gp(weight);
     }
     
     

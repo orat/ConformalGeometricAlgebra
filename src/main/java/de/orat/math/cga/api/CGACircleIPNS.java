@@ -60,7 +60,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     
     @Override
     public CGACircleOPNS undual(){
-        return new CGACircleOPNS(impl.dual().gp(-1));
+        return new CGACircleOPNS(super.undual().compress()); //impl.dual().gp(-1));
     }
     
     

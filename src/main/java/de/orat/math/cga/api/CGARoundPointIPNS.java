@@ -235,6 +235,6 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
     
     @Override
     public CGARoundPointOPNS undual(){
-        return new CGARoundPointOPNS(impl.dual().gp(-1));
+        return new CGARoundPointOPNS(super.undual().compress());//impl.dual().gp(-1));
     }
 }

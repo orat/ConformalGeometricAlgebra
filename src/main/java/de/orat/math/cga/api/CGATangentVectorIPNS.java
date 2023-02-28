@@ -46,7 +46,7 @@ public class CGATangentVectorIPNS extends CGATangentIPNS implements iCGATrivecto
     
     @Override
     public CGATangentVectorOPNS undual(){
-        return new CGATangentVectorOPNS(super.undual());
+        return new CGATangentVectorOPNS(super.undual().compress());
     }
     
     /**

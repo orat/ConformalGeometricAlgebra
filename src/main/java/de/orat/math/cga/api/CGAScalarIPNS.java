@@ -31,6 +31,6 @@ public class CGAScalarIPNS extends CGAKVector implements iCGAScalarIPNS {
     }
     
     public CGAScalarOPNS undual(){
-        return new CGAScalarOPNS(super.undual());
+        return new CGAScalarOPNS(super.undual().compress());
     }
 }

@@ -96,7 +96,7 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     
     @Override
     public CGALineOPNS undual(){
-        return new CGALineOPNS(impl.dual().gp(-1));
+        return new CGALineOPNS(super.undual().compress());//impl.dual().gp(-1));
     }
     
     /**

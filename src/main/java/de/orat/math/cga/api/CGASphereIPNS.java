@@ -233,7 +233,7 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     
     @Override
     public CGASphereOPNS undual(){
-        return new CGASphereOPNS(impl.dual().gp(-1));
+        return new CGASphereOPNS(super.undual().compress());//impl.dual().gp(-1));
     }
     
     public boolean isImaginary(){

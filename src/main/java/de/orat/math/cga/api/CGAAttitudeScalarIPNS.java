@@ -41,7 +41,7 @@ public class CGAAttitudeScalarIPNS extends CGAAttitudeIPNS {
     }
     
     public CGAAttitudeScalarOPNS undual(){
-        return new CGAAttitudeScalarOPNS(super.dual().negate().compress());
+        return new CGAAttitudeScalarOPNS(super.undual()/*dual().negate()*/.compress());
     }
     
     

@@ -34,6 +34,6 @@ public class CGAAttitudeIPNS extends CGAKVector implements iCGAAttitude {
     
     @Override
     public CGAAttitudeOPNS undual(){
-        return (CGAAttitudeOPNS) super.undual();
+        return new CGAAttitudeOPNS(super.undual().compress());
     }
 }

@@ -191,7 +191,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     }
     public CGAScalarOPNS squaredSizeIntern1(){
         // sign corresponding to errata in Dorst2007
-        CGAScalarOPNS result = CGARoundOPNS.squaredSizeIntern1(this.undual());
+        CGAScalarOPNS result = CGARoundOPNS.squaredSizeIntern1(undual());
         //System.out.println(result.toString("squaredSizeIntern1 (CGARoundIPNS)"));
         return result;
     }

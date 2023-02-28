@@ -236,14 +236,6 @@ public interface iCGAMultivector {
          return ip(createI(),LEFT_CONTRACTION);
     }
     
-    /**
-     * Determination of outer product null space representation form inner product
-     * null space representation.
-     * 
-     * @return outer product null space representation
-     */
-    //public iCGAMultivector undual();
-
     public double scalarPart();
     
     public boolean isNull();

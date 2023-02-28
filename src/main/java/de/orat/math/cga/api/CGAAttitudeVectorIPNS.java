@@ -42,7 +42,7 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     }
     @Override
     protected CGAAttitudeVectorOPNS attitudeIntern(){
-        return this.undual();
+        return undual();
     }
     
     
@@ -59,6 +59,6 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     
     @Override
     public CGAAttitudeVectorOPNS undual(){
-        return new CGAAttitudeVectorOPNS(impl.dual().gp(-1d));
+        return new CGAAttitudeVectorOPNS(super.undual().compress()/*dual().gp(-1d)*/);
     }
 }

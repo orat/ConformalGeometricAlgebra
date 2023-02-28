@@ -152,7 +152,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     
     @Override
     public CGAPointPairOPNS undual(){
-        return new CGAPointPairOPNS(impl.dual().gp(-1));
+        return new CGAPointPairOPNS(super.undual().compress());//impl.dual().gp(-1));
     }
     
     

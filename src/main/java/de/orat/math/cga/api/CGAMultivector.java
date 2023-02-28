@@ -32,6 +32,7 @@ public class CGAMultivector {
     public static final CGAMultivector inf = createInf(1d);
     public static final CGAMultivector I3 = createI3();
     public static final CGAMultivector I3i = I3.inverse();
+    public static final CGAMultivector I = createI();
     public static final CGAMultivector Ii = o.op(I3i).op(inf);
     public static final CGAMultivector I0 = inf.op(o);
     
@@ -163,12 +164,14 @@ public class CGAMultivector {
      * 
      * @return the multivector representing the pseudoscalar
      */
-    public static CGAMultivector createI(){
+    private static CGAMultivector createI(){
         // da könnte ich doch gleich den richtigen Blade in einem Schritt erzeugen
         //FIXME
-        return createOrigin(1d).op(createEx(1d))
+        // neu 28.2.23 Methode der Implementierung verwenden
+        return new CGAMultivector(defaultInstance.impl.createI());
+        /*return createOrigin(1d).op(createEx(1d))
                 .op(createEy(1d)).op(createEz(1d))
-                .op(inf);
+                .op(inf);*/
     }
    
     public static CGAMultivector createE(double value){
@@ -454,7 +457,7 @@ public class CGAMultivector {
      * the correct sign.
      */
     public CGAMultivector undual(){
-        return new CGAMultivector(impl.dual().gp(-1));
+        return new CGAMultivector(impl.undual());//impl.dual().gp(-1));
     }
     
     /**

@@ -157,7 +157,8 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     
     @Override
     public CGAPlaneOPNS undual(){
-        return new CGAPlaneOPNS((new CGAMultivector(impl.dual().gp(-1))).compress());
+        //return new CGAPlaneOPNS((new CGAMultivector(impl.dual().gp(-1))).compress());
+        return new CGAPlaneOPNS(super.undual().compress());
     }
     
     

@@ -103,8 +103,8 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector implements iCGAFlat 
     public abstract Vector3d attitude();
     
     
-    /*public CGAFlat undual(){
-        return new CGAFlat(impl.undual());
+    /*public CGAOrientedFiniteFlatIPNS undual(){
+        return new CGAOrientedFiniteFlatIPNS(super.undual().compress());
     }*/
     
     /**

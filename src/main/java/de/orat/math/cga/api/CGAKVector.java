@@ -105,7 +105,7 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
     public CGAKVector undual(){
         //FIXME ist hier Vorzeichen mit gp(-1) überhaupt richtig, oder muss das
         // nicht eine formel sein, die vom grade abhängt?
-        return new CGAKVector(impl.dual().gp(-1));
+        return new CGAKVector(super.undual().compress()); //impl.dual().gp(-1));
     }
     @Override
     public CGAKVector dual(){
