@@ -1,6 +1,7 @@
 package de.orat.math.cga.spi;
 
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
+import de.orat.math.ga.basis.Multivector;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
@@ -26,8 +27,14 @@ public interface iCGAMultivector {
     default iCGAMultivector createE(Tuple3d p){
         return createEx(p.x).add(createEy(p.y)).add(createEz(p.z));
     }
+    /**
+     * Creates the pseudo scalar.
+     * 
+     * @return pseudo scalar
+     */
     // the pseudo scalar is always the last blade
-    default iCGAMultivector createPseudoScalar(){
+    // wird bisher nur von meet verwendet
+    default iCGAMultivector createI(){
         double[] values = new double[32];
         values[31] = 1d;
         return create(values);
@@ -140,7 +147,7 @@ public interface iCGAMultivector {
      * @return a new element from the meet with the specified element.
      */
     default iCGAMultivector meet(iCGAMultivector mv){
-        return (gp(createPseudoScalar()).ip(this, LEFT_CONTRACTION));
+        return (gp(createI()).ip(this, LEFT_CONTRACTION));
     }
     
     /**
@@ -219,11 +226,15 @@ public interface iCGAMultivector {
      * 
      * The dual operation is an automorphism and almost (up to a sign) an involution.
      * 
-     * @return a new element that is the dual of this element.
+     * @return a new element that is the dual of this element (up to a sign).
      */
     public /*default*/ iCGAMultivector dual();//{
-    //   return gp(createPseudoScalar().reverse());
+    //   return gp(createI().reverse()); //???
+    //    return ip(createI().versorInverse(),LEFT_CONTRACTION);
     //}
+    public default iCGAMultivector undual(){
+         return ip(createI(),LEFT_CONTRACTION);
+    }
     
     /**
      * Determination of outer product null space representation form inner product

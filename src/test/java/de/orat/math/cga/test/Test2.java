@@ -78,10 +78,9 @@ public class Test2 {
     public static CGAMultivector e2 = CGAMultivector.createEy(1d);
     public static CGAMultivector e3 = CGAMultivector.createEz(1d);
     
-    public Test2() {
-    }
+    public Test2() {}
 
-    private boolean equals(double a, double b){
+    private static boolean equals(double a, double b){
         boolean result = true;
         if (Math.abs(a-b) > epsilon){
             result = false;
@@ -627,7 +626,9 @@ public class Test2 {
         CGAPlaneIPNS plane = new CGAPlaneIPNS(new Vector3d(0d,0d,1d), 0d,0d);
         System.out.println("plane="+plane.toString());
         //C  = !(up(1.4e1)-.125*ni)&!(1e3),    // right circleIPNS
-        CGACircleOPNS C = new CGACircleOPNS(S2.vee(plane.dual()));
+        //7 28.2.23 wechsel auf undual 
+        //TODO test
+        CGACircleOPNS C = new CGACircleOPNS(S2.vee(plane.undual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245 = 1.3e02i + 0.85e12i -e012 (korrekt)
         // java: C=-eo^e1^e2 - 1.34*eo^e2^ei + 0.85*e1^e2^ei
         System.out.println("C="+C.toString());
@@ -724,10 +725,13 @@ public class Test2 {
         
         // S  = sphereIPNS(up(-1.4e1),.5),            // left sphereIPNS
         // sphereIPNS = (P,r)=>!(P-r**2*.5*ni)
-        CGASphereOPNS S = new CGASphereOPNS((new CGASphereIPNS(new Point3d(-1.4d,0d,0d),0.5)).dual());
+        CGASphereOPNS S = (new CGASphereIPNS(new Point3d(-1.4d,0d,0d),0.5)).undual();
         // java S*=1.0*eo - 1.4*e1 + 0.85*ei
         // java S=-eo^e1^e2^e3 + 1.34*eo^e2^e3^ei - 0.856*e1^e2^e3^ei
         // ganja: -1.35e1234-0.35e1235-1.39e2345 = -0.8e123i-e0123+1.4e023i (korrekt)
+        //27.2.23 dual --> undual
+        //TODO
+        // überprüfen, ob das jetzt noch so stimmt, Vorzeichen?
         System.out.println("S="+S.toString());
         
         // sphereIPNS = (P,r)=>!(P-r**2*.5*ni)
@@ -738,7 +742,7 @@ public class Test2 {
         // sphereIPNS=-eo^e1^e2^e3 - 1.34*eo^e2^e3^ei - 0.8545*e1^e2^e3^ei
         //TODO
         CGACircleOPNS C = new CGACircleOPNS(sphere.vee((
-                new CGAPlaneIPNS(new Vector3d(0d,0d,1d),0d, 0d)).dual()));
+                new CGAPlaneIPNS(new Vector3d(0d,0d,1d),0d, 0d)).undual()));
         // ganja.js: 1.35e124+0.35e125+1.39e245
         // C=-eo^e1^e2 + 1.34*eo^e2^ei + 0.855*e1^e2^ei
         System.out.println("C="+C.toString());
@@ -1149,13 +1153,9 @@ public class Test2 {
         System.out.println(toString("squaredRadius2 (sphereIPNS)", squaredRadius5)); // 4.0 stimmt
         assertTrue(equals(radius*radius,squaredRadius5));
         
-        // squaredSizeIntern1/squaredRadius
-        // squaredSizeIntern1/radiusSquared = (4.2500000000000036) (failed)
-        // wenn Kugel im Ursprung: radius2squared = 5.000000000000004 (failed)
-        // auch wenn zusätzlich weight auf 1 gesetzt wurde, ändert sich nichts
         double squaredRadius = sphereIPNS.squaredSize();
         System.out.println(toString("squaredRadius (sphereIPNS)", squaredRadius)); // failed
-        //assertTrue(equals(radiusSquared*radiusSquared,squaredRadius));
+        assertTrue(equals(radius*radius,squaredRadius));
         
         
         // locationIPNS
@@ -2361,22 +2361,20 @@ public class Test2 {
         
         CGAMultivector u1CGA = inf.lc(l1).rc(o).normalize();
         System.out.println(u1CGA.toString("u1CGA"));
-        Vector3d u1vec = u1CGA.extractE3ToVector3d();
-        System.out.println(toString("u1vec",u1vec));
-        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
-         
+        Vector3d u1CGAAsVector3d = u1CGA.extractE3ToVector3d();
+        System.out.println(toString("u1CGA (as Vector3d)",u1CGAAsVector3d));
+        
+        // Kleppe2016 hat anderes Vorzeichen als erwartet
         CGAMultivector u1CGAa = l1.rc(o).rc(inf).normalize();
-        // Kleppe2016 hat anderes Vorzeichen
         System.out.println(u1CGAa.toString("u1CGA [Kleppe2016]"));
         
         CGAMultivector u2CGA = inf.lc(l2).rc(o).normalize();
         System.out.println(u2CGA.toString("u2CGA"));
         Vector3d u2vec = u2CGA.extractE3ToVector3d();
-        System.out.println(toString("u2vec",u2vec));
-        // hat anderes Vorzeichen als erwartet, vielleicht ist doch Kleppe richtig
+        System.out.println(toString("u2CGA (as Vector3d)",u2vec));
         
+        // Kleppe2016 hat anderes Vorzeichen als erwartet
         CGAMultivector u2CGAa = l2.rc(o).rc(inf).normalize();
-        // Kleppe2016 hat anderes Vorzeichen
         System.out.println(u2CGAa.toString("u2CGA [Kleppe2016]"));
         
         // "Common normal" mit CGA (funktioniert nicht für parallele Linien)
@@ -2529,6 +2527,8 @@ public class Test2 {
         System.out.println(fp1.dual().toString("to ipns"));
         
         CGAFlatPointIPNS fp2 = new CGAFlatPointIPNS(new Point3d(1,2,3),1d);
+        // f1= 2.9999999999999996e124-1.9999999999999996e134+0.9999999999999998e23)
+        // f2= 1.0e123+2.9999999999999996e124-1.9999999999999996e134+0.9999999999999998e23)
         System.out.println(fp2.toString("flatpoint ipns"));
         System.out.println(fp2.undual().toString("to opns"));
         

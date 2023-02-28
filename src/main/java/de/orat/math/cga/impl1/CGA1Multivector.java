@@ -134,7 +134,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     public double[] extractCoordinates(){
         CGA1Metric indexTable = CGA1Metric.getInstance();
         double[] result = new double[32]; //new double[Util.binominal(n, grade)];
-        List<ScaledBasisBlade> gblades = this.getBlades(); //                             extractBlades(new int[]{0,1,2,3,4,5});
+        List<ScaledBasisBlade> gblades = this.getBlades(); // extractBlades(new int[]{0,1,2,3,4,5});
         for (int i=0;i<gblades.size();i++){
             ScaledBasisBlade basisBlade = gblades.get(i);
             result[indexTable.getIndex(basisBlade.bitmap)] = basisBlade.scale;
@@ -301,11 +301,14 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     public iCGAMultivector dual() {
         return new CGA1Multivector(super.dual(CGA_METRIC));
     }
-    /*@Override
+    @Override
+    public CGA1Multivector createI(){
+        return new CGA1Multivector(super.createI(CGA_METRIC));
+    }
+    @Override
     public iCGAMultivector undual(){
-        //return new CGA1Multivector(super.undual(CGA_METRIC));
-         return new CGA1Multivector(super.dual(CGA_METRIC).gp(-1));
-    }*/
+        return new CGA1Multivector(super.undual(CGA_METRIC));
+    }
     /**
      * Unit multivector.
      * 

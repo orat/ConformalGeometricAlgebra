@@ -77,12 +77,9 @@ public class CGA1Metric {
         return gradeCoordinatesMap.get(bitsetMap.get(bitset));
     }
     
-    public String[] basisBladeNames(){
-        String[] result = new String[]{"","e0","e1","e01","e2","e02","e12","e012","e03","e13","e013" };
-        /*result[0]=""; // scalar
-        for (int i=1;i<32;i++){
-            
-        }*/
+    public static String[] basisBladeNames(){
+        String[] result = new String[]{"","e0", "e1","e2","e3","einf","e01","e02","e03","e0i","e12","e13","e1i","e23","e2i","e3i","e012","e013",
+        "e01i","e023","e02i","e03i","e123","e12i","e13i","e23i","e0123","e012i","e013i","e023i","e123i","e0123i"};
         return result;
     }
     /**
@@ -99,7 +96,7 @@ public class CGA1Metric {
         gradeCoordinatesMap.put(0,0);
         // vectors
         bitsetMap.put(1,1);
-        gradeCoordinatesMap.put(1,0); // n0 // gaalop e1
+        gradeCoordinatesMap.put(1,0); // e0, n0 // gaalop e1
         bitsetMap.put(2,2);
         gradeCoordinatesMap.put(2,1); // e1 // gaalop e2
         bitsetMap.put(4,3);
@@ -107,7 +104,7 @@ public class CGA1Metric {
         bitsetMap.put(8,4);
         gradeCoordinatesMap.put(4,3); // e3 // gaalop ni
         bitsetMap.put(16,5);
-        gradeCoordinatesMap.put(5,4); // ni // gaalop n0
+        gradeCoordinatesMap.put(5,4); // einf, ni // gaalop n0
         // bivectors
         bitsetMap.put(1+2,6);
         gradeCoordinatesMap.put(6,0); // e01
@@ -116,18 +113,18 @@ public class CGA1Metric {
         bitsetMap.put(1+8,8);
         gradeCoordinatesMap.put(8,2); // e03
         bitsetMap.put(1+16,9);
-        gradeCoordinatesMap.put(9,3); // e04
+        gradeCoordinatesMap.put(9,3); // e0i
         bitsetMap.put(2+4,10); // e12
         gradeCoordinatesMap.put(10,4);
         bitsetMap.put(2+8,11); // e13
         gradeCoordinatesMap.put(11,5);
-        bitsetMap.put(2+16,12); // e14
+        bitsetMap.put(2+16,12); // e1i
         gradeCoordinatesMap.put(12,6);
         bitsetMap.put(4+8,13); // e23
         gradeCoordinatesMap.put(13,7);
-        bitsetMap.put(4+16,14); // e24
+        bitsetMap.put(4+16,14); // e2i
         gradeCoordinatesMap.put(14,8);
-        bitsetMap.put(8+16,15); // e34
+        bitsetMap.put(8+16,15); // e3i
         gradeCoordinatesMap.put(15,9);
         //trivectors
         bitsetMap.put(1+2+4,16); //e012
@@ -138,31 +135,31 @@ public class CGA1Metric {
         gradeCoordinatesMap.put(18,2);
         bitsetMap.put(1+4+8,19); //e023
         gradeCoordinatesMap.put(19,3);
-        bitsetMap.put(1+4+16,20); //e024
+        bitsetMap.put(1+4+16,20); //e02i
         gradeCoordinatesMap.put(20,4);
-        bitsetMap.put(1+8+16,21); //e034
+        bitsetMap.put(1+8+16,21); //e03i
         gradeCoordinatesMap.put(21,5);
         bitsetMap.put(2+4+8,22); //e123
         gradeCoordinatesMap.put(22,6);
-        bitsetMap.put(2+4+16,23); // e124
+        bitsetMap.put(2+4+16,23); // e12i
         gradeCoordinatesMap.put(23,7);
-        bitsetMap.put(2+8+16,24); // e134
+        bitsetMap.put(2+8+16,24); // e13i
         gradeCoordinatesMap.put(24,8);
-        bitsetMap.put(4+8+16,25); // e234
+        bitsetMap.put(4+8+16,25); // e23i
         gradeCoordinatesMap.put(25,9);
         //quatvectors
         bitsetMap.put(1+2+4+8,26);
-        gradeCoordinatesMap.put(26,0);
+        gradeCoordinatesMap.put(26,0); // e0123
         bitsetMap.put(1+2+4+16,27);
-        gradeCoordinatesMap.put(27,1);
+        gradeCoordinatesMap.put(27,1); // e012i
         bitsetMap.put(1+2+8+16,28);
-        gradeCoordinatesMap.put(28,2);
+        gradeCoordinatesMap.put(28,2); // e013i
         bitsetMap.put(1+4+8+16,29);
-        gradeCoordinatesMap.put(29,3);
+        gradeCoordinatesMap.put(29,3); // e023i
         bitsetMap.put(2+4+8+16,30);
-        gradeCoordinatesMap.put(30,4);
+        gradeCoordinatesMap.put(30,4); // e123i
         // pseudoscalar
-        bitsetMap.put(1+2+4+8+16,31);
+        bitsetMap.put(1+2+4+8+16,31); // e0123i
         gradeCoordinatesMap.put(31,0);
     }
     
