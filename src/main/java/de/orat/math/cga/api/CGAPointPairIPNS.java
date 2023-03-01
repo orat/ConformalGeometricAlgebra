@@ -65,12 +65,21 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      * @param weight 
      * @param real true for a real point-pair else for a imaginary point pair
      */
-    public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean real){
+    /*public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean real){
         this(createCGAMultivector(c,n,r,weight, real));
     }
     public CGAPointPairIPNS(Point3d c, Vector3d n, double r, boolean real){
         this(createCGAMultivector(c,n,r,1d, real));
-    }
+    }*/
+    /**
+     * Composition of a point pair by its center, radius and direction in ipns
+     * representation.
+     * 
+     * @param c center of the point pair
+     * @param n direction of the line defined by the point pair
+     * @param r radius, r<=imaginary point pair
+     * @param weight 
+     */
     public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight){
         this(createCGAMultivector(c,n,r,weight));
     }
@@ -83,7 +92,6 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     // Hitzer vorzunehmen.
     private static CGAMultivector createCGAMultivector(Point3d center, Vector3d normal, 
             double r, double weight, boolean sign){
-        CGAMultivector o = createOrigin(1d);
         CGAMultivector no_inf = o.op(inf);
         CGAMultivector c = createE3(center);
         CGAMultivector n = createE3(normal);
@@ -99,7 +107,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         //( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
         
 
-        //return o.op(n).add(c.op(n).op(no_inf).sub(c.ip(n))).sub(c.ip(n).gp(c).
+        //return oo.op(n).add(c.op(n).op(no_inf).sub(c.ip(n))).sub(c.ip(n).gp(c).
         //        sub(c.ip(c).add(sr2)).gp(n).gp(0.5d)).op(inf)
         //        .gp(createI3()).gp(weight);
         
@@ -120,8 +128,6 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      */
     private static CGAMultivector createCGAMultivector(Point3d center, Vector3d normal, 
             double r, double weight){
-        CGAMultivector o = createOrigin(1d);
-        CGAMultivector no_inf = o.op(inf);
         CGAMultivector c = createE3(center);
         CGAMultivector n = createE3(normal);
         CGAMultivector sr2;
@@ -137,14 +143,14 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         //( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
         
 
-        //return o.op(n).add(c.op(n).op(no_inf).sub(c.ip(n))).sub(c.ip(n).gp(c).
+        //return oo.op(n).add(c.op(n).op(no_inf).sub(c.ip(n))).sub(c.ip(n).gp(c).
         //        sub(c.ip(c).add(sr2)).gp(n).gp(0.5d)).op(inf)
         //        .gp(createI3()).gp(weight);
         
-        CGAMultivector a =  o.op(n).add(c.op(n).op(no_inf)).sub(c.ip(n));
+        CGAMultivector a =  o.op(n).add(c.op(n).op(I0)).sub(c.ip(n));
         CGAMultivector b = c.ip(n).gp(c);
-        CGAMultivector d = c.ip(c).add(sr2).gp(0.5).gp(n);
-        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(weight).gp(createI3());
+        CGAMultivector d = c.sqr().add(sr2).gp(0.5).gp(n);
+        CGAMultivector result = a.sub(b.sub(d)).op(inf).gp(weight).gp(createI3());
         return result;
     }
     

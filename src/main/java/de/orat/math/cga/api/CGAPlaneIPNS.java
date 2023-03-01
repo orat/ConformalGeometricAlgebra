@@ -51,17 +51,17 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
     // composition 
     
     /**
-     * Create plane in inner product null space representation (grade 1 multivector)
-     * based on the parameters of the Hesse-Normal-Form Be careful: This corresponds to dual plane in Dorst2007.of a plane.
-    Successful tested!!!
- 
- TODO
- - Ein nicht normalisiertes n liefert anderen Multivektor, aber könnte der
- nicht die gleiche Ebene representieren?
+     * Create plane in inner product null space representation (grade 1)
+     * based on the parameters of the Hesse-Normal-Form Be careful: 
+     * This corresponds to dual plane in Dorst2007.
+     * 
+     * TODO
+     * - Ein nicht normalisiertes n liefert anderen Multivektor, aber könnte der
+     * nicht die gleiche Ebene representieren?
      * 
      * @param n (normalized) normal vector of the plane
-     * @param d distance of the plane to
-     * @param weight the origin
+     * @param d distance of the plane to the origin
+     * @param weight weight
      */
     public CGAPlaneIPNS(Vector3d n, double d, double weight){
         this(createEx(n.x)
@@ -70,9 +70,11 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
             .add(createInf(d)).gp(weight));
     }
     /**
+     * Composition of a plane in ipns representation based on its normal vector and 
+     * its distance to the origin.
      * 
-     * @param n
-     * @param d 
+     * @param n (normalized) normal vector of the plane
+     * @param d distance of the plane to the origin
      */
     public CGAPlaneIPNS(Vector3d n, double d){
         this(n,d,1d);

@@ -339,8 +339,7 @@ public class Test2 {
         Vector3d n = new Vector3d(0d,0d,1d);
         double r = 2d;
         double weight = 3d;
-        boolean sign = true;
-        CGAPointPairIPNS ppIPNS = new CGAPointPairIPNS(c, n, r, weight, sign);
+        CGAPointPairIPNS ppIPNS = new CGAPointPairIPNS(c, n, r, weight);
         System.out.println(ppIPNS.toString("ppIPNS"));
         testPointPairIPNS(ppIPNS);
         
@@ -2415,7 +2414,7 @@ public class Test2 {
         System.out.println(pi2OPNS.toString("pi2 (via cross euclid u. ipns dual)"));
         
         //FIXME hier fliege ich nach der Neuimplementierung von undual() raus
-        //assertTrue(pi2OPNS.equals(pi2n));
+        assertTrue(pi2OPNS.equals(pi2n));
         
         // Intersection nach Lasenby
         CGAMultivector m = intersect(l1.normalize(), l2.normalize(), new CGARoundPointIPNS(new Point3d(2d,2d,2d)));

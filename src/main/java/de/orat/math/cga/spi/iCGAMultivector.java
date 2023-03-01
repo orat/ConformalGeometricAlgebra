@@ -229,11 +229,13 @@ public interface iCGAMultivector {
      * @return a new element that is the dual of this element (up to a sign).
      */
     public /*default*/ iCGAMultivector dual();//{
+    // return gp(createI().versorInverse());
     //   return gp(createI().reverse()); //???
-    //    return ip(createI().versorInverse(),LEFT_CONTRACTION);
+    //   return ip(createI().versorInverse(),LEFT_CONTRACTION);
     //}
     public default iCGAMultivector undual(){
-         return ip(createI(),LEFT_CONTRACTION);
+         //return ip(createI(),LEFT_CONTRACTION);
+         return gp(createI());
     }
     
     public double scalarPart();

@@ -18,12 +18,11 @@ public class CGAOrientedPointIPNS extends CGACircleIPNS{
     public CGAOrientedPointIPNS(Point3d p, Vector3d v){
         super(create(v,p));
     }
-    //TODO
-    // not yet tested!!!
     private static CGAMultivector create(Vector3d v, Point3d p){
         CGAEuclideanVector nq = new CGAEuclideanVector(v);
         CGAEuclideanVector q = new CGAEuclideanVector(p);
-        return nq.op(q).add(q.sqr().gp(0.5d).gp(nq).sub(q.gp(q.scp(nq))).gp(inf)).add(nq.gp(o)).add(q.ip(nq).gp(I0));
+        return nq.op(q).add(q.sqr().gp(0.5d).gp(nq).sub(q.gp(q.scp(nq)))).gp(inf).
+                add(nq.gp(o)).sub(q.ip(nq).gp(I0));
     }
     
     
