@@ -150,7 +150,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         CGAMultivector a =  o.op(n).add(c.op(n).op(I0)).sub(c.ip(n));
         CGAMultivector b = c.ip(n).gp(c);
         CGAMultivector d = c.sqr().add(sr2).gp(0.5).gp(n);
-        CGAMultivector result = a.sub(b.sub(d)).op(inf).gp(weight).gp(createI3());
+        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(weight).gp(createI3());
         return result;
     }
     

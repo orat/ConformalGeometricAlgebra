@@ -2468,6 +2468,15 @@ public class Test2 {
         System.out.println(test.toString("infsquare"));
     }
     
+    public void testAPlus(){
+         System.out.println("----------------- test a+ ---------------");
+        CGAEuclideanVector s = new CGAEuclideanVector(new Vector3d(0d,0d,1d));
+        CGAMultivector s1 = s.div(I3);
+        System.out.println(s1.toString("s1"));
+        CGAMultivector s2 = s.op(I3.inverse());
+        System.out.println(s2.toString("s2"));
+    }
+    
     public void testNullVectors(){
         System.out.println("----------------- null vectors -----------------");
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Point3d(1,0,0));
