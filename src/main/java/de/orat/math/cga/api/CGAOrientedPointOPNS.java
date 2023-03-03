@@ -28,9 +28,10 @@ public class CGAOrientedPointOPNS extends CGACircleOPNS {
     // not yet tested!!!
     private static CGAMultivector create(Vector3d v1, Vector3d v2, Point3d p){
         // unit oriented bivector plane
+        // Vorzeichen bezüglich I0 überprüft und damit anders als im Video
         CGAEuclideanBivector iq = (new CGAEuclideanBivector(v1, v2)).normalize();
         CGAEuclideanVector q = new CGAEuclideanVector(p);
-        return iq.op(q).add(q.sqr().gp(0.5d).gp(iq).sub(q.gp(q.scp(iq))).gp(inf)).add(iq.gp(o)).add(iq.ip(q.gp(I0)));
+        return iq.op(q).add(q.sqr().gp(0.5d).gp(iq).sub(q.gp(q.scp(iq))).gp(inf)).add(iq.gp(o)).sub(iq.ip(q.gp(I0)));
     }
     @Override
     public CGAOrientedPointIPNS dual(){

@@ -44,13 +44,16 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         //this((new CGASphereIPNS(center, radius, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
     private static CGAMultivector create(Point3d center, Vector3d normal, double radius, double weight){
+        // ε₀∧nn+(x⋅nn)E₀+x∧nn+((x⋅nn)x-0.5(x²-r²)nn)∧εᵢ
+        
+        //FIXME
+        // scheint falsches vorzeichen zu liefern
         // CGA lua code
         // local blade = weight * ( no ^ normal + ( center .. normal ) * no_ni + center ^ normal +
         // ( ( center .. normal ) * center - 0.5 * ( ( center .. center ) - sign * radius * radius ) * normal ) ^ ni )
         CGAEuclideanVector x = new CGAEuclideanVector(center);
         CGAEuclideanVector n = new CGAEuclideanVector(normal);
         CGAScalarOPNS r = new CGAScalarOPNS(radius);
-        CGAScalarOPNS w = new CGAScalarOPNS(weight);
         
         CGAMultivector a = x.op(n).add(x.ip(n)).gp(I0).add(x.op(n));
         CGAMultivector b = x.ip(n).gp(x);

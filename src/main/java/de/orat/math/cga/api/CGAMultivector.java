@@ -34,7 +34,7 @@ public class CGAMultivector {
     public static final CGAMultivector I3i = I3.inverse();
     public static final CGAMultivector I = createI();
     public static final CGAMultivector Ii = o.op(I3i).op(inf);
-    public static final CGAMultivector I0 = inf.op(o);
+    public static final CGAMultivector I0 = o.op(inf); //inf.op(o);
     
     CGAMultivector(){
         impl = new CGA1Multivector();

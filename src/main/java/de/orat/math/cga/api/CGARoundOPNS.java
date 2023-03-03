@@ -60,6 +60,7 @@ class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     public CGAKVector carrierFlat(){
         // do not normalize before, so that it is possible to determine the weight
         // as norm of the carrier flat.
+        //FIXME eventuell I0.negate() Vorzeichen kontrollieren
         return new CGAKVector(this.op(inf).negate().rc(I0));
     }
     

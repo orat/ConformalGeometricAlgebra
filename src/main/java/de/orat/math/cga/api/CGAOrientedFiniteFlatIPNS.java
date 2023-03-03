@@ -55,6 +55,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat 
     public CGAKVector carrierFlat(){
         // do not normalize before, so that it is possible to determine the weight
         // as norm of the carrier flat.
+        //FIXME eventuell mutt ich I0.negate() verwenden, damit das Vorzeichen stimmt
         return new CGAKVector(this.undual().negate().rc(I0));
     }
     

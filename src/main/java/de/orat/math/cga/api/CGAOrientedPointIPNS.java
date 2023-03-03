@@ -18,6 +18,7 @@ public class CGAOrientedPointIPNS extends CGACircleIPNS{
     public CGAOrientedPointIPNS(Point3d p, Vector3d v){
         super(create(v,p));
     }
+    // Vorzeichen wegen I0 ist überprüft, Formel daher anders als im Video
     private static CGAMultivector create(Vector3d v, Point3d p){
         CGAEuclideanVector nq = new CGAEuclideanVector(v);
         CGAEuclideanVector q = new CGAEuclideanVector(p);

@@ -2317,6 +2317,7 @@ public class Test2 {
         
         
         // nach ganja.js example c1 bestimmen
+        //FIXME I0.negate() ? vorzeichen kontrollieren
         CGAMultivector c1cga = I0.lc(pi2n.vee(l1).op(o));
         System.out.println(c1cga.toString("c1cga"));
         //Point3d p1p = c1cga.extractE3ToPoint3d();
@@ -2424,6 +2425,8 @@ public class Test2 {
         //CGARoundPointOPNS c1 = new CGARoundPointOPNS(pi2.vee(l1));
         
         // nach ganja.js example c1 bestimmen
+        // nach ganja.js example c1 bestimmen
+        //FIXME I0.negate() ? vorzeichen kontrollieren
         CGAMultivector c1cga = I0.lc(pi2.vee(l1).op(o));
         System.out.println(c1cga.toString("c1cga"));
         Point3d p1p = c1cga.extractE3ToPoint3d();
@@ -2565,6 +2568,8 @@ public class Test2 {
         System.out.println(line.toString("line"));
         CGAFlatPointOPNS m = new CGAFlatPointOPNS(plane.vee(line));
         System.out.println(m.toString("intersec point"));
+         // nach ganja.js example c1 bestimmen
+        //FIXME I0.negate() ? vorzeichen kontrollieren
         CGAMultivector meuclid = I0.lc(m.op(o));
         // falsches Vorzeichen
         //FIXME

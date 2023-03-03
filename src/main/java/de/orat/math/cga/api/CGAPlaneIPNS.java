@@ -139,9 +139,17 @@ public class CGAPlaneIPNS extends CGAOrientedFiniteFlatIPNS implements iCGAVecto
      * 
      * TODO normalize() hat uneindeutiges Vorzeichen, welches brauche ich hier und
      * wie beschaffe ich mir das richtige? Was liefert ganja.js
+     * 
+     * DualPlane (grade 3) = !(d(P2,no)*ni + (P2^nino*nino).normalized())
+     * Hier also ohne den dual operator !
+     * P2 ist grade 1
+     * 
+     * Diese Implementierung ist umständlich, da sie den Point3d erst in einen
+     * CGAPoint up-projiziert und dann intern das wieder rückgängig macht etc.
+   
      */
     public CGAPlaneIPNS(CGARoundPointIPNS P){
-        this(createInf(dist2Origin(P)).add(P.op(I0).gp(I0).normalize()));
+        this(createInf(dist2Origin(P)).add(P.op(I0.negate()).gp(I0.negate()).normalize()));
     }
     
     
