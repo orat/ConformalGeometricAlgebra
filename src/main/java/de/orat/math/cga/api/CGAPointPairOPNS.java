@@ -5,8 +5,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * A point-pair (0-sphere) in outer product null space representation (grade 2 
- * multivector), corresponding to direct point-pair in [Dorst2007].
+ * A point-pair (0-sphere) in outer product null space representation (grade 2 ), 
+ * corresponding to direct point-pair in [Dorst2007].
  * 
  * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
  * e3^ni,    no^ni
@@ -67,6 +67,8 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
      * Create a normalized point-pair in outer product null space representation
      * (grade 2).
      * 
+     * The direction of the point-pair is defined from point-2 to point-1.
+     * 
      * @param point1
      * @param point2 
      */
@@ -76,6 +78,8 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     
     /**
      * Composition of a point-pair based on two weighted rounds-points.
+     * 
+     * The direction of the point-pair is defined from point-2 to point-1.
      * 
      * @param point1
      * @param point2

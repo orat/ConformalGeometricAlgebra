@@ -76,7 +76,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      * representation.
      * 
      * @param c center of the point pair
-     * @param n direction of the line defined by the point pair
+     * @param n direction of the line defined by the point pair from point-2 to point-1
      * @param r radius, r<=imaginary point pair
      * @param weight 
      */
@@ -120,8 +120,9 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     /**
      * Create point pair in ipns representation based on euclidean objects.
      * 
+     * 
      * @param center
-     * @param normal vector (normalization not needed)
+     * @param normal vector (normalization not needed, from point-2 to point-1)
      * @param r >0 for real pointpair, <0 for imaginary pointpait
      * @param weight
      * @return 
@@ -143,12 +144,12 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         // (das erste "-" ist im pdf ein "+"
         // local blade = weight * ( no ^ normal + center ^ normal ^ no_ni - ( center .. normal ) -
         //( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
-        
-        // Def von I0 ist in der Formel berücksichtigt
+        // FIXME component e123 scheint falches Vorzeichen zu haben
         CGAMultivector a =  o.op(n).add(c.op(n).op(I0)).sub(c.ip(n));
         CGAMultivector b = c.ip(n).gp(c);
         CGAMultivector d = c.sqr().add(sr2).gp(0.5).gp(n);
-        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(createI3()).normalize().gp(weight);
+        //FIXME braucht es das normalize() überhaupt?
+        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(I3).normalize().gp(weight);
         return result;
     }
     
