@@ -36,6 +36,10 @@ public class CGASphereOPNS extends CGARoundOPNS implements iCGAQuadvector {
         this(new CGASphereIPNS(o,r).undual());
     }
     
+    public CGASphereOPNS(Point3d o, double r, double weight){
+        this(new CGASphereIPNS(o,r, weight).undual());
+    }
+    
     /**
      * Create dual sphere in outer product null space representation 
      * (grade 4 multivector).

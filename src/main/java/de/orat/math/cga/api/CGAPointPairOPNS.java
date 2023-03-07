@@ -6,7 +6,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * A point-pair (0-sphere) in outer product null space representation (grade 2 
- * multivector), corresponding to direct point-pair in Dorst2007.
+ * multivector), corresponding to direct point-pair in [Dorst2007].
  * 
  * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
  * e3^ni,    no^ni
@@ -47,7 +47,8 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     }
     
     /**
-     * Create point pair in outer product null space representation (grade 2 multivector).
+     * Create (non-normalized) point pair in outer product null space 
+     * representation (grade 2 multivector).
      * 
      * The point pair has a direction from point2 to point1, corresponding to
      * [Hitzer2005]. This corresponds to the line defined by two points in outer
@@ -57,13 +58,32 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
      * @param weight1
      * @param point2
      * @param weight2
+     * 
      */
     public CGAPointPairOPNS(Point3d point1, double weight1, Point3d point2, double weight2){
         this(create(new CGARoundPointIPNS(point1, weight1), new CGARoundPointIPNS(point2, weight2)));
     }
+    /**
+     * Create a normalized point-pair in outer product null space representation
+     * (grade 2).
+     * 
+     * @param point1
+     * @param point2 
+     */
+    public CGAPointPairOPNS(Point3d point1, Point3d point2){
+        this(create(new CGARoundPointIPNS(point1), new CGARoundPointIPNS(point2)).normalize());
+    }
     
+    /**
+     * Composition of a point-pair based on two weighted rounds-points.
+     * 
+     * @param point1
+     * @param point2
+     * @return non-normalized point-pair
+     */
     private static CGAMultivector create(CGARoundPointIPNS point1, CGARoundPointIPNS point2){
-        return point1.op(point2);
+        //FIXME normalize() führt zu einem Fehler im Test "testDorst2007DrillsPointPairs
+        return point1.op(point2);//.normalize();
     }
     
     

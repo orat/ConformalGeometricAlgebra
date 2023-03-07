@@ -479,6 +479,15 @@ public class Test2 {
         // s=2.0*eo^e1^e2^e3 - 1.0*e1^e2^e3^ei (korrekt)
         System.out.println("s="+s.toString());
         
+        // location als normalized sphere mit r=0
+        CGARoundPointOPNS l = new CGARoundPointOPNS(s.negate().div(inf.lc(s)));
+        // location = (1.0*eo + 0.5*ei) 
+        // FIXME ei ist falsch? oder muss ich im Ergenis noch r=0 annehmen, damit der ei-Termin verschwindet?
+        // vermutlich liegt das am Soderfall dass die location der Ursprung ist
+        // Wie bekomme ich dann den euclidean vector herausprojeziert?
+        System.out.println(l.toString("location"));
+        
+        // plane
         CGAPlaneOPNS p = new CGAPlaneOPNS(p1,p2,p3);
         // p1=1.0*eo^e1^e2^ei + 1.0*eo^e1^e3^ei - 1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei (korrekt)
         System.out.println("p="+p.toString());

@@ -121,7 +121,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      * Create point pair in ipns representation based on euclidean objects.
      * 
      * @param center
-     * @param normal
+     * @param normal vector (normalization not needed)
      * @param r >0 for real pointpair, <0 for imaginary pointpait
      * @param weight
      * @return 
@@ -129,6 +129,8 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     private static CGAMultivector createCGAMultivector(Point3d center, Vector3d normal, 
             double r, double weight){
         CGAMultivector c = createE3(center);
+        Vector3d normalizedNormal = new Vector3d(normal);
+        normalizedNormal.normalize();
         CGAMultivector n = createE3(normal);
         CGAMultivector sr2;
         
@@ -142,15 +144,11 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         // local blade = weight * ( no ^ normal + center ^ normal ^ no_ni - ( center .. normal ) -
         //( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
         
-
-        //return oo.op(n).add(c.op(n).op(no_inf).sub(c.ip(n))).sub(c.ip(n).gp(c).
-        //        sub(c.ip(c).add(sr2)).gp(n).gp(0.5d)).op(inf)
-        //        .gp(createI3()).gp(weight);
         // Def von I0 ist in der Formel berücksichtigt
         CGAMultivector a =  o.op(n).add(c.op(n).op(I0)).sub(c.ip(n));
         CGAMultivector b = c.ip(n).gp(c);
         CGAMultivector d = c.sqr().add(sr2).gp(0.5).gp(n);
-        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(weight).gp(createI3());
+        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(createI3()).normalize().gp(weight);
         return result;
     }
     
