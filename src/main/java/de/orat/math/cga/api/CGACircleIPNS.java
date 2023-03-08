@@ -44,6 +44,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         //this((new CGASphereIPNS(center, radius, 1d)).op(new CGAPlaneIPNS(center, normal, 1d)).gp(weight));
     }
     /**
+     * Create a circle in inps respresentation.
      * 
      * @param center
      * @param normal
@@ -70,7 +71,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         CGAMultivector a = x.op(n).add(x.ip(n)).gp(I0).add(x.op(n));
         CGAMultivector b = x.ip(n).gp(x);
         CGAMultivector c = x.sqr().sub(sr2).gp(n).gp(0.5);
-	return a.add((b.sub(c)).op(inf)).gp(weight);
+	return a.add((b.sub(c)).op(inf)).normalize().gp(weight);
     }
     public CGACircleIPNS(Point3d center, Vector3d normal, double radius){
          this(center, normal, radius, 1d);

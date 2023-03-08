@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -14,7 +15,7 @@ public class CGAEuclideanBivector extends AbstractEuclideanKVector implements iC
     public CGAEuclideanBivector(CGAMultivector m){
         super(m);
     }
-    public CGAEuclideanBivector(Vector3d v1, Vector3d v2){
+    public CGAEuclideanBivector(Tuple3d v1, Tuple3d v2){
         super((new CGAEuclideanVector(v1)).op(new CGAEuclideanVector(v2)));
     }
     

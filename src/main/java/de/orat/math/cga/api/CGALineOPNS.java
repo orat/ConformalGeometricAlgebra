@@ -1,13 +1,12 @@
 package de.orat.math.cga.api;
 
 import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Tuple3d;
 import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
  * Line in outer product null space representation (grade 3 multivector),
- * corresponding to direct line in Dorst2007.
+ * corresponding to direct line in [Dorst2007].
  * 
  * e1^e2^ni, e1^e3^ni, e2^e3^ni, e1^no^ni, e2^no^ni, e3^no^ni
  * 
@@ -32,14 +31,13 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     // composition
     
     /**
-     * Create line in outer product null space representation (grade 3 multivector).
+     * Create normalized line in outer product null space representation 
+     * (grade 3 multivector).
      * 
      * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
      * Hildenbrand2013.
      * 
      * The direction of the line is from p2 to p1.
-     * 
-     * The line is not!!! normalized.
      * 
      * @param p1 first point on the line
      * @param p2 second point on the line
@@ -47,11 +45,14 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
      */
     public CGALineOPNS(Point3d p1, Point3d p2){
-        this((new CGARoundPointIPNS(p1)), (new CGARoundPointIPNS(p2)));
+        // Umstellung auf this(create(p1,p2)
+        //FIXME
+        this(create(new CGARoundPointIPNS(p1),new CGARoundPointIPNS(p2)).normalize());
     }
     
     /**
-     * Create line in outer product null space representation (grade 3 multivector).
+     * Create (non-normalized) line in outer product null space representation 
+     * (grade 3).
      * 
      * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
      * Hildenbrand2013.
@@ -65,29 +66,55 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * @param p2
      * @param weight2 
      */
-    public CGALineOPNS(Point3d p1, double weight1, Tuple3d p2, double weight2){
-        this((new CGARoundPointIPNS(p1, weight1)), (new CGARoundPointIPNS(p2, weight2)));
+    public CGALineOPNS(Point3d p1, double weight1, Point3d p2, double weight2){
+        this(new CGARoundPointIPNS(p1, weight1), 
+             new CGARoundPointIPNS(p2, weight2));
     }
     
     /**
-     * Create line in outer product null space representation 
-     * (grade 3 multivector).
+     * Create (non normalized) line in outer product null space representation 
+     * (grade 3).
      * 
      * @param p1 first point in inner product null space representation
-     * @param p2 seconds point in inner product null space representation
+     * @param p2 second point in inner product null space representation
      * 
-     * Be careful: The representation is called dual in Hildenbrand2013 but direkt
+     * Be careful: The representation is called dual in Hildenbrand2013 but direct
      * in Dorst2007.
      * 
      * Hint: The direction of the line is from p2 to p1.
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
-        this(p1.op(p2).op(inf));
+        this(create(p1,p2));
+    }
+    
+    /**
+     * Create a non-normalized line in outer product null space representation.
+     * 
+     * @param p1
+     * @param p2
+     * @return line as CGA multivector object with direction from p2 to p1
+     */
+    private static CGAMultivector create(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
+        return p1.op(p2).op(inf);
+    }
+    /**
+     * Create a normalized line in outer product null space representation.
+     * 
+     * TODO normalization
+     * 
+     * @param p1
+     * @param p2
+     * @return 
+     */
+    private static CGAMultivector create(Point3d p1, Point3d p2){
+        return (new CGAAttitudeBivectorOPNS(p1,p2)).add((new CGAEuclideanVector(p1)).sub(new CGAEuclideanVector(p2)).gp(I0));
     }
     
     /**
      * Create a line in outer product null space representation (grade 3 multivector)
      * based on its moment and direction. 
+     * 
+     * FIXME Normalization?
      * 
      * The moment bivector is the outer product of two points on the line. Different
      * to plücker coordinates this moment representation allows to create also
@@ -97,15 +124,15 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * @param moment
      * @param direction 
      */
-    public CGALineOPNS(CGABivector moment, Vector3d direction){
-        this(moment.op(inf).add(CGAMultivector.createE3(direction).gp(inf.op(o))));
+    public CGALineOPNS(CGAEuclideanBivector moment, Vector3d direction){
+        this(moment.op(inf).add(CGAMultivector.createE3(direction).negate().gp(I0)));
     }
     /**
-     * Create a line in outer product null space representation (grade 3 multivector)
+     * Create a line in outer product null space representation (grade 3)
      * based on a point and the direction. 
      * 
      * TODO
-     * ungetestet
+     * ungetestet, mir scheint das ist auch gar nicht korrekt
      * 
      * @param p euclidean point on the line
      * @param d euclidean direction of the line
@@ -125,6 +152,7 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
     public CGALineOPNS normalize(){
         return new CGALineOPNS(super.normalize());
     }
+    
     
     // decomposition
     

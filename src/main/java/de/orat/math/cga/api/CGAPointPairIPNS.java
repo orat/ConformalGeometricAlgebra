@@ -120,10 +120,9 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     /**
      * Create point pair in ipns representation based on euclidean objects.
      * 
-     * 
      * @param center
      * @param normal vector (normalization not needed, from point-2 to point-1)
-     * @param r >0 for real pointpair, <0 for imaginary pointpait
+     * @param r >0 for real point-pair, <0 for imaginary pointpait
      * @param weight
      * @return 
      */

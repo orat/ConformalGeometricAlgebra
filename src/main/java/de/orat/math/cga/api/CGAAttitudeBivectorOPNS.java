@@ -1,6 +1,7 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -27,12 +28,15 @@ public class CGAAttitudeBivectorOPNS extends CGAAttitudeOPNS implements iCGATriv
     
     // composition 
     
-    public CGAAttitudeBivectorOPNS(CGABivector B){
+    public CGAAttitudeBivectorOPNS(CGAEuclideanBivector B){
         // muss statt gp nicht op stehen
         //FIXME
-        this(B.op(createInf(1.0)));
+        this(B.op(inf));
     }
     
+    public CGAAttitudeBivectorOPNS(Tuple3d v1, Tuple3d v2){
+        super((new CGAEuclideanVector(v1)).op(new CGAEuclideanVector(v2)).op(inf));
+    }
     
     // decomposition
     

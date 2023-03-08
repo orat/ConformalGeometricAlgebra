@@ -2163,6 +2163,7 @@ public class Test2 {
         CGALineOPNS l1Orthogonal = new CGALineOPNS(l1.sub(l2.gp(l1).gp(l2)));
         System.out.println(l1Orthogonal.toString("l1 (orthogonal)"));
         
+        //FIXME normalize() schlägt fehlt, da das innere Produkt 0 ist
         CGAMultivector u1Orthogonal = inf.lc(l1Orthogonal).rc(o).normalize();
         System.out.println(u1Orthogonal.toString("u1 (orthogonal)"));
         Vector3d u1vec = u1Orthogonal.extractE3ToVector3d();

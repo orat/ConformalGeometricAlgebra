@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Lines in IPNS representation. 
+ * Lines in IPNS representation (grade 2). 
  * 
  * Lines generates the motor algebra. They can be interpreted as flattended 
  * circles passing through infinity.
@@ -35,7 +35,7 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     // composition
     
     /**
-     * Create line in inner product null space representation (grade 2 multivector).
+     * Create line in inner product null space representation (grade 2).
      * 
      * Be careful: This corresponds to a dual line in Dorst2007.
      * 
@@ -73,9 +73,6 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
     public CGALineIPNS(Point3d c, Vector3d attitude){
         this(c, attitude, 1d);
     }
-    
-    //TODO
-    // durch zwei Punkte konstruieren?
     
     public CGALineIPNS(CGABivector B, double d){
         this(B.add(createInf(d)));
