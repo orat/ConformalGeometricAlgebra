@@ -45,9 +45,9 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
      */
     public CGALineOPNS(Point3d p1, Point3d p2){
-        // Umstellung auf this(create(p1,p2)
-        //FIXME
-        this(create(new CGARoundPointIPNS(p1),new CGARoundPointIPNS(p2)).normalize());
+        this(create(p1,p2));
+        // bisher
+        //this(create(new CGARoundPointIPNS(p1),new CGARoundPointIPNS(p2)).normalize());
     }
     
     /**
@@ -101,13 +101,20 @@ public class CGALineOPNS extends CGAOrientedFiniteFlatOPNS implements iCGATrivec
      * Create a normalized line in outer product null space representation.
      * 
      * TODO normalization
+     * - reicht es die Länge des Richtungsvektors auf 1 zu bringen, ohne dessen Vorzeichen zu ändern?
+     * - funktioniert das normalize wirklich zuverlässig? Da wird ja durch Wurnzel des 
+     *   absolut-Wertes des Quadrats geteilt. Da das quadrat negativ sein kann, eliminiert
+     *   der absolut werd doch in bestimmten Fällen das Vorzeichen, was aber nötig ist um die Wurzel
+     *   zu ziehen. Könnte ich nicht mit einer if-Anweisung vorher das Vorzeichen aufheben?
+     *   Wann tritt dieser Fall überhaupt auf?
      * 
      * @param p1
      * @param p2
      * @return 
      */
     private static CGAMultivector create(Point3d p1, Point3d p2){
-        return (new CGAAttitudeBivectorOPNS(p1,p2)).add((new CGAEuclideanVector(p1)).sub(new CGAEuclideanVector(p2)).gp(I0));
+        return (new CGAAttitudeBivectorOPNS(p1,p2)).add(
+                (new CGAEuclideanVector(p1)).sub(new CGAEuclideanVector(p2)).normalize().gp(I0));
     }
     
     /**

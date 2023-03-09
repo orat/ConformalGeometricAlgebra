@@ -30,9 +30,9 @@ class CGAKVector extends CGAMultivector implements iCGABlade {
             throw(e);
         }
     }
-    CGAKVector(double value){
+    /*CGAKVector(double value){
         super(value);
-    }
+    }*/
     
      // decomposeMotor
    

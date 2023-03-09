@@ -12,7 +12,7 @@ public class CGAScalarOPNS extends CGAKVector implements iCGAScalarOPNS {
     }
     
     public CGAScalarOPNS(double value){
-        super(value);
+         super(defaultInstance.impl.createScalar(value));
     }
     
     public static CGAScalarOPNS atan2(CGAScalarOPNS y, CGAScalarOPNS x){

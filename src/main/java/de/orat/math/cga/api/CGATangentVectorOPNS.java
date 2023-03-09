@@ -91,7 +91,7 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
         // ist hier geometrisches Produkt überhaupt richtig oder muss hier äußeres 
         // Produkt stehen?
         // muss die Reihenfolge der Faktoren nicht umgedreht sein?
-        return new CGATangentVectorOPNS(createOrigin(1.0).gp(new CGAMultivector(t)));
+        return new CGATangentVectorOPNS(createOrigin(1.0).gp(createE3(t)));
     }
     
     

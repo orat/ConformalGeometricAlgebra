@@ -68,7 +68,7 @@ public class CGALineIPNS extends CGAOrientedFiniteFlatIPNS implements iCGABivect
         // ungeklärt, was passiert wenn c=(0,0,0)--> das sollte möglich sein
         // local blade = weight * ( normal + ( center ^ normal ) * ni ) * i
         this(createE3(attitude).add(createE3(c).op(createE3(attitude)).gp(inf)).
-                gp(createI3()).gp(weight));
+                gp(I3).gp(weight));
     }
     public CGALineIPNS(Point3d c, Vector3d attitude){
         this(c, attitude, 1d);

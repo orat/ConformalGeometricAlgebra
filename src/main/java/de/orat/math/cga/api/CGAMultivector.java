@@ -22,7 +22,7 @@ public class CGAMultivector {
      */
     public static double eps = 1e-12;
 
-    private static CGAMultivector defaultInstance = new CGAMultivector();
+    static CGAMultivector defaultInstance = new CGAMultivector();
     
     static int default_ip_type = LEFT_CONTRACTION;
     iCGAMultivector impl;
@@ -39,12 +39,15 @@ public class CGAMultivector {
     CGAMultivector(){
         impl = new CGA1Multivector();
     }
-    public CGAMultivector(Tuple3d p){
+    public CGAMultivector(double[] values){
+        this.impl = defaultInstance.impl.create(values);
+    }
+    /*public CGAMultivector(Tuple3d p){
         this.impl = defaultInstance.impl.createE(p);
-    }
-    public CGAMultivector(double d){
+    }*/
+    /*public CGAMultivector(double d){
         this.impl = defaultInstance.impl.createScalar(d);
-    }
+    }*/
     
     CGAMultivector(iCGAMultivector impl){
         this.impl = impl;
@@ -621,8 +624,8 @@ public class CGAMultivector {
         return new CGAMultivector(impl.sub(b.impl));
     }
     
-    public CGAMultivector abs(){
-        return new CGAMultivector(impl.length());
+    public CGAScalarOPNS abs(){
+        return new CGAScalarOPNS(impl.length());
     }
     public CGAMultivector exp() {
         return new CGAMultivector(impl.exp());
