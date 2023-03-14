@@ -15,3 +15,7 @@ The project is used to learn about different possibilities to implement CGA and 
 CGA can be implemented based on different metrics corresponding to different definitions of the origin and the point at infinity. Different metrics results in different formulas for composition of CGA-vectors and in the formulas for determining lenghts and angles. In this API the origin is defined as $\epsilon_0=0.5(\epsilon_--\epsilon_+)$ and the point at infinity as $\epsilon_\infty=\epsilon_+ +\epsilon_-$ with $\epsilon_-^2=-1$. This corresponds to ganja.js, the book [Hildenbrand2009] and also the paper [Klepper2016].
 
 Be careful. This software is still in an early draft version. Changes in the API are planned e.g. to correct some object naming.
+
+## Dependencies Setup
+The project depends on the vecmath library in the refactured version of jogamp. Your can find this library [here](https://jogamp.org/deployment/java3d/1.7.1-build-20200222/vecmath.jar). Unfortunately there is no maven repository available. That is why you need to download the jar file manually and add it as a local depency of the project. To do this in the nebeans ide: Right-click on the depencies of the project and add the dependency manually. The group id is "org.jogamp.java3d", the artifactId is "vecmath" and the type is "jar". \
+Alternatively clone it from [GitHub](https://github.com/JogAmp/vecmath/tree/dev1.7.1), update the compiler version in it's pom.xml and build it.
