@@ -6,7 +6,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Sphere in inner product null space representation (grade 1 multivector)
+ * Sphere in inner product null space representation (grade 1)
  * corresponding to dual real or imaginary sphere in Dorst2007.
  * 
  * no, e1, e2, e3, ni

@@ -6,7 +6,7 @@ import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * A round point in inner product null space representation (grade 1 multivector), 
+ * A round point in inner product null space representation (grade 1), 
  * corresponding to dual round point in Dorst2007. 
  * 
  * no, e1, e2, e3, ni

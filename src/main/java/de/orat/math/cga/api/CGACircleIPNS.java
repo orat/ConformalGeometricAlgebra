@@ -6,7 +6,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Circle in inner product null space represenation (grade 2 multivector)
+ * Circle in inner product null space represenation (grade 2)
  * corresponding to dual circle in Dorst2007.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -20,7 +20,11 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         super(impl);
     }
     
-    
+    public static boolean typeof(CGAMultivector m){
+       boolean result = CGARoundIPNS.typeof(m);
+       // TODO weitere Tests
+       return result;
+    }
     // composition
     
     /**

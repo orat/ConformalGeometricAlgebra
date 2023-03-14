@@ -36,6 +36,7 @@ import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGAScalor;
+import de.orat.math.cga.api.CGATangentTrivectorOPNS;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -2164,7 +2165,7 @@ public class Test2 {
         System.out.println(l1Orthogonal.toString("l1 (orthogonal)"));
         
         //FIXME normalize() schlägt fehlt, da das innere Produkt 0 ist
-        CGAMultivector u1Orthogonal = inf.lc(l1Orthogonal).rc(o).normalize();
+        CGAMultivector u1Orthogonal = inf.lc(l1Orthogonal).rc(o); //.normalize();
         System.out.println(u1Orthogonal.toString("u1 (orthogonal)"));
         Vector3d u1vec = u1Orthogonal.extractE3ToVector3d();
         // Der Vektor scheint zum Richtungsvektor von l1 zu degenerieren, statt
@@ -2612,5 +2613,48 @@ public class Test2 {
         CGAMultivector ps = xss.add(xsss).gp(0.5);
         //return ps.gp(inf).gp(ps).negate().gp(1d/(ps.rc(inf).sqr().decomposeScalar()*2d));
         return new CGARoundPointIPNS(ps.gp(inf).gp(ps).negate().div(ps.rc(inf).sqr().gp(2d)));
+    }
+    
+    public void testGrade1Vectors(){
+        System.out.println("------------------------- test grade 1 multivectors ---------------------");
+        //CGAAttitudeScalarOPNS test = CGAAttitudeScalarOPNS(1d);
+        Vector3d v1 = new Vector3d(1,0.5,0);
+        Vector3d v2 = new Vector3d(0,1,0.5);
+        Vector3d v3 = new Vector3d(0,0,1);
+        CGATangentTrivectorOPNS test = new CGATangentTrivectorOPNS(v1,v2,v3);
+        System.out.println(test.toString("v (opns)"));
+        CGAMultivector test2 = test.dual();
+        // v = (0.9999999999999994*eo - 1.1102230246251565E-16*ei)
+        System.out.println(test2.toString("v (ipns)"));
+    }
+    
+    public void testTangentBivectors(){
+        System.out.println("------------------------------- test tangent bivectors ---------------------");
+        CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));
+        CGASphereOPNS S = (new CGASphereIPNS(p, 1.1d)).undual();
+        
+        CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Vector3d(1d,1,1));
+        CGARoundPointIPNS p2 = new CGARoundPointIPNS(new Vector3d(1,1,0d));
+        CGARoundPointIPNS p3 = new CGARoundPointIPNS(new Vector3d(1,0d,1));
+        CGAPlaneOPNS pl= new CGAPlaneOPNS(p1,p2,p3);
+        // pl = (-1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei)
+        System.out.println(pl.toString("pl"));
+        
+        // ohne dual am Ende
+        // m = (-0.9999999999999984*eo^e1 - 0.9999999999999987*eo^ei - 0.4999999999999992*e1^ei)
+        // mit dual am Ende
+        // m = (0.999999999999998*eo^e2^e3 + 0.9999999999999981*e1^e2^e3 + 0.4999999999999989*e2^e3^ei)
+        // mit reduziertem Radius immer noch ein tangent-bivector-opns obwohl kein Berührpunkt mehr
+        // m = (0.999999999999998*eo^e2^e3 + 0.9999999999999981*e1^e2^e3 + 0.4049999999999992*e2^e3^ei)
+        // das scheint mir ein tangent bivector opns zu sein wie erwartet
+        // m = (0.9999999999999982*eo^e2^e3 + 0.9999999999999981*e1^e2^e3 + 0.6049999999999989*e2^e3^ei)
+        // mit r>1 das scheint immer noch ein bivector zu sein, 
+        CGAMultivector m = S.dual().op(pl.dual()).dual();
+        System.out.println(m.toString("m"));
+        
+        CGASphereIPNS Sipns = new CGASphereIPNS(p, 1d);
+        CGAMultivector m1 = Sipns.vee(pl.dual());
+        // m1 = (0)
+        System.out.println(m1.toString("m1"));
     }
 }

@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAOrientedPointIPNS extends CGACircleIPNS{
+public class CGAOrientedPointIPNS extends CGACircleIPNS {
 
     public CGAOrientedPointIPNS(CGAMultivector m) {
         super(m);
@@ -26,6 +26,11 @@ public class CGAOrientedPointIPNS extends CGACircleIPNS{
                 add(nq.gp(o)).sub(q.ip(nq).gp(I0));
     }
     
+    public static boolean typeof(CGAMultivector m){
+        boolean result = CGARoundIPNS.typeof(m);
+        //TODO weitere Tests
+        return result;
+    }
     
     @Override
     public CGAOrientedPointOPNS dual(){

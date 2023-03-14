@@ -15,7 +15,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
+public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     
     CGARoundOPNS(CGAMultivector m){
         super(m.impl);

@@ -37,6 +37,9 @@ public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadv
      * Create a dual plane as a mid plane between two given result in outer product
      * null space representation (grade 4 multivector).
      * 
+     * TODO
+     * unklares Vorzeichen des Normalenvektors der Ebene
+     * 
      * @param p1 point 1
      * @param p2 point 2
      */

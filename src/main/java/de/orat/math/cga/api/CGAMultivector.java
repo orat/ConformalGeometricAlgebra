@@ -39,9 +39,21 @@ public class CGAMultivector {
     CGAMultivector(){
         impl = new CGA1Multivector();
     }
-    public CGAMultivector(double[] values){
+    CGAMultivector(double[] values){
         this.impl = defaultInstance.impl.create(values);
     }
+    
+    public static CGAMultivector create(double[] values, boolean isIPNS){
+        CGAMultivector m = new CGAMultivector(values);
+        if (isIPNS && CGARoundIPNS.typeof(m)){
+            //TODO
+            // test ob circle, point, ...
+            return new CGAOrientedPointIPNS(m);
+        }
+        System.out.println("Subtype of \""+m.toString("")+"\" not detected!");
+        return m;
+    }
+    
     /*public CGAMultivector(Tuple3d p){
         this.impl = defaultInstance.impl.createE(p);
     }*/
