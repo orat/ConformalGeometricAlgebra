@@ -10,7 +10,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-class CGAKVector extends CGAMultivector implements iCGABlade {
+public class CGAKVector extends CGAMultivector implements iCGABlade {
     
     CGAKVector(CGAMultivector m){
         super(m.impl);

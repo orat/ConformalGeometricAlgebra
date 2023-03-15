@@ -12,7 +12,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAPlaneOPNS extends CGAOrientedFiniteFlatOPNS implements iCGAQuadvector {
+public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     
     public CGAPlaneOPNS(CGAMultivector m){
         super(m);

@@ -5,10 +5,10 @@ import org.jogamp.vecmath.Point3d;
 
 /**
  * Circle (1-sphere) in outer product null space representation (grade 3), 
- * corresponding to direct circle in Dorst2007.
+ * corresponding to direct circle in [Dorst2007].
  * 
  * e2^e3^ni, e3^e1^ni, e1^e2^ni, no^e3^ni, no^e1^ni, no^e2^ni, no^e2^e3, 
- * no^e1^e3, no^e1^e2, e1^e2^e3
+ * no^e1^e3, no^e1^e2, e1^e2^e3<p>
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

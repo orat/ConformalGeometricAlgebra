@@ -5,24 +5,20 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * (Oriented finite) flats are rounds containing the infinity inf., e.g. flat
+ * (Oriented finite) flats are rounds containing the infinity inf, eg
  * points, lines, planes, hyperplanes (k-dimensional flats).
  * 
  * All in outer product null space representation, corresponding to direct flat
- * in Dorst2007.
- * 
- * FIXME
- * - sollte das nicht CGAFlatOPNS sein?
- * - Warum oriented? warum finite?
+ * in [Dorst2007].<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector implements iCGAFlat {
+abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
     
-    CGAOrientedFiniteFlatOPNS(CGAMultivector m){
+    CGAFlatOPNS(CGAMultivector m){
         super(m.impl);
     }
-    protected CGAOrientedFiniteFlatOPNS(iCGAMultivector m){
+    protected CGAFlatOPNS(iCGAMultivector m){
         super(m);
     }
     
@@ -48,7 +44,12 @@ abstract class CGAOrientedFiniteFlatOPNS extends CGAKVector implements iCGAFlat 
      * 
      * The carrier flat is fully position independent.
      * 
-     * @return carrier flat (not normalized)
+     * Carrier method for the general evaluation and control of pose, molecular 
+     * conformation, track-ing, and the like.
+     * Eckhard Hitzer, Kanta Tachibana, Sven Buchholz and Isseki Yu
+     * (Theorem 2.3)
+     * 
+     * @return carrier flat (not normalized, to be able to determine the weight of the carrier)
      */
     public CGAKVector carrierFlat(){
         // do not normalize before, so that it is possible to determine the weight

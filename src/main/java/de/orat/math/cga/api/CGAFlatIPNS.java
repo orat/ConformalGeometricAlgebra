@@ -5,20 +5,22 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * (Oriented finite) flats are rounds containing the the infinity inf., e.g. flat
- * points, lines, planes, hyperplanes (k-dimensional flats), all in inner product 
- * null space representation, corresponding to dual flat in Dorst2007.
+ * (Oriented finite) flats are rounds containing the the infinity inf, eg
+ * points, lines, planes, hyperplanes (k-dimensional flats).
  * 
- * A dual flat point has "hairs" extending to infinity.
+ * All in inner product null space representation, corresponding to dual flat 
+ * in [Dorst2007].<p>
+ * 
+ * A dual flat point has "hairs" extending to infinity.<p>
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat {
+abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
      
-    CGAOrientedFiniteFlatIPNS(CGAMultivector m){
+    CGAFlatIPNS(CGAMultivector m){
         super(m);
     }
-    CGAOrientedFiniteFlatIPNS(iCGAMultivector m){
+    CGAFlatIPNS(iCGAMultivector m){
         super(m);
     }
     
@@ -41,14 +43,22 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat 
      * 
      * The carrier flat is the OPNS subspace representation of the minimal (lowest
      * possible dimension) Euclidean subspace to include the whole geometric object
-     * when it is placed at the origin.
+     * when it is placed at the origin.<p>
      * 
      * The carrier flat of an element is the smallest grade flat that contains
-     * the element (Dorst2007 p. 445).
+     * the element (Dorst2007 p. 445).<p>
      * 
-     * The carrier flat is fully position independent.
+     * The carrier flat is fully position independent.<p>
+     * 
+     * Carrier method for the general evaluation and control of pose, molecular 
+     * conformation, track-ing, and the like.
+     * Eckhard Hitzer, Kanta Tachibana, Sven Buchholz and Isseki Yu
+     * (Theorem 2.3)
      * 
      * plane IPNS: Bivector e.g. (0.9999999999999991*e1^e2)
+     * 
+     * FIXME
+     * Bei Hitzer2005 ist carrierFlat nur für OPNS definiert!!!
      * 
      * @return carrier flat (not normalized)
      */
@@ -113,7 +123,7 @@ abstract class CGAOrientedFiniteFlatIPNS extends CGAKVector implements iCGAFlat 
         // warum enthält das eine ei component, damit wäre doch r != 0?
         System.out.println(result.toString("location as normalized dual sphere (CGAOrientedFiniteFlatIPNS, Dorst)"));
         //result.normalize(); // hat nichts gebracht
-        //System.out.println(result.toString("location normalized dual sphere 2 (CGAOrientedFiniteFlatIPNS)"));
+        //System.out.println(result.toString("location normalized dual sphere 2 (CGAFlatIPNS)"));
         return result;
     }
     @Override

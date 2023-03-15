@@ -11,6 +11,8 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * Flat-points are blades with grade 2.
  * 
+ * = finite-infinite point-pair (Hitzer2005)?
+ * 
  * e1^ni, e2^ni, e3^ni, no^ni
  * 
  * Flat points are the result of an intersection between a line and a plane, and 
@@ -29,7 +31,7 @@ import org.jogamp.vecmath.Vector3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAFlatPointOPNS extends CGAOrientedFiniteFlatOPNS implements iCGABivector {
+public class CGAFlatPointOPNS extends CGAFlatOPNS implements iCGABivector {
     
     public CGAFlatPointOPNS(CGAMultivector m){
         super(m.compress());
