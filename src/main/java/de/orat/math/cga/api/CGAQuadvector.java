@@ -1,34 +1,31 @@
 package de.orat.math.cga.api;
 
+import static de.orat.math.cga.api.CGAMultivector.inf;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
- * A Quadvector describes spheres and planes in OPNS representation, ...
- * 
- * Quadvectors are linear combinations of Blades with grade 4.
- * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAQuadvector extends CGAMultivector implements iCGAQuadvector {
-
-    public CGAQuadvector(CGAMultivector m){
-        super(m.impl);
+public class CGAQuadvector extends CGAKVector implements iCGAQuadvector {
+    
+    public CGAQuadvector(CGAMultivector m) {
+        super(m);
     }
     
-    public CGAQuadvector(Tuple3d a,Tuple3d b,Tuple3d c, Tuple3d d){
-         this((new CGAEuclideanVector(a)).op(
-                (new CGAEuclideanVector(b)).op(
-                (new CGAEuclideanVector(c))).op(new CGAEuclideanVector(d))));
-    }
-    public CGAQuadvector(Tuple3d a,Tuple3d b,Tuple3d c){
-         this((new CGAEuclideanVector(a)).op(
-                (new CGAEuclideanVector(b)).op(
-                (new CGAEuclideanVector(c))).op(inf)));
+    public CGAQuadvector(Tuple3d a, Tuple3d b, Tuple3d c, Tuple3d d){
+        this((new CGAEuclideanVector(a)).op(
+             (new CGAEuclideanVector(b)).op((new CGAEuclideanVector(c))).op((new CGAEuclideanVector(b)))));
     }
     
-    /*@Override
-    public int grade() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }*/
+    public CGAQuadvector(Tuple3d a, Tuple3d b, Tuple3d c){
+        this((new CGAEuclideanVector(a)).op(
+             (new CGAEuclideanVector(b)).op((new CGAEuclideanVector(c))).op(inf)));
+    }
     
+    public CGAVector dual(){
+        return new CGAVector(super.dual().compress());
+    }
+    public CGAVector undual(){
+        return new CGAVector(super.undual().compress());
+    }
 }

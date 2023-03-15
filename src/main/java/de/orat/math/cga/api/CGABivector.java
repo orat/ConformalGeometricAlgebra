@@ -39,12 +39,16 @@ public class CGABivector extends CGAKVector implements iCGABivector {
     /**
      * Create a bivector from an euclidian vector and the point at infinity.
      * 
-     * TODO
-     * Was ist das anschaulich?
-     * 
      * @param a the euclidian vector
      */
     public CGABivector(Tuple3d a){
         this((new CGAEuclideanVector(a)).op(inf));
+    }
+    
+    public CGATrivector dual(){
+        return new CGATrivector(super.dual().compress());
+    }
+    public CGATrivector undual(){
+        return new CGATrivector(super.undual().compress());
     }
 }

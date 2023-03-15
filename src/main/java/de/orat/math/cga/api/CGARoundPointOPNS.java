@@ -5,14 +5,11 @@ import org.jogamp.vecmath.Point3d;
 
 /**
  * A round point in outer product null space representation (grade 4 multivector), 
- * corresponding to direct round point in Dorst2007.
- *
- * FIXME
- * - ein round point ist kein oriented point!!!
+ * corresponding to direct round point in [Dorst2007].
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGARoundPointOPNS extends CGARoundOPNS {
+public class CGARoundPointOPNS extends CGARoundOPNS implements iCGAQuadvector {
     
     public CGARoundPointOPNS(CGAMultivector m){
         super(m.compress());

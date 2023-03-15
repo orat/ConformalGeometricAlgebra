@@ -83,11 +83,11 @@ public class CGAKVector extends CGAMultivector implements iCGABlade {
     
     /**
      * Determine the location of the geometric object, which is represented by
-     * the k-Vector. 
+     * the k-Vector.For a flat object this is defined by the perpendicular 
+ distance vector of the origin to the carrier plane. 
      * 
-     * For a flat object this is defined by the perpendicular 
-     * distance vector of the origin to the carrier plane.
-     * 
+     *
+     * @param p 
      * @return location
      */
     /*@Override

@@ -29,7 +29,9 @@ public class CGAAttitudeTrivectorOPNS extends CGAAttitudeOPNS implements iCGAQua
     public CGAAttitudeTrivectorOPNS(Vector3d a, Vector3d b, Vector3d c){
         //FIXME
         // muss statt gp nicht op stehen?
-        this((new CGATrivector(a,b,c)).op(createInf(1.0)));
+        this((new CGAEuclideanVector(a)).op(
+                new CGAEuclideanVector(b)).op(
+                new CGAEuclideanVector(c)).op(createInf(1.0)));
     }
     
     

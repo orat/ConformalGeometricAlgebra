@@ -4,7 +4,11 @@ import static de.orat.math.cga.api.CGAMultivector.inf;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
- * A trivector describes lines and circles.
+ * A trivector describe lines, circles, bivector-tangents and bivector-attitudes
+ * in OPNS representation and also the following blades in IPNS representation:
+ * point-pairs, flat-points, ...
+ * 
+ * Trivectors are linear combinations of blades with grade 3 (e123).
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -14,7 +18,12 @@ interface iCGATrivector extends iCGABlade {
         return true;
     }
     
-    default iCGATrivector createCGATrivector(Tuple3d a, Tuple3d b){
+    default iCGATrivector create(Tuple3d a, Tuple3d b, Tuple3d c){
+        return (iCGATrivector) (new CGAEuclideanVector(a)).op(
+                (new CGAEuclideanVector(b)).op(
+                (new CGAEuclideanVector(c))));
+    }
+    default iCGATrivector create(Tuple3d a, Tuple3d b){
         return (iCGATrivector) (new CGAEuclideanVector(a)).op(
                 (new CGAEuclideanVector(b)).op(inf));
     }
