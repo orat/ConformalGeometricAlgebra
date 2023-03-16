@@ -23,7 +23,9 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     CGARoundIPNS(iCGAMultivector impl){
         super(impl);
     }
-    
+    public CGARoundIPNS(double[] values){
+        super(values);
+    }
     public static boolean typeof(CGAMultivector m){
        if (inf.op(m).isNull()) return false;
        if (inf.ip(m).isNull()) return false;

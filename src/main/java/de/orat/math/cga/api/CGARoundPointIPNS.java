@@ -43,10 +43,12 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
     public CGARoundPointIPNS(CGAMultivector m){
         super(m.compress());
     }
+    public CGARoundPointIPNS(double[] values){
+        super(values);
+    }
     CGARoundPointIPNS(iCGAMultivector m){
         super(m);
     }
-    
     
     // composition
     

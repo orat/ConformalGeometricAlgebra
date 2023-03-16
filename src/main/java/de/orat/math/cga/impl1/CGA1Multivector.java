@@ -147,7 +147,9 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     
     @Override
     public iCGAMultivector create(double[] values){
-        return null;
+        CGA1Multivector result = new CGA1Multivector();
+        result.setCoordinates(values);
+        return result;
     }
     
     // base vector creation

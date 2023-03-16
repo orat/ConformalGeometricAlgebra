@@ -50,6 +50,12 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     /**
      * Create a circle in inps respresentation.
      * 
+     * FIXME
+     * The given multivector is not of grade 2 or a null vector: 
+     * 0.33333333333333354*e1^e3 + 0.6666666666666671*e2^e3 + 1.0000000000000002*eo^ei + 
+     * 1.0000000000000007*e1^ei + 2.0000000000000013*e2^ei + 1.3333333333333341*e3^ei + 
+     * 0.3333333333333334*eo^e1^e3^ei + 0.6666666666666669*eo^e2^e3^ei
+     *
      * @param center
      * @param normal
      * @param radius imaginary circle if radius<0

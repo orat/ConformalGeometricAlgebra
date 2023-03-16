@@ -30,6 +30,9 @@ public class CGAKVector extends CGAMultivector implements iCGABlade {
             throw(e);
         }
     }
+    public CGAKVector(double[] values){
+        super(values);
+    }
     /*CGAKVector(double value){
         super(value);
     }*/
