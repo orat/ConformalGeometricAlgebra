@@ -4,7 +4,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * A round point in outer product null space representation (grade 4 multivector), 
+ * A round point in outer product null space representation (grade 4), 
  * corresponding to direct round point in [Dorst2007].
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

@@ -5,13 +5,10 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Oriented and weighted rounds are points, point-pairs, circles and spheres/hyper-spheres,
+ * Weighted rounds are points, point-pairs, circles and spheres/hyper-spheres,
  * here given in outer product null space representation corresponding to direct round in Dorst2007.
  * 
  * Rounds are objects with finite areas/volumes/hyperolumes.
- * 
- * TODO
- * - welcher code hier ist spezifisch für orientedFinite? diesen auslagern?
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

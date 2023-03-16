@@ -1,29 +1,26 @@
 package de.orat.math.cga.api;
 
-import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * A round point in inner product null space representation (grade 1), 
- * corresponding to dual round point in Dorst2007. 
+ * corresponding to dual round point in [Dorst2007]. 
  * 
  * no, e1, e2, e3, ni
  * 
- * Also called tangent scalar or finite point????
- * 
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
- * have a weight of 1.
+ * have a weight of 1.<p>
  * 
  * In CGA a point can be represented as a round or a flat. The round point is a 
- * sphere with radius 0, a blade with grade 1.
+ * sphere with radius 0, a blade with grade 1.<p>
  *
  * The round point is used more often in geometric expressions than the flat 
  * point, since it has nice perpendicularity properties. For example, given 
  * the round points P, Q and R, it can be used for calculating the CGA-object 
  * that is perpendicular to those three points: P ∧ Q ∧ R. This is the
- * circle passing through P, Q and R.
+ * circle passing through P, Q and R.<p>
  *
  * They can also be considered as spheres with zero radius. By
  * adding to or subtracting from the weight of the ∞ basis, we can create imaginary or
@@ -31,13 +28,13 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * and δ is the radius of the sphere: by adding δ we create imaginary spheres with a
  * negative squared radius. Finding this squared radius is as simple as squaring the
  * dual sphere: σ 2 = r 2 . What exactly an imaginary sphere is varies from application to
- * application.
+ * application.<p>
  * 
  * Null vectors, or points, in the conformal model have the unique property of 
  * having a zero dot product with themselves: p · p = 0. This interesting result 
  * is part of a more general useful trait: the dot product between any two 
  * normalized points represents the squared Euclidean distance between them: 
- * p · q = δ 2 .
+ * p · q = δ 2 .<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -58,8 +55,6 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
      * euclidian vector into its conformal one.
      * 
      * Inner and outer product null space representation is identical?.<p>
-     * 
-     * Successfull tested!!
      * 
      * @param p euclidian normalized point
      */
@@ -194,11 +189,12 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
     
     /**
      * Normalized round points can be multiplied by scalar factor and 
-     * then represent the same point. Sometimes a ’unique’ or default 
-     * representation is required for calculations. 
+     * then represent the same point. 
+     * 
+     * Sometimes a ’unique’ or default representation is required for calculations.<p>
      * 
      * Therefore the point is normalized by the formula P0 :=P/(-∞·P). 
-     * This sets the e0 -factor (weight) of the point to 1.
+     * This sets the e0 -factor (weight) of the point to 1.<p>
      * 
      * @return normalized point
      */
@@ -215,15 +211,15 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
      * ganja.js example dual planes/spheres:
      * The distance between two points.
      * var d = (a,b)=>((a<<b).Length*2)**.5;
- TODO Wie passt das mit der aktuellen Implementierung zusammen?
- - Was bedeutet .Length? vermutlich decomposeScalar()?
- - Warum muss hier keine Vorzeichen korrigiert werden. Das wird vermutlich
-   irgendwie mit der method Length() gemacht. 
- - Vielleicht eine eigene length() method einführen
- 
- get Length (){ 
-   return options.over?Math.sqrt(Math.abs(this.Mul(this.Conjugate).s.s)):Math.sqrt(Math.abs(this.Mul(this.Conjugate).s)); 
- };
+     * TODO Wie passt das mit der aktuellen Implementierung zusammen?
+     * - Was bedeutet .Length? vermutlich decomposeScalar()?
+     * - Warum muss hier keine Vorzeichen korrigiert werden. Das wird vermutlich
+     * irgendwie mit der method Length() gemacht. 
+     * - Vielleicht eine eigene length() method einführen
+     *
+     * get Length (){ 
+     *    return options.over?Math.sqrt(Math.abs(this.Mul(this.Conjugate).s.s)):Math.sqrt(Math.abs(this.Mul(this.Conjugate).s)); 
+     * };
      * 
      * @param p second point to determine the distance to
      * @return squared distance to the given point

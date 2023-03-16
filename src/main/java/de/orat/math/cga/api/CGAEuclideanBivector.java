@@ -1,7 +1,6 @@
 package de.orat.math.cga.api;
 
 import org.jogamp.vecmath.Tuple3d;
-import org.jogamp.vecmath.Vector3d;
 
 /**
  * An euclidean bivector (e12, e13, e23).

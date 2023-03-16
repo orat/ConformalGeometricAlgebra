@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  * 
  * Tangent in inner product null space representation corresponding to dual 
- * tangent in Dorst2007.
+ * tangent in [Dorst2007].
  * 
  * Pure tangents have zero size but a finite weight. 
  * 
