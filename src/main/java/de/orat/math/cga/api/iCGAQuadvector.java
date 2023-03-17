@@ -15,7 +15,7 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-interface iCGAQuadvector extends iCGABlade {
+interface iCGAQuadvector extends iCGAkVector {
     
     default boolean isQuadvector(){
         return true;

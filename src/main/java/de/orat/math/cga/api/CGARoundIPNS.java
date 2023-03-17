@@ -29,7 +29,12 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     public static boolean typeof(CGAMultivector m){
        if (inf.op(m).isNull()) return false;
        if (inf.ip(m).isNull()) return false;
-       return !m.sqr().isNull();
+       // square(m) = 0 then round
+       if (m.isScalar() && m.decomposeScalar() == 0){
+           return true;
+       }
+       return false;
+       //return !m.sqr().isNull();
     }
     
     // etc
@@ -135,7 +140,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     }
     /**
      * Determine location of the correspondig geometric object based on a
-     * sandwitch-product following Hildenbrand1998.
+     * sandwitch-product following [Hildenbrand1998].
      * 
      * @return location of the corresponding geometric object.
      */

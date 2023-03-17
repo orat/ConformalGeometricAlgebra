@@ -23,7 +23,9 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
     CGAFlatIPNS(iCGAMultivector m){
         super(m);
     }
-    
+    CGAFlatIPNS(double[] values){
+        super(values);
+    }
     
     // decompose
     

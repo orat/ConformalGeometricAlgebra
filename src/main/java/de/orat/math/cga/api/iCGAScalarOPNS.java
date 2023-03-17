@@ -4,7 +4,7 @@ package de.orat.math.cga.api;
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public interface iCGAScalarOPNS extends iCGABlade {
+public interface iCGAScalarOPNS extends iCGAkVector {
     
     default boolean isScalar(){
         return true;

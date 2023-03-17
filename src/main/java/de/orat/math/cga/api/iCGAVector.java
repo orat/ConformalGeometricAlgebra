@@ -10,7 +10,7 @@ package de.orat.math.cga.api;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-interface iCGAVector extends iCGABlade {
+interface iCGAVector extends iCGAkVector {
     
     default boolean isVector(){
         return true;

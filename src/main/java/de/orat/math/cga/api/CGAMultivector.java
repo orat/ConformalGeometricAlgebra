@@ -44,6 +44,8 @@ public class CGAMultivector {
     }
     
     public static CGAMultivector create(double[] values, boolean isIPNS){
+        if (values.length != 32) throw new IllegalArgumentException("double[] has not the length 32 but \""+
+                String.valueOf(values.length+"\"!"));
         CGAMultivector m = new CGAMultivector(values);
         if (isIPNS && CGARoundIPNS.typeof(m)){
             //TODO
@@ -139,6 +141,8 @@ public class CGAMultivector {
         return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     
+    // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+    // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, e012inf, e013inf, e023inf, e123inf, e0123inf
     public double[] extractCoordinates(){
         return impl.extractCoordinates();
     }
@@ -240,13 +244,21 @@ public class CGAMultivector {
      * @return location represented by a normalized sphere/finite point (dual sphere corresponding to Dorst2007)
      */
     protected CGARoundPointIPNS locationFromTangentAndRoundAsNormalizedSphere(){
-        // corresponds to the errata of the book Dorst2007
+        // corresponds to the errata of the book [Dorst2007]
         // and also Fernandes2009 supplementary material B
-        // location as finite point/dual sphere corresponding to Dorst2007
+        // location as finite point/dual sphere corresponding to [Dorst2007]
         // createInf(-1d).ip(this) ist die Wichtung, es wird also durch die Wichtung geteilt,
         // d.h. der Punkt wird normiert?
         System.out.println(this.toString("tangentOrRound"));
-        // tangentOrRound = (eo^e2 + eo^ei + 0.5*e2^ei)
+        // circleipns:
+        // tangentOrRound = (-0.24011911*eo^e1 + 0.39999987*eo^e2 + 0.3904*eo^e3 - 
+        // 0.35230035*eo^ei - 0.04229702*e1^ei + 0.07046005*e2^ei + 0.06876903*e3^ei)
+
+        // CGARoundPointIPNS schlägt fehl mit:
+        // The given multivector is no blade: 1.0000000000000002*eo + 0.2285897790690278*e1 
+        // - 0.3807938564778948*e2 - 0.371654924710276*e3 + 0.159234453488245*ei - 5.391337279392339E-9*e1^e2^ei 
+        // - 4.515812467020819E-9*e1^e3^ei - 1.24294008418957E-9*e2^e3^ei
+
         CGARoundPointIPNS result = new CGARoundPointIPNS((this.div(createInf(-1d).lc(this))).compress());
         //CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this)).negate().compress());
         // z.B. locationFromTangentAndRound=eo + 0.02*e1 + 0.02*e2 + e3 + 0.5*ei
@@ -266,6 +278,7 @@ public class CGAMultivector {
         CGAMultivector resultEuclidean = o.op(inf).ip(o.op(inf).op(result));
         // location (decomposed) euclidean only = (0.4999999999999998*e2)
         // FIXME nur halb so gross wie ursprünglich
+        // bei circleipns ==0 FIXME
         System.out.println(resultEuclidean.toString("location (decomposed) euclidean only"));
         return result;
     }
@@ -480,10 +493,13 @@ public class CGAMultivector {
      * 
      * a a = a^a + a.a = a.a
      * 
+     * FIXME
+     * Kann es nicht Multivektoren geben die quadriert kein Skalar ergeben?
      * @return square, equals the ip results in a scalar.
      */
-    public CGAScalarOPNS sqr(){
-        return new CGAScalarOPNS(ip(this).compress());
+    public CGAMultivector /*CGAScalarOPNS*/ sqr(){
+        CGAMultivector result = ip(this).compress();
+        return /*new CGAScalarOPNS(*/result.compress()/*)*/;
     } 
     public double squaredNorm(){
         return impl.lengthSquared();
@@ -776,5 +792,59 @@ public class CGAMultivector {
             return pointPair.decomposePoints();
         }        
         throw new RuntimeException("CGA Multivector is not of type iCGAPointPair");
+    }
+    
+      /**
+    Gaalop blades sequence:
+    [0] Skalar
+    [1] e1
+    [2] e2
+    [3] e3
+    [4] einf
+    [5] e0
+    [6] e1 ^ e2
+    [7] e1 ^ e3
+    [8] e1 ^ einf
+    [9] e1 ^ e0
+    [10] e2 ^ e3
+    [11] e2 ^ einf
+    [12] e2 ^ e0
+    [13] e3 ^ einf
+    [14] e3 ^ e0
+    [15] einf ^ e0
+    [16] e1 ^ (e2 ^ e3)
+    [17] e1 ^ (e2 ^ einf)
+    [18] e1 ^ (e2 ^ e0)
+    [19] e1 ^ (e3 ^ einf)
+    [20] e1 ^ (e3 ^ e0)
+    [21] e1 ^ (einf ^ e0)
+    [22] e2 ^ (e3 ^ einf)
+    [23] e2 ^ (e3 ^ e0)
+    [24] e2 ^ (einf ^ e0)
+    [25] e3 ^ (einf ^ e0)
+    [26] e1 ^ (e2 ^ (e3 ^ einf))
+    [27] e1 ^ (e2 ^ (e3 ^ e0))
+    [28] e1 ^ (e2 ^ (einf ^ e0))
+    [29] e1 ^ (e3 ^ (einf ^ e0))
+    [30] e2 ^ (e3 ^ (einf ^ e0))
+    [31] e1 ^ (e2 ^ (e3 ^ (einf ^ e0))) (Pseudoskalar)
+    * 
+    *  m = (1.0*eo + 2.0*e1 + 3.0*eo^e1 + 4.0*e2 + 5.0*eo^e2 + 6.0*e1^e2 + 
+    *    7.0*eo^e1^e2 + 8.0*e3 + 9.0*eo^e3 + 10.0*e1^e3 + 11.0*eo^e1^e3 + 
+    *    12.0*e2^e3 + 13.0*eo^e2^e3 + 14.0*e1^e2^e3 + 15.0*eo^e1^e2^e3 + 
+    *    16.0*ei + 17.0*eo^ei + 18.0*e1^ei + 19.0*eo^e1^ei + 20.0*e2^ei + 
+    *    21.0*eo^e2^ei + 22.0*e1^e2^ei + 23.0*eo^e1^e2^ei + 24.0*e3^ei + 
+    *    25.0*eo^e3^ei + 26.0*e1^e3^ei + 27.0*eo^e1^e3^ei + 28.0*e2^e3^ei + 
+    *    29.0*eo^e2^e3^ei + 30.0*e1^e2^e3^ei + 31.0*eo^e1^e2^e3^ei)
+    * 
+    * @param values in gaalop blades sequence
+    * @return values in the apis sequence
+    */
+    public static double[] fromGaalop(double[] values){
+        double[] result = new double[]{values[0], values[5], values[1], -values[9], values[2], -values[12],
+       values[6], values[18], values[3], -values[14], values[7],  values[20],  values[10],  -values[23], values[16], -values[27],
+        values[4], -values[15],  values[8],  values[21], values[11], values[24], values[17], -values[28], values[13], values[25],
+       values[19], -values[29], values[22], -values[30], values[26], values[31]};
+        return result;
     }
 }

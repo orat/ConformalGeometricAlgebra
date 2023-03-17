@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * Circle in inner product null space represenation (grade 2)
- * corresponding to dual circle in Dorst2007.
+ * corresponding to dual circle in [Dorst2007].
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -19,12 +19,18 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     protected CGACircleIPNS(iCGAMultivector impl){
         super(impl);
     }
+    public CGACircleIPNS(double[] values){
+        super(values);
+    }
+    
     
     public static boolean typeof(CGAMultivector m){
        boolean result = CGARoundIPNS.typeof(m);
        // TODO weitere Tests
        return result;
     }
+    
+    
     // composition
     
     /**
@@ -62,7 +68,8 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
      * @param weight
      * @return 
      */
-    private static CGAMultivector create(Point3d center, Vector3d normal, double radius, double weight){
+    private static CGAMultivector create(Point3d center, Vector3d normal, 
+                                         double radius, double weight){
         // ε₀∧nn+(x⋅nn)E₀+x∧nn+((x⋅nn)x-0.5(x²-r²)nn)∧εᵢ
         
         double r2 = radius*radius;
@@ -130,7 +137,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     /**
      * Determine location as E3 vector.
      * 
-     * @return location
+     * @return location as euclidean-vector
      */
     public CGAEuclideanVector locationIntern2(){
         CGAMultivector no_ni = createOrigin(1d).op(inf);
@@ -144,7 +151,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     }
     
     /**
-     * Determination of the squared size/radius. This is the radiusSquared for a sphere.
+     * Determination of the squared size/radius. 
      * 
      * scheint nicht zu funktionieren
      * 

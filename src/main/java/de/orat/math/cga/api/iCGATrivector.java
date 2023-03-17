@@ -12,7 +12,7 @@ import org.jogamp.vecmath.Tuple3d;
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-interface iCGATrivector extends iCGABlade {
+interface iCGATrivector extends iCGAkVector {
      
     default boolean isTrivector(){
         return true;

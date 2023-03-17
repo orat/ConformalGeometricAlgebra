@@ -46,7 +46,9 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
     CGAPlaneIPNS(iCGAMultivector m){
         super(m);
     }
-    
+    public CGAPlaneIPNS(double[] values){
+        super(values);
+    }
     
     // composition 
     

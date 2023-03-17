@@ -117,7 +117,14 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         return result;
     }
     
+  
+   
     // ungetestet
+    // {"","e0", "e1","e2","e3","einf",
+    // "e01","e02","e03","e0i","e12","e13","e1i","e23","e2i","e3i"
+    // ,"e012","e013","e01i","e023","e02i","e03i","e123","e12i","e13i","e23i",
+    //"e0123","e012i","e013i","e023i","e123i",
+    // "e0123i"};
     public void setCoordinates(double[] values){
         blades = new ArrayList<>();
         for (int i=0;i<values.length;i++){

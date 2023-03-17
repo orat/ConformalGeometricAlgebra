@@ -26,7 +26,9 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     CGAPointPairIPNS(iCGAMultivector impl){
         super(impl);
     }
-    
+    public CGAPointPairIPNS(double[] values){
+        super(values);
+    }
     
     // composition
     

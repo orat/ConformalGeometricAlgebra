@@ -23,7 +23,9 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     CGASphereIPNS(iCGAMultivector impl){
         super(impl);
     }
-    
+    public CGASphereIPNS(double[] values){
+        super(values);
+    }
     
     // composition
     
