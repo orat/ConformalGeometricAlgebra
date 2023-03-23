@@ -114,7 +114,7 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
      */
     private static CGAMultivector create(Point3d p1, Point3d p2){
         return (new CGAAttitudeBivectorOPNS(p1,p2)).add(
-                (new CGAEuclideanVector(p1)).sub(new CGAEuclideanVector(p2)).normalize().gp(I0));
+                (new CGAEuclideanVector(p1)).sub(new CGAEuclideanVector(p2))/*.normalize()*/.gp(I0));
     }
     
     /**

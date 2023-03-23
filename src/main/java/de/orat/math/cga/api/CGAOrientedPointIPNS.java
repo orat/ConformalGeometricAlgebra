@@ -16,14 +16,22 @@ public class CGAOrientedPointIPNS extends CGACircleIPNS {
         super(impl);
     }
     public CGAOrientedPointIPNS(Point3d p, Vector3d v){
-        super(create(v,p));
+        super(create(p,v));
     }
     // Vorzeichen wegen I0 ist überprüft, Formel daher anders als im Video
-    private static CGAMultivector create(Vector3d v, Point3d p){
+    // stimmt mir meinem IAS paper überein
+    private static CGAMultivector create(Point3d p, Vector3d v){
         CGAEuclideanVector nq = new CGAEuclideanVector(v);
         CGAEuclideanVector q = new CGAEuclideanVector(p);
-        return nq.op(q).add(q.sqr().gp(0.5d).gp(nq).sub(q.gp(q.scp(nq)))).gp(inf).
+        CGAMultivector result =  nq.op(q).add(q.sqr().gp(0.5d).gp(nq).sub(q.gp(q.scp(nq)))).gp(inf).
                 add(nq.gp(o)).sub(q.ip(nq).gp(I0));
+        // orientedPoint = (-0.9999999999999998*eo^e3 - 2.9999999999999987*eo^ei - 
+        // 2.9999999999999996*e1^ei - 5.999999999999999*e2^ei - 1.9999999999999996*e3^ei 
+        // - 0.9999999999999998*e1^e3^ei - 1.9999999999999996*e2^e3^ei)
+        // die 3-blades sind hier falsch
+        //FIXME
+        System.out.println(result.toString("orientedPoint"));
+        return result;
     }
     
     public static boolean typeof(CGAMultivector m){

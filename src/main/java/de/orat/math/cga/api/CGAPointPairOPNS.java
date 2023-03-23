@@ -9,13 +9,20 @@ import org.jogamp.vecmath.Vector3d;
  * corresponding to direct point-pair in [Dorst2007].
  * 
  * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
- * e3^ni,    no^ni
+ * e3^ni,    no^ni<p>
  * 
  * This corresponds to a sphere in a line, the set of points with an equal distance
- * to the center of the point-pair.
+ * to the center of the point-pair.<p>
  * 
  * Point pairs are the only rounds for which one can retrieve the points that 
  * constitutes them.
+ * 
+ * A point-pair can be imaginary. In this case it does not contain points.
+ * An imaginary point-pair is equal a ipns circle, is equal the wedge/outer product
+ * of a ipns sphere with an orthogonal ipns plane. Orthogonality of plane and sphere
+ * is given if the inner product of both is 0.
+ * 
+ * A point pair with with its corresponding squared sphere = 0, is tangent vector.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -33,7 +40,7 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     
     /**
      * Create point pair in outer product null space representation 
-     * (grade 2 multivector).
+     * (grade 2).
      * 
      * The point pair has a direction from point2 to point1, corresponding to
      * [Hitzer2005]. This corresponds to the line defined by two points in outer
@@ -48,7 +55,7 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     
     /**
      * Create (non-normalized) point pair in outer product null space 
-     * representation (grade 2 multivector).
+     * representation (grade 2).
      * 
      * The point pair has a direction from point2 to point1, corresponding to
      * [Hitzer2005]. This corresponds to the line defined by two points in outer
@@ -108,17 +115,16 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
         return result.extractAttitudeFromEeinfRepresentation();
     }
     
+    // funktioniert das auch mit imaginären Punktepaaren?
+    //TODO
+    // vermutlich nein!
     public PointPair decomposePoints(){
-        //Point3d[] result = new Point3d[2];
         CGAScalarOPNS sqrt = new CGAScalarOPNS(this.ip(this).compress()).sqrt();
         // following Fernandes (Formelsammlung, attachement)
         CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
         System.out.println(p2.toString("p2"));
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
         System.out.println(p1.toString("p1"));
-        
-        //result[0] = p1.location();
-        //result[1] = p2.location();
         return new PointPair(p1.location(), p2.location());
     }
 }

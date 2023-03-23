@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * A vector with direction u at location p (grade 2), corresponding to 
- * direct tangent in Dorst2007.
+ * direct tangent in [Dorst2007].
  * 
  * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
  * e3^ni,    no^ni

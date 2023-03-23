@@ -108,7 +108,7 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         return squaredSizeIntern1(this);
     }
     /**
-     * Determination of the squared size of a round centered in the origin. 
+     * Determination of the squared size of a round. 
      * 
      * precondition:
      * - location at the origin?
@@ -127,7 +127,12 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
         // gradeInversion() ist elegant, da ich damit die Formel für pp, circle und sphere
         // verwenden kann
-        CGAScalarOPNS result = new CGAScalarOPNS(m_n.gp(m_n.gradeInversion()).div((inf.lc(m_n)).sqr()).compress()); 
+        // The given multivector is not not grade 0! -0.5016342651363553 - 
+        // 0.6891020957909896*eo^e1^e2^e3 + 0.31092585211142815*eo^e1^e2^ei
+        // Der scalar-Teil scheint korrekt zu sein und wird hier mit extractGrade() rausgeschnitten
+        // FIXME warum ist das nötig? Vielleicht ist sqr als einfaches ip falsch implementiert
+        // vielleicht muss ip vom reverse gerechnet werden für sqr
+        CGAScalarOPNS result = new CGAScalarOPNS(m_n.gp(m_n.gradeInversion()).div((inf.lc(m_n)).sqr()).extractGrade(0)/*compress()*/); 
         System.out.println(result.toString("squaredSize (Dorst2007)"));
         
         // Alternative implementation

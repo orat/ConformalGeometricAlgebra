@@ -1,20 +1,19 @@
 package de.orat.math.cga.api;
 
 import static de.orat.math.cga.api.CGAMultivector.createE3;
-import static de.orat.math.cga.api.CGAMultivector.createOrigin;
 import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
  * A point-pair (0-sphere) in inner product null space representation 
- * (grade 3 multivector), corresponding to dual point-pair in Dorst2007.
+ * (grade 3), corresponding to dual point-pair in Dorst2007.
  * 
  * This corresponds to a sphere in a line, the set of point with an equal distance
- * to the center of the point-pair.
+ * to the center of the point-pair.<p>
  * 
- * Point pairs are the only rounds for which one can retrieve the points that 
- * constitutes them.
+ * Point pairs are the only rounds, for which one can retrieve the points that 
+ * constitutes them.<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -161,6 +160,9 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         return new CGAPointPairOPNS(super.undual().compress());//impl.dual().gp(-1));
     }
     
+    public CGAPointPairIPNS normalize(){
+        return new CGAPointPairIPNS(super.normalize());
+    }
     
     // decomposition
     
@@ -213,9 +215,12 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         //blade = blade / weight
 	//local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) ) * i
         double weight = weightIntern2();
-        CGAMultivector no = createOrigin(1d);
-        CGAMultivector no_ni = no.op(inf);
-        CGAMultivector result = attitudeIntern2().negate().gp(no_ni.ip(this.gp(1d/weight).op(no.gp(inf)))).gp(createI3());
+        CGAMultivector blade = this.gp(1d/weight);
+        CGAMultivector no_ni = o.op(inf);
+        CGAMultivector result = attitudeIntern2().negate().gp(no_ni.ip(blade.op(o.gp(inf)))).gp(I3);
+        // locationIntern2 (CGAOrientedPointPairIPNS) = (0.22051648227377704*e1 + 
+        // 0.3673450407273629*e2 + 0.18356670723359603*e3 + 0.3445510478954946*e1^e2^e3)
+        //FIXME der letzte Termin ist falsch
         System.out.println(result.toString("locationIntern2 (CGAOrientedPointPairIPNS)"));
         return new CGAEuclideanVector(result);
     }
@@ -225,10 +230,11 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     }
     
     /**
-     * Specific implementation, because generic implementation for all rounds
-     * does not work.
+     * Squared size.
      * 
-     * @return squaredSize/squaredRadius
+     * Vielversprechende Implementierung following CGALua.
+     * 
+     * @return squaredSize/squaredRadius <0 for imaginary point paires, else > 0
      */
     public CGAScalarOPNS squaredSizeIntern5(){
         // It must be non-zero and of grade 3
@@ -238,15 +244,13 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         System.out.println("weightIntern2 (squaredSizeIntern2, CGAOrientedPointPairIPNS)="+
                 String.valueOf(weight));
         CGAMultivector blade = this.gp(1d/weight);
-        System.out.println(blade.toString("CGAOrientedPointPairIPNS input to determine squaredRadius"));
-        CGAMultivector no = CGAMultivector.createOrigin(1d);
-        CGAMultivector no_ni = no.op(inf);
+        CGAMultivector no_ni = o.op(inf);
         CGAMultivector center = locationIntern2();
         CGAMultivector normal = attitudeIntern2();
         // local radius_squared = -( center .. center ) + 
         // 2 * ( ( no_ni .. ( no ^ blade ) ) * i + ( center .. normal ) * center ) * normal
         CGAMultivector result =  center.ip(center).negate().add(
-                no_ni.ip(no.op(blade)).gp(CGAMultivector.createI3()).
+                no_ni.ip(o.op(blade)).gp(CGAMultivector.createI3()).
                         add(center.ip(normal).gp(center)).gp(2d).gp(normal));
         System.out.println(result.toString("squaredSizeIntern (CGAOrientedPointPairIPNS, Spencer)"));
         return new CGAScalarOPNS(result);

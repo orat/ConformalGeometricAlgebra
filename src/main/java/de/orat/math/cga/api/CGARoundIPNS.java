@@ -224,7 +224,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     }
     /**
      * ok for sphereIPNS
-     * failed for circleIPNS Multivector is not invertable: this.negate().ip(CGAMultivector.createInf(1d))
+     * failed for circleIPNS, pointpairipns Multivector is not invertable: this.negate().ip(CGAMultivector.createInf(1d))
      * 
      * @return 
      */

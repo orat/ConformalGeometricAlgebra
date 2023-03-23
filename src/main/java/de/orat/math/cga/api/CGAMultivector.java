@@ -40,7 +40,7 @@ public class CGAMultivector {
         impl = new CGA1Multivector();
     }
     CGAMultivector(double[] values){
-        this.impl = defaultInstance.impl.create(values);
+        this.impl = defaultInstance.impl.create(values).getCompressed();
     }
     
     public static CGAMultivector create(double[] values, boolean isIPNS){
@@ -239,6 +239,7 @@ public class CGAMultivector {
      * scheint für CGARound zu stimmen
      * scheint mit CGATangent nicht zu stimmen??? mittlerweile korrigiert?
      * scheint mit CGAOrientedPointPair zu stimmen
+     * vielleicht muss das object vorher normalisiert werden
      * TODO
      * 
      * @return location represented by a normalized sphere/finite point (dual sphere corresponding to Dorst2007)
@@ -259,7 +260,14 @@ public class CGAMultivector {
         // - 0.3807938564778948*e2 - 0.371654924710276*e3 + 0.159234453488245*ei - 5.391337279392339E-9*e1^e2^ei 
         // - 4.515812467020819E-9*e1^e3^ei - 1.24294008418957E-9*e2^e3^ei
 
-        CGARoundPointIPNS result = new CGARoundPointIPNS((this.div(createInf(-1d).lc(this))).compress());
+        // FIXME unklar, ob Normierung notwendig ist
+        CGAMultivector mn = this.normalize();
+        
+        // The given multivector is no k-vector: 1.0000000000000002*eo + 0.220516482273777*e1 + 
+        // 0.36734504072736274*e2 + 0.1835667072335959*e3 - 
+        // 0.3445510478954946*e1^e2^e3 + 0.18137731261233903*ei - 0.28195912872783596*e1^e2^ei + 0.253138237443652*e1^e3^ei - 0.15195837009131624*e2^e3^ei
+        // schlägt fehlt bei imaginary point-pair == ipns circle. da rountpointipns keine 3-er-Komponenten enthalten darf
+        CGARoundPointIPNS result = new CGARoundPointIPNS((mn.negate().div(inf.lc(mn))).compress());
         //CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this)).negate().compress());
         // z.B. locationFromTangentAndRound=eo + 0.02*e1 + 0.02*e2 + e3 + 0.5*ei
         // bei input von p=(0.02,0.02,1.0), funktioniert, aber vermutlich nur,

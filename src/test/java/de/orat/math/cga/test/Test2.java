@@ -35,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
 import de.orat.math.cga.api.CGAScalarIPNS;
-import de.orat.math.cga.api.CGAScalor;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
 
 /**

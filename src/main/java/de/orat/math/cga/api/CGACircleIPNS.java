@@ -55,30 +55,22 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     }
     /**
      * Create a circle in inps respresentation.
-     * 
-     * FIXME
-     * The given multivector is not of grade 2 or a null vector: 
-     * 0.33333333333333354*e1^e3 + 0.6666666666666671*e2^e3 + 1.0000000000000002*eo^ei + 
-     * 1.0000000000000007*e1^ei + 2.0000000000000013*e2^ei + 1.3333333333333341*e3^ei + 
-     * 0.3333333333333334*eo^e1^e3^ei + 0.6666666666666669*eo^e2^e3^ei
      *
      * @param center
      * @param normal
      * @param radius imaginary circle if radius<0
      * @param weight
-     * @return 
+     * @return multivector representing a circle ipns object
      */
     private static CGAMultivector create(Point3d center, Vector3d normal, 
                                          double radius, double weight){
-        // Formel stimmt mit paper überein und auch mit der Implementierung in lua
+        // Formula corresponding to cgaLua pdf documentation
         // ε₀∧nn+(x⋅nn)E₀+x∧nn+((x⋅nn)x-0.5(x²-r²)nn)∧εᵢ
         
         double r2 = radius*radius;
         if (radius<0){
             r2 = -r2;
         }
-        //FIXME
-        // scheint doppeltes e23 zu liefern
         // CGA lua code
         // local blade = weight * ( no ^ normal + ( center .. normal ) * no_ni + center ^ normal +
         // ( ( center .. normal ) * center - 0.5 * ( ( center .. center ) - sign * radius * radius ) * normal ) ^ ni )
