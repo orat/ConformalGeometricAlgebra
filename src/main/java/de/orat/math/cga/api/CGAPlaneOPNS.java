@@ -20,6 +20,9 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     CGAPlaneOPNS(iCGAMultivector impl){
         super(impl);
     }
+    public CGAPlaneOPNS(double[] values){
+        super(values);
+    }
     /**
      * Create plane in outer product null space representation (grade 4 multivector).
      * 

@@ -47,10 +47,18 @@ public class CGAMultivector {
         if (values.length != 32) throw new IllegalArgumentException("double[] has not the length 32 but \""+
                 String.valueOf(values.length+"\"!"));
         CGAMultivector m = new CGAMultivector(values);
-        if (isIPNS && CGARoundIPNS.typeof(m)){
-            //TODO
-            // test ob circle, point, ...
-            return new CGAOrientedPointIPNS(m);
+        if (isIPNS){
+            if (CGARoundIPNS.typeof(m)){
+                //TODO
+                // test ob circle, point, ...
+                return new CGAOrientedPointIPNS(m);
+            } 
+        } else {
+             if (CGARoundIPNS.typeof(m)){
+                //TODO
+                // test ob circle, point, ...
+                return new CGAOrientedPointOPNS(m);
+            } 
         }
         System.out.println("Subtype of \""+m.toString("")+"\" not detected!");
         return m;
