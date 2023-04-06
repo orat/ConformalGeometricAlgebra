@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * A point-pair (0-sphere) in outer product null space representation (grade 2 ), 
+ * A point-pair (0-sphere) in outer product null space representation (grade 2), 
  * corresponding to direct point-pair in [Dorst2007].
  * 
  * no^e1,    no^e2,    no^e3,    e1^e2,    e2^e3,    e3^e1,    e1^ni,    e2^ni,    
@@ -18,7 +18,7 @@ import org.jogamp.vecmath.Vector3d;
  * constitutes them.
  * 
  * A point-pair can be imaginary. In this case it does not contain points.
- * An imaginary point-pair is equal a ipns circle, is equal the wedge/outer product
+ * An imaginary point-pair is equal a ipns circle, it is equal the wedge/outer product
  * of a ipns sphere with an orthogonal ipns plane. Orthogonality of plane and sphere
  * is given if the inner product of both is 0.
  * 
@@ -39,7 +39,7 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     // composition
     
     /**
-     * Create point pair in outer product null space representation 
+     * Create a (non-normalized) point pair in outer product null space representation 
      * (grade 2).
      * 
      * The point pair has a direction from point2 to point1, corresponding to
@@ -60,7 +60,7 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
      * The point pair has a direction from point2 to point1, corresponding to
      * [Hitzer2005]. This corresponds to the line defined by two points in outer
      * product null space representation.
-    
+     *
      * @param point1
      * @param weight1
      * @param point2
@@ -84,7 +84,7 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     }
     
     /**
-     * Composition of a point-pair based on two weighted rounds-points.
+     * Composition of a (non-normalized) point-pair based on two rounds-points.
      * 
      * The direction of the point-pair is defined from point-2 to point-1.
      * 

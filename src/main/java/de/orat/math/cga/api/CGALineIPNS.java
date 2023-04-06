@@ -70,8 +70,19 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
         this(createE3(attitude).add(createE3(c).op(createE3(attitude)).gp(inf)).
                 gp(I3).gp(weight));
     }
+    /**
+     * Create a a line in IPNS representation with weight 1.
+     * 
+     * @param c position on the line
+     * @param attitude direction of the line (normalization is not needed)
+     */
     public CGALineIPNS(Point3d c, Vector3d attitude){
-        this(c, attitude, 1d);
+        this(c, normalize(attitude), 1d);
+    }
+    private static Vector3d normalize(Vector3d attitude){
+        Vector3d result = attitude;
+        attitude.normalize();
+        return attitude;
     }
     
     public CGALineIPNS(CGABivector B, double d){
