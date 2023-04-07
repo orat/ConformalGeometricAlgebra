@@ -853,14 +853,43 @@ public class CGAMultivector {
     *    25.0*eo^e3^ei + 26.0*e1^e3^ei + 27.0*eo^e1^e3^ei + 28.0*e2^e3^ei + 
     *    29.0*eo^e2^e3^ei + 30.0*e1^e2^e3^ei + 31.0*eo^e1^e2^e3^ei)
     * 
+    *  [6] e1 ^ e2
+    [7] e1 ^ e3
+    [8] e1 ^ einf
+    [9] e1 ^ e0
+    *  [10] e2 ^ e3
+    [11] e2 ^ einf
+    [12] e2 ^ e0
+    [13] e3 ^ einf
+    [14] e3 ^ e0
+    [15] einf ^ e0
+    * 
+    *  [0] Skalar
+    [1] e1
+    [2] e2
+    [3] e3
+    [4] einf
+    [5] e0
+         
+        *  // m = (1.0*eo + 2.0*e1 + 3.0*eo^e1 + 4.0*e2 + 5.0*eo^e2 + 6.0*e1^e2 + 
+         // 7.0*eo^e1^e2 + 8.0*e3 + 9.0*eo^e3 + 10.0*e1^e3 + 11.0*eo^e1^e3 + 
+         // 12.0*e2^e3 + 13.0*eo^e2^e3 + 14.0*e1^e2^e3 + 15.0*eo^e1^e2^e3 + 
+         // 16.0*ei + 17.0*eo^ei + 18.0*e1^ei + 19.0*eo^e1^ei + 20.0*e2^ei + 
+         // 21.0*eo^e2^ei + 22.0*e1^e2^ei + 23.0*eo^e1^e2^ei + 24.0*e3^ei +
+         * 
+         // 25.0*eo^e3^ei + 26.0*e1^e3^ei + 27.0*eo^e1^e3^ei + 28.0*e2^e3^ei + 
+         // 29.0*eo^e2^e3^ei + 30.0*e1^e2^e3^ei + 31.0*eo^e1^e2^e3^ei)
     * @param values in gaalop blades sequence
     * @return values in the apis sequence
     */
     public static double[] fromGaalop(double[] values){
-        double[] result = new double[]{values[0], values[5], values[1], -values[9], values[2], -values[12],
-       values[6], values[18], values[3], -values[14], values[7],  values[20],  values[10],  -values[23], values[16], -values[27],
-        values[4], -values[15],  values[8],  values[21], values[11], values[24], values[17], -values[28], values[13], values[25],
-       values[19], -values[29], values[22], -values[30], values[26], values[31]};
+        double[] result = new double[]{values[0], values[5], values[1], -values[9], values[2], -values[12], values[6], 
+            values[18], values[3], -values[14], values[7],  values[20],  
+            values[10],  values[23], values[16], -values[27],
+            values[4], -values[15],  values[8],  values[21], values[11], 
+            values[24], values[17], -values[28], values[13], 
+            values[25], values[19], -values[29], values[22], 
+            -values[30], values[26], values[31]};
         return result;
     }
 }

@@ -149,7 +149,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         return result;
     }
     public String[] basisBladeNames(){
-        return CGA1Metric.getInstance().basisBladeNames();
+        return CGA1Metric.basisBladeNames();
     }
     
     @Override
