@@ -12,6 +12,7 @@ public class CGAOrientedPointOPNS extends CGACircleOPNS {
     public CGAOrientedPointOPNS(CGAMultivector m) {
         super(m);
     }
+    
     protected CGAOrientedPointOPNS(iCGAMultivector impl){
         super(impl);
     }
@@ -33,9 +34,12 @@ public class CGAOrientedPointOPNS extends CGACircleOPNS {
         CGAEuclideanVector q = new CGAEuclideanVector(p);
         return iq.op(q).add(q.sqr().gp(0.5d).gp(iq).sub(q.gp(q.scp(iq))).gp(inf)).add(iq.gp(o)).sub(iq.ip(q.gp(I0)));
     }
+    
+    
+    // etc.
+    
     @Override
     public CGAOrientedPointIPNS dual(){
         return new CGAOrientedPointIPNS(impl.dual());
     }
-    
 }

@@ -876,7 +876,6 @@ public class CGAMultivector {
          // 12.0*e2^e3 + 13.0*eo^e2^e3 + 14.0*e1^e2^e3 + 15.0*eo^e1^e2^e3 + 
          // 16.0*ei + 17.0*eo^ei + 18.0*e1^ei + 19.0*eo^e1^ei + 20.0*e2^ei + 
          // 21.0*eo^e2^ei + 22.0*e1^e2^ei + 23.0*eo^e1^e2^ei + 24.0*e3^ei +
-         * 
          // 25.0*eo^e3^ei + 26.0*e1^e3^ei + 27.0*eo^e1^e3^ei + 28.0*e2^e3^ei + 
          // 29.0*eo^e2^e3^ei + 30.0*e1^e2^e3^ei + 31.0*eo^e1^e2^e3^ei)
     * @param values in gaalop blades sequence

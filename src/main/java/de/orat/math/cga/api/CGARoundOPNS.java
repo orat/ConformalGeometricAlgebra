@@ -6,7 +6,8 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * Weighted rounds are points, point-pairs, circles and spheres/hyper-spheres,
- * here given in outer product null space representation corresponding to direct round in Dorst2007.
+ * here given in outer product null space representation corresponding to direct 
+ * round in [Dorst2007].
  * 
  * Rounds are objects with finite areas/volumes/hyperolumes.
  * 
@@ -21,6 +22,22 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         super(impl);
     }
     
+    // untested
+    /**
+     * Creates real or imaginary round in outer product null space representation.
+     * 
+     * corresponding to [Dorst2009] 14.9
+     * 
+     * @param c
+     * @param Ak
+     * @return round in opns representation
+     */
+    static CGARoundOPNS create(Point3d c, AbstractEuclideanKVector Ak, double r){
+        CGARoundPointIPNS cp = new CGARoundPointIPNS(c);
+        CGAMultivector result = new CGAMultivector(cp.impl);
+        result.add(inf.gp(0.5*r*r));
+        return (CGARoundPointOPNS) result.op(cp.negate().op(Ak.gp(inf)));
+    }
     
     // decompose
     

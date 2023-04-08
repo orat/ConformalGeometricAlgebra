@@ -17,9 +17,11 @@ public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
     public CGACircleOPNS(CGAMultivector m){
         super(m);
     }
+    
     CGACircleOPNS(iCGAMultivector m){
         super(m);
     }
+    
     /**
      * Create direct circle in outer product null space representation 
      * (grade 3 multivector).
@@ -46,12 +48,21 @@ public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
          this((new CGARoundPointIPNS(point1, weight1)).op((new CGARoundPointIPNS(point2, weight2))).op((new CGARoundPointIPNS(point3, weight3))));
     }
    
-    public CGABivector carrierFlat(){
-        return new CGABivector(super.carrierFlat());
+    // ungetested
+    CGACircleOPNS(Point3d c, CGAEuclideanBivector ev, double r){
+        super(create(c, ev, r).impl);
     }
+    
+    
+    // etc.
     
     @Override
     public CGACircleIPNS dual(){
         return new CGACircleIPNS(impl.dual());
     }
+    
+    public CGABivector carrierFlat(){
+        return new CGABivector(super.carrierFlat());
+    }
+    
 }
