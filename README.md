@@ -1,4 +1,4 @@
-# ConformalGeometricAlgebra
+# (Oriented) Conformal Geometric Algebra
 
 The conformal group is the group of transformations that preserve angles. This includes the rigid (euclidean) transformations. The conformal group on $R^3$ has a natural representation in terms of rotations in a 5D-space, with signature $R^{4, 1}$ which means 4 basis vectors have a positive square, and 1 have a negative square. So, in the same way that projective transformations are linearised by working in a 4D-homogeneous space, conformal transformations are linearised in a 5D-space.
 
