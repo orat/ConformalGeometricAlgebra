@@ -504,6 +504,10 @@ public class CGAMultivector {
         return new CGAMultivector(impl.undual());//impl.dual().gp(-1));
     }
     
+    public CGAMultivector euclideanDual(){
+        return new CGAMultivector(this.lc(I3i).impl);
+    }
+    
     /**
      * Determine the square.
      * 
@@ -723,7 +727,13 @@ public class CGAMultivector {
     public CGAMultivector negate(){
         return this.gp(-1);
     }
-    
+    /**
+     * Swapping the parity of the grade.
+     * 
+     * Also called main involution.
+     * 
+     * @return 
+     */
     public CGAMultivector gradeInversion(){
         return new CGAMultivector(impl.gradeInversion());
     }

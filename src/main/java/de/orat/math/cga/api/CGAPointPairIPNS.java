@@ -50,28 +50,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         this(p1.op(p2).dual());
     }
     
-    /**
-     * Composition of a point pair in IPNS representation from euclidean parameters.
-     * 
-     * Implementation follows:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-     *
-     * To determine the formula the formula of a sphere on the left and the formula
-     * of a line one the right side of an outer product is used. This makes an
-     * implicit choice which affects the sign of the weight.
-     * 
-     * @param c center
-     * @param n normal
-     * @param r radius > 0
-     * @param weight 
-     * @param real true for a real point-pair else for a imaginary point pair
-     */
-    /*public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight, boolean real){
-        this(createCGAMultivector(c,n,r,weight, real));
-    }
-    public CGAPointPairIPNS(Point3d c, Vector3d n, double r, boolean real){
-        this(createCGAMultivector(c,n,r,1d, real));
-    }*/
+    
     /**
      * Composition of a point pair by its center, radius and direction in ipns
      * representation.
@@ -82,16 +61,25 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      * @param weight 
      */
     public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight){
-        this(createCGAMultivector(c,n,r,weight));
+        this(CGAPointPairIPNS.create(c,n,r,weight));
     }
     public CGAPointPairIPNS(Point3d c, Vector3d n, double r){
-        this(createCGAMultivector(c,n,r,1d));
+        this(CGAPointPairIPNS.create(c,n,r,1d));
     }
     
+    /**
+     * Implementation follows:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     *
+     * To determine the formula the formula of a sphere on the left and the formula
+     * of a line one the right side of an outer product is used. This makes an
+     * implicit choice which affects the sign of the weight.
+     */
     // The given multivector m is not of grade 3! 4.5*e1^e2^ei - 3.0*eo^e1^e2^ei
     // TODO Es wäre auch zu versuchen die Implementierung nach den Formeln von
     // Hitzer vorzunehmen.
-    private static CGAMultivector createCGAMultivector(Point3d center, Vector3d normal, 
+    @Deprecated
+    private static CGAMultivector create(Point3d center, Vector3d normal, 
             double r, double weight, boolean sign){
         CGAMultivector no_inf = o.op(inf);
         CGAMultivector c = createE3(center);
@@ -119,15 +107,18 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         return result;
     }
     /**
-     * Create point pair in ipns representation based on euclidean objects.
+     * Create point-pair in ipns representation based on euclidean objects.
+     * 
+     * Implementation follows:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      * 
      * @param center
      * @param normal vector (normalization not needed, from point-2 to point-1)
-     * @param r >0 for real point-pair, <0 for imaginary pointpait
+     * @param r >0 for real point-pair, <0 for imaginary point-pair
      * @param weight
-     * @return 
+     * @return point pair in ipns representation
      */
-    private static CGAMultivector createCGAMultivector(Point3d center, Vector3d normal, 
+    private static CGAMultivector create(Point3d center, Vector3d normal, 
             double r, double weight){
         CGAMultivector c = createE3(center);
         Vector3d normalizedNormal = new Vector3d(normal);
@@ -151,6 +142,10 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         //FIXME braucht es das normalize() überhaupt?
         CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(I3).normalize().gp(weight);
         return result;
+    }
+    
+    private static CGAMultivector create2(Point3d center, Vector3d normal, double r){
+         return CGARoundIPNS.create(center, new CGAEuclideanVector(normal), r);
     }
     
     // etc

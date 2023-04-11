@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * Oriented and weighted finite rounds are round points, point-pairs, circles and spheres, 
  * here given in inner product null space representation corresponding to dual 
- * round in Drost2007.
+ * round in [Drost2007].
  * 
  * Finite rounds are objects with finite areas/volumes/hyperolumes.
  * 
@@ -26,15 +26,30 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     public CGARoundIPNS(double[] values){
         super(values);
     }
+    
+    // untested
+    /**
+     * Creates real or imaginary round in outer product null space representation.
+     * 
+     * corresponding to [Dorst2009] 14.9
+     * 
+     * @param c
+     * @param Ak
+     * @return round in opns representation
+     */
+    static CGARoundIPNS create(Point3d c, AbstractEuclideanKVector Ak, double r){
+        CGARoundPointIPNS cp = new CGARoundPointIPNS(c);
+        CGAMultivector result = new CGAMultivector(cp.impl);
+        result.sub(inf.gp(0.5*r*r));
+        return (CGARoundPointIPNS) result.op(cp.negate().lc(Ak.gradeInversion().euclideanDual().gp(inf)));
+    }
+    
     public static boolean typeof(CGAMultivector m){
        if (inf.op(m).isNull()) return false;
        if (inf.ip(m).isNull()) return false;
-       // square(m) = 0 then round
-       if (m.isScalar() && m.decomposeScalar() == 0){
-           return true;
-       }
-       return false;
-       //return !m.sqr().isNull();
+        // square(m) = 0 then round
+        //return !m.sqr().isNull();
+       return m.isScalar() && m.decomposeScalar() == 0;
     }
     
     // etc

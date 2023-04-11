@@ -36,7 +36,7 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         CGARoundPointIPNS cp = new CGARoundPointIPNS(c);
         CGAMultivector result = new CGAMultivector(cp.impl);
         result.add(inf.gp(0.5*r*r));
-        return (CGARoundPointOPNS) result.op(cp.negate().op(Ak.gp(inf)));
+        return (CGARoundPointOPNS) result.op(cp.negate().lc(Ak.gradeInversion().gp(inf)));
     }
     
     // decompose

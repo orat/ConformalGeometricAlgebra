@@ -36,8 +36,8 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     }
     
     // ungetested
-    CGAPointPairOPNS(Point3d c, CGAEuclideanVector ev, double r){
-        super(create(c, ev, r).impl);
+    CGAPointPairOPNS(Point3d c, Vector3d v, double r){
+        super(create(c, new CGAEuclideanVector(v), r).impl);
     }
     
     // composition
