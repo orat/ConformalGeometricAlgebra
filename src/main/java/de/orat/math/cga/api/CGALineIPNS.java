@@ -31,7 +31,7 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
         super(m);
     }
     
-    CGALineIPNS(double[] values){
+    public CGALineIPNS(double[] values){
         super(values);
     }
     
