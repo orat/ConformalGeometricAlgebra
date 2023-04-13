@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Flat points (grade 3). 
+ * Flat points (grade 3) in ipns representation. 
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -15,6 +15,9 @@ public class CGAFlatPointIPNS extends CGAFlatIPNS implements iCGATrivector {
         super(m);
     }
    
+    public CGAFlatPointIPNS(double[] values){
+        super(values);
+    }
     
     // composition
     
