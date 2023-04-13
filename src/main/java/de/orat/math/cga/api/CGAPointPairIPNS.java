@@ -7,13 +7,15 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * A point-pair (0-sphere) in inner product null space representation 
- * (grade 3), corresponding to dual point-pair in Dorst2007.
+ * (grade 3), corresponding to dual point-pair in [Dorst2007].
  * 
  * This corresponds to a sphere in a line, the set of point with an equal distance
  * to the center of the point-pair.<p>
  * 
  * Point pairs are the only rounds, for which one can retrieve the points that 
  * constitutes them.<p>
+ * 
+ * A point-pair be used as a line-segment.<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -57,14 +59,21 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      * 
      * @param c center of the point pair
      * @param n direction of the line defined by the point pair from point-2 to point-1
-     * @param r radius, r<=imaginary point pair
+     * @param r radius, r<0: imaginary point pair
      * @param weight 
      */
     public CGAPointPairIPNS(Point3d c, Vector3d n, double r, double weight){
         this(CGAPointPairIPNS.create(c,n,r,weight));
+        // das könnte ich hier auch auf create2 umstellen. Dazu muss ich create2()
+        // nur um einen weight-Parameter ergänzen
+        //TODO
     }
     public CGAPointPairIPNS(Point3d c, Vector3d n, double r){
-        this(CGAPointPairIPNS.create(c,n,r,1d));
+        // following Lua code
+        //this(CGAPointPairIPNS.create(c,n,r,1d));
+        // following generic dual round composition from [Dorst2009].
+        // scheint zu gleichem Ergebnis wie die Lua-based implementation zu führen
+        this(CGAPointPairIPNS.create2(c,n,r));
     }
     
     /**
@@ -110,7 +119,16 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
      * Create point-pair in ipns representation based on euclidean objects.
      * 
      * Implementation follows:
-     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf<p>
+     * 
+     * The implementation is based on the outer product of a sphere with a line
+     * through the origin of the sphere.<p>
+     * 
+     * TODO
+     * Die Multiplikation des Ausdrucks mit "weight" ist nur korrekt, wenn der Term
+     * vorher normalisiert ist. Es ist aber noch nicht überprüft, ob er implizit bereits normal
+     * ist. Vermutlich stimmt es aber mit der impliziten Normalisierung, denn n und
+     * c sollten normalisiert sein. <p>
      * 
      * @param center
      * @param normal vector (normalization not needed, from point-2 to point-1)
@@ -135,18 +153,29 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         // (das erste "-" ist im pdf ein "+"
         // local blade = weight * ( no ^ normal + center ^ normal ^ no_ni - ( center .. normal ) -
         //( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
-        // FIXME component e123 scheint falches Vorzeichen zu haben
-        CGAMultivector a =  o.op(n).add(c.op(n).op(I0)).sub(c.ip(n));
+        // FIXME component e123 scheint falches Vorzeichen zu haben --> das "+" im pdf ist also richtig
+        //CGAMultivector a =  o.op(n).add(c.op(n).op(I0)).sub(c.ip(n));
+        CGAMultivector a =  o.op(n).add(c.op(n).op(I0)).add(c.ip(n));
         CGAMultivector b = c.ip(n).gp(c);
         CGAMultivector d = c.sqr().add(sr2).gp(0.5).gp(n);
-        //FIXME braucht es das normalize() überhaupt?
-        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(I3).normalize().gp(weight);
+        //FIXME braucht es das normalize() überhaupt? nein!
+        //CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(I3).normalize().gp(weight);
+        CGAMultivector result = a.sub(b.sub(d).op(inf)).gp(I3).gp(weight);
         return result;
     }
     
+    /**
+     * Composition of an ipns point-pair based on [Dorst2009], formula 14_10.
+     * 
+     * @param center
+     * @param normal
+     * @param r
+     * @return point-pair 
+     */
     private static CGAMultivector create2(Point3d center, Vector3d normal, double r){
          return CGARoundIPNS.create(center, new CGAEuclideanVector(normal), r);
     }
+    
     
     // etc
     

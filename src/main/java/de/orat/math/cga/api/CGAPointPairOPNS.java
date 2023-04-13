@@ -15,14 +15,16 @@ import org.jogamp.vecmath.Vector3d;
  * to the center of the point-pair.<p>
  * 
  * Point pairs are the only rounds for which one can retrieve the points that 
- * constitutes them.
+ * constitutes them.<p>
  * 
  * A point-pair can be imaginary. In this case it does not contain points.
  * An imaginary point-pair is equal a ipns circle, it is equal the wedge/outer product
  * of a ipns sphere with an orthogonal ipns plane. Orthogonality of plane and sphere
- * is given if the inner product of both is 0.
+ * is given if the inner product of both is 0.<p>
  * 
- * A point pair with with its corresponding squared sphere = 0, is tangent vector.
+ * A point pair with with its corresponding squared sphere = 0, is tangent vector.<p>
+ * 
+ * A point-pair be used as a line-segment.<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

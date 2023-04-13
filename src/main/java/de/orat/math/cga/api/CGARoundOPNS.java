@@ -32,11 +32,11 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
      * @param Ak
      * @return round in opns representation
      */
-    static CGARoundOPNS create(Point3d c, AbstractEuclideanKVector Ak, double r){
+    static CGAMultivector create(Point3d c, AbstractEuclideanKVector Ak, double r){
         CGARoundPointIPNS cp = new CGARoundPointIPNS(c);
         CGAMultivector result = new CGAMultivector(cp.impl);
         result.add(inf.gp(0.5*r*r));
-        return (CGARoundPointOPNS) result.op(cp.negate().lc(Ak.gradeInversion().gp(inf)));
+        return result.op(cp.negate().lc(Ak.gradeInversion().gp(inf)));
     }
     
     // decompose

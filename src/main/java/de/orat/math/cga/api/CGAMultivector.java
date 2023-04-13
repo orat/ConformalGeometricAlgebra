@@ -129,7 +129,7 @@ public class CGAMultivector {
      * @return E3 vector
     */
     public static CGAEuclideanVector createE3(Tuple3d v){
-            return new CGAEuclideanVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
+        return new CGAEuclideanVector(createEx(v.x).add(createEy(v.y)).add(createEz(v.z)));
     }
     // sollte identisch zur createE3 sein? Nein!
     public static CGAMultivector createI3(){
@@ -505,7 +505,9 @@ public class CGAMultivector {
     }
     
     public CGAMultivector euclideanDual(){
-        return new CGAMultivector(this.lc(I3i).impl);
+        //return new CGAMultivector(this.lc(I3i).impl);
+        //return new CGAMultivector(this.gp(I3i).impl);
+        return new CGAMultivector(this.div(I3).impl);
     }
     
     /**

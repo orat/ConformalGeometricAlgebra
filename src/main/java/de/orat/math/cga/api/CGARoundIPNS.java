@@ -34,14 +34,15 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
      * corresponding to [Dorst2009] 14.9
      * 
      * @param c
-     * @param Ak
-     * @return round in opns representation
+     * @param Ak euclidean k-Vector with k=1,2,3 to create point-pair, circle and sphere
+     * @return round in ipns representation
      */
-    static CGARoundIPNS create(Point3d c, AbstractEuclideanKVector Ak, double r){
+    static CGAMultivector create(Point3d c, AbstractEuclideanKVector Ak, double r){
         CGARoundPointIPNS cp = new CGARoundPointIPNS(c);
         CGAMultivector result = new CGAMultivector(cp.impl);
         result.sub(inf.gp(0.5*r*r));
-        return (CGARoundPointIPNS) result.op(cp.negate().lc(Ak.gradeInversion().euclideanDual().gp(inf)));
+        //result.sub((new CGAScalarOPNS(0.5*r*r)).gp(inf));
+        return result.op(cp.negate().lc(Ak.gradeInversion().euclideanDual().gp(inf)));
     }
     
     public static boolean typeof(CGAMultivector m){

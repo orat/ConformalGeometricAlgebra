@@ -10,10 +10,11 @@ public class CGAScalarOPNS extends CGAKVector implements iCGAScalarOPNS {
     public CGAScalarOPNS(CGAMultivector m) throws IllegalArgumentException {
         super(m);
     }
-    
     public CGAScalarOPNS(double value){
          super(defaultInstance.impl.createScalar(value));
     }
+    
+    // etc.
     
     public static CGAScalarOPNS atan2(CGAScalarOPNS y, CGAScalarOPNS x){
         return new CGAScalarOPNS(Math.atan2(y.decomposeScalar(), x.decomposeScalar()));
