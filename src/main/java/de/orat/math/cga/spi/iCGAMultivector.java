@@ -413,7 +413,11 @@ public interface iCGAMultivector {
      * introducing formally imaginary numbers, we can only fix the normalized 
      * multivector's magnitude to +-1.
      * 
-     * @throws java.lang.ArithmeticException if multivector is null-vector
+     * TODO
+     * kann ich das Vorzeichen nicht enfach bestimmen und gegebenenfalls hinterher
+     * negate() aufrufen?
+     * 
+     * @throws java.lang.ArithmeticException if the multivector is a null-vector
      * @return unit under 'reverse' norm (this / sqrt(length(this.reverse(this))))
      */
     default iCGAMultivector normalize(){

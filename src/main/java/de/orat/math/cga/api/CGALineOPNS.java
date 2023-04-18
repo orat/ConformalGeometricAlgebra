@@ -27,6 +27,9 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
         super(m);
     }
     
+    public CGALineOPNS(double[] values){
+        super(values);
+    }
     
     // composition
     

@@ -45,23 +45,25 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
         return result.op(cp.negate().lc(Ak.gradeInversion().euclideanDual().gp(inf)));
     }
     
-    public static boolean typeof(CGAMultivector m){
-       if (inf.op(m).isNull()) return false;
-       if (inf.ip(m).isNull()) return false;
-        // square(m) = 0 then round
-        //return !m.sqr().isNull();
-       return m.isScalar() && m.decomposeScalar() == 0;
-    }
     
     // etc
     
     public boolean isNormalized(){
         return isNormalized;
     }
-    
+     
+    public static boolean typeof(CGAMultivector m){
+       if (inf.op(m).isNull()) return false;
+       if (inf.ip(m).isNull()) return false;
+        // square(m) = 0 then round
+        //return !m.sqr().isNull();
+       return m.isScalar() && m.decomposeScalar() == 0;
+    } 
     private boolean test(){
         boolean result = false;
-        if ((inf.op(this).decomposeScalar() != 0) && (inf.ip(this).decomposeScalar() != 0) && (this.sqr().decomposeScalar() != 0d)){
+        if ((inf.op(this).decomposeScalar() != 0) && 
+            (inf.ip(this).decomposeScalar() != 0) && 
+                (this.sqr().decomposeScalar() != 0d)){
             result = true;
         }
         return result;

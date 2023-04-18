@@ -48,6 +48,9 @@ public class CGAFlatPointOPNS extends CGAFlatOPNS implements iCGABivector {
         //this((new CGAFlatPointIPNS(c, weight)).undual());
     }
     
+    public CGAFlatPointOPNS(double[] values){
+        super(values);
+    }
     
     // decoposition
     
