@@ -17,10 +17,14 @@ public class CGASphereOPNS extends CGARoundOPNS implements iCGAQuadvector {
     public CGASphereOPNS(CGAMultivector m){
         super(m);
     }
-    
     CGASphereOPNS(iCGAMultivector impl){
         super(impl);
     }
+    public CGASphereOPNS(double[] values){
+        super(values);
+    }
+    
+    // composition 
     
     /**
      * Create dual sphere.
@@ -81,6 +85,11 @@ public class CGASphereOPNS extends CGARoundOPNS implements iCGAQuadvector {
     @Override
     public CGASphereIPNS dual(){
         return new CGASphereIPNS(impl.dual());
+    }
+    
+    @Override
+    public CGAAttitudeTrivectorOPNS attitudeIntern(){
+        return new CGAAttitudeTrivectorOPNS(super.attitudeIntern());
     }
     
     /**

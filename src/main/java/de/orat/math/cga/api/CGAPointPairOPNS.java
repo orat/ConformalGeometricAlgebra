@@ -36,6 +36,9 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     CGAPointPairOPNS(iCGAMultivector impl){
         super(impl);
     }
+    public CGAPointPairOPNS(double[] values){
+        super(values);
+    }
     
     // ungetested
     CGAPointPairOPNS(Point3d c, Vector3d v, double r){
@@ -114,22 +117,27 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     
     // decomposition
     
-    @Override
+    /*@Override
     public Vector3d attitude(){
         CGAAttitudeOPNS result = attitudeIntern();
+        // e.g. 0.24011910999709996*e1^e3^ei - 0.3999998699932229*e2^e3^ei
         System.out.println("attitude (CGAOrientedPointPairOPNS)="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
-    }
+    }*/
     
+    @Override
+    public CGAAttitudeVectorOPNS attitudeIntern(){
+        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRound2(false));
+    }
     // funktioniert das auch mit imaginären Punktepaaren?
     //TODO
     // vermutlich nein!
     public PointPair decomposePoints(){
         CGAScalarOPNS sqrt = new CGAScalarOPNS(this.ip(this).compress()).sqrt();
         // following Fernandes (Formelsammlung, attachement)
-        CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
+        CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(inf.negate().ip(this)).compress());
         System.out.println(p2.toString("p2"));
-        CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(CGAMultivector.createInf(-1d).ip(this)).compress());
+        CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(inf.negate().ip(this)).compress());
         System.out.println(p1.toString("p1"));
         return new PointPair(p1.location(), p2.location());
     }

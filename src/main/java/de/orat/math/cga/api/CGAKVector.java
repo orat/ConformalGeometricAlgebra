@@ -53,6 +53,8 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         
         // e.g. attitude=1.9999999999999982*e2^e3^ei
         // grade 3, if invoked from a circle 
+        
+        // mir scheint auch grade3, if invoked from a point-pair?
         CGAKVector m = this;
         if (ipns) m = m.dual();
         CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.lc(m).op(inf).negate().compress());

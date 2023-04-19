@@ -21,6 +21,9 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     protected CGARoundOPNS(iCGAMultivector impl){
         super(impl);
     }
+    CGARoundOPNS(double[] values){
+        super(values);
+    }
     
     // untested
     /**
@@ -79,11 +82,14 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     }
     
     public Vector3d attitude(){
-        CGAMultivector result = attitudeIntern();
+        return attitudeIntern().direction();
+        
+        //Das geht so nicht, da bei pp,circle und sphere extract unterschiedlich erfolgen muss
+        /*CGAMultivector result = attitudeIntern();
         System.out.println("attitude (dualRound/dualTangent)="+result.toString());
         Vector3d res = result.extractE3ToVector3d();
         res.normalize();
-        return res;
+        return res;*/
     }
     /**
      * @return attitude
