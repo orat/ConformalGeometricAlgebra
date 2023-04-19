@@ -209,6 +209,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         return (o.op(inf).ip(this.op(inf))).gp(I3).norm();
     }
     
+    // was für einer IPNS-attitude entspricht das?
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
         return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRound2(true));

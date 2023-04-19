@@ -43,6 +43,8 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      * Determine direction/attitude from tangent or round objects in OPNS 
      * representation.
      * 
+     * following [Dorst2009]<p>
+     * 
      * @ipns true for blade in ipns representation
      * @return attitude
      */
@@ -54,7 +56,9 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         // e.g. attitude=1.9999999999999982*e2^e3^ei
         // grade 3, if invoked from a circle 
         
+        // attitude (round/tangent) = (0.24011910999709996*e1^e3^ei - 0.3999998699932229*e2^e3^ei)
         // mir scheint auch grade3, if invoked from a point-pair?
+        
         CGAKVector m = this;
         if (ipns) m = m.dual();
         CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.lc(m).op(inf).negate().compress());
