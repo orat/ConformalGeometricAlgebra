@@ -148,18 +148,15 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
     /**
      * Determine a point on the line which has the closest distance to the origin.
      * 
-     * 
-     * TODO
-     * möglicherweise geht das für alle flats?
+     * Implementation following:
+     * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      */
-    @Override
+    /*@Override
     public Point3d location(){
-        // Implementation following:
-        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = ( no .. blade ) * normal * i
         return new Point3d((o.ip(this.div(weightIntern2())).
                 gp(attitudeIntern())).gp(createI3()).extractE3ToPoint3d());
-    }
+    }*/
     
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
