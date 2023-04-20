@@ -359,6 +359,7 @@ public class CGAMultivector {
      */
     public Point3d location(){
         return location(new Point3d(0d,0d,0d));
+        //throw new RuntimeException("location in Multivector should not be invoked!");
     }
     public CGARoundPointIPNS locationIntern(){
         return new CGARoundPointIPNS(location());

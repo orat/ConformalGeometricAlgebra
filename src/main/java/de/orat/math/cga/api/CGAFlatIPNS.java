@@ -119,16 +119,7 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
      * @return location as normalized dual sphere
      */
     public CGARoundPointIPNS locationIntern(Point3d probe){
-        // input probe as normalized point
-        // determination of result as normalized dual sphere 
-        CGAMultivector m_n = this.normalize(); // scheint keinen Effekt gehabt zu haben
-        CGARoundPointIPNS result =  new CGARoundPointIPNS((new CGARoundPointIPNS(probe)).op(m_n).div(m_n).compress());
-        // (5*eo + 25*e1 + 25*e2 - 47*e3 + 23.5*ei)
-        // warum enthält das eine ei component, damit wäre doch r != 0?
-        System.out.println(result.toString("location as normalized dual sphere (CGAOrientedFiniteFlatIPNS, Dorst)"));
-        //result.normalize(); // hat nichts gebracht
-        //System.out.println(result.toString("location normalized dual sphere 2 (CGAFlatIPNS)"));
-        return result;
+        return new CGARoundPointIPNS((new CGARoundPointIPNS(probe)).op(this).div(this).compress());
     }
     @Override
     public Point3d location(Point3d probe){
@@ -139,35 +130,7 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
         CGAEuclideanVector result = new CGAEuclideanVector(oinf.lc(oinf.op(res)));
         System.out.println(result.toString("location E3 (from CGAOrientedFiniteFlatIPNS, Dorst)"));
         return result.location();
+        // oder direct? ohne vorher oinf rausprojezieren?  return m.extractE3ToPoint3d();
+        //FIXME
     }
-    
-    /**
-     * Extract the direction and location of a line/plane.
-     * 
-     * @param probePoint normalized probe result (e0=1, e1,e2,e3, einfM). If not specified use e0.
-     * @return direction of the given flat
-     */
-    /*protected Decomposition3d.FlatAndDirectionParameters decomposeFlat(CGAMultivector probePoint){
-        // Kleppe2016
-        //Multivector attitude = flat.ip(Multivector.createBasisVector(0), RIGHT_CONTRACTION)
-        //        .ip(Multivector.createBasisVector(4), RIGHT_CONTRACTION);
-        
-        // use dualFlat in Dorst2007
-        // damit bekomme ich die attitude in der Form I0.op(einfM)
-        // für attitude ist ein Vorzeichen nach Dorst2007 zu erwarten, scheint aber nicht zu stimmen
-        CGAMultivector attitude = createInf(1d).op(this).undual();
-        // attitude=-5.551115123125783E-17*no^e1^e2 + 0.9999999999999996*e1^e2^ni
-        System.out.println("attitude="+String.valueOf(attitude.toString()));
-                
-        // Dorst2007 - Formel für dual-flat verwenden
-        // locations are determined as dual spheres
-        CGAMultivector result = probePoint.op(this).gp(inverse());
-        //CGAMultivector result = probePoint.ip(this, LEFT_CONTRACTION).gp(inverse());
-        
-        double[] locationCoord = result.impl.extractCoordinates(1);
-        int index = result.impl.getEStartIndex();
-        return new Decomposition3d.FlatAndDirectionParameters(attitude.extractAttitudeFromEeinfRepresentation(), 
-               new Point3d(locationCoord[index++], locationCoord[index++], locationCoord[index]));
-    }*/
-    
 }

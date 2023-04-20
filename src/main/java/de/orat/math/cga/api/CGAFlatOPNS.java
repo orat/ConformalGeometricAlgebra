@@ -81,7 +81,10 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
     } 
     
     /**
-     * corresponds to
+     * Determine the localisation as the a point of the geometric object nearest
+     * to the given one.
+     * 
+     * correspondsing to:
      * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
      * Leandro A. F. Fernandes, and Manuel M. Oliveira
      * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
@@ -89,18 +92,16 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
      * if probe set to origin.
      * 
      * @param probe
-     * @return location (represented as finite point)
+     * @return location
      */
     public CGARoundPointIPNS locationIntern(Point3d probe){
-        // muss probe hier wirklich in OPNS representation angegeben werden?
-        //FIXME CGARoundPointOPNS
         return new CGARoundPointIPNS(new CGARoundPointIPNS(probe).ip(this).div(this));
     }
     @Override
     public Point3d location(Point3d probe){
         // Determine a normalized dual sphere as location
         CGARoundPointIPNS m = locationIntern(probe);
-        System.out.println(m.toString("location (CGAOrientedFiniteFlatOPNS, Dorst)"));
+        System.out.println(m.toString("location (CGAFlatOPNS, Dorst)"));
         // the euclidian part is the location in euclidian space
         return m.extractE3ToPoint3d();
     }

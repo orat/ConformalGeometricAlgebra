@@ -242,7 +242,7 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local center = -( no .. blade ) * normal
-        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight2Intern())).gp(attitudeIntern2()).negate();
+        CGAMultivector result = o.ip(this.gp(1d/weight2Intern())).gp(attitudeIntern2()).negate();
         System.out.println(result.toString("locationIntern2 (CGAPlaneIPNS)"));
         //return result.extractE3ToPoint3d();
         return new CGAEuclideanVector(result);
