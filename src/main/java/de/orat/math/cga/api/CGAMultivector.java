@@ -788,7 +788,7 @@ public class CGAMultivector {
         throw new RuntimeException("CGA Multivector is not of type iCGATangentOrRound");
     }
     
-    public iCGAFlat.EuclideanParameters decomposeFlat(){
+    /*public iCGAFlat.EuclideanParameters decomposeFlat(){
         if (this instanceof iCGAFlat flat){
             return flat.decompose();
         }
@@ -800,28 +800,28 @@ public class CGAMultivector {
             return flat.decompose(probePoint);
         }
         throw new RuntimeException("CGA Multivector is not of type iCGAFlat");
-    }
+    }*/
      
-    public Vector3d decomposeAttitude(){
+    /*public Vector3d decomposeAttitude(){
         if (this instanceof iCGAAttitude attitude){
             return attitude.direction();
         }
         throw new RuntimeException("CGA Multivector is not of type iCGAAttitude");
-    }
+    }*/
     
-    public Quat4d decomposeRotor(){
+    /*public Quat4d decomposeRotor(){
         if (this instanceof CGARotor rotor){
             return rotor.decompose();
         }
         throw new RuntimeException("CGA Multivector is not of type CGARotor");
-    }
+    }*/
     
-    public PointPair decomposePointPair(){
+    /*public PointPair decomposePointPair(){
         if (this instanceof iCGAPointPair pointPair){
             return pointPair.decomposePoints();
         }        
         throw new RuntimeException("CGA Multivector is not of type iCGAPointPair");
-    }
+    }*/
     
       /**
     Gaalop blades sequence:

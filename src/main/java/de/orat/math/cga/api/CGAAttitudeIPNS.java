@@ -9,7 +9,7 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGAAttitudeIPNS extends CGAKVector implements iCGAAttitude {
     
-    CGAAttitudeIPNS(CGAMultivector m){
+    public CGAAttitudeIPNS(CGAMultivector m){
         super(m.impl);
     }
     

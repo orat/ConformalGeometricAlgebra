@@ -27,13 +27,11 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
     
     // decompose
     
-    @Override
-    public iCGAFlat.EuclideanParameters decompose(){
+    public iCGAFlat.EuclideanParameters decomposeFlat(){
         return new iCGAFlat.EuclideanParameters(attitude(), location(), 
                                       squaredWeight());
     }
-    
-    public iCGAFlat.EuclideanParameters decompose(Point3d probePoint){
+    public iCGAFlat.EuclideanParameters decomposeFlat(Point3d probePoint){
         return new iCGAFlat.EuclideanParameters(attitude(), location(probePoint), squaredWeight());
     }
     
@@ -68,15 +66,14 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
      */
     @Override
     public CGAAttitudeOPNS attitudeIntern(){
-        // corresponds to
+        // corresponding to
         // Geometric Algebra: A powerful tool for solving geometric problems in visual computing
-        // Leandro A. F. Fernandes, and Manuel M. Oliveira
+        // Leandro A. F. Fernandes, and Manuel M. Oliveira, 2009
         // DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
-        // 2009
-        // also corresponding to Dorst2007 p407
+        // also corresponding to [Dorst2007] p.407
         // tested for line
         CGAMultivector result =  inf.lc(this).negate().compress();
-        System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst)"));
+        System.out.println(result.toString("attitudeIntern (CGAFlatOPNS, Dorst2009)"));
         return new CGAAttitudeOPNS(result);
     } 
     
@@ -86,9 +83,8 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
      * 
      * correspondsing to:
      * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
-     * Leandro A. F. Fernandes, and Manuel M. Oliveira
+     * Leandro A. F. Fernandes, and Manuel M. Oliveira, 2009
      * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
-     * 2009
      * if probe set to origin.
      * 
      * @param probe

@@ -30,13 +30,11 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
     
     // decompose
     
-    @Override
-    public iCGAFlat.EuclideanParameters decompose(){
+    public iCGAFlat.EuclideanParameters decomposeFlat(){
         return new iCGAFlat.EuclideanParameters(attitude(), location(), 
                                       squaredWeight());
     }
-    
-    public iCGAFlat.EuclideanParameters decompose(Point3d probePoint){
+    public iCGAFlat.EuclideanParameters decomposeFlat(Point3d probePoint){
         return new iCGAFlat.EuclideanParameters(attitude(), location(probePoint), squaredWeight());
     }
     
@@ -93,7 +91,7 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         // testweise normalisieren
         CGAMultivector result = inf.op(this).undual().negate().compress();
-        System.out.println(result.toString("attitudeIntern (CGAOrientedFiniteFlatIPNS, Dorst)"));
+        System.out.println(result.toString("attitudeIntern (CGAOrientedFlatIPNS, Dorst)"));
         return new CGAAttitudeOPNS(result);
         
         /*corresponds to
@@ -128,7 +126,7 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
         // Dorst2007 p.409
         CGAMultivector oinf = o.op(inf);
         CGAEuclideanVector result = new CGAEuclideanVector(oinf.lc(oinf.op(res)));
-        System.out.println(result.toString("location E3 (from CGAOrientedFiniteFlatIPNS, Dorst)"));
+        System.out.println(result.toString("location E3 (from CGAFlatIPNS, Dorst)"));
         return result.location();
         // oder direct? ohne vorher oinf rausprojezieren?  return m.extractE3ToPoint3d();
         //FIXME
