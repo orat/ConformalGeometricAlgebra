@@ -1,5 +1,6 @@
 package de.orat.math.cga.spi;
 
+import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import de.orat.math.ga.basis.Multivector;
 import org.jogamp.vecmath.Tuple3d;
@@ -240,7 +241,15 @@ public interface iCGAMultivector {
     
     public double scalarPart();
     
-    public boolean isNull();
+    // This implementation is fine but some implementations of this interface
+    // overwrites this with a not wanted strict functionality
+    default boolean isNull(double precision){
+        double[] coords = this.extractCoordinates();
+        for (int i=0;i<coords.length;i++){
+            if (coords[i] > precision) return false;
+        }
+        return true;
+    }
     
     //default boolean isBlade(){
       /*

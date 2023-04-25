@@ -75,23 +75,21 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
     }
     
     /**
-     * TODO
-     * vermutlich die Methode hier ganz beseitigen, da line, plane etc. Vector
-     * Bivector ... erzeugen ...
      * 
      * für ipns line stimmt das vorzeichen nicht -->bivector
-     * für ipns plane --> trivector
+     * für ipns plane --> trivector, aber da stimmen die Vorzeichen der Komponenten nicht!
      * 
-     * @return attitude
+     * @return attitude as "E inf"
      */
     @Override
     public CGAAttitudeOPNS attitudeIntern(){
-        // Sign of all coordinates change according to errato to the book Dorst2007
         // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
         // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
         // testweise normalisieren
-        CGAMultivector result = inf.op(this).undual().negate().compress();
-        System.out.println(result.toString("attitudeIntern (CGAOrientedFlatIPNS, Dorst)"));
+        //CGAMultivector result = inf.op(this).undual().negate().compress();
+        // FIXME nachfolgende impl. sieht richtig aus nach Dorst2009 aber obige scheint zu funktionieren
+        CGAMultivector result = inf.negate().lc(this.undual()).compress();
+        System.out.println(result.toString("attitudeIntern (CGAFlatIPNS, Dorst)"));
         return new CGAAttitudeOPNS(result);
         
         /*corresponds to

@@ -5,8 +5,8 @@ import org.jogamp.vecmath.Vector3d;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Direct plane in outer product null space representation (grade 4 multivector), 
- * corresponding to direct plane in Dorst2007.
+ * Plane in outer product null space representation (grade 4 multivector), 
+ * corresponding to direct plane in [Dorst2007].
  * 
  * e1^e2^e3^ni, e1^e2^no^ni, e1^e3^no^ni, e2^e3^no^ni
  * 
@@ -105,9 +105,24 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
         return new CGAPlaneOPNS(m);
     }
     
+    /**
+     * Determine the attitude.
+     * 
+     * TODO
+     * diese Implementierung following Dorst sollte doch auch für line und flat point 
+     * gelten, oder?
+     * 
+     * @return attitude as attitude-bivector in opns representation
+     */
+    @Override
+    public CGAAttitudeBivectorOPNS attitudeIntern(){
+        return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
+    }  
+    //TODO das gibts identisch in CGAPlaneIPNS, solle das nicht für alle flats
+    // gelten also nach CGAFlatIPNS und nach CGAFlatOPNS verschoeben werden?
     @Override
     public Vector3d attitude(){
-        Vector3d result = (new CGAAttitudeBivectorOPNS(attitudeIntern())).direction();
+        Vector3d result = attitudeIntern().direction();
         result.normalize();
         return result;
     }

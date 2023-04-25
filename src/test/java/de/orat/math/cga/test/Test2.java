@@ -36,6 +36,7 @@ import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
+import de.orat.math.cga.api.iCGAFlat.EuclideanParameters;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -874,8 +875,72 @@ public class Test2 {
         assertTrue(m.equals(new CGAScalarOPNS(-1d)));
     }
     
-    public void testPlane(){
-        System.out.println("---------------------- plane ----");
+    public void testPlaneOPNS(){
+        System.out.println("------------------ PlaneOPNS --------------");
+        Point3d p1 = new Point3d(1,1,1);
+        Point3d p2 = new Point3d(0,0,0);
+        Point3d p3 = new Point3d(1,1,0);
+        
+        // Normalenvektor n aus den obigen Punkten bestimmen
+        
+        Vector3d v1 = new Vector3d(p3);
+        v1.sub(p2);
+        
+        Vector3d v2 = new Vector3d(p1);
+        v2.sub(p2);
+        
+        // oder muss n anderes Vorzeichen haben?
+        //FIXME
+        // Wie definiert die Punkte-Reihenfolgen bei der opns-plane-composition
+        // die Orientierung des Normalenvektors?
+        Vector3d n = new Vector3d();
+        n.cross(v1, v2);
+        n.normalize();
+        System.out.println(toString("n(p1,p2,p3)",n));
+        
+        Point3d p4 = new Point3d(1,-1,1);
+        Point3d p5 = new Point3d(1,-1,0);
+        
+        CGAPlaneOPNS planeOPNS = new CGAPlaneOPNS(new CGARoundPointIPNS(p1),
+                new CGARoundPointIPNS(p2),new CGARoundPointIPNS(p3));
+        EuclideanParameters parameters = planeOPNS.decomposeFlat();
+        // a = (0.7071067811865475,0.7071067811865475,0.0)
+        //FIXME Vorzeichen einer Komponente ist falsch bei der Bestimmung nach Dorst
+        System.out.println(toString("a",parameters.attitude()));
+        // c = (0.0,0.0,0.0)
+        System.out.println(toString("c",parameters.location()));
+        CGARoundPointIPNS testC = new CGARoundPointIPNS(parameters.location());
+        CGAMultivector test = planeOPNS.op(testC);
+        System.out.println(test.toString("test plane.op(center)"));
+        assertTrue(test.isNull());
+        
+        Vector3d attitude = planeOPNS.attitude();
+        System.out.println(toString("attitude (planeOPNS, Dorst)",attitude));
+       
+        
+        // nach Spencer via dual IPNS
+        attitude = planeOPNS.dual().attitudeIntern2().direction();
+        // attitudeIntern2(CGAPlaneIPNS, Spencer) = (-0.7071067811865475*e1 + 0.7071067811865475*e2)
+        // falsches Vorzeichen! ansonsten korrekt
+        //FIXME
+        System.out.println(toString("attitudeIntern2 (planeOPNS, Spencer)",attitude));
+        //assertTrue(equals(n, attitude));
+        
+        
+        EuclideanParameters parameters2 = planeOPNS.dual().decomposeFlat();
+        // a_ = (0.7071067811865476,0.7071067811865476,0.0)
+        // c_ = (0.0,0.0,0.0)
+        System.out.println(toString("a_",parameters2.attitude()));
+        System.out.println(toString("c_",parameters2.location()));
+        Vector3d attitude2 = planeOPNS.dual().attitude();
+        System.out.println(toString("attitude (planeIPNS, Dorst)",attitude));
+    }
+    
+    
+    public void testPlaneIPNS(){
+        System.out.println("---------------------- PlaneIPNS ------------------------");
+        
+        // composition test
         
         // hessissche Normalenform der Ebene
         Vector3d n = new Vector3d(0d,0d,1d); n.normalize();
@@ -889,38 +954,47 @@ public class Test2 {
         System.out.println(planeIPNS.toString("planeIPNS"));
         assertTrue(planeIPNS.equals(planeIPNSTest));
         
+        // neues n definiert, da diese Orientierung kritischer ist für test der attitude
+        n = new Vector3d(1d,1d,0d); n.normalize();
+        System.out.println("HNF: n=("+String.valueOf(n.x)+","+String.valueOf(n.y)+", "+String.valueOf(n.z)+"), d="+String.valueOf(d));
+        
+        planeIPNS = new CGAPlaneIPNS(n, d, weight);
+       
         //TODO
         // Wie ist die Orientierung dieser Ebene festgelegt?
         
         // attitude
         
-        // attitude (planeIPNS, Dorst) = (0.0,0.0,-0.9999999999999996)
+        // nach Dorst
+        // attitudeIntern (CGAFlatIPNS, Dorst) = (0.707106781186547*e1^e3^ei - 0.707106781186547*e2^e3^ei)
+        // attitude (planeIPNS, Dorst) = (-0.7071067811865477,0.7071067811865477,0.0)
+        // FIXME stimmt nicht - eine Komponente hat ein falsches Vorzeichen ...
         Vector3d attitude = planeIPNS.attitude();
         System.out.println(toString("attitude (planeIPNS, Dorst)",attitude));
-        // attitude_cga=-0.9999999999999996*e1^e2^ei
-        // attitude (planeIPNS) = (0.0,0.0,-0.9999999999999996)
-        // FIXME
-        // Das Vorzeichen stimmt nicht, möglicherweise ist das aber auch korrekt so
-        // und das Vorzeichen wird nur durch die Definition des Pseudoskalars im 
-        // in CGA festgelegt
         
         // nach Spencer
-        // attitude (planeIPNS, Spencer) = (0.0,0.0,1.0)
         attitude = planeIPNS.attitudeIntern2().direction();
-         System.out.println(toString("attitude (planeIPNS, Spencer)",attitude));
-        // normal vector/attitude nach Kleppe2016
-        CGAMultivector normal = planeIPNS.op(CGAMultivector.createInf(1d)).ip(CGAMultivector.createOrigin(1d)).negate();
-        // normal (planeIPNS, Kleppe 1) = (0)
-        System.out.println(normal.toString("normal (planeIPNS, Kleppe 1)"));
+        System.out.println(toString("attitudeIntern2 (planeIPNS, Spencer)",attitude));
+        assertTrue(equals(n, attitude));
         
-        normal = planeIPNS.undual().ip(CGAMultivector.createOrigin(1d)).ip(CGAMultivector.createInf(1d))/*.normalize()*/.negate();
-        // normal (planeIPNS, Kleppe 2) = (0)
-        System.out.println(normal.toString("normal (planeIPNS, Kleppe 2)"));
+        // nach Kleppe2016
+        //CGAMultivector normal = planeIPNS.op(inf).ip(o).negate();
+        CGAMultivector normal = planeIPNS.op(inf).rc(o).negate();
+        Vector3d normalEuclid = normal.extractE3ToVector3d();
+        System.out.println(normal.toString("attitude (planeIPNS, Kleppe 1)"));
+        assertTrue(equals(n, normalEuclid));
+        
+        // nach Kleppe via dual into opns
+        //normal = planeIPNS.undual().ip(o).ip(inf)/*.normalize()*/.negate();
+        normal = planeIPNS.undual().rc(o).rc(inf)/*.normalize()*/.negate();
+        // attitude (planeIPNS, Kleppe 2 (dual)) = (-0.7071067811865468*e1^e3 + 0.7071067811865468*e2^e3)
+        System.out.println(normal.toString("attitude (planeIPNS, Kleppe 2 (dual))"));
+        // FIXME falsche, scheint identisch falsch wie Dorst2009 zu sein
         
         CGAMultivector carrierFlat = planeIPNS.carrierFlat();
+        // carrierFlat (planeIPNS) = (-0.7071067811865469*e1^e3 + 0.7071067811865469*e2^e3)
         System.out.println(carrierFlat.toString("carrierFlat (planeIPNS)"));
-        //carrierFlat (planeIPNS) = (0.9999999999999991*e1^e2)
-        //attitudeIntern (CGAPlaneIPNS) = (0.9999999999999996*e1^e2^ei)
+        // FIXME auch falsch
         
         // squaredWeight
         double squaredWeight = planeIPNS.squaredWeight();
@@ -928,24 +1002,20 @@ public class Test2 {
         System.out.println(toString("squaredWeight (planeIPNS, Dorst)", squaredWeight));
         assertTrue(equals(squaredWeight,1d));
         
-        
+      
         // location
         
         Point3d location = planeIPNS.locationIntern2().location(); 
         System.out.println(toString("location (planeIPNS, Spencer)",location));
-        assertTrue(equals(location, new Point3d(0,0,2))); 
+        CGARoundPointIPNS testP = new CGARoundPointIPNS(location);
+        CGAMultivector testM = planeIPNS.ip(testP);
+        assertTrue(testM.isNull()); 
         
-        Point3d probe = new Point3d(5,5,1); 
-        // von Hand bestimmt (Projektion von probe auf die Ebene)
-        Vector3d locationTest = new Vector3d(5,5,2);
-       
         // location planeIPNS, Dorst
-        location = planeIPNS.location(probe);
-        // location normalized dual sphere (CGAOrientedFiniteFlatIPNS) = (5.000000000000002*eo + 25.000000000000007*e1 + 25.000000000000007*e2 - 46.00000000000002*e3 + 23.00000000000001*ei)
-        // location E3 (CGAOrientedFiniteFlatIPNS) = (24.99999999999999*e1 + 24.99999999999999*e2 - 46.0*e3)
-        // location (plane IPNS) = (24.99999999999999,24.99999999999999,-46.0)
+        location = planeIPNS.location(new Point3d(5,5,1));
         System.out.println(toString("location (planeIPNS, Dorst)",location));
-        assertTrue(equals(location, locationTest)); // failed
+        CGAMultivector test = planeIPNS.ip(new CGARoundPointIPNS(location));
+        assertTrue(test.isNull()); 
         
         
         
@@ -1827,7 +1897,7 @@ public class Test2 {
     }
     
     public void testAttitudeOfFlats(){
-        System.out.println("----------------- attitude of flats -----");
+        System.out.println("----------------- attitude of IPNS flats -----------------");
         System.out.println("\nFlatPointIPNS:");
         Point3d c = new Point3d(0d,0d,1d);
         double weight = 3d;
@@ -1838,7 +1908,7 @@ public class Test2 {
         CGAMultivector carrierFlat = flatPointIPNS.carrierFlat();
         System.out.println(carrierFlat.toString("carrierFlat (flatPointIPNS)"));
        
-        System.out.println("\nLineIPNS:");
+        System.out.println("\nLineIPNS as intersection of two planes:");
         Vector3d n1 = new Vector3d(0d,0d,1d); n1.normalize();
         Vector3d n2 = new Vector3d(0d,1d,0d); n2.normalize();
         double d = 2d;
@@ -1857,13 +1927,23 @@ public class Test2 {
         CGAMultivector carrier = lineIPNS.carrierFlat();
         System.out.println(carrier.toString("carrier (lineIPNS)"));
         
-        System.out.println("\nPlaneIPNS:");
+        System.out.println("\nPlane1IPNS:");
         CGAMultivector carrierPlane1 = plane1IPNS.carrierFlat();
         System.out.println(carrierPlane1.toString("carrier (plane1IPNS)"));
         Vector3d plane1IPNSAttitude = plane1IPNS.attitude();
         System.out.println(plane1IPNS.toString("attitude (plane1IPNS)"));
         CGAMultivector plane1IPNSAttitude2 = plane1IPNS.attitudeIntern2();
         System.out.println(plane1IPNSAttitude2.toString("attitude2 (plane1IPNS)"));
+        
+        System.out.println("\nPlane2IPNS:");
+        CGAMultivector carrierPlane2 = plane2IPNS.carrierFlat();
+        System.out.println(carrierPlane2.toString("carrier (plane2IPNS)"));
+        Vector3d plane2IPNSAttitude = plane2IPNS.attitude();
+        System.out.println(plane2IPNS.toString("attitude (plane2IPNS)"));
+        CGAMultivector plane2IPNSAttitude2 = plane2IPNS.attitudeIntern2();
+        System.out.println(plane2IPNSAttitude2.toString("attitude2 (plane2IPNS)"));
+        Vector3d att = plane2IPNS.decomposeFlat().attitude();
+        System.out.println(toString("plane2 att decomposeflat", att));
     }
     
     

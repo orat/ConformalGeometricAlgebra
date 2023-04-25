@@ -373,7 +373,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return dual().gp(-1d);
     }*/
 
-    @Override
     public boolean isNull() {
         for (int i=0;i<_mVec.length;i++){
             if (_mVec[i] != 0d){

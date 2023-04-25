@@ -180,16 +180,22 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
      * Determine the attitude.
      * 
      * TODO
-     * diese Implementierung folowing Dorst sollte doch auch für line und flat point 
+     * diese Implementierung following Dorst sollte doch auch für line und flat point 
      * gelten, oder?
      * 
-     * @return attitude
+     * @return attitude as attitude-bivector in opns representation
      */
     @Override
     public CGAAttitudeBivectorOPNS attitudeIntern(){
         return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
     }  
-    
+    //TODO das gibts identisch in CGAPlaneIPNS, solle das nicht für alle flats
+    // gelten also nach CGAFlatIPNS und nach CGAFlatOPNS verschoeben werden?
+    /**
+     * Attitude.
+     * 
+     * @return attitude as normalized euclidean vector
+     */
     @Override
     public Vector3d attitude(){
         Vector3d result = attitudeIntern().direction();
@@ -209,11 +215,10 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
         // blade = blade / weight
 	// local normal = no .. ( blade ^ ni )
         double weight = weight2Intern();
-        CGAMultivector result = createOrigin(1d).ip(this.gp(1d/weight).op(inf)).compress();
-        // attitudeIntern(CGAPlaneIPNS) = (1.0*e3)
-        System.out.println(result.toString("attitudeIntern(CGAPlaneIPNS)"));
+        CGAMultivector result = o.ip(this.gp(1d/weight).op(inf)).compress();
+        System.out.println(result.toString("attitudeIntern2(CGAPlaneIPNS, Spencer)"));
         if (weight<=0){
-            System.out.println("attitudeIntern(CGAPlaneIPNS) failed because weight="+String.valueOf(weight));
+            System.out.println("attitudeIntern2(CGAPlaneIPNS, Spencer) failed because weight="+String.valueOf(weight));
         }
         return new CGAEuclideanVector(result);
     }

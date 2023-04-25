@@ -552,8 +552,9 @@ public class CGAMultivector {
     }
     
     public boolean isNull(){
-        return impl.isNull();
+        return impl.isNull(CGAMultivector.eps);
     }
+    
     public boolean isScalar(){
         return impl.isScalar();
     }

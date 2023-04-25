@@ -70,9 +70,10 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
         // Geometric Algebra: A powerful tool for solving geometric problems in visual computing
         // Leandro A. F. Fernandes, and Manuel M. Oliveira, 2009
         // DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
-        // also corresponding to [Dorst2007] p.407
+        // also corresponding to [Dorst2009] p.407
         // tested for line
-        CGAMultivector result =  inf.lc(this).negate().compress();
+        //CGAMultivector result =  inf.lc(this).negate().compress();
+        CGAMultivector result =  inf.negate().lc(this).compress();
         System.out.println(result.toString("attitudeIntern (CGAFlatOPNS, Dorst2009)"));
         return new CGAAttitudeOPNS(result);
     } 
@@ -102,8 +103,10 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
         return m.extractE3ToPoint3d();
     }
     
-    public abstract Vector3d attitude();
-    
+    //public abstract Vector3d attitude();
+    public Vector3d attitude(){
+        return attitudeIntern().direction();
+    }
     
     /*public CGAOrientedFiniteFlatIPNS undual(){
         return new CGAOrientedFiniteFlatIPNS(super.undual().compress());
