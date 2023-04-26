@@ -56,7 +56,7 @@ public class CGATangentOPNS extends CGAKVector implements iCGATangentOrRound {
     }
     
     public Vector3d attitude(){
-        CGAMultivector result = attitudeIntern();
+        CGAAttitudeVectorOPNS result = attitudeIntern();
         System.out.println("attitude="+result.toString());
         return result.extractAttitudeFromEeinfRepresentation();
     }

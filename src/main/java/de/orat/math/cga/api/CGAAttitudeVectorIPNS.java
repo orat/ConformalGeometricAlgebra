@@ -34,7 +34,7 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     // decomposition 
     
     public Vector3d attitude(){
-        CGAMultivector attitude = attitudeIntern();
+        CGAAttitudeVectorOPNS attitude = attitudeIntern();
         return attitude.extractAttitudeFromEeinfRepresentation();
         //TODO
         // mit was muss ich den multivector multiplizieren um die betreffenden 

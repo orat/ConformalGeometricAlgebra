@@ -909,9 +909,7 @@ public class Test2 {
         System.out.println(toString("a",parameters.attitude()));
         // c = (0.0,0.0,0.0)
         System.out.println(toString("c",parameters.location()));
-        CGARoundPointIPNS testC = new CGARoundPointIPNS(parameters.location());
-        CGAMultivector test = planeOPNS.op(testC);
-        System.out.println(test.toString("test plane.op(center)"));
+        CGAMultivector test = planeOPNS.op(new CGARoundPointIPNS(parameters.location()));
         assertTrue(test.isNull());
         
         Vector3d attitude = planeOPNS.attitude();

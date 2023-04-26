@@ -239,145 +239,7 @@ public class CGAMultivector {
     
     
    
-    /**
-     * Determines location from tangent (direct/dual) and round (direct/dual) 
-     * objects.
-     * 
-     * scheint für CGAOrientedFiniteRoundOPNS um einen faktor 2 falsch zu sein in allen Koordinaten
-     * scheint für CGARound zu stimmen
-     * scheint mit CGATangent nicht zu stimmen??? mittlerweile korrigiert?
-     * scheint mit CGAOrientedPointPair zu stimmen
-     * vielleicht muss das object vorher normalisiert werden
-     * TODO
-     * 
-     * @return location represented by a normalized sphere/finite point (dual sphere corresponding to Dorst2007)
-     */
-    protected CGARoundPointIPNS locationFromTangentAndRoundAsNormalizedSphere(){
-        // corresponds to the errata of the book [Dorst2007]
-        // and also Fernandes2009 supplementary material B
-        // location as finite point/dual sphere corresponding to [Dorst2007]
-        // createInf(-1d).ip(this) ist die Wichtung, es wird also durch die Wichtung geteilt,
-        // d.h. der Punkt wird normiert?
-        System.out.println(this.toString("tangentOrRound"));
-        // circleipns:
-        // tangentOrRound = (-0.24011911*eo^e1 + 0.39999987*eo^e2 + 0.3904*eo^e3 - 
-        // 0.35230035*eo^ei - 0.04229702*e1^ei + 0.07046005*e2^ei + 0.06876903*e3^ei)
-
-        // CGARoundPointIPNS schlägt fehl mit:
-        // The given multivector is no blade: 1.0000000000000002*eo + 0.2285897790690278*e1 
-        // - 0.3807938564778948*e2 - 0.371654924710276*e3 + 0.159234453488245*ei - 5.391337279392339E-9*e1^e2^ei 
-        // - 4.515812467020819E-9*e1^e3^ei - 1.24294008418957E-9*e2^e3^ei
-
-        // FIXME unklar, ob Normierung notwendig ist
-        CGAMultivector mn = this.normalize();
-        
-        // The given multivector is no k-vector: 1.0000000000000002*eo + 0.220516482273777*e1 + 
-        // 0.36734504072736274*e2 + 0.1835667072335959*e3 - 
-        // 0.3445510478954946*e1^e2^e3 + 0.18137731261233903*ei - 0.28195912872783596*e1^e2^ei + 0.253138237443652*e1^e3^ei - 0.15195837009131624*e2^e3^ei
-        // schlägt fehlt bei imaginary point-pair == ipns circle. da rountpointipns keine 3-er-Komponenten enthalten darf
-        CGARoundPointIPNS result = new CGARoundPointIPNS((mn.negate().div(inf.lc(mn))).compress());
-        //CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this)).negate().compress());
-        // z.B. locationFromTangentAndRound=eo + 0.02*e1 + 0.02*e2 + e3 + 0.5*ei
-        // bei input von p=(0.02,0.02,1.0), funktioniert, aber vermutlich nur,
-        // da hier die Wichtung bei e0==1 ist.
-        // locationFromTangentAndRound=2.0*eo + 0.5000000000000001*e2 - 0.5*ei
-        // hiermit funktioniert es nicht mehr
-        System.out.println("locationFromTangentAndRound="+result.toString());
-        
-        // center of this round, as a null vector
-        // https://github.com/pygae/clifford/blob/master/clifford/cga.py Zeile 284:
-        // self.mv * self.cga.einf * self.mv // * bedeutet geometrisches Produkt
-        //TODO ausprobieren?
-        
-        // euclidean part rausziehen, scheint zu funktionieren
-        CGAMultivector o = CGAMultivector.createOrigin(1d);
-        CGAMultivector resultEuclidean = o.op(inf).ip(o.op(inf).op(result));
-        // location (decomposed) euclidean only = (0.4999999999999998*e2)
-        // FIXME nur halb so gross wie ursprünglich
-        // bei circleipns ==0 FIXME
-        System.out.println(resultEuclidean.toString("location (decomposed) euclidean only"));
-        return result;
-    }
-    /**
-     * Determines location from tangend and round objects and also from its dual.
-     * 
-     * @return location in the euclidian part directly.
-     */
-    protected CGAMultivector locationFromTangendAndRound(){
-        // corresponds to the errata of the book Dorst2007
-        CGAMultivector result = (this.gp(inf).gp(this)).div((inf.ip(this)).sqr()).gp(-0.5d);
-        System.out.println("locationFromTangentAndRound2="+result.toString());
-        return result;
-    }
-    /**
-     * Determines the squared weight (without sign) based on the attitude and 
-     * the origin as probe point.
-     * 
-     * @return squared weight >0
-     */
-    public double squaredWeight(){
-        return squaredWeight(new Point3d(0d,0d,0d));
-    }
-    /**
-     * Determines the squared weight (without sign) based on the attitude.
-     * 
-     * @param probePoint
-     * @return squared weight > 0
-     */
-    public double squaredWeight(Point3d probePoint){
-        // probePoint(0,0,0)=1.0*eo
-        // System.out.println("probePoint(0,0,0)="+probePointCGA.toString());
-        return squaredWeight(attitudeIntern(), new CGARoundPointIPNS(probePoint));
-    } 
-    // bekomme ich da nicht immer einen AttitudeVector zurück?
-    //FIXME
-    /**
-     * Determine the attitude/direction as (I0 inf). 
-     * 
-     * @return 
-     */
-    protected CGAMultivector attitudeIntern(){
-        throw new RuntimeException("Not implemented. Available for derivative classes only!");
-    }
-    /**
-     * Determination of the location of the corresponding geometric object, if 
-     * available.
-     * 
-     * @param probe
-     * @return location
-     * @throws RuntimeException if location is not available
-     */
-    public Point3d location(Point3d probe){
-        throw new RuntimeException("Available for most of the derivative classes only!");
-    }
-    /**
-     * Determination of location of the corresponding geometric object, based 
-     * on default euclidiean probe point at (0,0,0).
-     * 
-     * @return location based on probe point = (0,0,0)
-     * @throws RuntimeException if location is not available
-     */
-    public Point3d location(){
-        return location(new Point3d(0d,0d,0d));
-        //throw new RuntimeException("location in Multivector should not be invoked!");
-    }
-    public CGARoundPointIPNS locationIntern(){
-        return new CGARoundPointIPNS(location());
-    }
-   
-    /**
-     * Determine the squared weight (without sign) of any CGA object.
-     * 
-     * @param attitude direction specific for the object form the multivector is representing
-     * @param probePoint If not specified use e0.
-     * @return squared weight >0
-     */
-    protected static double squaredWeight(CGAMultivector attitude, CGARoundPointIPNS probePoint){
-        return Math.abs(probePoint.lc(attitude).sqr().decomposeScalar());
-        // liefert gleiches Ergebnis
-        // CGAMultivector A = probePoint.ip(attitude);
-        //return A.reverse().gp(A).decomposeScalar();
-    }
+    
     
     /**
      * Computes the meet with the specified element in a common subspace.
@@ -750,43 +612,12 @@ public class CGAMultivector {
         return name+" = ("+toString()+")";
     }
     
-    
-    // coordinates extraction
-    
-    /**
-     * Extract attitude/direction from I0^einf multivector representation.
-     * 
-     * @return direction/attitude
-     */
-    protected Vector3d extractAttitudeFromEeinfRepresentation(){
-        double[] coordinates = impl.extractCoordinates(2);
-        //FIXME indizes hängen von der impl ab
-        return new Vector3d(coordinates[12-6], coordinates[14-6], coordinates[15-6]);
-    }
-    /**
-     * Extract attitude/direction from Bivector^einf multivector representation.
-     * 
-     * example: -1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei
-     *
-     * @return direction/attitude
-     */
-    protected Vector3d extractAttitudeFromBivectorEinfRepresentation(){
-         double[] coordinates = impl.extractCoordinates(3);
-         return new Vector3d(coordinates[9], coordinates[8], coordinates[7]);
-    }
-    
+   
     
     // decompose methods
     
     public double decomposeScalar(){
         return impl.scalarPart();
-    }
-    
-    public iCGATangentOrRound.EuclideanParameters decomposeTangentOrRound(){
-        if (this instanceof iCGATangentOrRound tangentOrRound){
-            return tangentOrRound.decompose();
-        }
-        throw new RuntimeException("CGA Multivector is not of type iCGATangentOrRound");
     }
     
     /*public iCGAFlat.EuclideanParameters decomposeFlat(){
