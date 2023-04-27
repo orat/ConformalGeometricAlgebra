@@ -171,6 +171,11 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
         return new CGAAttitudeVectorOPNS(super.attitudeIntern());
     }
     
+    /**
+     *     
+     * @Deprecated
+     * @return 
+     */
     public CGAEuclideanVector attitudeIntern2(){
         // nach Spencer
         CGAEuclideanVector result = this.dual().attitudeIntern2();

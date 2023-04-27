@@ -1,6 +1,5 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.api.iCGAPointPair.PointPair;
 import de.orat.math.cga.impl1.CGA1Multivector;
 import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
@@ -39,31 +38,11 @@ public class CGAMultivector {
     CGAMultivector(){
         impl = new CGA1Multivector();
     }
-    CGAMultivector(double[] values){
+    public CGAMultivector(double[] values){
         this.impl = defaultInstance.impl.create(values).getCompressed();
     }
     
-    public static CGAMultivector create(double[] values, boolean isIPNS){
-        if (values.length != 32) throw new IllegalArgumentException("double[] has not the length 32 but \""+
-                String.valueOf(values.length+"\"!"));
-        CGAMultivector m = new CGAMultivector(values);
-        if (isIPNS){
-            if (CGARoundIPNS.typeof(m)){
-                //TODO
-                // test ob circle, point, ...
-                return new CGAOrientedPointIPNS(m);
-            } 
-        } else {
-             if (CGARoundIPNS.typeof(m)){
-                //TODO
-                // test ob circle, point, ...
-                return new CGAOrientedPointOPNS(m);
-            } 
-        }
-        System.out.println("Subtype of \""+m.toString("")+"\" not detected!");
-        return m;
-    }
-    
+   
     /*public CGAMultivector(Tuple3d p){
         this.impl = defaultInstance.impl.createE(p);
     }*/
@@ -138,6 +117,9 @@ public class CGAMultivector {
         return createEx(1d).op(createEy(1d)).op(createEz(1d));
     }
     
+    
+    // extraction of coordinates into Euclid space
+    
     public Vector3d extractE3ToVector3d(){
         double[] vector = impl.extractCoordinates(1);
         int index = impl.getEStartIndex();
@@ -191,11 +173,9 @@ public class CGAMultivector {
      * 
      * @return the multivector representing the pseudoscalar
      */
-    private static CGAMultivector createI(){
-        // da könnte ich doch gleich den richtigen Blade in einem Schritt erzeugen
-        //FIXME
+    private static CGAKVector createI(){
         // neu 28.2.23 Methode der Implementierung verwenden
-        return new CGAMultivector(defaultInstance.impl.createI());
+        return new CGAKVector(defaultInstance.impl.createI());
         /*return createOrigin(1d).op(createEx(1d))
                 .op(createEy(1d)).op(createEz(1d))
                 .op(inf);*/

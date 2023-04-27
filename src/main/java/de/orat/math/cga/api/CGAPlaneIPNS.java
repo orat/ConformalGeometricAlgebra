@@ -189,18 +189,15 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
     public CGAAttitudeBivectorOPNS attitudeIntern(){
         return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
     }  
-    //TODO das gibts identisch in CGAPlaneIPNS, solle das nicht für alle flats
-    // gelten also nach CGAFlatIPNS und nach CGAFlatOPNS verschoeben werden?
+    
     /**
-     * Attitude.
+     * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
+     * plane obwohl das für line funktioniert
      * 
-     * @return attitude as normalized euclidean vector
+     * @return 
      */
-    @Override
     public Vector3d attitude(){
-        Vector3d result = attitudeIntern().direction();
-        result.normalize();
-        return result;
+        return attitudeIntern2().direction();
     }
     
     /**
@@ -210,7 +207,7 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
      * @return attitude as (E3) 1-vector
      */
     public CGAEuclideanVector attitudeIntern2(){
-        // implementation follows
+        // implementation following
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
 	// local normal = no .. ( blade ^ ni )

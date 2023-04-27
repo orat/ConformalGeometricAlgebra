@@ -8,7 +8,8 @@ import org.jogamp.vecmath.Vector3d;
  * A k-Vector is a multivector which is a linear combination of the 32 basis blades 
  * (in form of a linear combination) of the same grade k (0..5). 
  * 
- * It is also called blade or k-blade or shorter a blade.
+ * k-blades are k-vectors but not all k-vectors are k-blades (sometimes shorter 
+ * called blades).
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -39,7 +40,29 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         super(value);
     }*/
     
-     // decomposeMotor
+     public static CGAKVector create(double[] values, boolean isIPNS){
+        if (values.length != 32) throw new IllegalArgumentException("double[] has not the length 32 but \""+
+                String.valueOf(values.length+"\"!"));
+        CGAKVector m = new CGAKVector(values);
+        if (isIPNS){
+            if (CGARoundIPNS.typeof(m)){
+                //TODO
+                // test ob circle, point, ...
+                return new CGAOrientedPointIPNS(m);
+            } 
+        } else {
+             if (CGARoundIPNS.typeof(m)){
+                //TODO
+                // test ob circle, point, ...
+                return new CGAOrientedPointOPNS(m);
+            } 
+        }
+        System.out.println("Subtype of \""+m.toString("")+"\" not detected!");
+        return m;
+    }
+    
+     
+    // decomposeMotor
    
     /**
      * Determine direction/attitude from tangent or round objects in OPNS 
@@ -132,6 +155,13 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      * If k=0, the standard orientation is 1, and if k=n, the standard orientation 
      * is In. These are invariant under rigid body motions; for the other k-values 
      * the orientations are still invariant under translations. 
+     * 
+     * TODO
+     * The unit orientations for k=1,...4 hängen vom konkreten k-vector ab?
+     * Wie kann ich das dann implementieren?
+     * Habe ich hier nicht einen Freiheitsgrad wie ich die Standard-Orientierung
+     * eines k-vectors für k=1,...4 festlegen kann?
+     * 
      */
     /*private CGAKVector createUnitOrientation(){
         switch (grade()){
@@ -141,19 +171,23 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
             case 2:
             case 3:
             case 4:
-                
+            case 5:
+                return createI();
         }
     }
+    
+    Note also that unit weight and unit norm are different concepts; for the 
+    point representation e0+p has weight 1, but norm √(e02+p2) 
     private double weight(){
     
     }*/
     
     
-       /**
+    /**
      * Determines the squared weight (without sign) based on the attitude and 
      * the origin as probe point.
      * 
-     * @return squared weight >0
+     * @return squared weight is always >0
      */
     public double squaredWeight(){
         return squaredWeight(new Point3d(0d,0d,0d));
@@ -184,19 +218,24 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         //return A.reverse().gp(A).decomposeScalar();
     }
     
-    // bekomme ich da nicht immer einen AttitudeVector zurück?
-    //FIXME
     /**
      * Determine the attitude/direction as (I inf). 
+     * 
+     * TODO
+     * kann ich das nicht abstract machen?
      * 
      * @return 
      */
     protected CGAAttitudeOPNS /*CGAMultivector*/ attitudeIntern(){
         throw new RuntimeException("Not implemented. Available for derivative classes only!");
     }
+    
     /**
      * Determination of the location of the corresponding geometric object, if 
      * available.
+     * 
+     * TODO
+     * kann ich das nicht abstract machen?
      * 
      * @param probe
      * @return location

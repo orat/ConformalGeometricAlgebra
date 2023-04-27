@@ -117,13 +117,17 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     @Override
     public CGAAttitudeBivectorOPNS attitudeIntern(){
         return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
-    }  
-    //TODO das gibts identisch in CGAPlaneIPNS, solle das nicht für alle flats
-    // gelten also nach CGAFlatIPNS und nach CGAFlatOPNS verschoeben werden?
-    @Override
+    } 
+    
+    
+    /**
+     * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
+     * plane obwohl das für line funktioniert
+     * 
+     * führt zu falschen Vorzeichen x ist negativ statt z in einem unit test
+     * @return 
+     */
     public Vector3d attitude(){
-        Vector3d result = attitudeIntern().direction();
-        result.normalize();
-        return result;
+        return dual().attitude();
     }
 }

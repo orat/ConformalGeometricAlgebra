@@ -235,6 +235,7 @@ public class Test2 {
         System.out.println(attitudePlaneOPNSTest.toString("attitudePlaneOPNS (test)"));
         Vector3d dirTest = new Vector3d(2,2,-2);
         dirTest.normalize();
+        System.out.println(toString("dir", dirTest));
         assertTrue(equals(attitudePlaneOPNS, dirTest));
         
         CGAMultivector carrierFlatPlaneOPNS = planeOPNS.carrierFlat();
