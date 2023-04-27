@@ -28,4 +28,7 @@ public class CGATangentTrivectorOPNS extends CGATangentOPNS implements iCGAQuadv
     public CGATangentTrivectorIPNS dual(){
         return new CGATangentTrivectorIPNS(super.dual().compress());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for opns tangent trivector!");
+    }
 }

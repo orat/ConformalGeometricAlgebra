@@ -231,4 +231,5 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     public CGAPointPairOPNS project(CGARoundPointIPNS point){
         return new CGAPointPairOPNS(point.op(inf).lc(this).lc(this).negate());
     }
+    
 }

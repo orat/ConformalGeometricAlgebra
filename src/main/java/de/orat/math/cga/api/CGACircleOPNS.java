@@ -60,6 +60,9 @@ public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
     public CGACircleIPNS dual(){
         return new CGACircleIPNS(impl.dual());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns circle!");
+    }
     
     public CGABivector carrierFlat(){
         return new CGABivector(super.carrierFlat());

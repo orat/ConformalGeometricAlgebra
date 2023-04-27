@@ -86,6 +86,9 @@ public class CGASphereOPNS extends CGARoundOPNS implements iCGAQuadvector {
     public CGASphereIPNS dual(){
         return new CGASphereIPNS(impl.dual());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns sphere!");
+    }
     
     @Override
     public CGAAttitudeTrivectorOPNS attitudeIntern(){

@@ -45,4 +45,7 @@ public class CGATangentBivectorOPNS extends CGATangentOPNS implements iCGATrivec
     public CGATangentBivectorIPNS dual(){
         return new CGATangentBivectorIPNS(super.dual());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns tangent bivector!");
+    }
 }

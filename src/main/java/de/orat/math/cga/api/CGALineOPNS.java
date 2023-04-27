@@ -158,6 +158,9 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     public CGALineIPNS dual(){
         return new CGALineIPNS(new CGALineIPNS(impl.dual()).compress());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns line!");
+    }
     @Override
     public CGALineOPNS normalize(){
         return new CGALineOPNS(super.normalize());

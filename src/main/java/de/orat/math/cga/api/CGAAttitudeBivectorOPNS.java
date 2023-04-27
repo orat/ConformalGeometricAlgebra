@@ -52,4 +52,8 @@ public class CGAAttitudeBivectorOPNS extends CGAAttitudeOPNS implements iCGATriv
     public CGAAttitudeBivectorIPNS dual(){
         return new CGAAttitudeBivectorIPNS(impl.dual());
     }
+    
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns attitude bivector!");
+    }
 }

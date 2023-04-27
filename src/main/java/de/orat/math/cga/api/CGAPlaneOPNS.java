@@ -72,7 +72,10 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     
     @Override
     public CGAPlaneIPNS dual(){
-        return new CGAPlaneIPNS(impl.dual().gp(-1));
+        return new CGAPlaneIPNS(new CGAPlaneIPNS(impl.dual()).compress());
+    }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for opns plane!");
     }
     
     public CGAPlaneOPNS normalize(){
@@ -124,10 +127,13 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
      * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
      * plane obwohl das für line funktioniert
      * 
-     * führt zu falschen Vorzeichen x ist negativ statt z in einem unit test
+     * führt zu gleichem Ergebnis wie die CGAFlatOPNS implementation
+     * 
      * @return 
      */
-    public Vector3d attitude(){
-        return dual().attitude();
-    }
+    /*public Vector3d attitude(){
+        Vector3d result = (new CGAPlaneIPNS(dual().negate())).attitude();
+        System.out.println(toString("attitude (CGAPlaneOPNS via dual(), Spencer))"));
+        return result;
+    }*/
 }

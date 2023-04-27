@@ -49,4 +49,7 @@ public class CGARoundPointOPNS extends CGARoundOPNS implements iCGAQuadvector {
     public CGARoundPointIPNS dual(){
         return new CGARoundPointIPNS(impl.dual());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns round point!");
+    }
 }

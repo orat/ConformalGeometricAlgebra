@@ -1,5 +1,6 @@
 package de.orat.math.cga.test;
 
+import de.orat.math.cga.api.CGAAttitudeBivectorOPNS;
 import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAEuclideanVector;
@@ -36,6 +37,7 @@ import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
+import de.orat.math.cga.api.iCGAFlat;
 import de.orat.math.cga.api.iCGAFlat.EuclideanParameters;
 
 /**
@@ -226,18 +228,19 @@ public class Test2 {
         // attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst) = (-1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei)
         // attitudePlaneOPNS = (0.5773502691896258,0.5773502691896258,-0.5773502691896258)
         // attitudePlaneOPNS (test) = (2.0*e1^e2^ei + 2.0*e1^e3^ei + 2.0*e2^e3^ei)
-
-        Vector3d attitudePlaneOPNS = planeOPNS.attitude();
+        iCGAFlat.EuclideanParameters palenOPNSParameters = planeOPNS.decomposeFlat();
+        Vector3d attitudePlaneOPNS = palenOPNSParameters.attitude(); //planeOPNS.attitude();
         attitudePlaneOPNS.normalize();
         System.out.println(toString("attitudePlaneOPNS",attitudePlaneOPNS));
-        CGAMultivector attitudePlaneOPNSTest = (e1.op(e3).op(inf).add(
-                        e1.op(e2).op(inf)).add(e2.op(e3).op(inf))).gp(2d);
+        CGAAttitudeBivectorOPNS attitudePlaneOPNSTest = new CGAAttitudeBivectorOPNS((e1.op(e3).op(inf).add(
+                        e1.op(e2).op(inf)).add(e2.op(e3).op(inf))).gp(2d));
         System.out.println(attitudePlaneOPNSTest.toString("attitudePlaneOPNS (test)"));
-        Vector3d dirTest = new Vector3d(2,2,-2);
+        Vector3d dirTest = attitudePlaneOPNSTest.direction();//new Vector3d(2,2,-2);
         dirTest.normalize();
-        System.out.println(toString("dir", dirTest));
+        System.out.println(toString("attitudePlaneOPNS (test->vec)",dirTest));
+        
         //FIXME
-        //assertTrue(equals(attitudePlaneOPNS, dirTest));
+        assertTrue(equals(attitudePlaneOPNS, dirTest));
         
         CGAMultivector carrierFlatPlaneOPNS = planeOPNS.carrierFlat();
         // carrier flat (plane OPNS) = (0)
@@ -575,14 +578,8 @@ public class Test2 {
                 
         // radiusSquared
         double radiusSquared1 = s1.squaredSize();
-        // radiusSquared  = 2.586400000000001
-        // failed da 2.58... es wird aber 0.09 erwartet
-        // liegt vermutlich daran dass die Formel von normalisierter Kugel im Ursprung ausgeht
-        //FIXME
         System.out.println(toString("radiusSquared (sphere1, Dorst)", radiusSquared1));
-        assertTrue(equals(radiusSquared1, 0.3d*0.3d)); // failed, da location nicht im Ursprung ist
-        
-        
+        assertTrue(equals(radiusSquared1, 0.3d*0.3d)); 
         
         CGASphereOPNS s = s1.undual();
         System.out.println("s="+s.toString());
@@ -688,7 +685,7 @@ public class Test2 {
         System.out.println(ppTest.toString("s&l test"));
         //s&l test = (1.0*eo^e1 - 0.89*e1^e2 - 0.5*e1^ei)
         // stimmt in der zweiten Komponente nicht sehr exakt überein, 3. Nachkommastelle ...
-        //FIXMe
+        //FIXME
         //assertTrue(ppIPNS.equals(ppTest));
         
         // C3 = ()=>S&S2 sphereIPNS meet sphereIPNS

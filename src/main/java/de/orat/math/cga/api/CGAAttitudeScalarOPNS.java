@@ -39,6 +39,9 @@ public class CGAAttitudeScalarOPNS extends CGAAttitudeOPNS {
         return new CGAAttitudeScalarIPNS(super.dual().compress());
     }
     
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns scalar!");
+    }
     // decomposition
     
     @Override

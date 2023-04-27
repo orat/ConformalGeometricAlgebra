@@ -31,4 +31,7 @@ public class CGAScalarOPNS extends CGAKVector implements iCGAScalarOPNS {
     public CGAScalarIPNS dual(){
         return new CGAScalarIPNS(super.dual());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns scalar!");
+    }
 }

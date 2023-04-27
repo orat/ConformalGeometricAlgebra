@@ -36,6 +36,9 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
     public CGATangentVectorIPNS dual(){
         return new CGATangentVectorIPNS(super.dual());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for opns tangent vector!");
+    }
     
     // following Dorst2007 page 406
     /*private static CGAMultivector createCGATangentVectorOPNS(Point3d location, Vector3d direction){

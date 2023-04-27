@@ -51,4 +51,8 @@ public class CGAAttitudeOPNS extends CGAKVector implements iCGAAttitude {
     public CGAAttitudeIPNS dual(){
         return new CGAAttitudeIPNS(impl.dual());
     }
+    
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns attitude!");
+    }
 }

@@ -42,4 +42,7 @@ public class CGAOrientedPointOPNS extends CGACircleOPNS {
     public CGAOrientedPointIPNS dual(){
         return new CGAOrientedPointIPNS(impl.dual());
     }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns oriented point!");
+    }
 }

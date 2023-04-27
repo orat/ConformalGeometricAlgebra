@@ -41,4 +41,11 @@ public class CGAAttitudeTrivectorOPNS extends CGAAttitudeOPNS implements iCGAQua
     public Vector3d direction(){
         return new Vector3d(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY);
     }
+    
+    public CGAAttitudeTrivectorIPNS dual(){
+        return new CGAAttitudeTrivectorIPNS((new CGAAttitudeTrivectorIPNS(super.dual())).compress());
+    }
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns attitude trivector!");
+    }
 }

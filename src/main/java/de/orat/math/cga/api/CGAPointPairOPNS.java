@@ -114,6 +114,10 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
         return new CGAPointPairIPNS(impl.dual());
     }
     
+    public CGAKVector undual(){
+        throw new RuntimeException("undual() not supported for generic opns point pair!");
+    }
+    
     
     // decomposition
     

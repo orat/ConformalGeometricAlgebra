@@ -102,4 +102,11 @@ public class CGATangentOPNS extends CGAKVector implements iCGATangentOrRound {
     public CGATangentOPNS inverse(){
         throw new RuntimeException("A tangent has no inverse!");
     }
+    
+    /*public CGATangentIPNS dual(){
+        throw new RuntimeException("undual() not supported for generic ipns tangent!");
+    }
+    public CGATangentIPNS undual(){
+        throw new RuntimeException("undual() not supported for generic opns tangent!");
+    }*/
 }
