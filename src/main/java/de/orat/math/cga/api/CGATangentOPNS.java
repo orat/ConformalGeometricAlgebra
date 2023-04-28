@@ -67,7 +67,7 @@ public class CGATangentOPNS extends CGAKVector implements iCGATangentOrRound {
      */
     @Override
     protected CGAAttitudeVectorOPNS attitudeIntern(){
-        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRound2(false));
+        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRoundOPNS());
     }
     @Override
     public Point3d location(Point3d probe){

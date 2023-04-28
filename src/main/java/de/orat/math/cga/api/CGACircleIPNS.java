@@ -83,6 +83,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         CGAMultivector c = x.sqr().sub(sr2).gp(n).gp(0.5);
 	return a.add((b.sub(c)).op(inf)).gp(weight);
     }
+    
     public CGACircleIPNS(Point3d center, Vector3d normal, double radius){
          this(center, normal, radius, 1d);
     }
@@ -170,19 +171,21 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     }
     
     /**
-     * Determine attitude by extraction from bivector^inf representation. 
+     * WORKAROUND 
+     * by implementation following Spencer because generic version implemented
+     * in CGARoundIPNS does not work.
      * 
      * @return attitude as euclidean vector
      */
     @Override
     public Vector3d attitude(){
-        return attitudeIntern().direction();
+        return attitudeIntern2().direction();
         //System.out.println("attitude="+result.toString());
     }
     @Override
     public CGAAttitudeBivectorOPNS attitudeIntern(){
         //FIXME
-        // scheint das falsche Vorzeichen zu liefern
+        // scheint das falsche Vorzeichen zu liefern, um 90 grad gekippten Normalenvektor
         return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
     }
     /**
@@ -202,7 +205,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
 	// local normal = -no_ni .. ( blade ^ ni )
         CGAMultivector result = 
                 createOrigin(-1d).op(inf).ip(this.gp(1d/weight2()).op(inf)).compress();
-        System.out.println(result.toString("attitudeIntern2 (CGAOrientedCircleIPNS)"));
+        System.out.println(result.toString("attitudeIntern2 (CGACircleIPNS)"));
         return new CGAEuclideanVector(result);
     }
 }

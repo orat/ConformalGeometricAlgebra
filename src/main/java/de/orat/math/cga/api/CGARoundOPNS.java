@@ -96,10 +96,7 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
      */
     @Override
     protected CGAAttitudeOPNS attitudeIntern(){
-        // z.B. -1.9999999999999982*e1^e2^e3^ei also grade 4 und nicht grade 2
-        // wenn das von einem CGASphereOPNS aufgerufen wird
-        return attitudeFromTangentAndRound2(false);
-        //return attitudeFromDualTangentAndDualRound();
+        return attitudeFromTangentAndRoundOPNS();
     }
     
     @Override

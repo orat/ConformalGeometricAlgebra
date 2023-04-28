@@ -127,13 +127,14 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
      * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
      * plane obwohl das für line funktioniert
      * 
-     * führt zu gleichem Ergebnis wie die CGAFlatOPNS implementation
+     * führt zu gleichem Ergebnis wie die CGAFlatOPNS implementation in den tests,
+     * aber zu einer um 90grad gedrehten Ebenen bei der IK
      * 
      * @return 
      */
-    /*public Vector3d attitude(){
+    public Vector3d attitude(){
         Vector3d result = (new CGAPlaneIPNS(dual().negate())).attitude();
         System.out.println(toString("attitude (CGAPlaneOPNS via dual(), Spencer))"));
         return result;
-    }*/
+    }
 }

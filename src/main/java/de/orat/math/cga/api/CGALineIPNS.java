@@ -171,7 +171,7 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
      */
     public CGAEuclideanVector attitudeIntern2(){
         // implementation following Spencer
-        CGAEuclideanVector result = new CGAEuclideanVector(CGAMultivector.createOrigin(1d).ip(this.div(weightIntern2()).
+        CGAEuclideanVector result = new CGAEuclideanVector(o.ip(this.div(weightIntern2()).
                 op(inf)).gp(CGAMultivector.createI3()));
         System.out.println(result.toString("attitueIntern2 (CGALineIPNS, Spencer)"));
         return result;

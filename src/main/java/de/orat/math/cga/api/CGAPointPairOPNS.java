@@ -131,7 +131,7 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
-        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRound2(false));
+        return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRoundOPNS());
     }
     // funktioniert das auch mit imaginären Punktepaaren?
     //TODO

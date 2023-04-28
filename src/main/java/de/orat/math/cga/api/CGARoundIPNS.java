@@ -124,6 +124,10 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
         return res;
     }*/
     
+    /**
+     * 
+     * @return as euclidean vector
+     */
     public Vector3d attitude(){
         return attitudeIntern().direction();
     }
@@ -138,7 +142,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
      */
     @Override
     protected CGAAttitudeOPNS attitudeIntern(){
-        return attitudeFromTangentAndRound2(true);
+        return attitudeFromTangentAndRoundIPNS();
     }
     
     @Override
