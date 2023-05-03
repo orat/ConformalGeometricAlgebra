@@ -209,7 +209,31 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         return (o.op(inf).ip(this.op(inf))).gp(I3).norm();
     }
     
-    // was für einer IPNS-attitude entspricht das?
+    /**
+     * WORKAROUND 
+     * by implementation following Spencer because generic version implemented
+     * in CGARoundIPNS does not work.
+     * 
+     * @return attitude as euclidean vector
+     */
+    @Override
+    public Vector3d attitude(){
+        return attitudeIntern2().direction();
+        //System.out.println("attitude="+result.toString());
+    }
+    /**
+     * WORKAROUND
+     * by implementation following Spencer because maybe generic version implemented
+     * in CGARoundIPNS does not work.
+     * 
+     * scheint keinen Unterschied zu machen zumindest in der CGAView3dDemo app.
+     * 
+     * @return 
+     */
+    /*public double squaredSize(){
+        return squaredSizeIntern5().decomposeScalar();
+    }*/
+    
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
         return new CGAAttitudeVectorOPNS(attitudeFromTangentAndRoundIPNS());

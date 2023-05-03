@@ -38,17 +38,16 @@ public class CGAMultivector {
     CGAMultivector(){
         impl = new CGA1Multivector();
     }
+    /**
+     * @param values 
+     * eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+     * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
+     * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
+     * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+     */
     public CGAMultivector(double[] values){
         this.impl = defaultInstance.impl.create(values).getCompressed();
     }
-    
-   
-    /*public CGAMultivector(Tuple3d p){
-        this.impl = defaultInstance.impl.createE(p);
-    }*/
-    /*public CGAMultivector(double d){
-        this.impl = defaultInstance.impl.createScalar(d);
-    }*/
     
     CGAMultivector(iCGAMultivector impl){
         this.impl = impl;
@@ -131,11 +130,39 @@ public class CGAMultivector {
         return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     
-    // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
-    // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, e012inf, e013inf, e023inf, e123inf, e0123inf
-    public double[] extractCoordinates(){
+    
+    /**
+     * Extract coordinates.
+     * 
+     * @return s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+     * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
+     * e012inf, e013inf, e023inf, e123inf, e0123inf
+     * @Deprecated 
+     */
+    public double[] extractCoordinatesOrig(){
         return impl.extractCoordinates();
     }
+    
+    /** 
+     * Extract coordinates.
+     * 
+     * @return 
+     * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+     * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
+     * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
+     * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+     */
+    public double[] extractCoordinates(){
+        // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+        // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
+        // e012inf, e013inf, e023inf, e123inf, e0123inf
+        double[] t =  impl.extractCoordinates();
+        return new double[]{t[0], t[1], t[2], t[6], t[3], t[7], t[10], t[16], t[4], t[8], t[11], t[17],
+                            t[13], t[19], t[22], t[26], t[5], t[9], t[12], t[18],
+                            t[14], t[20], t[23], t[27], t[15], t[21], t[24],
+                            t[28], t[25], t[29], t[30], t[31]};
+    }
+    
     public String[] basisBladeNames(){
         return impl.basisBladeNames();
     }

@@ -36,9 +36,6 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
     public CGAKVector(double[] values){
         super(values);
     }
-    /*CGAKVector(double value){
-        super(value);
-    }*/
     
     public static CGAKVector create(double[] values, boolean isIPNS){
         if (values.length != 32) throw new IllegalArgumentException("double[] has not the length 32 but \""+
@@ -133,7 +130,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
     }
     @Override
     public CGAKVector dual(){
-        return new CGAKVector(impl.dual());
+        return new CGAKVector(impl.dual().getCompressed());
     }
     
     /**

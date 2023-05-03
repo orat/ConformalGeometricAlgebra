@@ -218,7 +218,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
      * Squared size.
      * 
      * Hint: Squared size is - radius squared. The sign is different to 
-     * CGAOrientedFiniteRoundOPNS.
+     * CGARoundOPNS.
      * 
      * @return squared size/-radius squared
      */

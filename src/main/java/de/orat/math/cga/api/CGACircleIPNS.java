@@ -108,25 +108,6 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
     
     // decomposition
     
-    /**
-     * Determination the absolute of the weight without usage of a probepoint 
-     * and without determination of the attitude.
-     * 
-     * test ok
-     * 
-     * @return absolute value of the weight
-     */
-    public double weight2(){
-        // Implementation following:
-        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
-        // local weight2Intern = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
-        // # bedeutet magnitude
-        //FIXME warum Math.abs()? Warum bekomme ich hier das Vorzeichen nicht?
-        CGAMultivector result =  createOrigin(1d).op(inf.ip(this.op(inf)));
-        System.out.println(result.toString("weight2 (CGAOrientedCircleIPNS)"));
-        // weight2Intern (CGACircleIPNS) = (1.9999999999999991*eo^e1^ei)
-        return Math.abs(result.norm());
-    }
     
     /**
      * Determine location as E3 vector.
@@ -182,6 +163,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         return attitudeIntern2().direction();
         //System.out.println("attitude="+result.toString());
     }
+    
     @Override
     public CGAAttitudeBivectorOPNS attitudeIntern(){
         //FIXME
@@ -207,5 +189,23 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
                 createOrigin(-1d).op(inf).ip(this.gp(1d/weight2()).op(inf)).compress();
         System.out.println(result.toString("attitudeIntern2 (CGACircleIPNS)"));
         return new CGAEuclideanVector(result);
+    }
+    /**
+     * Determination the absolute of the weight without usage of a probepoint 
+     * and without determination of the attitude.
+     * 
+     * test ok
+     * 
+     * @return absolute value of the weight
+     */
+    public double weight2(){
+        // Implementation following:
+        // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
+        // local weight2Intern = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
+        // # bedeutet magnitude
+        //FIXME warum Math.abs()? Warum bekomme ich hier das Vorzeichen nicht?
+        CGAMultivector result =  createOrigin(1d).op(inf.ip(this.op(inf)));
+        System.out.println(result.toString("weight2 (CGAOrientedCircleIPNS)"));
+        return Math.abs(result.norm());
     }
 }
