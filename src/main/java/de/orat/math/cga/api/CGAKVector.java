@@ -268,7 +268,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         // location as finite point/dual sphere corresponding to [Dorst2007]
         // createInf(-1d).ip(this) ist die Wichtung, es wird also durch die Wichtung geteilt,
         // d.h. der Punkt wird normiert?
-        System.out.println(this.toString("tangentOrRound"));
+        System.out.println(this.toString("locationFromTangentOrRoundAsNormalizedSphere(CGAKVector)"));
         // circleipns:
         // tangentOrRound = (-0.24011911*eo^e1 + 0.39999987*eo^e2 + 0.3904*eo^e3 - 
         // 0.35230035*eo^ei - 0.04229702*e1^ei + 0.07046005*e2^ei + 0.06876903*e3^ei)
@@ -279,7 +279,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         // - 4.515812467020819E-9*e1^e3^ei - 1.24294008418957E-9*e2^e3^ei
 
         // FIXME unklar, ob Normierung notwendig ist
-        CGAMultivector mn = this.normalize();
+        CGAMultivector mn = this; //this.normalize();
         
         // The given multivector is no k-vector: 1.0000000000000002*eo + 0.220516482273777*e1 + 
         // 0.36734504072736274*e2 + 0.1835667072335959*e3 - 

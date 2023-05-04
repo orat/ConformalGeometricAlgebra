@@ -2,6 +2,7 @@ package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGAKVector;
 import de.orat.math.cga.api.CGAMultivector;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -20,18 +21,24 @@ public class TestCGA1Multivector {
          // 25.0*eo^e3^ei + 26.0*e1^e3^ei + 27.0*eo^e1^e3^ei + 28.0*e2^e3^ei + 
          // 29.0*eo^e2^e3^ei + 30.0*e1^e2^e3^ei + 31.0*eo^e1^e2^e3^ei)
          
-         System.out.println(m.toString("m"));
+         System.out.println(m.toString("internal representation"));
          
          // 0.0,1.0,2.0,4.0,8.0,16.0,3.0,5.0,9.0,17.0,6.0,10.0,18.0,12.0,20.0,24.0,
          // 7.0,11.0,19.0,13.0,21.0,25.0,14.0,22.0,26.0,28.0,15.0,23.0,27.0,29.0,30.0,31.0,
          // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
          // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, e012inf, e013inf, e023inf, e123inf, e0123inf
          double[] extractedValues = m.extractCoordinates();
+         System.out.print("extracted values=");
          for (int i=0;i<extractedValues.length;i++){
              System.out.print(String.valueOf(extractedValues[i]));
              System.out.print(",");
          }
          System.out.println();
+         
+         
+         for (int i=0;i<values.length;i++){
+             assertTrue(Test2.equals(values[i], extractedValues[i]));
+         }
          
          // setCoordinates:
          // m = (1.0*eo + 2.0*e1 + 3.0*eo^e1 + 4.0*e2 + 5.0*eo^e2 + 6.0*e1^e2 + 
@@ -42,13 +49,13 @@ public class TestCGA1Multivector {
          // 25.0*eo^e3^ei + 26.0*e1^e3^ei + 27.0*eo^e1^e3^ei + 28.0*e2^e3^ei + 
          // 29.0*eo^e2^e3^ei + 30.0*e1^e2^e3^ei + 31.0*eo^e1^e2^e3^ei)
 
-         System.out.println(m.toString("m"));
+         //System.out.println(m.toString("m"));
          
          //double[] current = CGAMultivector.fromGaalop(values);
-         for (int i=0;i<extractedValues.length;i++){
-             System.out.print(String.valueOf(extractedValues[i]));
+         /*for (int i=0;i<extractedValues.length;i++){
+             System.out.print(String.valueOf(current[i]));
              System.out.print(",");
          }
-         System.out.println();
+         System.out.println();*/
      }
 }

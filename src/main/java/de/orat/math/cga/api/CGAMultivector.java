@@ -393,6 +393,16 @@ public class CGAMultivector {
         CGAMultivector result = ip(this).compress();
         return /*new CGAScalarOPNS(*/result.compress()/*)*/;
     } 
+    /**
+     * squared norm.
+     * 
+     * https://math.stackexchange.com/questions/3845533/is-there-a-useful-natural-definition-of-norm-in-geometric-algebra
+     * 
+     * this.gp(this.reverse()).scalarPart() - this is not always non-negative
+     * so the norm can not be determined 
+     * 
+     * @return 
+     */
     public double squaredNorm(){
         return impl.lengthSquared();
     }
@@ -521,16 +531,17 @@ public class CGAMultivector {
     /**
      * Vee/meet or regressive product.
      * 
-     * Unsed for intersection.
+     * Application for intersection of objects in opns representation.<p>
      * 
-     * Overwrites this vee product with an optimized method if possible. The
+     * Overwrites this vee-product with an optimized method if possible. The
      * default impl calculates the dual of the wedge of the duals.
      * 
      * @param x second (right side) argument of the vee product
      * @return vee product
      */
     public CGAMultivector vee(CGAMultivector x){
-        //FIXME muss hier nicht dual() statt undual() stehen?
+        // was ist mit den Vorzeichen, test ob IPNS und gegebenenfalls undual() verwenden?
+        //FIXME
         // es scheint aber so zu funktionieren
         // a&b = !(!a^!b)
         return dual().op(x.dual()).dual();

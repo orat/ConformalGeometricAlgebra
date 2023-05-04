@@ -18,6 +18,10 @@ public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
         super(m);
     }
     
+    public CGACircleOPNS(double[] values){
+        super(values);
+    }
+    
     CGACircleOPNS(iCGAMultivector m){
         super(m);
     }
@@ -68,4 +72,11 @@ public class CGACircleOPNS extends CGARoundOPNS implements iCGATrivector {
         return new CGABivector(super.carrierFlat());
     }
     
+    @Override
+    public CGAAttitudeBivectorOPNS attitudeIntern(){
+        //FIXME
+        // The given multivector m is not of grade 3! 0.24011910999709993*e1^ei 
+        // - 0.39999986999322285*e2^ei + 0.5895999999978847*e3^ei
+        return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
+    }
 }

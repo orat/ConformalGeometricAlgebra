@@ -83,7 +83,7 @@ public class Test2 {
     
     public Test2() {}
 
-    private static boolean equals(double a, double b){
+    static boolean equals(double a, double b){
         boolean result = true;
         if (Math.abs(a-b) > epsilon){
             result = false;

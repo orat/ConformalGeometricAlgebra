@@ -7,7 +7,7 @@ import org.jogamp.vecmath.Vector3d;
 
 /**
  * Circle in inner product null space represenation (grade 2)
- * corresponding to dual circle in [Dorst2007].
+ * corresponding to dual circle in [Dorst2009].
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -139,7 +139,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         // local radius_squared = ( center .. center ) - 2 * ( ( no_ni .. ( no ^ blade ) ) + ( center .. normal ) * center ) * normal
 	CGAMultivector normal = attitudeIntern2();
         CGAMultivector center = locationIntern2();
-        CGAMultivector o = createOrigin(1d);
+        //CGAMultivector o = createOrigin(1d);
         CGAMultivector no_ni = o.op(inf);
         CGAMultivector result = center.ip(center).sub((no_ni.ip(o.op(this.gp(1d/weight2()))).add((o.ip(normal).gp(center)))).gp(2d).gp(normal));
         return new CGAScalarOPNS(result);

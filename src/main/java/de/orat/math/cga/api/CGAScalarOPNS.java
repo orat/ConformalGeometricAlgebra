@@ -17,6 +17,10 @@ public class CGAScalarOPNS extends CGAKVector implements iCGAScalarOPNS {
     
     // etc.
     
+    public CGAScalarOPNS negate(){
+        return new CGAScalarOPNS(this.gp(-1));
+    }
+    
     public static CGAScalarOPNS atan2(CGAScalarOPNS y, CGAScalarOPNS x){
         return new CGAScalarOPNS(Math.atan2(y.decomposeScalar(), x.decomposeScalar()));
     }

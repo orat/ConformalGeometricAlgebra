@@ -79,6 +79,7 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         // as norm of the carrier flat.
         //FIXME eventuell I0.negate() Vorzeichen kontrollieren
         return new CGAKVector(this.op(inf).negate().rc(I0));
+        // vermutlich identisch mit inf.lc(this)
     }
     
     public Vector3d attitude(){
@@ -92,6 +93,8 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         return res;*/
     }
     /**
+     * Determine the attitude of the round.
+     * 
      * @return attitude
      */
     @Override
@@ -112,8 +115,13 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
      * @return squared size/radius squared
      */
     public double squaredSize(){
-        CGARoundOPNS m = this.normalize();
+        CGARoundOPNS m = this;//.normalize();
         //FIXME muss ich wirklich normalisieren?
+        //System.out.println(m.toString("squaredSize m"));
+        CGAMultivector m2 = m.gp(m.gradeInversion());
+        //System.out.println(m2.toString("squaredSize m*m.gradeinversion"));
+        CGAMultivector m3 = m.carrierFlat().sqr();
+        System.out.println(m3.toString("squaredSize carrierflat.sqr"));
         CGAScalarOPNS result = new CGAScalarOPNS(m.gp(m.gradeInversion()).div(m.carrierFlat().sqr()).compress()); 
         return result.value();
     }
@@ -133,8 +141,8 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
      * precondition:
      * - location at the origin?
      * 
-     * @param m round or dual round object represented by a multivector
-     * @return squared size/radius (maybe negative)
+     * @param m round (opns) or dual round (ipns) object represented by a multivector
+     * @return squared size/radius (maybe negative) for round -squared size/radius for dual round (ipns)
      * @Deprecated
      */
     static CGAScalarOPNS squaredSizeIntern1(CGAKVector m){
@@ -144,11 +152,9 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         // Das funktioniert nur, wenn das Objekt im Ursprung liegt!!!!
         // Vergleich mit Hitzer: gleiche Formbel bis auf op statt lc im Nenner FIXME
         //FIXME funktioniert nicht
-        CGAMultivector m_n = m.normalize(); // hat im circletest keinen Unterschied gemacht
+        CGAMultivector m_n = m;//.normalize(); // hat im circletest keinen Unterschied gemacht
         // gradeInversion() ist elegant, da ich damit die Formel für pp, circle und sphere
         // verwenden kann
-        // The given multivector is not not grade 0! -0.5016342651363553 - 
-        // 0.6891020957909896*eo^e1^e2^e3 + 0.31092585211142815*eo^e1^e2^ei
         // Der scalar-Teil scheint korrekt zu sein und wird hier mit extractGrade() rausgeschnitten
         // FIXME warum ist das nötig? Vielleicht ist sqr als einfaches ip falsch implementiert
         // vielleicht muss ip vom reverse gerechnet werden für sqr
