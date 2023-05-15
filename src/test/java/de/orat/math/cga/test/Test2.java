@@ -2637,6 +2637,26 @@ public class Test2 {
         return result.toString();
     }
     
+    public void testIPNS(){
+        System.out.println("----------------- test ipns --------------------");
+        CGARoundPointIPNS p4 = new CGARoundPointIPNS(new Vector3d(1d,-1d,-2d));
+        CGARoundPointIPNS p3 = new CGARoundPointIPNS(new Vector3d(2d,-1d,-2d));
+        CGAMultivector m = p4.ip(p4);
+        System.out.println(m.toString("p4.p4"));
+        CGAMultivector m2 = p4.op(p4);
+        System.out.println(m2.toString("p4^p4"));
+    }
+    public void testOPNS(){
+        System.out.println("----------------- test opns --------------------");
+        CGARoundPointOPNS p4 = new CGARoundPointOPNS(new Point3d(1d,-1d,-2d));
+        CGARoundPointOPNS p3 = new CGARoundPointOPNS(new Point3d(2d,-1d,-2d));
+        CGAMultivector m = p4.ip(p4);
+        System.out.println(m.toString("p4.p4"));
+        CGAMultivector m2 = p4.op(p4);
+        System.out.println(m2.toString("p4^p4"));
+    }
+    
+    
     public void testFlatPoints(){
         System.out.println("----------------- test flat points --------------------");
         Point3d p = new Point3d(1,2,3);

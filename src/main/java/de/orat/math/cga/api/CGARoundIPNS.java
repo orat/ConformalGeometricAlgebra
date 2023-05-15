@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Oriented and weighted finite rounds are round points, point-pairs, circles and spheres, 
+ * Weighted finite rounds are: round points, point-pairs, circles and spheres, 
  * here given in inner product null space representation corresponding to dual 
  * round in [Drost2007].
  * 
@@ -215,12 +215,12 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     }*/
     
     /**
-     * Squared size.
+     * Determination of squared size.
      * 
-     * Hint: Squared size is - radius squared. The sign is different to 
-     * CGARoundOPNS.
+     * Hint: Squared size is - radius squared for round (k-sphere). The sign has to be changed 
+     * in the formulas for CGARoundOPNS.<p>
      * 
-     * @return squared size/-radius squared
+     * @return squared size/-radius squared, negative values are possible and describe imaginary rounds
      */
     public double squaredSize(){
         return squaredSizeIntern1().decomposeScalar();

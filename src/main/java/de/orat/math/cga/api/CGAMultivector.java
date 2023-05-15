@@ -409,7 +409,7 @@ public class CGAMultivector {
     /**
      * Calculate the Euclidean norm. (strict positive).
      * 
-     * @return euclidean norm
+     * @return euclidean norm (strict positive).
      */
     public double norm(){
         return Math.sqrt(Math.abs(squaredNorm()));
@@ -495,7 +495,7 @@ public class CGAMultivector {
      * - the decision whether a point is inside or outside of a sphere
      * 
      * The inner product is identical to the scalar product, if the arguments
-     * are Euclid vectors.
+     * are Euclid vectors.<p>
      * 
      * @param x right side argument of the inner product
      * @return inner product of this with a 'x'
@@ -602,10 +602,11 @@ public class CGAMultivector {
         // mit normalize2() schlägt die Normalisierung einer line fehl, d.h. die
         // Bestimmung der length() liefert dann 0.
         return new CGAMultivector(impl.normalize().getCompressed());
-        // alternativ
+        // alternativ this/(εᵢ⌋this)
+        // Unklarheit bezüglich des Vorzeichens
         //return div(createInf(-1d).ip(this));
         // https://github.com/pygae/clifford/blob/master/clifford/cga.py
-        // return div(this.negate().ip(createInf(1d)
+        // return div(this.negate().ip(createInf(1d))
     }
     
     public CGAMultivector negate(){

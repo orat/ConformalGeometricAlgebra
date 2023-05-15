@@ -45,7 +45,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
      * Determination by intersection of a sphere and a plane.
      * 
      * @param center center of the circle
-     * @param normal normal vector of the carrier plane of the circle
+     * @param normal (normalized) normal vector of the carrier plane of the circle
      * @param radius imaginary circle if radius<0
      * @param weight weight
      */
@@ -57,7 +57,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
      * Create a circle in inps respresentation.
      *
      * @param center
-     * @param normal
+     * @param normal (normalized) normal vector of the carrier lane of the circle
      * @param radius imaginary circle if radius<0
      * @param weight
      * @return multivector representing a circle ipns object
@@ -84,6 +84,11 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
 	return a.add((b.sub(c)).op(inf)).gp(weight);
     }
     
+    /**
+     * @param center center of the circle
+     * @param normal (normalized) normal vector of the carrier plane of the circle
+     * @param radius imaginary circle if radius<0
+     */
     public CGACircleIPNS(Point3d center, Vector3d normal, double radius){
          this(center, normal, radius, 1d);
     }
@@ -186,7 +191,7 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         // blade = blade / weight2
 	// local normal = -no_ni .. ( blade ^ ni )
         CGAMultivector result = 
-                createOrigin(-1d).op(inf).ip(this.gp(1d/weight2()).op(inf)).compress();
+                o.op(inf).negate().ip(this.gp(1d/weight2()).op(inf)).compress();
         System.out.println(result.toString("attitudeIntern2 (CGACircleIPNS)"));
         return new CGAEuclideanVector(result);
     }
@@ -204,8 +209,9 @@ public class CGACircleIPNS extends CGARoundIPNS implements iCGABivector {
         // local weight2Intern = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
         // # bedeutet magnitude
         //FIXME warum Math.abs()? Warum bekomme ich hier das Vorzeichen nicht?
-        CGAMultivector result =  createOrigin(1d).op(inf.ip(this.op(inf)));
-        System.out.println(result.toString("weight2 (CGAOrientedCircleIPNS)"));
-        return Math.abs(result.norm());
+        //CGAMultivector result =  o.op(inf.ip(this.op(inf)));
+        double result = o.op(inf).ip(this.op(inf)).norm();
+        System.out.println(toString("weight2 (CGACircleIPNS)="+String.valueOf(result)));
+        return result;
     }
 }

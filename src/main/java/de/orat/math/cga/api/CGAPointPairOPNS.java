@@ -118,7 +118,10 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
         throw new RuntimeException("undual() not supported for generic opns point pair!");
     }
     
-    
+    @Override
+    public CGAPointPairOPNS normalize(){
+        return new CGAPointPairOPNS(super.normalize());
+    }
     // decomposition
     
     /*@Override
@@ -136,12 +139,19 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     // funktioniert das auch mit imaginären Punktepaaren?
     //TODO
     // vermutlich nein!
+    // also corresponding to [Dorst2009] p. 427
     public PointPair decomposePoints(){
-        CGAScalarOPNS sqrt = new CGAScalarOPNS(this.ip(this).compress()).sqrt();
+        //CGAScalarOPNS sqrt = new CGAScalarOPNS(this.ip(this).compress()).sqrt();
+        
+        // testweise vorher normalisieren
+        CGAPointPairOPNS npp = this.normalize();
+        CGAScalarOPNS sqrt = new CGAScalarOPNS(npp.sqr().compress()).sqrt();
         // following Fernandes (Formelsammlung, attachement)
-        CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(inf.negate().ip(this)).compress());
+        //CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(inf.negate().ip(this)).compress());
+        CGARoundPointIPNS p2 = new CGARoundPointIPNS(npp.sub(sqrt).div(inf.negate().lc(npp)).compress());
         System.out.println(p2.toString("p2"));
-        CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(inf.negate().ip(this)).compress());
+        //CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(inf.negate().ip(this)).compress());
+        CGARoundPointIPNS p1 = new CGARoundPointIPNS(npp.add(sqrt).div(inf.negate().lc(npp)).compress());
         System.out.println(p1.toString("p1"));
         return new PointPair(p1.location(), p2.location());
     }

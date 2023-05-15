@@ -110,9 +110,9 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     /**
      * Determination of the squared size. 
      * 
-     * This is the radiusSquared for a k-sphere.
+     * This is the radiusSquared for a k-sphere.<p>
      * 
-     * @return squared size/radius squared
+     * @return squared size/radius squared, negative values are possible and describe imaginary rounds.
      */
     public double squaredSize(){
         CGARoundOPNS m = this;//.normalize();

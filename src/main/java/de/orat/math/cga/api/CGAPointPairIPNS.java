@@ -275,7 +275,7 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     }
     
     public iCGAPointPair.PointPair decomposePoints(){
-        return this.undual().decomposePoints();
+        return undual().decomposePoints();
     }
     
     /**
