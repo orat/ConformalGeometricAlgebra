@@ -29,6 +29,11 @@ public class CGAScalarOPNS extends CGAKVector implements iCGAScalarOPNS {
         return new CGAScalarOPNS(Math.sqrt(this.decomposeScalar()));
     }
     
+    // neu 16.5.23
+    public CGAScalarOPNS abs(){
+        return new CGAScalarOPNS(Math.abs(this.decomposeScalar()));
+    }
+    
     public double value(){
         return decomposeScalar();
     }

@@ -12,4 +12,7 @@ abstract class AbstractEuclideanKVector extends CGAKVector {
     AbstractEuclideanKVector(CGAMultivector m){
         super(m);
     }
+    AbstractEuclideanKVector(double[] values){
+        super(values);
+    }
 }

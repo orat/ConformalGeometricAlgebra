@@ -304,4 +304,46 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
         System.out.println(result.toString("squaredSizeIntern (CGAOrientedPointPairIPNS, Spencer)"));
         return new CGAScalarOPNS(result);
     }
+    
+    /**
+     * not tested
+     * following Perwass p. 178
+     * @return 
+     */
+    public CGAPlaneOPNS midPlane(){
+        return new CGAPlaneOPNS(this.op(inf));
+    }
+    /**
+     * not tested
+     * following Perwass p. 178
+     * @return 
+     */
+    public CGALineOPNS line(){
+        return new CGALineOPNS(dual().op(inf));
+    }
+    /**
+     * not tested
+     * following Perwass p. 178
+     * @return 
+     */
+    public CGARoundPointIPNS midPoint(){
+        return new CGARoundPointIPNS(midPlane().vee(line()));
+    }
+    /**
+     * not tested
+     * following Perwass p. 178
+     * @return 
+     */
+    public double dist(){
+        CGALineOPNS l = line();
+        return 2d*Math.sqrt((new CGAScalarOPNS(this.ip(this).div(l.ip(l)))).decomposeScalar());
+    }
+    /**
+     * not tested
+     * following Perwass p. 178
+     * @return 
+     */
+    public CGACircleOPNS imaginaryCircle(){
+        return new CGACircleOPNS(this);
+    }
 }

@@ -74,6 +74,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     
     @Override
     public EuclideanParameters decompose(){
+        System.out.println(toString("CGARoundIPNS.decompose"));
         return new EuclideanParameters(attitude(), location(), 
                                       squaredSize(), squaredWeight());
     }

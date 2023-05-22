@@ -63,25 +63,25 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      * Determine direction/attitude from tangent or round objects in OPNS 
      * representation.
      * 
-     * following [Dorst2009]<p>
+     * following [Dorst2009] p.407<p>
      * 
-     * @ipns true for blade in ipns representation
      * @return attitude
      */
     CGAAttitudeOPNS attitudeFromTangentAndRoundIPNS(){
-        CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.negate().lc(this.dual()).op(inf).compress());
-        System.out.println(result.toString("attitudeIPNS (round/tangent)"));
+        System.out.println(toString("CGAkVector attitudeFromTangentAndRoundIPNS"));
+        CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.negate().lc(dual()).op(inf).compress());
+        System.out.println(result.toString("CGAkVector attitudeIPNS (round/tangent)"));
         return result;
     }
     CGAAttitudeOPNS attitudeFromTangentAndRoundOPNS(){
         CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.lc(this).negate().op(inf).compress());
-        System.out.println(result.toString("attitudeOPNS (round/tangent)"));
+        System.out.println(result.toString("CGAkVector attitudeOPNS (round/tangent)"));
         return result;
     }
     /**
      * Determine direction/attitude from tangent or round objects.
      * 
-     * Hildenbrand2004
+     * [Hildenbrand2004]
      * 
      * @return direction/attitude
      */

@@ -19,6 +19,9 @@ public class CGAEuclideanVector extends AbstractEuclideanKVector implements iCGA
         // TODO test dass e0, einf nicht vorhanden ist!!!
     }
     
+    public CGAEuclideanVector(double[] values){
+        super(values);
+    }
     
     // composition
     

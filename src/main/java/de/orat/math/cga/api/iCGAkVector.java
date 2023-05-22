@@ -6,7 +6,7 @@ package de.orat.math.cga.api;
 interface iCGAkVector {
     
     default void testGrade(){
-        if (grade() < 0) throw new IllegalArgumentException("The given multivector is no k-vector:");
+        if (grade() < 0) throw new IllegalArgumentException("The given multivector is no k-vector: "+toString());
     }
     public int grade();
 }

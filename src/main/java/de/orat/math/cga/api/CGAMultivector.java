@@ -387,7 +387,7 @@ public class CGAMultivector {
      * 
      * FIXME
      * Kann es nicht Multivektoren geben die quadriert kein Skalar ergeben?
-     * @return square, equals the ip results in a scalar.
+     * @return square, equals the ip, results in a scalar which can be negative.
      */
     public CGAMultivector /*CGAScalarOPNS*/ sqr(){
         CGAMultivector result = ip(this).compress();
@@ -556,9 +556,11 @@ public class CGAMultivector {
         return new CGAMultivector(impl.sub(b.impl));
     }
     
-    public CGAScalarOPNS abs(){
+    // scheint mir so falsch zu sein, erwartet hatte ich dass das Vorzeichen bei
+    // einem Skalar geswitched wird.
+    /*public CGAScalarOPNS abs(){
         return new CGAScalarOPNS(impl.length());
-    }
+    }*/
     public CGAMultivector exp() {
         return new CGAMultivector(impl.exp());
     }

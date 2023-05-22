@@ -137,4 +137,13 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
         System.out.println(toString("attitude (CGAPlaneOPNS via dual(), Spencer))"));
         return result;
     }
+    
+    /**
+     * not tested
+     * following Perwass p. 178
+     * @return 
+     */
+    public CGAPlaneIPNS midPlane(){
+        return new CGAPlaneIPNS(this.ip(inf));
+    }
 }

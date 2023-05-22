@@ -35,10 +35,12 @@ import org.jogamp.vecmath.Vector3d;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
+import de.orat.math.cga.api.CGAOrientedPointOPNS;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
 import de.orat.math.cga.api.iCGAFlat;
 import de.orat.math.cga.api.iCGAFlat.EuclideanParameters;
+import de.orat.math.cga.api.iCGATangentOrRound;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -2034,6 +2036,19 @@ public class Test2 {
         System.out.println(carrierFlatPPIPNS.toString("carrierFlat (ppIPNS)\n"));
     }
     
+    public void testAttitudeFromRoundPointIPNS(){
+        System.out.println("----------------- test attitude from round point ipns -------------------");
+        Point3d p = new Point3d(0.2564423003521458, -0.23434198923703015, 0.5895999999978854);
+        p = new Point3d(1,2,3);
+        CGARoundPointIPNS pc = new CGARoundPointIPNS(p);
+        Vector3d att2 = pc.attitude();
+        System.out.println(toString("att2", att2));
+        iCGATangentOrRound.EuclideanParameters parameters = pc.decompose();
+        Vector3d attitude = parameters.attitude();
+        // att = (Infinity,Infinity,Infinity)
+        System.out.println(toString("att", attitude));
+    }
+    
     public void testLinePair2(){
         System.out.println("--------------- test Line pair decomposition -----------------");
         CGALineOPNS l = new CGALineOPNS(new Point3d(1,0,0), new Vector3d(1,1,0));
@@ -2739,6 +2754,23 @@ public class Test2 {
         System.out.println(test2.toString("v (ipns)"));
     }
     
+    public void testOrientedPoint(){
+         System.out.println("------------------------------- test oriented points ---------------------");
+         Vector3d v1 = new Vector3d(1,0,0);
+         Vector3d v2 = new Vector3d(0,1,0);
+         Point3d p = new Point3d(1,1,1);
+         CGAOrientedPointOPNS op = new CGAOrientedPointOPNS(v1,v2,p);
+         // op = (0.9999999999999998*eo^e1^e2 + 1.0*e1^e2^e3 + 1.4999999999999998*e1^e2^ei)
+         System.out.println(op.toString("op"));
+         Point3d pp = op.location();
+         // location (decomposed) euclidean only = (0.9999999999999998*e3)
+         //FIXME das ist offensichtlich falsch, sollte (1,1,1) sein
+         System.out.println("op "+toString("location",pp));
+         Vector3d v = op.attitude();
+         // op attitude = (0.0,0.0,0.9999999999999997)
+         // stimmt zumindest für dieses input-data
+         System.out.println("op "+toString("attitude",v));
+    }
     public void testTangentBivectors(){
         System.out.println("------------------------------- test tangent bivectors ---------------------");
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));

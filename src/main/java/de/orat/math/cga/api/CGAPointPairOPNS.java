@@ -140,19 +140,40 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
     //TODO
     // vermutlich nein!
     // also corresponding to [Dorst2009] p. 427
+    /**
+     * 
+     * @return 
+     */
     public PointPair decomposePoints(){
-        //CGAScalarOPNS sqrt = new CGAScalarOPNS(this.ip(this).compress()).sqrt();
         
-        // testweise vorher normalisieren
-        CGAPointPairOPNS npp = this.normalize();
-        CGAScalarOPNS sqrt = new CGAScalarOPNS(npp.sqr().compress()).sqrt();
+        //WORKAROUND strict-norm (abs) verwenden statt einfach quadrieren, denn
+        // das Quadrat kann negativ werden und dann läßt sich die Wurzel nicht ziehen
+        //FIXME 
+        // unklar, ob dadurch nicht die Reihenfolge der beiden Punkte beeinflusst wird.
+        CGAScalarOPNS sqrt = new CGAScalarOPNS(norm());
+        
         // following Fernandes (Formelsammlung, attachement)
         //CGARoundPointIPNS p2 = new CGARoundPointIPNS(this.sub(sqrt).div(inf.negate().ip(this)).compress());
-        CGARoundPointIPNS p2 = new CGARoundPointIPNS(npp.sub(sqrt).div(inf.negate().lc(npp)).compress());
+        CGARoundPointIPNS p2 = new CGARoundPointIPNS(sub(sqrt).div(inf.negate().lc(this)).compress());
         System.out.println(p2.toString("p2"));
         //CGARoundPointIPNS p1 = new CGARoundPointIPNS(this.add(sqrt).div(inf.negate().ip(this)).compress());
-        CGARoundPointIPNS p1 = new CGARoundPointIPNS(npp.add(sqrt).div(inf.negate().lc(npp)).compress());
+        CGARoundPointIPNS p1 = new CGARoundPointIPNS(add(sqrt).div(inf.negate().lc(this)).compress());
         System.out.println(p1.toString("p1"));
         return new PointPair(p1.location(), p2.location());
+    }
+    
+    // alternative Implementierung
+    public PointPair decomposePoints2(){
+        iCGATangentOrRound.EuclideanParameters parameters = decomposeTangentOrRound();
+        Point3d c = parameters.location();
+        double r = Math.sqrt(Math.abs(parameters.squaredSize())); 
+        Vector3d v = parameters.attitude();
+        v.normalize();
+        v.scale(r);
+        Point3d p1 = new Point3d(c);
+        p1.add(v);
+        Point3d p2 = new Point3d(c);
+        p2.sub(v);
+        return new PointPair(p1,p2);
     }
 }
