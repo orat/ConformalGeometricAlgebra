@@ -15,7 +15,7 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGAKVector extends CGAMultivector implements iCGAkVector {
     
-    CGAKVector(CGAMultivector m){
+    public CGAKVector(CGAMultivector m){
         super(m.compress().impl);
         try {
             testGrade();

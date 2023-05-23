@@ -11,4 +11,5 @@ public interface iCGATangentOrRound {
     public EuclideanParameters decompose();
     public record EuclideanParameters(Vector3d attitude, Point3d location, 
                                       double squaredSize, double squaredWeight){}
+    
 }
