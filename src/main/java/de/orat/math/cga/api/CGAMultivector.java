@@ -30,7 +30,7 @@ public class CGAMultivector {
     public static final CGAMultivector o = createOrigin(1d);
     public static final CGAMultivector inf = createInf(1d);
     public static final CGAMultivector I3 = createI3();
-    public static final CGAMultivector I3i = I3.inverse();
+    public static final CGAMultivector I3i = I3.inverse(); // was kommt da raus? TODO
     public static final CGAMultivector I = createI();
     public static final CGAMultivector Ii = o.op(I3i).op(inf);
     public static final CGAMultivector I0 = o.op(inf); //inf.op(o);
@@ -592,9 +592,9 @@ public class CGAMultivector {
     /**
      * Create a normalized multivector.
      * 
-     * Multivectors can have a negative squared-magnitude.  So, without 
+     * Multivectors can have a negative squared-magnitude. So, without 
      * introducing formally imaginary numbers, we can only fix the normalized 
-     * multivector's magnitude to +-1.
+     * multivector's magnitude to +-1.<p>
      * 
      * @return the normalised multivector so that X*~X is +- 1
      */

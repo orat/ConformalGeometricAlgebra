@@ -58,6 +58,31 @@ public class CGAOrientedPointIPNS extends CGACircleIPNS {
        return result.gp(I3).add(nc.op(o)).add(cc.ip(nc).gp(inf.op(o))).
                add(nc.gp(0.5*(new Vector3d(c)).dot(cn)).sub(cc.gp(n.dot(new Vector3d(c)))).op(inf));
     }
+    /**
+     * Creates an oriented point in opns representation.
+     * 
+     * Implementation following [Hildenbrand2011], based on cross-products.<p>
+     * 
+     * TODO
+     * ungetested
+     * 
+     * FIXME
+     * 
+     * @param c location
+     * @param n orientation
+     * @return oriented point in opns representation
+     */
+    private static CGAMultivector create2a(Point3d c, Vector3d n){
+        Vector3d cn = new Vector3d(); cn.cross(new Vector3d(c),n);
+        CGAEuclideanVector nc = new CGAEuclideanVector(n);
+        CGAEuclideanVector cc = new CGAEuclideanVector(c);
+        Vector3d cv = new Vector3d(c);
+        return (new CGAEuclideanVector(cn)).gp(I3).
+                add(nc.op(o)).
+                add(inf.op(o).gp(cv.dot(n))).
+                add(nc.gp(0.5*cv.lengthSquared()).sub(cc.gp(cv.dot(n))).op(inf));
+    }
+    
     
     public static boolean typeof(CGAMultivector m){
         boolean result = CGARoundIPNS.typeof(m);

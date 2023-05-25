@@ -223,7 +223,7 @@ public interface iCGAMultivector {
      * vector y containing all the basis vectors that are not in x. For 
      * non-degenerate metrics, you can use multiplication with the pseudoscalar 
      * if so desired (although it will be less efficient). This is not possible 
-     * for CGA because of its degenerate metric.
+     * for CGA because of its degenerate metric.<p>
      * 
      * The dual operation is an automorphism and almost (up to a sign) an involution.
      * 
@@ -432,6 +432,7 @@ public interface iCGAMultivector {
     default iCGAMultivector normalize(){
         double s = lengthSquared();
         if (s == 0.0) throw new java.lang.ArithmeticException("null multivector");
+        // following [Kleppe2016]
         else return this.gp(1d / Math.sqrt(Math.abs(s)));
     }
     /**

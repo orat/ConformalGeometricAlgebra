@@ -14,6 +14,9 @@ public class CGAScalarOPNS extends CGAKVector implements iCGAScalarOPNS {
          super(defaultInstance.impl.createScalar(value));
     }
     
+    public CGAScalarOPNS(double[] values){
+        super(values);
+    }
     
     // etc.
     

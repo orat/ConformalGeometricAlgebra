@@ -8,6 +8,7 @@ import de.orat.math.cga.api.CGAFlatPointIPNS;
 import de.orat.math.cga.api.CGAFlatPointOPNS;
 import de.orat.math.cga.api.CGACircleIPNS;
 import de.orat.math.cga.api.CGACircleOPNS;
+import de.orat.math.cga.api.CGAEuclideanBivector;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
 import de.orat.math.cga.api.CGAPointPairOPNS;
@@ -2573,6 +2574,28 @@ public class Test2 {
         System.out.println(m.toString("dual(m)"));
     }
     
+    public void testEuclideanDual(){
+        System.out.println("-------------- test euclidean dual -----------------");
+        // a cross b = dual(a op b)
+        Vector3d a = new Vector3d(1,0,0);
+        Vector3d b = new Vector3d(0,1,0);
+        CGAEuclideanVector ac = new CGAEuclideanVector(a);
+        CGAEuclideanVector bc = new CGAEuclideanVector(b);
+        CGAEuclideanBivector bi = new CGAEuclideanBivector(ac.op(bc));
+        System.out.println(bi.toString("bi"));
+        CGAMultivector dual_bi = bi.dual();
+        // dual_bi = (-0.9999999999999997*eo^e3^ei)
+        System.out.println(dual_bi.toString("dual_bi"));
+        
+        CGAEuclideanVector bi_div_I3 = new CGAEuclideanVector(bi.div(I3));
+        System.out.println(bi_div_I3.toString("bi/I3"));
+         
+        // Vergleich mit Kreuzprodukt
+        Vector3d cross = new Vector3d();
+        cross.cross(a,b);
+        System.out.println(toString("cross",cross));
+        assertTrue(equals(cross, bi_div_I3.direction()));
+    }
     public void testEpsilon0Contraction(){
         System.out.println("----------------- test epsilon_0 projection of attitude scalar ---------------");
         CGAAttitudeScalarOPNS test1 = new CGAAttitudeScalarOPNS(1d);
