@@ -375,9 +375,9 @@ public class CGAMultivector {
     }
     
     public CGAMultivector euclideanDual(){
-        //return new CGAMultivector(this.lc(I3i).impl);
+        return new CGAMultivector(this.lc(I3i).impl); // [Dorst2009] p.80
         //return new CGAMultivector(this.gp(I3i).impl);
-        return new CGAMultivector(this.div(I3).impl);
+        //return new CGAMultivector(this.div(I3).impl);
     }
     
     /**

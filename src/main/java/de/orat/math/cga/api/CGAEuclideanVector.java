@@ -43,4 +43,17 @@ public class CGAEuclideanVector extends AbstractEuclideanKVector implements iCGA
     public Vector3d direction(){
         return extractE3ToVector3d();
     }
+    
+    
+    // etc
+    
+    /**
+     * Cross-product, implementation following [Dorst2009] 3.28.
+     * 
+     * @param v2
+     * @return 
+     */
+    public CGAEuclideanVector cross(CGAEuclideanVector v2){
+        return new CGAEuclideanVector(this.op(v2).lc(I3i));
+    }
 }

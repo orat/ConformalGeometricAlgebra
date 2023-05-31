@@ -94,4 +94,17 @@ public class CGAOrientedPointIPNS extends CGACircleIPNS {
     public CGAOrientedPointOPNS dual(){
         return new CGAOrientedPointOPNS(impl.dual());
     }
+    
+    /**
+     * Workaround, da CGACircleIPNS die impl CGARoundIPNS überschreibt und ein
+     * falsches Vorzeichen liefert. Diese impl sollte eigentlich wieder identisch
+     * sein zu der von CGARoundIPNS ...
+     * 
+     * @return 
+     */
+    @Override
+    public Vector3d attitude(){
+        CGAAttitudeBivectorOPNS result = new CGAAttitudeBivectorOPNS(attitudeFromTangentAndRoundIPNS());
+        return result.direction();
+    }
 }

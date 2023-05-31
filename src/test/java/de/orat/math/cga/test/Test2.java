@@ -36,6 +36,7 @@ import org.jogamp.vecmath.Vector3d;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
+import de.orat.math.cga.api.CGAOrientedPointIPNS;
 import de.orat.math.cga.api.CGAOrientedPointOPNS;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
@@ -2578,18 +2579,21 @@ public class Test2 {
         System.out.println("-------------- test euclidean dual -----------------");
         // a cross b = dual(a op b)
         Vector3d a = new Vector3d(1,0,0);
-        Vector3d b = new Vector3d(0,1,0);
+        Vector3d b = new Vector3d(1,1,0);
         CGAEuclideanVector ac = new CGAEuclideanVector(a);
         CGAEuclideanVector bc = new CGAEuclideanVector(b);
         CGAEuclideanBivector bi = new CGAEuclideanBivector(ac.op(bc));
         System.out.println(bi.toString("bi"));
-        CGAMultivector dual_bi = bi.dual();
+        //CGAMultivector dual_bi = bi.dual();
         // dual_bi = (-0.9999999999999997*eo^e3^ei)
-        System.out.println(dual_bi.toString("dual_bi"));
+        //System.out.println(dual_bi.toString("dual_bi"));
         
         CGAEuclideanVector bi_div_I3 = new CGAEuclideanVector(bi.div(I3));
         System.out.println(bi_div_I3.toString("bi/I3"));
          
+        CGAEuclideanVector bi_mul_I3 = new CGAEuclideanVector(bi.gp(I3));
+        System.out.println(bi_mul_I3.toString("bi I3"));
+        
         // Vergleich mit Kreuzprodukt
         Vector3d cross = new Vector3d();
         cross.cross(a,b);
@@ -2778,21 +2782,49 @@ public class Test2 {
     }
     
     public void testOrientedPoint(){
-         System.out.println("------------------------------- test oriented points ---------------------");
+         System.out.println("------------------------------- test oriented points ipns and opns ---------------------");
          Vector3d v1 = new Vector3d(1,0,0);
          Vector3d v2 = new Vector3d(0,1,0);
          Point3d p = new Point3d(1,1,1);
+         
+         
+         // oriented point opns representation
+         
          CGAOrientedPointOPNS op = new CGAOrientedPointOPNS(v1,v2,p);
          // op = (0.9999999999999998*eo^e1^e2 + 1.0*e1^e2^e3 + 1.4999999999999998*e1^e2^ei)
          System.out.println(op.toString("op"));
+         
+         // location
          Point3d pp = op.location();
          // location (decomposed) euclidean only = (0.9999999999999998*e3)
          //FIXME das ist offensichtlich falsch, sollte (1,1,1) sein
          System.out.println("op "+toString("location",pp));
+         
+         // attitude
          Vector3d v = op.attitude();
          // op attitude = (0.0,0.0,0.9999999999999997)
          // stimmt zumindest für dieses input-data
          System.out.println("op "+toString("attitude",v));
+         
+         
+         // oriented point ipns representation
+         
+         Vector3d v1xv2 = new Vector3d();
+         v1xv2.cross(v1,v2);
+         CGAOrientedPointIPNS op1 = new CGAOrientedPointIPNS(p,v1xv2);
+         
+         // location
+         Point3d pp1 = op1.location();
+         // op1 location2 = (1.0000000000000004,1.0000000000000004,1.0)
+         System.out.println("op1 "+toString("location2",pp1));
+         assertTrue(equals(p,pp1));
+         
+         // attitude
+         Vector3d va = op1.attitude();
+         assertTrue(equals(va, v1xv2));
+         // op1 attitude2 = (0.0,0.0,-1.0) circleIPNS impl
+         // attitude orientedPointIPNS = (0.9999999999999991*e1^e2^ei)
+         //System.out.println("op1 "+toString("attitude2",va));
     }
     public void testTangentBivectors(){
         System.out.println("------------------------------- test tangent bivectors ---------------------");

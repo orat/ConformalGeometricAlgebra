@@ -21,4 +21,8 @@ public class CGAEuclideanBivector extends AbstractEuclideanKVector implements iC
     public CGAEuclideanBivector normalize(){
         return new CGAEuclideanBivector(super.normalize());
     }
+    
+    public CGAEuclideanVector euclideanDual(){
+        return new CGAEuclideanVector(super.euclideanDual());
+    }
 }
