@@ -106,7 +106,7 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
      * Location point of the flat nearest to to the given probe point as 
      * normalized dual (ipns) sphere.
      * 
-     * corresponds to
+     * corresponding to
      * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
      * Leandro A. F. Fernandes, and Manuel M. Oliveira
      * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
@@ -114,15 +114,22 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
      * 
      * @param probe point
      * @return location as normalized dual sphere
+     * @throws java.lang.ArithmeticException if the flat is not invertible.
+     * 
+     * can fail if the flat contains the given probe?
      */
     public CGARoundPointIPNS locationIntern(Point3d probe){
-        return new CGARoundPointIPNS((new CGARoundPointIPNS(probe)).op(this).div(this).compress());
+        return new CGARoundPointIPNS(locationInt(probe));
+    }
+    private CGAMultivector locationInt(Point3d probe){
+        return (new CGARoundPointIPNS(probe)).op(this).div(this).compress();
     }
     @Override
     public Point3d location(Point3d probe){
         CGARoundPointIPNS res = locationIntern(probe);
+        
         // extract E3 from normalized dual sphere
-        // Dorst2007 p.409
+        // [Dorst2007] p.409
         CGAMultivector oinf = o.op(inf);
         CGAEuclideanVector result = new CGAEuclideanVector(oinf.lc(oinf.op(res)));
         System.out.println(result.toString("location E3 (from CGAFlatIPNS, Dorst)"));

@@ -311,6 +311,7 @@ public class CGAMultivector {
      * Inversion is a reflection in e+, this swaps e0 and ei.
      * 
      * @return space inversion (reflection on a sphere?)
+     * @throws java.lang.ArithmeticException if multivector is not invertible.
      *
      * cluscript: The inversion is obtained with the ! operator. If a multivector has no
      * inverse then zero is returned.
@@ -521,6 +522,12 @@ public class CGAMultivector {
     public CGAMultivector gp(double x){
         return new CGAMultivector(impl.gp(x));
     }
+    /**
+     * 
+     * @param x
+     * @return 
+     * @throws java.lang.ArithmeticException if the given multivector x is not invertible.
+     */
     public CGAMultivector div(CGAMultivector x){
         return gp(x.inverse());
     }

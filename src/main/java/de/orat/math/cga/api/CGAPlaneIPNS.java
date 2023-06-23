@@ -12,18 +12,18 @@ import org.jogamp.vecmath.Point3d;
  * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
  * square to 0. 
  * 
- * Planes are grade 1. Corresponding to dual plane in Dorst2007.
+ * Planes are grade 1. Corresponding to dual plane in [Dorst2007].<p>
  * 
- * Planes are flattended spheres.
+ * Planes are flattended spheres.<p>
  * 
  * Given two null points p and q, we can construct the dual plane in between them 
  * by simple substraction: π = p − q : subtracting one normalized point from a
  * nother eliminates the o blade and returns a vector of the form π = n + δ ∞
- * which represents a dual plane with normal n at distance δ from the origin.
+ * which represents a dual plane with normal n at distance δ from the origin.<p>
  *
  * Planes π = n + δ ∞ are combination of a Euclidean normal vector n plus a
  * weighted infinity ∞ representing the distance from Origin (sometimes called 
- * the Hessian distance). 
+ * the Hessian distance). <p>
  *
  * These other kinds of planes enable different kinds of transformations – 
  * namely timelike and lightlike depending upon whether they square to a 
@@ -34,7 +34,7 @@ import org.jogamp.vecmath.Point3d;
  * vector space they can be added together continuously. Also, composites planes 
  * are possible – for instance a ∧ b + v ∧ ∞, which is a combination of a 
  * rotation plane and translation plane, which creates an interpolatable dual 
- * line twist axis.
+ * line twist axis.<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -104,11 +104,11 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
      * @param weight weight
      */
     public CGAPlaneIPNS(Point3d P, Vector3d n, double weight){
-        // Dorst2007 p.376 sub() statt add()
+        // FIXME Dorst2007 p.376 sub() statt add()?
         this((createEx(n.x)
-            .sub(createEy(n.y))
-            .sub(createEz(n.z))
-            .sub(createInf(P.x*n.x+P.y*n.y+P.z*n.z))).gp(weight));
+            .add(createEy(n.y))
+            .add(createEz(n.z))
+            .add(createInf(P.x*n.x+P.y*n.y+P.z*n.z))).gp(weight));
     }
     
     /**

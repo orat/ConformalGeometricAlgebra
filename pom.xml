@@ -8,6 +8,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
+        <skipTests>false</skipTests>
         <!--exec.mainClass>de.orat.math.cga.ConformalGeometricAlgebra</exec.mainClass-->
     </properties>
     <dependencies>

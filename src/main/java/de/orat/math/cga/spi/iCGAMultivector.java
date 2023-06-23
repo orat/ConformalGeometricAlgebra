@@ -1,8 +1,6 @@
 package de.orat.math.cga.spi;
 
-import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
-import de.orat.math.ga.basis.Multivector;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
@@ -88,7 +86,7 @@ public interface iCGAMultivector {
      * 
      * @param b
      * @param type
-     * @return 
+     * @return inner product
      */
     public iCGAMultivector ip(iCGAMultivector b, int type);
     public iCGAMultivector op(iCGAMultivector b);
@@ -167,14 +165,10 @@ public interface iCGAMultivector {
     // monadic/unary operators
     
     /**
-     * The inverse of the multivector even if it is not a versor (returns 0 if 
-     * inverse does not exist).
-     * 
+     * The inverse of the multivector even if it is not a versor.
      * 
      * @return the inverse of an arbitray multivector or 0 if no inverse exist.
-     * 
-     * TODO
-     * test if it really returns 0 if no inverse exists!
+     * @throws java.lang.ArithmeticException if multivector is not invertible.
      */
     default iCGAMultivector generalInverse(){
         iCGAMultivector conjugate = conjugate();
@@ -431,7 +425,7 @@ public interface iCGAMultivector {
      */
     default iCGAMultivector normalize(){
         double s = lengthSquared();
-        if (s == 0.0) throw new java.lang.ArithmeticException("null multivector");
+        if (s == 0.0) throw new java.lang.ArithmeticException("null multivector normalization not allowed");
         // following [Kleppe2016]
         else return this.gp(1d / Math.sqrt(Math.abs(s)));
     }

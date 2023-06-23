@@ -236,7 +236,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      * on default euclidiean probe point at (0,0,0).
      * 
      * @return location based on probe point = (0,0,0)
-     * @throws RuntimeException if location is not available
+     * @throws java.lang.ArithmeticException if the k-vector is not invertible.
      */
     public Point3d location(){
         return location(new Point3d(0d,0d,0d));

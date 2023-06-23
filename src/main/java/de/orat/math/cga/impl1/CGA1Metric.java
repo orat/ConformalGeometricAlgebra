@@ -22,13 +22,16 @@ public class CGA1Metric {
     // ehemals n0, e1, e2, e3, ni
     public static final String[] baseVectorNames = {"eo", "e1", "e2", "e3", "ei"};
     
-    // representational space - Minkovski space
     // e0, e1, e2, e3, einf
-    // e0=0.5*(e- - e+) und einf=e- + e+)
+    // e0=0.5*(e- - e+) und einf=(e- + e+)
+    //FIXME
+    // muss ich das 0.5 nicht noch irgendwie in der Matrix berücksichtigen?
     // corresponding to D. Hildenbrand2013, Kleppe2016
     public static Metric CGA_METRIC;
     static {
         try {
+            // e-*e- = -1, e+*e+=1
+            // ?
             // Metric: [-1.0, 0.9999999999999998, 1.0, 1.0, 1.0]
             // null-basis
             CGA_METRIC = new Metric(new double[][]{
@@ -39,6 +42,24 @@ public class CGA1Metric {
                 {-1.0, 0.0, 0.0, 0.0, 0.0}});
         } catch (MetricException e){}
     }
+    
+    // representational space - Minkovski space
+    // e0, e1, e2, e3, einf
+    // e0=(e- - e+) und einf=e- + e+)
+    public static Metric CGA1_METRIC;
+    static {
+        try {
+            // Metric: [-1.0, 0.9999999999999998, 1.0, 1.0, 1.0]
+            // null-basis
+            CGA1_METRIC = new Metric(new double[][]{
+                {0.0, 0.0, 0.0, 0.0, -1.0},
+                {0.0, 1.0, 0.0, 0.0, 0.0},
+                {0.0, 0.0, 1.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0, 1.0, 0.0},
+                {-1.0, 0.0, 0.0, 0.0, 0.0}});
+        } catch (MetricException e){}
+    }
+    
     // e+, e1, e2, e3, e-
     // non-degenerate basis
     public static Metric CGA2_METRIC;

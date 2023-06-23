@@ -1,20 +1,33 @@
 package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGAAttitudeBivectorOPNS;
+import de.orat.math.cga.api.CGAAttitudeBivectorOPNS;
 import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
+import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
+import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
 import de.orat.math.cga.api.CGAFlatPointOPNS;
 import de.orat.math.cga.api.CGACircleIPNS;
+import de.orat.math.cga.api.CGACircleIPNS;
+//import de.orat.math.cga.api.CGACircleOPNS;
 import de.orat.math.cga.api.CGACircleOPNS;
 import de.orat.math.cga.api.CGAEuclideanBivector;
+import de.orat.math.cga.api.CGAEuclideanBivector;
+import de.orat.math.cga.api.CGAEuclideanVector;
+import de.orat.math.cga.api.CGAFlatPointIPNS;
+import de.orat.math.cga.api.CGAFlatPointOPNS;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
 import de.orat.math.cga.api.CGAPointPairOPNS;
 import de.orat.math.cga.api.CGASphereOPNS;
 import de.orat.math.cga.api.CGALineIPNS;
+import de.orat.math.cga.api.CGALineIPNS;
+import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGALinePair;
+import de.orat.math.cga.api.CGALinePair;
+import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
@@ -37,12 +50,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
 import de.orat.math.cga.api.CGAOrientedPointIPNS;
+import de.orat.math.cga.api.CGAOrientedPointIPNS;
 import de.orat.math.cga.api.CGAOrientedPointOPNS;
+import de.orat.math.cga.api.CGAOrientedPointOPNS;
+import de.orat.math.cga.api.CGAPlaneIPNS;
+import de.orat.math.cga.api.CGAPlaneOPNS;
+import de.orat.math.cga.api.CGAPointPairIPNS;
+import de.orat.math.cga.api.CGAPointPairOPNS;
+import de.orat.math.cga.api.CGARoundPointIPNS;
+import de.orat.math.cga.api.CGARoundPointOPNS;
 import de.orat.math.cga.api.CGAScalarIPNS;
+import de.orat.math.cga.api.CGAScalarIPNS;
+import de.orat.math.cga.api.CGAScalarOPNS;
+import de.orat.math.cga.api.CGASphereIPNS;
+import de.orat.math.cga.api.CGASphereOPNS;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
+import de.orat.math.cga.api.CGATangentTrivectorOPNS;
+import de.orat.math.cga.api.CGATangentVectorIPNS;
+import de.orat.math.cga.api.CGATangentVectorOPNS;
+import de.orat.math.cga.api.CGATranslator;
+import de.orat.math.cga.api.iCGAFlat;
 import de.orat.math.cga.api.iCGAFlat;
 import de.orat.math.cga.api.iCGAFlat.EuclideanParameters;
 import de.orat.math.cga.api.iCGATangentOrRound;
+import de.orat.math.cga.api.iCGATangentOrRound;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -108,6 +140,7 @@ public class Test2 {
         return result;
     }
     // Metric: [-1.0, 0.9999999999999998, 1.0, 1.0, 1.0]
+    @Test
     public void testCGAMetric(){
         System.out.println("------------------ Metric -----------");
         double[] values = CGA_METRIC.getEigenMetric();
@@ -141,6 +174,7 @@ public class Test2 {
         assertTrue(equals(distSquare,8d));
     }
     
+    @Test
     public void testDorst2007DrillsBasicObjects(){
         System.out.println("------------------ Dorst2007 drills (chapter 13.9.1): basic objects ------------------");
         
@@ -156,6 +190,7 @@ public class Test2 {
         // decomposition
         // locationIPNS
         Point3d p1Test = p1cga.location();
+        System.out.println(toString("p1Test", p1Test)+" "+toString("p1", p1));
         assert(equals(p1,p1Test));
         
         // squared weight
@@ -258,7 +293,7 @@ public class Test2 {
         System.out.println(carrierFlatPlaneOPNS.toString("carrier flat (plane OPNS)"));
     }
     
-    
+    @Test
     public void testDorst2007DrillsPointPairs(){
         System.out.println("------------------ Dorst2007 drills (chpater 14.9.1): point pair --------------");
        
@@ -348,6 +383,7 @@ public class Test2 {
         assertTrue(equals(radiusSquared,radiusSquaredTest)); // failed because location of ppOPNS is not the origin
     }
     
+    @Test
     public void testPointPairIPNS(){
         System.out.println("----------- test pointpair IPNS---------");
         Point3d c = new Point3d(0d,1d,0d);
@@ -425,6 +461,7 @@ public class Test2 {
     }
     
     // alles korrekt
+    @Test
     public void testGanjaExampleCreatePointsCircleLine(){
         System.out.println("------------------Ganja.js expample: creation of points, circle, line --------------");
         
@@ -476,6 +513,7 @@ public class Test2 {
     }
     
     // alles korrekt!
+    @Test
     public void testGanjaExampleCreatePointsPlaneSphere(){
         System.out.println("------------------Ganja.js expample: creation of points, plane, sphere --------------");
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Vector3d(1d,0d,0d));
@@ -518,6 +556,7 @@ public class Test2 {
         System.out.println("p="+p.toString());
     }
     
+    @Test
     public void testGanjaExampleCreateDualSphereAndPlane(){
         System.out.println("------------------Ganja.js expample: creation of dual sphere and plane --------------");
         // We start by defining a null basis, and upcasting for points
@@ -729,6 +768,7 @@ public class Test2 {
         //TODO
     }
     
+    @Test
     public void testGanjaExampleProjectReject(){
         
         System.out.println("------------------Ganja.js expample: project, reject --------------");
@@ -877,6 +917,7 @@ public class Test2 {
         */
     }
     
+    @Test
     public void testBasisBlades(){
         System.out.println("------------------Basis blades--------------");
         CGAMultivector m = CGAMultivector.createOrigin(1d).ip(CGAMultivector.createInf(1d));
@@ -943,7 +984,7 @@ public class Test2 {
         System.out.println(toString("attitude (planeIPNS, Dorst)",attitude));
     }
     
-    
+    @Test
     public void testPlaneIPNS(){
         System.out.println("---------------------- PlaneIPNS ------------------------");
         
@@ -1033,6 +1074,7 @@ public class Test2 {
         
     }
     
+    @Test
     public void testCircleIPNS(){
         System.out.println("----------------- circle IPNS (origin) -----");
         
@@ -1086,6 +1128,8 @@ public class Test2 {
         
         testCircleIPNS(circleIPNS2, c, radiusSquared, squaredWeight, attitudeTest);
     }
+    
+    @Test
     private void testCircleIPNS(CGACircleIPNS circleIPNS, Point3d c, 
                                 double radiusSquared, double squaredWeight, Vector3d attitudeTest){
         System.out.println("---------------------------------------------");
@@ -1160,6 +1204,7 @@ public class Test2 {
         //assert(equals(squaredSize,radiusSquared)); // 1.25 wäre  korrekt
     }
     
+    @Test
     public void testSpheresOPNS(){
         System.out.println("----------------- spheres OPNS --------------------");
         
@@ -1218,6 +1263,7 @@ public class Test2 {
         assertTrue(equals(radiusSquared,s*s)); 
     }
     
+    @Test
     public void testSpheresIPNS(){
         
         System.out.println("----------------- sphere IPNS-----");
@@ -1294,6 +1340,7 @@ public class Test2 {
         System.out.println("norm(sphere) = "+String.valueOf(sphereIPNS.norm()));
     }
     
+    @Test
     public void testDecomposeLocation(){
         System.out.println("--------------- decompose location for several objecs in IPNS and OPNS representation  -------");
         
@@ -1415,6 +1462,7 @@ public class Test2 {
         //assert(equals(location10, ));
     }
         
+    @Test
     public void testPointsIPNS(){
         System.out.println("--------------- points in IPNS representation -------");
         Point3d p = new Point3d(0d,0d,1d);
@@ -1473,6 +1521,7 @@ public class Test2 {
         assertTrue(equals(p.distanceSquared(p2),distSquare));
     }
 
+    @Test
     public void testPointsOPNS(){
         System.out.println("--------------- points in OPNS representation -------");
         Point3d p = new Point3d(0.02,0.02,1);
@@ -1512,6 +1561,7 @@ public class Test2 {
         System.out.println("distsquare="+result);
     }
     
+    @Test
     public void testDorst2007DrillsLines(){
         System.out.println("-------------- Dorst 2007 drills (chapter 13.9.1): lines -------------------");
         
@@ -1591,6 +1641,7 @@ public class Test2 {
     /**
      * @Test2
      */
+    @Test
     public void testLine() {
         System.out.println("-------------- line --------");
         
@@ -1666,6 +1717,7 @@ public class Test2 {
         System.out.println(toString("location (line IPNS, Dorst)",locationIPNS));
     }
     
+    @Test
     public void testLinePair(){
     
         System.out.println("-------------- linepair --------");
@@ -1722,6 +1774,7 @@ public class Test2 {
         //l2l1.decomposeLinePair();
     }
     
+    @Test
      public void testAttitudeCompositionAndDecomposition(){
         System.out.println("------------- test attitude composition and decomposition in OPNS representation ---------------------");
         // test attitude vector construction and decomposition
@@ -1736,6 +1789,7 @@ public class Test2 {
     }
      
     // test tangent vector construction and decomposition
+     @Test
     public void testTangentCompositionAndDecomposition(){
         System.out.println("----------------- tangent composition and decomposition ------------------");
         Point3d p = new Point3d(0d,1d,0d);
@@ -1771,6 +1825,7 @@ public class Test2 {
         assertTrue(equals(yTangentPoint,p));
     }
     
+    @Test
     public void testSquaredSizeOfRounds(){
         
         System.out.println("----------------- squared size of rounds -----");
@@ -1903,6 +1958,7 @@ public class Test2 {
         System.out.println(toString("locationIntern2",loc));
     }
     
+    @Test
     public void testAttitudeOfFlats(){
         System.out.println("----------------- attitude of IPNS flats -----------------");
         System.out.println("\nFlatPointIPNS:");
@@ -1953,7 +2009,7 @@ public class Test2 {
         System.out.println(toString("plane2 att decomposeflat", att));
     }
     
-    
+    @Test
     public void testAttitudeOfRounds(){
         
         System.out.println("----------------- attitude of rounds -----");
@@ -2038,6 +2094,7 @@ public class Test2 {
         System.out.println(carrierFlatPPIPNS.toString("carrierFlat (ppIPNS)\n"));
     }
     
+    @Test
     public void testAttitudeFromRoundPointIPNS(){
         System.out.println("----------------- test attitude from round point ipns -------------------");
         Point3d p = new Point3d(0.2564423003521458, -0.23434198923703015, 0.5895999999978854);
@@ -2069,7 +2126,7 @@ public class Test2 {
         System.out.println(toString("attitude",parameters.attitude()));
     }
     
-    
+    @Test
     public void testTranslation(){
         System.out.println("---------------- translation--------------");
         // transform a point
@@ -2100,6 +2157,7 @@ public class Test2 {
         assertTrue(equals(locationTransformed, locationTransformedTest));
     }
     
+    @Test
     public void testTangentFromLineExtraction(){
         System.out.println("------------- test tanget extraction from line -------------");
         Point3d p1 = new Point3d(1,0,0);
@@ -2192,6 +2250,7 @@ public class Test2 {
         System.out.println(m1.toString("m1"));*/
     }
     
+    @Test
     public void testIntersectionPointOfIntersectingLines(){
         System.out.println("-------------- test intersecting lines intersection point (Lasenby) -----------------");
         Point3d p1 = new Point3d(1,0,0);
@@ -2237,6 +2296,43 @@ public class Test2 {
        
     }
     
+    @Test
+    public void testReflectionOfLines(){
+        System.out.println("-------------- test orthogonal line reflection -----------------");
+        CGALineIPNS l1 = new CGALineIPNS(new Point3d(0,0,0), new Vector3d(0,0,1));
+        CGALineIPNS l2 = new CGALineIPNS(new Point3d(1,0,1), new Vector3d(0,1,0));
+        CGAMultivector l1ss = l1.sub(l2.gp(l1).gp(l2));
+        System.out.println(l1ss.toString("l1ss"));
+        //assertTrue(false);
+    }
+    
+    @Test
+    public void testDistances(){
+        System.out.println("-------------- test distance determination between points -----------------");
+        Point3d p1 = new Point3d(0,0,0);//new Point3d(1,1,1);
+        Point3d p2 = new Point3d(0.0,0.0,0.16242364179550933);
+        double value = p1.distance(p2);
+        CGARoundPointIPNS p1c = new CGARoundPointIPNS(p1);
+        System.out.println(p1c.toString("p1c"));
+        CGARoundPointIPNS p2c = new CGARoundPointIPNS(p2);
+        System.out.println(p2c.toString("p2c"));
+        
+        double dist = Math.sqrt(p1c.ip(p2c).decomposeScalar()*(-2d));
+        assertTrue(equals(dist, value));
+    }
+    
+    @Test
+    public void testFlatPointsIPNS(){
+        System.out.println("-------------- test flat point ipns -----------------");
+        Point3d p1 = new Point3d(0,0,100);
+        CGAFlatPointIPNS p1c = new CGAFlatPointIPNS(p1);
+        // p1c = (-1.0*e1^e2^e3 - 99.99999999999997*e1^e2^ei)
+        System.out.println(p1c.toString("p1c"));
+        Point3d p1a = p1c.location();
+        assertTrue(equals(p1, p1a));
+    }
+    
+    @Test
     public void testOrthogonalLineOfParallelLinesByReflection(){
         System.out.println("-------------- test parallel lines orthogonal line by reflection -----------------");
         Point3d p1 = new Point3d(1,0,0);
@@ -2285,6 +2381,8 @@ public class Test2 {
         CGAMultivector l2l1 = l2.normalize().gp(l1.normalize());
         System.out.println(l2l1.toString("l2l1"));
     }
+    
+    @Test
     public void testIntersectionPointOfParallelLines(){
         System.out.println("-------------- test parallel lines by regressive product -----------------");
         Point3d p1 = new Point3d(1,0,0);
@@ -2364,6 +2462,7 @@ public class Test2 {
         
     }
     
+    @Test
     public void testIntersectionPointOfIntersectingLines2(){
         System.out.println("-------------- test intersecting lines by regressive product -----------------");
         Point3d p1 = new Point3d(1,0,0);
@@ -2444,6 +2543,7 @@ public class Test2 {
         
     }
         
+    @Test
     public void testSkewedLinesClosestPoints(){
         System.out.println("-------------- test skewed lines closest points -----------------");
         Point3d p1 = new Point3d(1,0,0);
@@ -2564,6 +2664,7 @@ public class Test2 {
         System.out.println(toString("c1 (dual)",p1Dual));
     }
     
+    @Test
     public void testEuclideanVector(){
         System.out.println("-------------- test euclidean vector -----------------");
         CGAEuclideanVector ev = new CGAEuclideanVector(new Vector3d(1,1,1));
@@ -2600,6 +2701,8 @@ public class Test2 {
         System.out.println(toString("cross",cross));
         assertTrue(equals(cross, bi_div_I3.direction()));
     }
+    
+    @Test
     public void testEpsilon0Contraction(){
         System.out.println("----------------- test epsilon_0 projection of attitude scalar ---------------");
         CGAAttitudeScalarOPNS test1 = new CGAAttitudeScalarOPNS(1d);
@@ -2610,11 +2713,13 @@ public class Test2 {
         System.out.println(test3.toString("r=0: "));
     }
     
+    @Test
     public void testinf(){
         CGAMultivector test = inf.op(inf);
         System.out.println(test.toString("infsquare"));
     }
     
+    @Test
     public void testAPlus(){
          System.out.println("----------------- test a+ ---------------");
         CGAEuclideanVector s = new CGAEuclideanVector(new Vector3d(0d,0d,1d));
@@ -2624,6 +2729,7 @@ public class Test2 {
         System.out.println(s2.toString("s2"));
     }
     
+    @Test
     public void testNullVectors(){
         System.out.println("----------------- null vectors -----------------");
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Point3d(1,0,0));
@@ -2632,6 +2738,7 @@ public class Test2 {
         // test gp = (-1 + eo^ei + *e1^ei)
         System.out.println(test.toString("test gp"));
     }
+    @Test
     public void testAttitudeScalar(){
         CGAAttitudeScalarOPNS test = new CGAAttitudeScalarOPNS(5);
         System.out.println("----------------- CGA Attitude Scalar -----------------");
@@ -2640,11 +2747,14 @@ public class Test2 {
         System.out.println(test.dual().toString("ipns"));
     }
     
+    @Test
     public void testgp(){
         System.out.println("------------------  test gp ---------------------");
         CGAMultivector test = CGAMultivector.createE3(new Vector3d(1,2,3)).gp(CGAMultivector.createI3());
         System.out.println(test.toString("test"));
     }
+    
+    @Test
     public void testScalar(){
         System.out.println("----------------- test Scalar --------------------");
         CGAScalarOPNS test = new CGAScalarOPNS(3d);
@@ -2679,6 +2789,7 @@ public class Test2 {
         return result.toString();
     }
     
+    @Test
     public void testIPNS(){
         System.out.println("----------------- test ipns --------------------");
         CGARoundPointIPNS p4 = new CGARoundPointIPNS(new Vector3d(1d,-1d,-2d));
@@ -2688,6 +2799,8 @@ public class Test2 {
         CGAMultivector m2 = p4.op(p4);
         System.out.println(m2.toString("p4^p4"));
     }
+    
+    @Test
     public void testOPNS(){
         System.out.println("----------------- test opns --------------------");
         CGARoundPointOPNS p4 = new CGARoundPointOPNS(new Point3d(1d,-1d,-2d));
@@ -2768,6 +2881,7 @@ public class Test2 {
         return new CGARoundPointIPNS(ps.gp(inf).gp(ps).negate().div(ps.rc(inf).sqr().gp(2d)));
     }
     
+    @Test
     public void testGrade1Vectors(){
         System.out.println("------------------------- test grade 1 multivectors ---------------------");
         //CGAAttitudeScalarOPNS test = CGAAttitudeScalarOPNS(1d);
@@ -2826,6 +2940,8 @@ public class Test2 {
          // attitude orientedPointIPNS = (0.9999999999999991*e1^e2^ei)
          //System.out.println("op1 "+toString("attitude2",va));
     }
+    
+    @Test
     public void testTangentBivectors(){
         System.out.println("------------------------------- test tangent bivectors ---------------------");
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));

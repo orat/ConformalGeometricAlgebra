@@ -278,10 +278,10 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         return new CGA1Multivector(super.gradeInversion());
     }
     /**
-     * The inverse of the multivector even if it is not a versor (returns 0 if 
-     * inverse does not exist).
+     * The inverse of the multivector even if it is not a versor.
      * 
      * @return the inverse of an arbitray multivector or 0 if no inverse exist.
+     * @throws java.lang.ArithmeticException if multivector is not invertible.
      */
     @Override
     public iCGAMultivector generalInverse() {
@@ -321,7 +321,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     /**
      * Unit multivector.
      * 
-     * @return unit
+     * @return unit multivector
      * @throws java.lang.ArithmeticException if multivector is null.
      */
     @Override

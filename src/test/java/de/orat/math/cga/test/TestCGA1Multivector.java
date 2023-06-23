@@ -2,6 +2,7 @@ package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGAKVector;
 import de.orat.math.cga.api.CGAMultivector;
+import de.orat.math.cga.api.CGAMultivector;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
