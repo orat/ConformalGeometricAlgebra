@@ -34,13 +34,19 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     // composition
     
     /**
-     * Create normalized line in outer product null space representation 
+     * Create (normalized?) line in outer product null space representation 
      * (grade 3 multivector).
      * 
-     * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
-     * Hildenbrand2013.
+     * Be careful: This corresponds to a line in [Dorst2007] but to a dual line in
+     * [Hildenbrand2013].<p>
      * 
-     * The direction of the line is from p2 to p1.
+     * The direction of the line is from p1 to p2.<p>
+     *  
+     * TODO
+     * Ist die line wirklich normalized? Als weights wird zwar 1 angenommen, aber die
+     * beiden Punkte sind ja beliebig. Normalisation und weight sind 2 verschiedene
+     * Konzepte, kommt hier dann wenigstens weight=1 heraus? Was erwarte ich für 
+     * die Normalization?<p>
      * 
      * @param p1 first point on the line
      * @param p2 second point on the line
@@ -49,18 +55,34 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
      */
     public CGALineOPNS(Point3d p1, Point3d p2){
         this(create(p1,p2));
-        // bisher
+        // bisher, brauchte es die normalzation überhaupt?, will ich hier nicht
+        // einfach nur weight=1? oder führt das zum gleichen?
         //this(create(new CGARoundPointIPNS(p1),new CGARoundPointIPNS(p2)).normalize());
+    }
+    /**
+     * Create a normalized line in outer product null space representation.
+     * 
+     * The direction of the line is from p1 to p2.<p>
+     * 
+     * Compare [Rettig2023].<p>
+     *
+     * @param p1 first euclidean point
+     * @param p2 second euclidean point
+     * @return multivector representing an opns-line
+     */
+    private static CGAMultivector create(Point3d p1, Point3d p2){
+        return (new CGAAttitudeBivectorOPNS(p1,p2)).add(
+                (new CGAEuclideanVector(p1)).sub(new CGAEuclideanVector(p2)).gp(I0));
     }
     
     /**
-     * Create (non-normalized) line in outer product null space representation 
+     * Create (non-normalized? weighted) line in outer product null space representation 
      * (grade 3).
      * 
      * Be careful: This corresponds to a line in Dorst2007 but to a dual line in
-     * Hildenbrand2013.
+     * [Hildenbrand2013].<p>
      * 
-     * Hint: The direction of the line is from p2 to p1.
+     * Hint: The direction of the line is from p1 to p2.<p>
      * 
      * (tri-vector: (e12inf, e13inf, e23inf, e10inf, e20inf, e30inf = tri-vector))
      * 
@@ -75,16 +97,18 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     }
     
     /**
-     * Create (non normalized) line in outer product null space representation 
+     * Create a (non normalized) line in outer product null space representation 
      * (grade 3).
      * 
      * @param p1 first point in inner product null space representation
      * @param p2 second point in inner product null space representation
      * 
-     * Be careful: The representation is called dual in Hildenbrand2013 but direct
-     * in Dorst2007.
+     * Be careful: The representation is called dual in [Hildenbrand2013] but direct
+     * in [Dorst2007].<p>
      * 
-     * Hint: The direction of the line is from p2 to p1.
+     * test by [Dorst2007]: drills (chapter 13.9.1).<p>
+     * 
+     * Hint: The direction of the line is from p1 to p2.
      */
     public CGALineOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         this(create(p1,p2));
@@ -100,25 +124,7 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     private static CGAMultivector create(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
         return p1.op(p2).op(inf);
     }
-    /**
-     * Create a normalized line in outer product null space representation.
-     * 
-     * TODO normalization
-     * - reicht es die Länge des Richtungsvektors auf 1 zu bringen, ohne dessen Vorzeichen zu ändern?
-     * - funktioniert das normalize wirklich zuverlässig? Da wird ja durch Wurnzel des 
-     *   absolut-Wertes des Quadrats geteilt. Da das quadrat negativ sein kann, eliminiert
-     *   der absolut werd doch in bestimmten Fällen das Vorzeichen, was aber nötig ist um die Wurzel
-     *   zu ziehen. Könnte ich nicht mit einer if-Anweisung vorher das Vorzeichen aufheben?
-     *   Wann tritt dieser Fall überhaupt auf?
-     * 
-     * @param p1
-     * @param p2
-     * @return 
-     */
-    private static CGAMultivector create(Point3d p1, Point3d p2){
-        return (new CGAAttitudeBivectorOPNS(p1,p2)).add(
-                (new CGAEuclideanVector(p1)).sub(new CGAEuclideanVector(p2))/*.normalize()*/.gp(I0));
-    }
+    
     
     /**
      * Create a line in outer product null space representation (grade 3 multivector)
@@ -169,21 +175,30 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     
     // decomposition
     
+    /**
+     * tested by comparison with [Dorst2007]: drills (chapter 13.9.1)
+     * 
+     * TODO
+     * sollte eigentlich conformalDirection heissen, da attitude nur die Ausrichtung
+     * ohne Vorzeichen ist.
+     * 
+     * @return attitude (inclusive weight == not normalized attitude)
+     */
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
         return new CGAAttitudeVectorOPNS(super.attitudeIntern());
     }
     
     /**
-     *     
+     * Test nach [Dorst2007]: drills (chapter 13.9.1) funktioniert.
+     * 
      * @Deprecated
-     * @return 
+     * @return euclidiean direction
      */
     public CGAEuclideanVector attitudeIntern2(){
-        // nach Spencer
-        CGAEuclideanVector result = this.dual().attitudeIntern2();
-        System.out.println(result.toString("attitudeIntern2 (CGALineOPNS, via dual, Spencer"));
-        return result;
+        // nach Spencer, derzeit fälschlicherweise durch abs(weight) dividiert entsprechend Spencer
+        // das ist geändert
+        return this.dual().attitudeIntern2();
     }
     
     /**

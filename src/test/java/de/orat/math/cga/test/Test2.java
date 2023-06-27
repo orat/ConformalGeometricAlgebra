@@ -179,12 +179,12 @@ public class Test2 {
         System.out.println("------------------ Dorst2007 drills (chapter 13.9.1): basic objects ------------------");
         
         // 1.
-        // composition of a point in IPNS representation
+        // composition of a point in IPNS representation by point and weight
         Point3d p1 = new Point3d(1d,1d,0d);
         double weight1 = 2;
         CGARoundPointIPNS p1cga = new  CGARoundPointIPNS(p1,weight1);
-        CGARoundPointIPNS p1cgaTest = new CGARoundPointIPNS((CGAMultivector.createOrigin(1d).
-                add(CGAMultivector.createE3(p1)).add(CGAMultivector.createInf(1d))).gp(2d));
+        CGARoundPointIPNS p1cgaTest = new CGARoundPointIPNS((o.
+                add(CGAMultivector.createE3(p1)).add(inf)).gp(2d));
         assertTrue(p1cga.equals(p1cgaTest));
         
         // decomposition
@@ -210,27 +210,47 @@ public class Test2 {
         // lineOPNS_ in OPNS representation
         CGALineOPNS lineOPNS_ = new CGALineOPNS(p1cga, p2cga);
         System.out.println(lineOPNS_.toString("lineOPNS"));
-        CGALineOPNS lineTest = new CGALineOPNS(CGAMultivector.createOrigin(1d).add(CGAMultivector.createE3(p1)).
-                gp(-2).op(CGAMultivector.createE3(new Point3d(0d,-1d,1d))).op(CGAMultivector.createInf(1d)));
+        CGALineOPNS lineTest = new CGALineOPNS(o.add(CGAMultivector.createE3(p1)).
+                gp(-2).op(CGAMultivector.createE3(new Point3d(0d,-1d,1d))).op(inf));
         System.out.println(lineTest.toString("lineOPNS (test)"));
         assertTrue(lineOPNS_.equals(lineTest));
         
+        // test mit composition ohne weight und später gp(weight)
+        CGALineOPNS lineOPNS_2 = new CGALineOPNS(p1,p2);
+        lineOPNS_2 = new CGALineOPNS(lineOPNS_2.gp(-2));
+        //System.out.println(lineOPNS_2.toString("lineOPNS composition ohne weight"));
+        assertTrue(lineOPNS_2.equals(lineOPNS_));
+        
         // 4.
         // direction of the lineOPNS_
-        CGAEuclideanVector attitude2 = lineOPNS_.attitudeIntern2();
-        System.out.println(attitude2.toString("attitude2 (line OPNS)"));
         
-        Vector3d attitude = lineOPNS_.attitudeIntern().direction(); // without normalizationd
-        Vector3d attitudeTest = new Vector3d(p1); 
-        attitudeTest.sub(p2); // // 0,1,-1
-        attitudeTest.scale(Math.sqrt(lineOPNS_.squaredWeight()));
-        System.out.println(toString("attitude Test (scaled with weight)",attitudeTest));
-        // warum p1-p2 und nicht umgekehrt?
-        // was ist das mit weight?
-        //FIXME
-        attitudeTest = new Vector3d(0d,2d,-2d);
-        System.out.println(toString("n (line opns)", attitudeTest)); 
+        // entsprechend Ergebnis aus "Drills"
+        Vector3d attitudeTest = new Vector3d(0d,2d,-2d);
+        
+        // test attitude via ipns nach Spencer ohne normalization
+        CGAEuclideanVector attitude2 = lineOPNS_.attitudeIntern2();
+        // attitude2 (line OPNS) = (0.7071067811865475*e2 - 0.7071067811865475*e3) mit Normalisierung nach spencer
+        // attitude2 (line OPNS) = (1.9999999999999982*e2 - 1.9999999999999982*e3)
+        System.out.println(attitude2.toString("attitude2 (line OPNS)"));
+        assertTrue(equals(attitudeTest, attitude2.direction()));
+        
+        // test attitude euclid
+        Vector3d attitudeEuclid = new Vector3d(p2);   // 1,0,1, w2=-1
+        attitudeEuclid.sub(p1); // 1,1,0, w1=2
+        double w_Line = -2; // = w1*w2? TODO
+        attitudeEuclid.scale(w_Line);
+        // attitudeEuclid = (-0.0,-2.0,2.0)
+        System.out.println(toString("attitudeEuclid", attitudeEuclid));
+        assertTrue(equals(attitudeEuclid, attitudeTest));
+        
+        // test attitude conformal determination
+        Vector3d attitude = lineOPNS_.attitudeIntern().direction(); // without normalization
         assertTrue(equals(attitude, attitudeTest));
+        
+        
+        
+        
+        // TODO
         
         CGAMultivector carrierFlat = lineOPNS_.carrierFlat();
         // anderes Vorzeichen als Dorst
@@ -1981,13 +2001,21 @@ public class Test2 {
         CGAPlaneIPNS plane2IPNS = new CGAPlaneIPNS(n2, d, weight);
         CGALineIPNS lineIPNS = new CGALineIPNS(plane1IPNS, plane2IPNS);
         Vector3d lineIPNSAttitude = lineIPNS.attitude();
-        //FIXME
-        // Spencer als attitude 2 scheint normalisiert zu sein
-        // carrier hat anders Vorzeichen als dorst und Spencer
+        
+        // attitudeIntern (CGAFlatIPNS, Dorst) = (3.9999999999999973*e1^ei)
         System.out.println(toString("attitude (lineIPNS)", lineIPNSAttitude));
+        
+        //FIXME Vorzeichen im Vergleich zu attitude()
+        // attitueIntern2 (CGALineIPNS, Spencer) = (-3.9999999999999987*e1)
         Vector3d lineIPNSAttitude2 = lineIPNS.attitudeIntern2().direction();
+        // Spencer als attitude 2 ist normalisiert, das ist aber jetzt geändert
+        // aber das Vorzeichen ist immer noch anders als bei attitude()
         System.out.println(toString("attitude2 (lineIPNS)", lineIPNSAttitude2));
+        
+        // carrier hat anders Vorzeichen als dorst 
+        //FIXME
         CGAMultivector carrier = lineIPNS.carrierFlat();
+        // carrier (lineIPNS) = (3.9999999999999964*e1)
         System.out.println(carrier.toString("carrier (lineIPNS)"));
         
         System.out.println("\nPlane1IPNS:");

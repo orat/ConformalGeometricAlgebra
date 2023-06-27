@@ -60,9 +60,11 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
     }
     
     /**
-     * Determine the attitude.
+     * Determine the attitude (inclusive weight == not normalized attitude).
      * 
-     * @return attitude
+     * tested for line-opns by comparison with [Dorst2007]: drills (chapter 13.9.1)
+     * 
+     * @return attitude 
      */
     @Override
     public CGAAttitudeOPNS attitudeIntern(){

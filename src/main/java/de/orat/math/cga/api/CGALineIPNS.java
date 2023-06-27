@@ -166,12 +166,18 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
     /**
      * Determine attitude.
      * 
+     * TODO
+     * Vorzeichen möglicherweise falsch, 
+     * 
      * @Deprecated
      * @return normalized attitude as (E3) 1-vector
      */
     public CGAEuclideanVector attitudeIntern2(){
-        // implementation following Spencer
-        CGAEuclideanVector result = new CGAEuclideanVector(o.ip(this.div(weightIntern2()).
+        // implementation following Spencer, nach Spencer wird durch abs(weight) dividiert
+        // damit wird Ergebnis normalisiert aber es geht auch das Vorzeichen verloren.
+        //TODO
+        // besser nicht durch abs(weight) dividieren
+        CGAEuclideanVector result = new CGAEuclideanVector(o.ip(this/*.div(weightIntern2())*/.
                 op(inf)).gp(CGAMultivector.createI3()));
         System.out.println(result.toString("attitueIntern2 (CGALineIPNS, Spencer)"));
         return result;

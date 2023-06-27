@@ -523,6 +523,7 @@ public class CGAMultivector {
         return new CGAMultivector(impl.gp(x));
     }
     /**
+     * Divide
      * 
      * @param x
      * @return 

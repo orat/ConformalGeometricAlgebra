@@ -111,12 +111,12 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
                                       0d, squaredWeight());
     }*/
     
+    /**
+     * @return e1^e2^e3^ei
+     */
     @Override
     public CGAAttitudeTrivectorOPNS attitudeIntern(){
-        CGAMultivector test = super.attitudeIntern();
-        //FIXME hier komme ich schon nicht mehr an
-        System.out.println(test.toString("roundPIPNS.attitude"));
-        return new CGAAttitudeTrivectorOPNS(test);
+        return new CGAAttitudeTrivectorOPNS(super.attitudeIntern());
     }
     @Override
     public CGARoundPointIPNS locationIntern(){
