@@ -314,10 +314,11 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     public CGA1Multivector createI(){
         return new CGA1Multivector(super.createI(CGA_METRIC));
     }
-    @Override
+    // auskommentiert da die super.undual()-Methode noch nicht richtig implementiert ist
+    /*@Override
     public iCGAMultivector undual(){
         return new CGA1Multivector(super.undual(CGA_METRIC));
-    }
+    }*/
     /**
      * Unit multivector.
      * 

@@ -209,16 +209,17 @@ public class Test2 {
         CGALineIPNS test = new CGALineIPNS(p1,d);
         System.out.println(test.toString("lineIPNS"));
                 
-        // FIXME falsches Vorzeichen
+        // ipns.attitude() FIXME falsches Vorzeichen
+        // ok, nachdem ich bei undual das Vorzeichen geswitched habe
         Vector3d attitude2 = test.attitude(); // via attitudeIntern()
         System.out.println(toString("attitude2", attitude2));
-        //assertTrue(equals(attitude2, d));
+        assertTrue(equals(attitude2, d));
         
         Vector3d attitude2a = test.attitudeIntern2().direction();
         System.out.println(toString("attitude2a", attitude2a));
         assertTrue(equals(attitude2a, d));
         
-        
+        // dual() ok
         Point3d p2 = new Point3d(p1);
         p2.add(d);
         CGALineOPNS opnsLine = new CGALineOPNS(p1,p2);
@@ -226,14 +227,15 @@ public class Test2 {
         System.out.println(test2.toString("lineIPNS3"));
         assertTrue(test.equals(test2));
         
-        // test undual failed
+        // test undual failed, ok nachdem ich bei undual das Vorzeichen geswitched habe
         CGALineOPNS opnsLineTest = test2.undual();
         assertTrue(opnsLineTest.equals(opnsLine));
         
         //FIXME attitude schlägt fehlt, falsches Vorzeichen
+        // ok, nachdem ich bei undual() das Vorzeichen geswitched habe
         attitude2 = test2.attitude(); // via attitudeIntern()
         System.out.println(toString("attitude2", attitude2));
-        //assertTrue(equals(attitude2, d));
+        assertTrue(equals(attitude2, d));
         
         attitude2a = test2.attitudeIntern2().direction();
         System.out.println(toString("attitude2a", attitude2a));

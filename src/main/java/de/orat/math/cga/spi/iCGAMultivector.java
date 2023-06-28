@@ -230,7 +230,9 @@ public interface iCGAMultivector {
     //}
     public default iCGAMultivector undual(){
          //return ip(createI(),LEFT_CONTRACTION);
-         return gp(createI());
+         // scheint auch falsches Vorzeichen zu haben
+         // -1 ist fix für CGA
+         return gp(createI()).gp(-1); // -1 wird gebraucht
     }
     
     public double scalarPart();
