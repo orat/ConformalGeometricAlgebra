@@ -61,6 +61,8 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
+     * FIXME erzeugt vermutlich falsches Vorzeichen für die attitude
+     * 
      * @param c location
      * @param attitude normalized attitude
      * @param weight 
@@ -78,12 +80,13 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
      * 
      * TODO
      * brauche ich hier die normalisation?
+     * FIXME produziert vermutlich falsches Vorzeichen für attitude
      * 
      * @param c position on the line
      * @param attitude direction of the line (normalization is not needed)
      */
     public CGALineIPNS(Point3d c, Vector3d attitude){
-        this(c, normalize(attitude), 1d);
+        this(c, /*normalize(*/attitude/*)*/, 1d);
     }
     private static Vector3d normalize(Vector3d attitude){
         Vector3d result = attitude;
@@ -161,6 +164,13 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
                 gp(attitudeIntern())).gp(createI3()).extractE3ToPoint3d());
     }*/
     
+    public CGALineIPNS normalize(){
+        return new CGALineIPNS(super.normalize().compress());
+    }
+    
+    
+    // attitude
+    
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
         return new CGAAttitudeVectorOPNS(super.attitudeIntern());
@@ -188,7 +198,4 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
         return result;
     }
     
-    public CGALineIPNS normalize(){
-        return new CGALineIPNS(super.normalize().compress());
-    }
 }
