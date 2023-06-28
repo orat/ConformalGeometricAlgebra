@@ -26,17 +26,17 @@ public class CGAAttitudeBivectorOPNS extends CGAAttitudeOPNS implements iCGATriv
         super(impl);
     }
     
+    
     // composition 
     
     public CGAAttitudeBivectorOPNS(CGAEuclideanBivector B){
-        // muss statt gp nicht op stehen
-        //FIXME
         this(B.op(inf));
     }
     
     public CGAAttitudeBivectorOPNS(Tuple3d v1, Tuple3d v2){
         super((new CGAEuclideanVector(v1)).op(new CGAEuclideanVector(v2)).op(inf));
     }
+    
     
     // decomposition
     

@@ -36,6 +36,8 @@ public class CGAAttitudeOPNS extends CGAKVector implements iCGAAttitude {
     // decomposition
     
     public Vector3d direction(){
+        // impl abhängig vom grade waere moeglich
+        //TODO
         throw new RuntimeException("Implementation only for derviced classes available!");
     }
     
@@ -44,6 +46,8 @@ public class CGAAttitudeOPNS extends CGAKVector implements iCGAAttitude {
     
     @Override
     public CGATangentOPNS inverse(){
+        // warum ist das so?
+        //TODO
         throw new RuntimeException("An attitude has no inverse!");
     }
     

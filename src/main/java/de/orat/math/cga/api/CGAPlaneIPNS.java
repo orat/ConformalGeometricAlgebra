@@ -176,29 +176,30 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
     
     // decomposition 
     
+    // attitude
+    
     /**
-     * Determine the attitude.
+     * Determine the eculidean direction.
      * 
-     * TODO
-     * diese Implementierung following Dorst sollte doch auch für line und flat point 
-     * gelten, oder?
+     * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
+     * plane obwohl das für line funktioniert.
+     * 
+     * @return euclidean direction 
+     */
+    /*public Vector3d attitude(){
+        return attitudeIntern2().direction();
+    }*/
+    
+    /**
+     * Determine the attitude as attitude bivector.
      * 
      * @return attitude as attitude-bivector in opns representation
      */
     @Override
     public CGAAttitudeBivectorOPNS attitudeIntern(){
+        System.out.println("CGAPlaneIPNS.attitudeIntern() invoked!");
         return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
     }  
-    
-    /**
-     * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
-     * plane obwohl das für line funktioniert
-     * 
-     * @return 
-     */
-    public Vector3d attitude(){
-        return attitudeIntern2().direction();
-    }
     
     /**
      * Determination of the attitude.
@@ -211,11 +212,14 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // blade = blade / weight
 	// local normal = no .. ( blade ^ ni )
+        // Das entspricht doch auch etwa kleppe2016
         double weight = weight2Intern();
         CGAMultivector result = o.ip(this.gp(1d/weight).op(inf)).compress();
         System.out.println(result.toString("attitudeIntern2(CGAPlaneIPNS, Spencer)"));
+        // warum ist <0 ein Problem? Wann kann =0 auftreten?
+        //FIXME
         if (weight<=0){
-            System.out.println("attitudeIntern2(CGAPlaneIPNS, Spencer) failed because weight="+String.valueOf(weight));
+            System.out.println("attitudeIntern2(CGAPlaneIPNS, Spencer) failed because weight < 0 ="+String.valueOf(weight));
         }
         return new CGAEuclideanVector(result);
     }
@@ -224,7 +228,7 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
      * Determine weight without a probe point and without determination of the
      * attitude.
      * 
-     * The sign in lost in composition of the plane and unreoverable.
+     * The sign in lost in composition of the plane and unreoverable.<p>
      * 
      * @return weight wihout sign (always positive, the sign is lost)
      */
@@ -232,8 +236,11 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
         // implementation follows
         // https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
         // local weight = ( #( no .. ( blade ^ ni ) ) ):tonumber()
-        return createOrigin(1d).ip(this.op(inf)).norm();
+        return o.ip(this.op(inf)).norm();
     }
+    
+    
+    // location
     
     /**
      * Determine location.

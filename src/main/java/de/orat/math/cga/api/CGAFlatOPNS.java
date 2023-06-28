@@ -59,27 +59,7 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
         return new CGAKVector(this.negate().rc(I0));
     }
     
-    /**
-     * Determine the attitude (inclusive weight == not normalized attitude).
-     * 
-     * tested for line-opns by comparison with [Dorst2007]: drills (chapter 13.9.1)
-     * 
-     * @return attitude 
-     */
-    @Override
-    public CGAAttitudeOPNS attitudeIntern(){
-        // corresponding to
-        // Geometric Algebra: A powerful tool for solving geometric problems in visual computing
-        // Leandro A. F. Fernandes, and Manuel M. Oliveira, 2009
-        // DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
-        // also corresponding to [Dorst2009] p.407
-        // tested for line
-        //CGAMultivector result =  inf.lc(this).negate().compress();
-        CGAMultivector result =  inf.negate().lc(this).compress();
-        System.out.println(result.toString("attitudeIntern (CGAFlatOPNS, Dorst2009)"));
-        return new CGAAttitudeOPNS(result);
-    } 
-    
+   
     /**
      * Determine the localisation as the a point of the geometric object nearest
      * to the given one.
@@ -105,14 +85,36 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
         return m.extractE3ToPoint3d();
     }
     
-    //public abstract Vector3d attitude();
+    
+    // attitude
+    
     public Vector3d attitude(){
         return attitudeIntern().direction();
     }
     
-    /*public CGAOrientedFiniteFlatIPNS undual(){
-        return new CGAOrientedFiniteFlatIPNS(super.undual().compress());
-    }*/
+    /**
+     * Determine the attitude (inclusive weight == not normalized attitude).
+     * 
+     * tested for line-opns by comparison with [Dorst2007]: drills (chapter 13.9.1)
+     * 
+     * @return attitude 
+     */
+    @Override
+    public CGAAttitudeOPNS attitudeIntern(){
+        // corresponding to
+        // Geometric Algebra: A powerful tool for solving geometric problems in visual computing
+        // Leandro A. F. Fernandes, and Manuel M. Oliveira, 2009
+        // DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
+        // also corresponding to [Dorst2009] p.407
+        // tested for line
+        //CGAMultivector result =  inf.lc(this).negate().compress();
+        CGAMultivector result =  inf.negate().lc(this).compress();
+        System.out.println(result.toString("attitudeIntern (CGAFlatOPNS, Dorst2009)"));
+        return new CGAAttitudeOPNS(result);
+    } 
+    
+    
+    // etc
     
     /**
      * Determine the euclid decomposition parameters corresponding to the given dual Flat.

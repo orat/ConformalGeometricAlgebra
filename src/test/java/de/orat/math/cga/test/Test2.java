@@ -175,6 +175,29 @@ public class Test2 {
     }
     
     @Test
+    public void testLineOPNSComposition(){
+        System.out.println("------------------------- test line OPNS comosition ------------------");
+        Point3d p1 = new Point3d(1,2,3);
+        Vector3d d = new Vector3d(4,-1,1);
+        CGALineOPNS test = new CGALineOPNS(p1,d);
+        System.out.println(test.toString("lineOPNS"));
+                
+        Point3d p2 = new Point3d(p1);
+        p2.add(d);
+        CGALineOPNS test2 = new CGALineOPNS(p1,p2);
+        System.out.println(test2.toString("lineOPNS3"));
+        assertTrue(test.equals(test2));
+        
+        Vector3d attitude2 = test2.attitude(); // via attitudeIntern()
+        System.out.println(toString("attitude2", attitude2));
+        assertTrue(equals(attitude2, d));
+        
+        Vector3d attitude2a = test2.attitudeIntern2().direction();
+        System.out.println(toString("attitude2a", attitude2a));
+        assertTrue(equals(attitude2a, d));
+    }
+    
+    @Test
     public void testDorst2007DrillsBasicObjects(){
         System.out.println("------------------ Dorst2007 drills (chapter 13.9.1): basic objects ------------------");
         
@@ -1494,7 +1517,7 @@ public class Test2 {
         // products
         CGAMultivector testgp = cp.gp(cp);
         // P*P=9.00480064 Warum eigentlich?
-        // ist das gleich p.sqr()?
+        // ist das gleich p1.sqr()?
         // muesst da nicht mit dem reverse multipliziert werden um norm quadrdat zu bekommen
         //FIXME
         System.out.println("P*P="+testgp);
@@ -1677,8 +1700,11 @@ public class Test2 {
         CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2, weight2);
         System.out.println("cp2="+cp2);
         
-        Vector3d n = new Vector3d(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
-        n.normalize();
+        // neu ohne Normalisierung und mit anderer Reihenfolge von p1 und p2
+        Vector3d n = new Vector3d(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z);
+        n.scale(weight2*weight1);
+        //Vector3d n = new Vector3d(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
+        //n.normalize();
         System.out.println(toString("n",n));
         
         
@@ -1692,21 +1718,25 @@ public class Test2 {
         System.out.println(l_OPNSTest.toString("l_OPNSTest"));
         assertTrue(l_OPNSTest.equals(l_OPNS));
         
-        // attitude
+        // attitude [Dorst2007]
         Vector3d attitude = l_OPNS.attitude();
         // l_OPNSTest = (2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei)
         // attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst) = (1.9999999999999991*e2^ei - 1.9999999999999991*e3^ei)
-        // attitudeIntern ist korrekt, aber output Dorst hat falsches Vorzeichen
-        System.out.println(toString("attitude (l_OPNS, Dorst2007)",attitude));
+        System.out.println(toString("attitude (Dorst2007)",attitude));
         assertTrue(equals(n, attitude));
         
-        // Kleppe2016 directional component of a lineOPNS_
-        CGAMultivector m = l_OPNS.ip(o).ip(inf);
-        System.out.println(m.toString("attitude (Kleppe2016) V1")); // failed liefert 0
+        // attitude [Kleppe2016] directional component of a lineOPNS_
+        CGAMultivector m = l_OPNS.rc(o).rc(inf);
+        // attitude (Kleppe2016) V1 = (-1.9999999999999984*e2 + 1.9999999999999984*e3)
+        // falsches Vorzeichen
+        //FIXME vielleicht ist die Formel in Kleppe falsch? ja so ist es vermutlich!
+        System.out.println(m.toString("attitude (Kleppe2016)")); 
         
-        // Variante 2
-        m = l_OPNS.dual().op(inf).ip(o);
-        System.out.println(m.toString("attitude (Kleppe2016) V2")); // failed liefert 0
+        // attitude [Rettig2023]
+        m = inf.lc(l_OPNS).rc(o);
+        // attitude (Rettig2023) = (1.9999999999999984*e2 - 1.9999999999999984*e3)
+        System.out.println(m.toString("attitude (Rettig2023)")); 
+        assertTrue(equals(n, m.extractE3ToVector3d()));
         
         // locationOPNS
         Point3d location = l_OPNS.location();
@@ -1714,6 +1744,7 @@ public class Test2 {
         // Gerade geht offensichtlich nicht durch 0,0.0
         //FIXME
         System.out.println(toString("location (line OPNS, Dorst)",location));
+        
         
         // lineOPNS_ IPNS representation
         
@@ -1832,7 +1863,7 @@ public class Test2 {
         
         // The given multivector m is not of grade 3! 
         // 5.55111512312578E-17*eo^e1^e2^e3 - 5.551115123125781E-17*eo^e1^e3^ei + 2.7755575615628904E-17*e1^e2^e3^ei
-        //CGATangentVectorIPNS ytangentDual2 = new CGATangentVectorIPNS(p,u);
+        //CGATangentVectorIPNS ytangentDual2 = new CGATangentVectorIPNS(p1,u);
         //System.out.println("TangentVector* ytangentDual2 = "+ytangentDual2.toString());
         
         
@@ -1854,7 +1885,7 @@ public class Test2 {
         System.out.println(toString("p", p));
         double weight = 3d;
         System.out.println("input weight="+String.valueOf(weight));
-        //CGARoundPointIPNS pc = new CGARoundPointIPNS(p, weight);
+        //CGARoundPointIPNS pc = new CGARoundPointIPNS(p1, weight);
         //System.out.println(pc.toString("pc"));
         //double squaredRadius1 = pc.squaredSizeIntern1().decomposeScalar(); // ok 0
         //System.out.println("squaredSizeIntern1 (RoundPointIPNS)="+String.valueOf(squaredRadius1));
@@ -1998,6 +2029,7 @@ public class Test2 {
         weight = 2d;
         System.out.println("HNF1: n=("+String.valueOf(n1.x)+","+String.valueOf(n1.y)+", "+String.valueOf(n1.z)+"), d="+String.valueOf(d));
         CGAPlaneIPNS plane1IPNS = new CGAPlaneIPNS(n1, d, weight);
+        System.out.println("HNF2: n=("+String.valueOf(n2.x)+","+String.valueOf(n2.y)+", "+String.valueOf(n2.z)+"), d="+String.valueOf(d));
         CGAPlaneIPNS plane2IPNS = new CGAPlaneIPNS(n2, d, weight);
         CGALineIPNS lineIPNS = new CGALineIPNS(plane1IPNS, plane2IPNS);
         Vector3d lineIPNSAttitude = lineIPNS.attitude();
@@ -2008,8 +2040,9 @@ public class Test2 {
         //FIXME Vorzeichen im Vergleich zu attitude()
         // attitueIntern2 (CGALineIPNS, Spencer) = (-3.9999999999999987*e1)
         Vector3d lineIPNSAttitude2 = lineIPNS.attitudeIntern2().direction();
-        // Spencer als attitude 2 ist normalisiert, das ist aber jetzt geändert
-        // aber das Vorzeichen ist immer noch anders als bei attitude()
+        // das Vorzeichen ist immer noch anders als bei attitude()
+        //attitueIntern2 (CGALineIPNS, Spencer) = (-3.9999999999999987*e1)
+        // attitude2 (lineIPNS) = (-3.9999999999999987,0.0,0.0)
         System.out.println(toString("attitude2 (lineIPNS)", lineIPNSAttitude2));
         
         // carrier hat anders Vorzeichen als dorst 

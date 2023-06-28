@@ -17,12 +17,15 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     public CGAPlaneOPNS(CGAMultivector m){
         super(m);
     }
+    
     CGAPlaneOPNS(iCGAMultivector impl){
         super(impl);
     }
+    
     public CGAPlaneOPNS(double[] values){
         super(values);
     }
+    
     /**
      * Create plane in outer product null space representation (grade 4 multivector).
      * 
@@ -47,6 +50,7 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
      * @param p2 point 2
      */
     public CGAPlaneOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
+        //FIXME inf wirklich zu beginn?
         this(inf.op((p1.op(p2)).dual()));
     }
     
@@ -70,6 +74,9 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
         return (new CGAPlaneIPNS(p, n)).undual();
     }
     
+    
+    // etc
+    
     @Override
     public CGAPlaneIPNS dual(){
         return new CGAPlaneIPNS(new CGAPlaneIPNS(impl.dual()).compress());
@@ -81,6 +88,7 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     public CGAPlaneOPNS normalize(){
         return new CGAPlaneOPNS(super.normalize().compress());
     }
+    
     /**
      * Plane through p tangent to this.
      * 
@@ -109,36 +117,6 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     }
     
     /**
-     * Determine the attitude.
-     * 
-     * TODO
-     * diese Implementierung following Dorst sollte doch auch für line und flat point 
-     * gelten, oder?
-     * 
-     * @return attitude as attitude-bivector in opns representation
-     */
-    @Override
-    public CGAAttitudeBivectorOPNS attitudeIntern(){
-        return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
-    } 
-    
-    
-    /**
-     * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
-     * "plane", obwohl das für "line" funktioniert!
-     * 
-     * Führt zu gleichem Ergebnis, wie die CGAFlatOPNS implementation in den tests,
-     * aber zu einer um 90grad gedrehten Ebenen bei der IK.
-     * 
-     * @return attitude
-     */
-    public Vector3d attitude(){
-        Vector3d result = (new CGAPlaneIPNS(dual().negate().compress())).attitude();
-        System.out.println(toString("attitude (CGAPlaneOPNS via dual(), Spencer))"));
-        return result;
-    }
-    
-    /**
      * not tested
      * following Perwass p. 178
      * @return 
@@ -146,4 +124,32 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     public CGAPlaneIPNS midPlane(){
         return new CGAPlaneIPNS(this.ip(inf));
     }
+    
+    
+    // attitude
+    
+    /**
+     * WORKAROUND da super.attitudeIntern() nicht richtig funktioniert für
+     * "plane-opns", obwohl das für "line-opns" funktioniert!
+     * 
+     * Führt zu gleichem Ergebnis, wie die CGAFlatOPNS implementation in den tests,
+     * aber zu einer um 90grad gedrehten Ebenen bei der IK.
+     * 
+     * @return euclidean direction
+     */
+    /*public Vector3d attitude(){
+        Vector3d result = (new CGAPlaneIPNS(dual().negate().compress())).attitude();
+        System.out.println(toString("attitude (CGAPlaneOPNS via dual(), Spencer))"));
+        return result;
+    }*/
+    
+    /**
+     * Determine the attitude as attitude bivector.
+     * 
+     * @return attitude as attitude-bivector in opns representation
+     */
+    @Override
+    public CGAAttitudeBivectorOPNS attitudeIntern(){
+        return new CGAAttitudeBivectorOPNS(super.attitudeIntern());
+    } 
 }

@@ -76,6 +76,9 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
     /**
      * Create a a line in IPNS representation with weight 1.
      * 
+     * TODO
+     * brauche ich hier die normalisation?
+     * 
      * @param c position on the line
      * @param attitude direction of the line (normalization is not needed)
      */
@@ -167,7 +170,9 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
      * Determine attitude.
      * 
      * TODO
-     * Vorzeichen möglicherweise falsch, 
+     * Vorzeichen möglicherweise falsch, siehe Test Zeile 2042, eventuell ist
+     * die Formel falsch, in Spencer ist ja das Vorzeichen durh weight nicht
+     * klar definiert
      * 
      * @Deprecated
      * @return normalized attitude as (E3) 1-vector
@@ -181,7 +186,6 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
                 op(inf)).gp(CGAMultivector.createI3()));
         System.out.println(result.toString("attitueIntern2 (CGALineIPNS, Spencer)"));
         return result;
-        //return result.direction();
     }
     
     public CGALineIPNS normalize(){

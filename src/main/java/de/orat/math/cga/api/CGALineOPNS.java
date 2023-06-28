@@ -145,13 +145,14 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     }
     /**
      * Create a line in outer product null space representation (grade 3)
-     * based on a point and the direction. 
+     * based on a point and the direction with weight==1. 
      * 
      * TODO
-     * ungetestet, mir scheint das ist auch gar nicht korrekt
+     * mir scheint das ist auch gar nicht korrekt
+     * test in testLineOPNSComposition() scheint aber ok zu sein
      * 
      * @param p euclidean point on the line
-     * @param d euclidean direction of the line
+     * @param d euclidean (non normalized) direction of the line
      */
     public CGALineOPNS(Point3d p, Vector3d d){
         this((new CGARoundPointIPNS(p)).op(new CGAAttitudeVectorOPNS(d)));
@@ -175,14 +176,32 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     
     // decomposition
     
+    
+    /**
+     * Determine the normalized attitude of the corresponding geometric object.
+     * 
+     * normalization sollte wieder rückgängig gemacht werden, damit ich das weight
+     * da wieder rausbekommen kann--> erledigt.
+     * 
+     * Scheint so zu stimmen.
+     * 
+     * @return euclidean direction (its sign is the orientation corresponding to
+     * the euclidean pseudoscalar, its amplitude is the conformal weight)
+     */
+    @Override
+    public Vector3d attitude(){
+        return attitudeIntern().direction();
+    }
+    
     /**
      * tested by comparison with [Dorst2007]: drills (chapter 13.9.1)
      * 
      * TODO
      * sollte eigentlich conformalDirection heissen, da attitude nur die Ausrichtung
      * ohne Vorzeichen ist.
+     * umbenennen in conformalVectorDirection()
      * 
-     * @return attitude (inclusive weight == not normalized attitude)
+     * @return vector direction (inclusive weight == not normalized attitude)
      */
     @Override
     public CGAAttitudeVectorOPNS attitudeIntern(){
@@ -190,15 +209,34 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     }
     
     /**
-     * Test nach [Dorst2007]: drills (chapter 13.9.1) funktioniert.
+     * Determine euclidean direction.
+     * 
+     * Test nach [Dorst2007]: drills (chapter 13.9.1) funktioniert.<p>
+     * 
+     * TODO
+     * umbenennen in euclideanDirection2()
+     * da ipns.attitudeIntern2() vermutlich falsches Vorzeichen hat, diese Methode
+     * aber das richtige Vorzeichen liefert produziert vielleicht dual() ein falsches
+     * Vorzeichen
      * 
      * @Deprecated
-     * @return euclidiean direction
+     * @return euclidean direction (inclusive weight)
      */
     public CGAEuclideanVector attitudeIntern2(){
-        // nach Spencer, derzeit fälschlicherweise durch abs(weight) dividiert entsprechend Spencer
-        // das ist geändert
         return this.dual().attitudeIntern2();
+    }
+    
+    /**
+     * Corresponding to [Rettig2023].
+     * 
+     * untested, sollte aber funktionieren
+     * TODO
+     * Test 1736 da könnte der Testcode erweitert werden
+     * umbenennen in euclideanDirection3()
+     * @return euclidean direction
+     */
+    public CGAEuclideanVector attitudeIntern3(){
+        return new CGAEuclideanVector(inf.lc(this).rc(o));
     }
     
     /**
@@ -209,18 +247,5 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
     @Override
     public double squaredNorm(){
         return super.squaredNorm();
-    }
-
-    /**
-     * Determine the normalized attitude of the corresponding geometric object.
-     * 
-     * @return noramlized attitude (its sign is the orientation corresponding to
-     * the euclidean pseudoscalar)
-     */
-    @Override
-    public Vector3d attitude(){
-        Vector3d result = attitudeIntern().direction();
-        result.normalize();
-        return result;
     }
 }

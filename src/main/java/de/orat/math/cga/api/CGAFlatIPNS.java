@@ -71,11 +71,15 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
         return new CGAKVector(this.undual().negate().rc(I0));
     }
     
+    
+    // attitude
+    
     public Vector3d attitude(){
         return attitudeIntern().direction();
     }
     
     /**
+     * Formula corresponding to [Rettig2023] and [Dorst2009].
      * 
      * für ipns line stimmt das vorzeichen nicht -->bivector
      * für ipns plane --> trivector, aber da stimmen die Vorzeichen der Komponenten nicht!
@@ -84,23 +88,13 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
      */
     @Override
     public CGAAttitudeOPNS attitudeIntern(){
-        // mir scheint hier wird von weight==1 ausgegangen. Das Vorzeichen könnte
-        // vermutlich verschwinden, wenn ich die beiden Operanden vertausche
-        // testweise normalisieren
-        //CGAMultivector result = inf.op(this).undual().negate().compress();
-        // FIXME nachfolgende impl. sieht richtig aus nach Dorst2009 aber obige scheint zu funktionieren
         CGAMultivector result = inf.negate().lc(this.undual()).compress();
         System.out.println(result.toString("attitudeIntern (CGAFlatIPNS, Dorst)"));
         return new CGAAttitudeOPNS(result);
-        
-        /*corresponds to
-          Geometric Algebra: A powerful tool for solving geometric problems in visual computing
-          Leandro A. F. Fernandes, and Manuel M. Oliveira
-          DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
-          2009
-         */
-        //return new CGAAttitudeVectorOPNS(createInf(-1d).lc(this.undual()).compress());
     }   
+    
+    
+    // location
     
     /**
      * Location point of the flat nearest to to the given probe point as 
