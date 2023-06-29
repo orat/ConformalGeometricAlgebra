@@ -109,4 +109,9 @@ public class CGATangentOPNS extends CGAKVector implements iCGATangentOrRound {
     public CGATangentIPNS undual(){
         throw new RuntimeException("undual() not supported for generic opns tangent!");
     }*/
+    
+    @Override
+    public CGAKVector undual(){
+        throw new RuntimeException("The given multivector is opns-type - undual() is not allowed! Use dual() instead!");
+    }
 }

@@ -301,4 +301,9 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
         return new CGARoundPointIPNS(point.negate().op(inf).
                 lc(this).lc(this));
     }
+    
+    @Override
+    public CGAKVector dual(){
+        throw new RuntimeException("The given multivector is ipns-type - dual() is not allowed! Use undual() instead!");
+    }
 }

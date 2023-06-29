@@ -131,4 +131,9 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
         // oder direct? ohne vorher oinf rausprojezieren?  return m.extractE3ToPoint3d();
         //FIXME
     }
+    
+    @Override
+    public CGAKVector dual(){
+        throw new RuntimeException("The given multivector is ipns-type - dual() is not allowed! Use undual() instead!");
+    }
 }

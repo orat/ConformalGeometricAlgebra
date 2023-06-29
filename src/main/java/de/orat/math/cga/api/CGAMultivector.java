@@ -552,9 +552,13 @@ public class CGAMultivector {
         //FIXME
         // es scheint aber so zu funktionieren
         // a&b = !(!a^!b)
-        return dual().op(x.dual()).dual();
+        //return dual().op(x.dual()).dual();
+        return dual_i(dual_i(this).op(dual_i(x)));
         //TODO besser die default impl im interface aufrufen?
         //return new CGAMultivector(impl.vee(x.impl));
+    }
+    private static CGAMultivector dual_i(CGAMultivector m){
+        return new CGAMultivector(m.impl.dual());
     }
     
     public CGAMultivector add(CGAMultivector b){

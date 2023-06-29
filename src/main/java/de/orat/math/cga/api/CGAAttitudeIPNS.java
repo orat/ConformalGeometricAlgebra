@@ -36,4 +36,8 @@ public class CGAAttitudeIPNS extends CGAKVector implements iCGAAttitude {
     public CGAAttitudeOPNS undual(){
         return new CGAAttitudeOPNS(super.undual().compress());
     }
+    @Override
+    public CGAKVector dual(){
+        throw new RuntimeException("The given multivector is ipns-type - dual() is not allowed! Use undual() instead!");
+    }
 }

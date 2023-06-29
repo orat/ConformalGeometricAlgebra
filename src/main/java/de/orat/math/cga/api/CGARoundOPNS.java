@@ -240,4 +240,8 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
         return new CGAPointPairOPNS(point.op(inf).lc(this).lc(this).negate());
     }
     
+    @Override
+    public CGAKVector undual(){
+        throw new RuntimeException("The given multivector is opns-type - undual() is not allowed! Use dual() instead!");
+    }
 }

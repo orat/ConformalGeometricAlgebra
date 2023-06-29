@@ -244,6 +244,6 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
     }
     @Override
     public CGAKVector dual(){
-        throw new RuntimeException("The given multictor is ipns-type - dual() is not allowed! Use undual()");
+        throw new RuntimeException("The given multivector is ipns-type - dual() is not allowed! Use undual() instead!");
     }
 }

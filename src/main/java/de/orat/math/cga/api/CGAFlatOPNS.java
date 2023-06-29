@@ -198,4 +198,9 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
         // kommt aufs gleiche raus
         //return new CGARoundPointIPNS(point.negate().lc(this).lc(this).op(nino).gp(nino).extractE3ToPoint3d());
     }
+    
+    @Override
+    public CGAKVector undual(){
+        throw new RuntimeException("The given multivector is opns-type - undual() is not allowed! Use dual() instead!");
+    }
 }

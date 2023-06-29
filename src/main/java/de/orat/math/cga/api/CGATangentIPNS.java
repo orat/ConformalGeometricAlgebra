@@ -94,4 +94,9 @@ class CGATangentIPNS extends CGAKVector implements iCGATangentOrRound {
     public CGATangentIPNS inverse(){
         throw new RuntimeException("A tangent has no inverse!");
     }
+    
+    @Override
+    public CGAKVector dual(){
+        throw new RuntimeException("The given multivector is ipns-type - dual() is not allowed! Use undual() instead!");
+    }
 }
