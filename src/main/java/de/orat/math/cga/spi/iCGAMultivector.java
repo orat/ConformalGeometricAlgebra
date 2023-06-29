@@ -515,4 +515,5 @@ public interface iCGAMultivector {
     
     public iCGAMultivector exp();
    
+    //public String toString();
 }

@@ -15,6 +15,11 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     
+    /**
+     * 
+     * @param m 
+     * @throws IllegalArgumentException if the grade of the given argument is not correct
+     */
     CGARoundOPNS(CGAMultivector m){
         super(m.impl);
     }

@@ -24,12 +24,17 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
             throw(e);
         }
     }
+    /**
+     * 
+     * @param impl 
+     * @throws IllegalArgumentException if the grade of the given argument is not correct
+     */
     CGAKVector(iCGAMultivector impl){
         super(impl);
         try {
             testGrade();
         } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage()+" "+impl.toString());
+            System.out.println(e.getMessage()+": "+impl.toString());
             throw(e);
         }
     }

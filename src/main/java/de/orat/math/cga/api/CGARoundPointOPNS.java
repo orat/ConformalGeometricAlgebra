@@ -11,6 +11,11 @@ import org.jogamp.vecmath.Point3d;
  */
 public class CGARoundPointOPNS extends CGARoundOPNS implements iCGAQuadvector {
     
+    /**
+     * 
+     * @param m 
+     * @throws IllegalArgumentException if the grade of the given argument is not correct
+     */
     public CGARoundPointOPNS(CGAMultivector m){
         super(m.compress());
     }
@@ -36,7 +41,15 @@ public class CGARoundPointOPNS extends CGARoundOPNS implements iCGAQuadvector {
         this(sphere1.op(sphere2).op(sphere3).op(sphere4));
     }
     public CGARoundPointOPNS(Point3d p){
-        this((new CGARoundPointIPNS(p)).dual());
+        this((new CGARoundPointIPNS(p)).undual());
+        //this(create(p));
+    }
+    private static CGAMultivector create(Point3d p){
+        CGAEuclideanVector x = new CGAEuclideanVector(p);
+        // FIXME java.lang.IllegalArgumentException: The given multivector is not of grade 4 or a null vector!
+        // unklar, warum das nicht geht
+        // [Bayro-Corrochnano2005] see table
+        return x.negate().sub(inf.gp(x.sqr()).gp(0.5)).add(o).gp(I3);
     }
     public CGARoundPointOPNS(Point3d p, double weight){
         this((new CGARoundPointIPNS(p, weight)).dual());
