@@ -242,4 +242,8 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
     public CGARoundPointOPNS undual(){
         return new CGARoundPointOPNS(super.undual().compress());//impl.dual().gp(-1));
     }
+    @Override
+    public CGAKVector dual(){
+        throw new RuntimeException("The given multictor is ipns-type - dual() is not allowed! Use undual()");
+    }
 }

@@ -74,7 +74,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      */
     CGAAttitudeOPNS attitudeFromTangentAndRoundIPNS(){
         System.out.println(toString("CGAkVector attitudeFromTangentAndRoundIPNS"));
-        CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.negate().lc(dual()).op(inf).compress());
+        CGAAttitudeOPNS result = new CGAAttitudeOPNS(inf.negate().lc(undual()).op(inf).compress());
         System.out.println(result.toString("CGAkVector attitudeIPNS (round/tangent)"));
         return result;
     }
