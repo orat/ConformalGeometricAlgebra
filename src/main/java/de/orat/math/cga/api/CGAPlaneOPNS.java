@@ -29,7 +29,8 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     /**
      * Create plane in outer product null space representation (grade 4 multivector).
      * 
-     * Successfull tested!!!
+     * TODO
+     * herausfinden zu was für einer Ausrichtung des Normalenvektors dies führen soll.
      * 
      * @param p1 first point in inner product null space representation
      * @param p2 second point in inner product null space representation
@@ -37,6 +38,38 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
      */
     public CGAPlaneOPNS(CGARoundPointIPNS p1, CGARoundPointIPNS p2, CGARoundPointIPNS p3){
         this(p1.op(p2).op(p3).op(inf));
+    }
+    
+    /**
+     * Create plane in outer product null space representation (grade 4 multivector).
+     * 
+     * TODO
+     * herausfinden zu was für einer Ausrichtung des Normalenvektors dies führen soll.
+     * 
+     * @param p1
+     * @param p2
+     * @param p3 
+     */
+    public CGAPlaneOPNS(Point3d p1, Point3d p2, Point3d p3){
+        this(create(p1,p2,p3));
+    }
+    
+    /**
+     * following [Bayro-Corrochano2005].
+     * 
+     * TODO
+     * herausfinden zu was für einer Ausrichtung des Normalenvektors dies führen soll.<p>
+     * 
+     * @param p1
+     * @param p2
+     * @param p3
+     * @return up(p3).op(p1).op(p2).op(inf)
+     */
+    private static CGAMultivector create(Point3d p1, Point3d p2, Point3d p3){
+        CGAEuclideanVector p1c = new CGAEuclideanVector(p1);
+        CGAEuclideanVector p2c = new CGAEuclideanVector(p2);
+        CGAEuclideanVector p3c = new CGAEuclideanVector(p3);
+        return p3c.op(p1c).op(p2c).op(inf).add((p3c.sub(p1c).op(p2c.sub(p1c))).gp(inf.op(o)));
     }
     
     /**

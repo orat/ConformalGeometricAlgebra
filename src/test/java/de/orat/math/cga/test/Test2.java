@@ -177,7 +177,7 @@ public class Test2 {
     @Test
     public void testLineOPNSComposition(){
         System.out.println("------------------------- test line OPNS comosition ------------------");
-        //Point3d p1 = new Point3d(1,2,3);
+        //Point3d p1c = new Point3d(1,2,3);
         Point3d p1 = new Point3d(0,0,0);
         //Vector3d d = new Vector3d(4,-1,1);
         Vector3d d = new Vector3d(0,0,1);
@@ -203,7 +203,7 @@ public class Test2 {
     public void testLineIPNSComposition(){
         System.out.println("------------------------- test line IPNS comosition ------------------");
         Point3d p1 = new Point3d(1,2,3);
-        //Point3d p1 = new Point3d(0,0,0);
+        //Point3d p1c = new Point3d(0,0,0);
         Vector3d d = new Vector3d(4,-1,1);
         //Vector3d d = new Vector3d(0,0,1);
         CGALineIPNS test = new CGALineIPNS(p1,d);
@@ -553,25 +553,25 @@ public class Test2 {
     public void testGanjaExampleCreatePointsCircleLine(){
         System.out.println("------------------Ganja.js expample: creation of points, circle, line --------------");
         
-        // p1
+        // p1c
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Vector3d(1d,0d,0d));
-        // p1=1.0*eo + 1.0*e1 + 0.5*ei (korrekt)
+        // p1c=1.0*eo + 1.0*e1 + 0.5*ei (korrekt)
         System.out.println(p1.toString("p1"));
         CGAMultivector p1Test = o.add(e1).add(inf.gp(0.5d));
         System.out.println(p1Test.toString("p1Test"));
         assert(p1.equals(p1Test));
         
-        // p2
+        // p2c
         CGARoundPointIPNS p2 = new CGARoundPointIPNS(new Vector3d(0d,1d,0d));
-        // p2=1.0*eo + 1.0*e2 + 0.5*ei (korrekt)
+        // p2c=1.0*eo + 1.0*e2 + 0.5*ei (korrekt)
         System.out.println("p2="+p2.toString());
         CGAMultivector p2Test = o.add(e2).add(inf.gp(0.5d));
         System.out.println(p2Test.toString("p2Test"));
         assert(p2.equals(p2Test));
         
-        // p3
+        // p3c
         CGARoundPointIPNS p3 = new CGARoundPointIPNS(new Vector3d(0d,0d,1d));
-        // p3=1.0*eo + 1.0*e3 + 0.5*ei (korrekt)
+        // p3c=1.0*eo + 1.0*e3 + 0.5*ei (korrekt)
         System.out.println("p3="+p3.toString());
         CGAMultivector p3Test = o.add(e3).add(inf.gp(0.5d));
         System.out.println(p3Test.toString("p3Test"));
@@ -604,20 +604,24 @@ public class Test2 {
     @Test
     public void testGanjaExampleCreatePointsPlaneSphere(){
         System.out.println("------------------Ganja.js expample: creation of points, plane, sphere --------------");
-        CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Vector3d(1d,0d,0d));
-        // p1=1.0*eo + 1.0*e1 + 0.5*ei (korrekt)
-        System.out.println("p1="+p1.toString());
-        CGARoundPointIPNS p2 = new CGARoundPointIPNS(new Vector3d(0d,1d,0d));
-        // p2=1.0*eo + 1.0*e2 + 0.5*ei (korrekt)
-        System.out.println("p2="+p2.toString());
-        CGARoundPointIPNS p3 = new CGARoundPointIPNS(new Vector3d(0d,0d,-1d));
-        // p3=1.0*eo - 1.0*e3 + 0.5*ei (korrekt)
-        System.out.println("p3="+p3.toString());
-        CGARoundPointIPNS p4 = new CGARoundPointIPNS(new Vector3d(0d,-1d,-0d));
-        // p4=1.0*eo - 1.0*e2 + 0.5*ei (korrekt)
-        System.out.println("p4="+p4.toString());
+        Point3d p1 = new Point3d(1d,0d,0d);
+        CGARoundPointIPNS p1c = new CGARoundPointIPNS(p1);
+        // p1c=1.0*eo + 1.0*e1 + 0.5*ei (korrekt)
+        System.out.println("p1="+p1c.toString());
+        Point3d p2 = new Point3d(0d,1d,0d);
+        CGARoundPointIPNS p2c = new CGARoundPointIPNS(p2);
+        // p2c=1.0*eo + 1.0*e2 + 0.5*ei (korrekt)
+        System.out.println("p2="+p2c.toString());
+        Point3d p3 = new Point3d(0d,0d,-1d);
+        CGARoundPointIPNS p3c = new CGARoundPointIPNS(p3);
+        // p3c=1.0*eo - 1.0*e3 + 0.5*ei (korrekt)
+        System.out.println("p3="+p3c.toString());
+        Point3d p4 = new Point3d(0d,-1d,-0d);
+        CGARoundPointIPNS p4c = new CGARoundPointIPNS(p4);
+        // p4c=1.0*eo - 1.0*e2 + 0.5*ei (korrekt)
+        System.out.println("p4="+p4c.toString());
         
-        CGASphereOPNS s = new CGASphereOPNS(p1,p2,p3,p4);
+        CGASphereOPNS s = new CGASphereOPNS(p1c,p2c,p3c,p4c);
         // s=2.0*eo^e1^e2^e3 - 1.0*e1^e2^e3^ei (korrekt)
         System.out.println("s="+s.toString());
         
@@ -638,10 +642,14 @@ public class Test2 {
         // Wie bekomme ich dann den euclidean vector herausprojeziert?
         //System.out.println(l.toString("location"));
         
-        // plane
-        CGAPlaneOPNS p = new CGAPlaneOPNS(p1,p2,p3);
-        // p1=1.0*eo^e1^e2^ei + 1.0*eo^e1^e3^ei - 1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei (korrekt)
+        // plane opns
+        CGAPlaneOPNS p = new CGAPlaneOPNS(p1c,p2c,p3c);
+        // p1c=1.0*eo^e1^e2^ei + 1.0*eo^e1^e3^ei - 1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei (korrekt)
         System.out.println("p="+p.toString());
+        // new constructor comparison
+        CGAPlaneOPNS pa = new CGAPlaneOPNS(p1,p2,p3);
+        System.out.println("p="+pa.toString());
+        assertTrue(p.equals(pa));
     }
     
     @Test
@@ -652,11 +660,11 @@ public class Test2 {
         //var up = (x)=> no + x + .5*x*x*ni;
 
         // point
-        // var p1 = up(1e1+.5e2)
+        // var p1c = up(1e1+.5e2)
         Vector3d p1euclid = new Vector3d(1d,0.5d,0d);
         CGARoundPointIPNS p1 = new CGARoundPointIPNS(p1euclid);
         // ganja.js: e1+0.5e2+0.12e4+1.12e5 = e1+0.5e2+0.625ei+e0 (korrekt)
-        // java.js: p1=1.0*eo + 1.0*e1 + 0.5*e2 + 0.625*ei
+        // java.js: p1c=1.0*eo + 1.0*e1 + 0.5*e2 + 0.625*ei
         System.out.println(toString("p1 (euclid)", p1euclid));
         System.out.println(p1.toString("p1"));
         CGAMultivector p1Test = CGAMultivector.createE3(new Vector3d(1d,0.5d,0d)).
@@ -664,10 +672,10 @@ public class Test2 {
         assert(p1.equals(p1Test));
         
         // point
-        // p2 = up(1e2-.5e3);
+        // p2c = up(1e2-.5e3);
         Vector3d p2euclid = new Vector3d(0d,1d,0.5d);
         CGARoundPointIPNS p2 = new CGARoundPointIPNS(p2euclid);
-        // java: p2=1.0*eo + 1.0*e2 + 0.5*e3 + 0.625*ei
+        // java: p2c=1.0*eo + 1.0*e2 + 0.5*e3 + 0.625*ei
         // ganja.js: e2-0.5e3+0.12e4+1.12e5
         System.out.println(toString("p2 (euclid)",p2euclid));
         System.out.println("p2="+p2.toString());
@@ -679,7 +687,7 @@ public class Test2 {
         //var d = (a,b)=>((a<<b).Length*2)**.5;
         
         // The duality operator can be used to produce a sphereIPNS from a point.
-        // var s = ()=>!(p1 - .3**2*.5*ni);
+        // var s = ()=>!(p1c - .3**2*.5*ni);
         // ganja.js: -1.08e1234 - 0.07e1235 - 0.5e1345 + e2345
         // s=-eo^e1^e2^e3 + 0.5*eo^e1^e3^ei 
         //   -eo^e2^e3^ei - 0.625*e1^e2^e3^ei
@@ -723,15 +731,15 @@ public class Test2 {
         
         CGAMultivector inf_no = createInf(1d).op(createOrigin(1d));
         // Planes also have a direct dual representation. (but start from vector not point)
-        // var p1 = ()=>!(d(p2,no)*ni + (p2^nino*nino).Normalized);
+        // var p1c = ()=>!(d(p2c,no)*ni + (p2c^nino*nino).Normalized);
         
         CGAMultivector n = ((new CGARoundPointIPNS(p2)).op(inf_no).gp(inf_no)).normalize();
         // n1=-0.8944271909999159*e2 - 0.4472135954999579*e3
         System.out.println("n="+n.toString());
         CGAPlaneOPNS p = new CGAPlaneIPNS((CGAMultivector.createInf(Math.sqrt(p2.distSquare(new CGARoundPointIPNS(CGAMultivector.createOrigin(1d)))))).add(
                         n)).undual();
-        // java p1=-0.447*eo^e1^e2^ei - 0.89*eo^e1^e3^ei - 1.118*e1^e2^e3^ei
-        // ganja.js p1= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
+        // java p1c=-0.447*eo^e1^e2^ei - 0.89*eo^e1^e3^ei - 1.118*e1^e2^e3^ei
+        // ganja.js p1c= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
         // TODO
         System.out.println("p="+p.toString());
        
@@ -742,10 +750,10 @@ public class Test2 {
         //TODO
         //CGAPlane pa = CGAPlaneIPNS(n1, d);
         
-        // p1= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
+        // p1c= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
 
         // You can use the regressive product to calculate intersections..
-        //var location = ()=>s&p1;
+        //var location = ()=>s&p1c;
         CGACircleOPNS c = new CGACircleOPNS(s.vee(p));
         // ganja.js: location=-1.11e123 - 0.48e124 - 0.03e125 - 0.40e134 + 0.48e135 + 
         // 0.22e145 - 1.11e234 -1.11e235-0.44e245-0.89e345
@@ -762,10 +770,10 @@ public class Test2 {
         
         //p  = up(0)                          // point
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));
-        // p1=1.0*eo (korrekt)
+        // p1c=1.0*eo (korrekt)
         System.out.println("p="+p.toString());
         
-        //S  = ()=>!(p1-.5*ni),                 // main dual sphereIPNS around point 
+        //S  = ()=>!(p1c-.5*ni),                 // main dual sphereIPNS around point 
         CGASphereOPNS S = (new CGASphereIPNS(p, 1d)).undual();
         // java: S=-eo^e1^e2^e3 + 0.49*e1^e2^e3^ei
         // ganja.js e1235 = 0.5e123i-e0123 (korrekt)
@@ -841,7 +849,7 @@ public class Test2 {
         // C5 = ()=>C&P2;  circleIPNS meet planeIPNS
         CGAPointPairOPNS C5 = new CGAPointPairOPNS(C.vee(P2));
         // ganja.js: 1.7e12-1.02e24-2.02e25 = 1.7e12 
-        // java: location&p1=eo^e2 + 1.7*e1^e2 + 3.23*e2^ei
+        // java: location&p1c=eo^e2 + 1.7*e1^e2 + 3.23*e2^ei
         //FIXME stimmt nur in einer Komponente überein
         //TODO vermutlich sind bereits der Ausgangs-circleIPNS oder planeIPNS flasch --> überprüfen
         System.out.println("c&p="+C5.toString());
@@ -872,10 +880,10 @@ public class Test2 {
         // project_point_on_flat             = (point,planeIPNS)=>up(-point<<plane<<plane^nino*nino),
         // plane_through_point_tangent_to_x  = (point,x)=>point^ni<<x*point^ni;
 
-        // var p1  = up(.5e2),                     // point
+        // var p1c  = up(.5e2),                     // point
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0.5d,0d));
         // ganja.js: 0.5e2-0.37e4+0.62e5 = e0 + 0.5e2 + 0.125ei (korrekt)
-        // java p1=1.0*eo + 0.5*e2 + 0.125*ei
+        // java p1c=1.0*eo + 0.5*e2 + 0.125*ei
         System.out.println("p="+p.toString());
         
         // S  = sphereIPNS(up(-1.4e1),.5),            // left sphereIPNS
@@ -920,13 +928,13 @@ public class Test2 {
         
         // project point on sphereIPNS
         // var project_point_on_round            = (point,sphereIPNS)=>-point^ni<<sphere<<sphere
-        // ()=>project_point_on_round(p1,S), "p1 on S"
+        // ()=>project_point_on_round(p1c,S), "p1c on S"
         CGAPointPairOPNS pOnS = S.project(p);
         // ganja.js: 0.7e12-1.89e14-0.49e15+0.30e24+0.80e25-1.95e45 = 0.7e12-1.19e1i-1.44e01+0.55e2i-0.5e02+1.95e0i
         // java POnS=-1.4*eo^e1 - 0.5*eo^e2 + 0.7*e1^e2 + 1.96*eo^ei - 1.197*e1^ei + 0.557*e2^ei (korrekt)
         System.out.println("POnS="+pOnS.toString());
         
-        //()=>project_point_on_round(~p1,C), "p1 on C",   // point on circleIPNS
+        //()=>project_point_on_round(~p1c,C), "p1c on C",   // point on circleIPNS
         // java.lang.IllegalArgumentException: The given multivector is not not grade 1! grade()=2
         CGAPointPairOPNS pOnC = C.project(new CGARoundPointIPNS(p.conjugate()));
         // ganja.js -0.70e12 + 1.89e14+0.49e15+0.30e24+0.80e25-1.95e4 = -0.7e12+1.19e1i-1.44e01+0.55e2i-0.5e02
@@ -935,13 +943,13 @@ public class Test2 {
         
         // project_point_on_flat             = (point,planeIPNS)=>up(-point<<plane<<plane^nino*nino),
         
-        // ()=>project_point_on_flat(p1,P),   "p1 on P",   // point on planeIPNS
+        // ()=>project_point_on_flat(p1c,P),   "p1c on P",   // point on planeIPNS
         CGARoundPointIPNS pOnP = P.project(p);
         // ganja.js: -0.90e2-0.09e4+0.90e5 = e0-0.9e2+0.41ei
         // java pOnP=1.0*eo - 0.899*e2 + 0.4049*ei (korrekt)
         System.out.println("pOnP="+pOnP.toString());
         
-        // ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on lineOPNS_
+        // ()=>project_point_on_flat(~p1c,L),  "p1c on L",   // point on lineOPNS_
         CGARoundPointIPNS pConjugate = new CGARoundPointIPNS(p.conjugate());
         // java pConjugate= -eo - 0.5*e2 - 0.125*ei
         // ganja.js: pConjugate = -e0 - 0.5e2 - 0.125ei (korrekt)
@@ -955,16 +963,16 @@ public class Test2 {
         // Projektion auf Linien falsch sein, obowohl die Projektion auf Ebenen korrekt ist.
         
         
-        // ()=>plane_through_point_tangent_to_x(p1,S),    // planeIPNS through p1 tangent to S
+        // ()=>plane_through_point_tangent_to_x(p1c,S),    // planeIPNS through p1c tangent to S
         // tangent() error da falscher grade
         //FIXME
-        //CGADualPlane pToS = S.tangent(p1);
+        //CGADualPlane pToS = S.tangent(p1c);
         // ganja.js 0.25e1234+0.25e1235+0.5e1345-1.39e2345
         // java pToS=0.0724999999999999*e1^e3
         //System.out.println("pToS="+pToS.toString());
         //TODO
         
-        // ()=>plane_through_point_tangent_to_x(p1,P),    // planeIPNS through p1 tangent to P
+        // ()=>plane_through_point_tangent_to_x(p1c,P),    // planeIPNS through p1c tangent to P
         CGAPlaneOPNS pToP = P.tangent(p);
         System.out.println("pToP="+pToP.toString());
         // java pToP=-0.19999999999999984*e1^e3
@@ -973,13 +981,13 @@ public class Test2 {
         
         // Graph the items. (hex numbers are html5 colors, two extra first bytes = alpha)
         // document.body.appendChild(this.graph([ 
-        //      0x00FF0000, p1, "p1",                                       // point 
-        //      0x00008800, ()=>project_point_on_round(p1,S), "p1 on S",    // point on sphereIPNS
-        //      0x000000FF, ()=>project_point_on_round(~p1,C), "p1 on C",   // point on circleIPNS
-        //  0x00888800, ()=>project_point_on_flat(p1,P),   "p1 on P",   // point on planeIPNS
-        //  0x00008888, ()=>project_point_on_flat(~p1,L),  "p1 on L",   // point on lineOPNS_
-        //  0xc0FF0000, ()=>plane_through_point_tangent_to_x(p1,S),    // planeIPNS through p1 tangent to S2
-        //  0xc000FF00, ()=>plane_through_point_tangent_to_x(p1,P),    // planeIPNS through p1 tangent to P
+        //      0x00FF0000, p1c, "p1c",                                       // point 
+        //      0x00008800, ()=>project_point_on_round(p1c,S), "p1c on S",    // point on sphereIPNS
+        //      0x000000FF, ()=>project_point_on_round(~p1c,C), "p1c on C",   // point on circleIPNS
+        //  0x00888800, ()=>project_point_on_flat(p1c,P),   "p1c on P",   // point on planeIPNS
+        //  0x00008888, ()=>project_point_on_flat(~p1c,L),  "p1c on L",   // point on lineOPNS_
+        //  0xc0FF0000, ()=>plane_through_point_tangent_to_x(p1c,S),    // planeIPNS through p1c tangent to S2
+        //  0xc000FF00, ()=>plane_through_point_tangent_to_x(p1c,P),    // planeIPNS through p1c tangent to P
         //  0,L,0,C,                                                  // lineOPNS_ and circleIPNS
         //  0xE0008800, P,                                            // planeIPNS
         //  0xE0FFFFFF, S                                             // spheres
@@ -1041,6 +1049,8 @@ public class Test2 {
         
         CGAPlaneOPNS planeOPNS = new CGAPlaneOPNS(new CGARoundPointIPNS(p1),
                 new CGARoundPointIPNS(p2),new CGARoundPointIPNS(p3));
+        CGAPlaneOPNS planeOPNSa = new CGAPlaneOPNS(p1, p2, p3);
+        assertTrue(planeOPNS.equals(planeOPNSa));
         EuclideanParameters parameters = planeOPNS.decomposeFlat();
         // a = (0.7071067811865475,0.7071067811865475,0.0)
         //FIXME Vorzeichen einer Komponente ist falsch bei der Bestimmung nach Dorst
@@ -1424,7 +1434,7 @@ public class Test2 {
         // Dorst2007: -einf*P = 3 stimmt? soll das die Normierung sein?
         System.out.println("-einf*sphere = "+
                 String.valueOf(-CGAMultivector.createInf(1d).scp(sphereIPNS)));
-        // norm(p1) = 6 ist sollte das nicht 1 sein?
+        // norm(p1c) = 6 ist sollte das nicht 1 sein?
         System.out.println("norm(sphere) = "+String.valueOf(sphereIPNS.norm()));
     }
     
@@ -1509,7 +1519,7 @@ public class Test2 {
         // FIXME locationIPNS hat nur die halbe Größe
         System.out.println(toString("p1",p1));
         System.out.println(toString("loc(cp1b)",location7));
-        //assertTrue(equals(p1,location7));
+        //assertTrue(equals(p1c,location7));
         
         // point pair OPNS (failed)
         CGAPointPairOPNS pp2 = new CGAPointPairOPNS(p1, 1d ,p2, 1d);
@@ -1540,7 +1550,7 @@ public class Test2 {
         System.out.println("s1b="+s1b.toString());
         Point3d location9 = s1b.location();
         System.out.println(toString("loc(s1b)",location9));
-        //assertTrue(equals(p1, location9));
+        //assertTrue(equals(p1c, location9));
         
         // circles
         CGACircleOPNS c1b = new CGACircleOPNS(p1,p2,p3);
@@ -1562,7 +1572,7 @@ public class Test2 {
         // products
         CGAMultivector testgp = cp.gp(cp);
         // P*P=9.00480064 Warum eigentlich?
-        // ist das gleich p1.sqr()?
+        // ist das gleich p1c.sqr()?
         // muesst da nicht mit dem reverse multipliziert werden um norm quadrdat zu bekommen
         //FIXME
         System.out.println("P*P="+testgp);
@@ -1691,7 +1701,7 @@ public class Test2 {
         System.out.println(lineOPNSTest.toString("OPNS line (Test)"));
         assertTrue(lineOPNS.equals(lineOPNSTest));
         // lineOPNS_=2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei
-        // sollte p1 ∧ p2 ∧ ∞ = −2(o + (e1 + e2 )) ∧ (e3 − e2 ) ∧ ∞. sein
+        // sollte p1c ∧ p2c ∧ ∞ = −2(o + (e1 + e2 )) ∧ (e3 − e2 ) ∧ ∞. sein
         // stimmt
         double squaredWeight = lineOPNS.squaredWeight();
         System.out.println(toString("squaredWeight(CGALineOPNS)",squaredWeight));
@@ -1745,10 +1755,10 @@ public class Test2 {
         CGARoundPointIPNS cp2 = new CGARoundPointIPNS(p2, weight2);
         System.out.println("cp2="+cp2);
         
-        // neu ohne Normalisierung und mit anderer Reihenfolge von p1 und p2
+        // neu ohne Normalisierung und mit anderer Reihenfolge von p1c und p2c
         Vector3d n = new Vector3d(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z);
         n.scale(weight2*weight1);
-        //Vector3d n = new Vector3d(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
+        //Vector3d n = new Vector3d(p1c.x-p2c.x, p1c.y-p2c.y, p1c.z-p2c.z);
         //n.normalize();
         System.out.println(toString("n",n));
         
@@ -1908,7 +1918,7 @@ public class Test2 {
         
         // The given multivector m is not of grade 3! 
         // 5.55111512312578E-17*eo^e1^e2^e3 - 5.551115123125781E-17*eo^e1^e3^ei + 2.7755575615628904E-17*e1^e2^e3^ei
-        //CGATangentVectorIPNS ytangentDual2 = new CGATangentVectorIPNS(p1,u);
+        //CGATangentVectorIPNS ytangentDual2 = new CGATangentVectorIPNS(p1c,u);
         //System.out.println("TangentVector* ytangentDual2 = "+ytangentDual2.toString());
         
         
@@ -1930,7 +1940,7 @@ public class Test2 {
         System.out.println(toString("p", p));
         double weight = 3d;
         System.out.println("input weight="+String.valueOf(weight));
-        //CGARoundPointIPNS pc = new CGARoundPointIPNS(p1, weight);
+        //CGARoundPointIPNS pc = new CGARoundPointIPNS(p1c, weight);
         //System.out.println(pc.toString("pc"));
         //double squaredRadius1 = pc.squaredSizeIntern1().decomposeScalar(); // ok 0
         //System.out.println("squaredSizeIntern1 (RoundPointIPNS)="+String.valueOf(squaredRadius1));
@@ -2152,7 +2162,7 @@ public class Test2 {
         
         // Kugel 1
         Point3d p1 = new Point3d(1d,0d,0d);
-        //System.out.println(toString("p1",p1));
+        //System.out.println(toString("p1c",p1c));
         double weight1 = 1.0d;
         radiusSquared = 1.5d;
         CGASphereIPNS sphere1 = new CGASphereIPNS(p1, radiusSquared, weight1);
@@ -2160,7 +2170,7 @@ public class Test2 {
         
         // Kugel 2
         Point3d p2 = new Point3d(-1d,0d,0d);
-        //System.out.println(toString("p2",p2));
+        //System.out.println(toString("p2c",p2c));
         double weight2 = 1.0d;
         CGASphereIPNS sphere2 = new CGASphereIPNS(p2, radiusSquared, weight2);
         //System.out.println("sphere2="+sphere2.toString());
@@ -3053,12 +3063,17 @@ public class Test2 {
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));
         CGASphereOPNS S = (new CGASphereIPNS(p, 1.1d)).undual();
         
-        CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Vector3d(1d,1,1));
-        CGARoundPointIPNS p2 = new CGARoundPointIPNS(new Vector3d(1,1,0d));
-        CGARoundPointIPNS p3 = new CGARoundPointIPNS(new Vector3d(1,0d,1));
-        CGAPlaneOPNS pl= new CGAPlaneOPNS(p1,p2,p3);
+        Point3d p1 = new Point3d(1d,1,1);
+        CGARoundPointIPNS p1c = new CGARoundPointIPNS(p1);
+        Point3d p2 = new Point3d(1,1,0d);
+        CGARoundPointIPNS p2c = new CGARoundPointIPNS(p2);
+        Point3d p3 = new Point3d(1,0d,1);
+        CGARoundPointIPNS p3c = new CGARoundPointIPNS(p3);
+        CGAPlaneOPNS pl= new CGAPlaneOPNS(p1c,p2c,p3c);
         // pl = (-1.0*eo^e2^e3^ei - 1.0*e1^e2^e3^ei)
         System.out.println(pl.toString("pl"));
+        CGAPlaneOPNS pla= new CGAPlaneOPNS(p1,p2,p3);
+        assertTrue(pl.equals(pla));
         
         // ohne dual am Ende
         // m = (-0.9999999999999984*eo^e1 - 0.9999999999999987*eo^ei - 0.4999999999999992*e1^ei)
