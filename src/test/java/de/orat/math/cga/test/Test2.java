@@ -1209,6 +1209,12 @@ public class Test2 {
         //FIXME Vorzeichenfehler bei e3 egal welche normalize()-Methode ich verwende
         System.out.println(plane1.toString("plane1"));
         
+        // based on MacAllans formula as function of cga-point and euclidean-normal
+        Point3d p = new Point3d(n);
+        p.scale(d);
+        CGARoundPointIPNS pc = new CGARoundPointIPNS(p);
+        CGAPlaneIPNS planeIPNSa = new CGAPlaneIPNS(pc, n);
+        assertTrue(planeIPNS.equals(planeIPNSa));
     }
     
     @Test

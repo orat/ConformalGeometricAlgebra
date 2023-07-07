@@ -91,6 +91,16 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
     }
    
     /**
+     * 
+     * following [McDonald2022] p.199
+     * 
+     * @param p
+     * @param n 
+     */
+    public CGAPlaneIPNS(CGARoundPointIPNS p, Vector3d n){
+        this(p.ip((new CGAEuclideanVector(n)).gp(inf)));
+    }
+    /**
      * Composition of a plane based on a point, a normal vector and the weight. 
      * 
      * Notice: The sign of the weight is lost in the decomposition and therefor
