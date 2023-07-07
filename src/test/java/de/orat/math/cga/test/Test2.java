@@ -1082,18 +1082,18 @@ public class Test2 {
         // FIXME Vorzeichen falsch
         System.out.println(toString("attitude",parameters.attitude()));
         System.out.println(toString("n",n));
-        //assertTrue(equals(parameters.attitude(), n));
+        assertTrue(equals(parameters.attitude(), n));
         
         Vector3d attitude = planeOPNS.attitude();
         // FIXME Vorzeichen falsch
         System.out.println(toString("attitude (planeOPNS, Dorst)",attitude));
-        //assertTrue(equals(attitude, n));
+        assertTrue(equals(attitude, n));
         
         // nach Spencer via dual IPNS
         attitude = planeOPNS.dual().attitudeIntern2().direction();
         // FIXME auch falsches Vorzeichen! 
         System.out.println(toString("attitudeIntern2 (planeOPNS, Spencer)",attitude));
-        //assertTrue(equals(n, attitude));
+        assertTrue(equals(n, attitude));
         
         //ok
         CGAPlaneIPNS planeIPNS = new CGAPlaneIPNS(p1, n);

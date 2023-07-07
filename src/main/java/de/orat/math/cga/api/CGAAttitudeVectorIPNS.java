@@ -6,7 +6,7 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * Also called free or direction vector, elements without position/location in 
  * IPNS representation corresponding to dual direction vector or dual free 
- * vector in Dorst2007 (grade 3).
+ * vector in [Dorst2007] (grade 3).
  * 
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -27,7 +27,7 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     // composition
     
     public CGAAttitudeVectorIPNS(Vector3d t){
-        super((new CGAEuclideanVector(t)).op(inf).dual());
+        super((new CGAEuclideanVector(t)).op(inf).undual());
     }
     
     
@@ -60,5 +60,8 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     @Override
     public CGAAttitudeVectorOPNS undual(){
         return new CGAAttitudeVectorOPNS(super.undual().compress()/*dual().gp(-1d)*/);
+    }
+    public CGAKVector dual(){
+        throw new RuntimeException("dual() not supported for ipns attitude vector!");
     }
 }
