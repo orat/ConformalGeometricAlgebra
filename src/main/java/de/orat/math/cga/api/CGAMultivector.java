@@ -29,6 +29,11 @@ public class CGAMultivector {
     // do not change the scale of the following static constants
     public static final CGAMultivector o = createOrigin(1d);
     public static final CGAMultivector inf = createInf(1d);
+    
+    //TODO
+    // da diese Konstanten in den Formeln auftauchen müssen die Reihenfolge der
+    // auftretenden Faktoren mit der Reihenfolge der Basisvektoren im pseudoscalar
+    // übereinstimmen, sonst gibts Vorzeichenprobleme
     public static final CGAMultivector I3 = createI3();
     public static final CGAMultivector I3i = I3.inverse(); // was kommt da raus? TODO
     public static final CGAMultivector I = createI();

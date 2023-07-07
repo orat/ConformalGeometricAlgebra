@@ -115,6 +115,8 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     /**
      * Determines a sphere from the center and a point on the sphere.
      * 
+     * following [Dorst2004: An Algebraic foundation for object-oriented Euclidean Geometry] p.142
+     * 
      * @param location
      * @param pointOnSphere point on the sphere
      */

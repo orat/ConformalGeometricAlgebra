@@ -1021,56 +1021,95 @@ public class Test2 {
         assertTrue(m.equals(new CGAScalarOPNS(-1d)));
     }
     
+    @Test
     public void testPlaneOPNS(){
         System.out.println("------------------ PlaneOPNS --------------");
-        Point3d p1 = new Point3d(1,1,1);
-        Point3d p2 = new Point3d(0,0,0);
-        Point3d p3 = new Point3d(1,1,0);
+        //Point3d p1 = new Point3d(1,1,1);
+        //Point3d p2 = new Point3d(0,0,0);
+        //Point3d p3 = new Point3d(1,1,0);
+        
+        Point3d p1 = new Point3d(1,0,0.1);
+        Point3d p2 = new Point3d(0,0,-0.1);
+        Point3d p3 = new Point3d(0.3,1,0);
         
         // Normalenvektor n aus den obigen Punkten bestimmen
         
-        Vector3d v1 = new Vector3d(p3);
-        v1.sub(p2);
+        // die letzten zwei Vorzeichen sind falsch
+        //Vector3d v1 = new Vector3d(p2);
+        //v1.sub(p1);
+        //Vector3d v2 = new Vector3d(p3);
+        //v2.sub(p1);
+       
+        // erstes und drittes Vorzecien ist falsch
+        //Vector3d v1 = new Vector3d(p3);
+        //v1.sub(p1);
+        //Vector3d v2 = new Vector3d(p2);
+        //v2.sub(p1);
         
+        // mittleres Vorzeichen ist Falsch
+        //Vector3d v1 = new Vector3d(p3);
+        //v1.sub(p2);
+        //Vector3d v2 = new Vector3d(p1);
+        //v2.sub(p2);
+        
+        // erstes und drittes Vorzeichen falsch
+        //Vector3d v1 = new Vector3d(p1);
+        //v1.sub(p2);
+        //Vector3d v2 = new Vector3d(p3);
+        //v2.sub(p2);
+        
+        // mittleres Vorzeichen falsch
+        //Vector3d v1 = new Vector3d(p1);
+        //v1.sub(p3);
+        //Vector3d v2 = new Vector3d(p2);
+        //v2.sub(p3);
+        
+        // erstes und drittes Vorzeichen falsch
+        Vector3d v1 = new Vector3d(p2);
+        v1.sub(p3);
         Vector3d v2 = new Vector3d(p1);
-        v2.sub(p2);
+        v2.sub(p3);
         
-        // oder muss n anderes Vorzeichen haben?
-        //FIXME
-        // Wie definiert die Punkte-Reihenfolgen bei der opns-plane-composition
-        // die Orientierung des Normalenvektors?
         Vector3d n = new Vector3d();
         n.cross(v1, v2);
-        n.normalize();
         System.out.println(toString("n(p1,p2,p3)",n));
-        
-        Point3d p4 = new Point3d(1,-1,1);
-        Point3d p5 = new Point3d(1,-1,0);
         
         CGAPlaneOPNS planeOPNS = new CGAPlaneOPNS(new CGARoundPointIPNS(p1),
                 new CGARoundPointIPNS(p2),new CGARoundPointIPNS(p3));
         CGAPlaneOPNS planeOPNSa = new CGAPlaneOPNS(p1, p2, p3);
         assertTrue(planeOPNS.equals(planeOPNSa));
         EuclideanParameters parameters = planeOPNS.decomposeFlat();
-        // a = (0.7071067811865475,0.7071067811865475,0.0)
-        //FIXME Vorzeichen einer Komponente ist falsch bei der Bestimmung nach Dorst
-        System.out.println(toString("a",parameters.attitude()));
+        // FIXME Vorzeichen falsch
+        System.out.println(toString("attitude",parameters.attitude()));
+        System.out.println(toString("n",n));
+        //assertTrue(equals(parameters.attitude(), n));
+        
+        Vector3d attitude = planeOPNS.attitude();
+        // FIXME Vorzeichen falsch
+        System.out.println(toString("attitude (planeOPNS, Dorst)",attitude));
+        //assertTrue(equals(attitude, n));
+        
+        // nach Spencer via dual IPNS
+        attitude = planeOPNS.dual().attitudeIntern2().direction();
+        // FIXME auch falsches Vorzeichen! 
+        System.out.println(toString("attitudeIntern2 (planeOPNS, Spencer)",attitude));
+        //assertTrue(equals(n, attitude));
+        
+        //ok
+        CGAPlaneIPNS planeIPNS = new CGAPlaneIPNS(p1, n);
+        Vector3d planeIPNSAttitude = planeIPNS.attitude();
+        //System.out.println(toString("planeIPNS(attitude)", planeIPNSAttitude));
+        CGAPlaneOPNS planeOPNS2 = planeIPNS.undual();
+        Vector3d planeOPNSAttitude = planeOPNS2.attitude();
+        //System.out.println(toString("planeIPNS.dual(attitude)", planeOPNSAttitude));
+        assertTrue(equals(planeIPNSAttitude, planeOPNSAttitude));
+        
         // c = (0.0,0.0,0.0)
         System.out.println(toString("c",parameters.location()));
         CGAMultivector test = planeOPNS.op(new CGARoundPointIPNS(parameters.location()));
         assertTrue(test.isNull());
         
-        Vector3d attitude = planeOPNS.attitude();
-        System.out.println(toString("attitude (planeOPNS, Dorst)",attitude));
-       
         
-        // nach Spencer via dual IPNS
-        attitude = planeOPNS.dual().attitudeIntern2().direction();
-        // attitudeIntern2(CGAPlaneIPNS, Spencer) = (-0.7071067811865475*e1 + 0.7071067811865475*e2)
-        // falsches Vorzeichen! ansonsten korrekt
-        //FIXME
-        System.out.println(toString("attitudeIntern2 (planeOPNS, Spencer)",attitude));
-        //assertTrue(equals(n, attitude));
         
         
         EuclideanParameters parameters2 = planeOPNS.dual().decomposeFlat();
@@ -1430,6 +1469,16 @@ public class Test2 {
         Point3d loc2 = m.location();
         assert(equals(p1, loc2));
          
+        // composition from center and point on the sphere
+        CGARoundPointIPNS c = new CGARoundPointIPNS(p1);
+        Point3d pOnSphere = new Point3d(p1);
+        p1.x += radius;
+        CGASphereIPNS sphereIPNS2 = new CGASphereIPNS(c, new CGARoundPointIPNS (pOnSphere));
+        System.out.println(c.toString("c"));
+        System.out.println(sphereIPNS2.toString("sphereIPNS2"));
+        assertTrue(c.equals(sphereIPNS2));
+        
+
         //???????????
         // Dorst2007: -einf*P = 3 stimmt? soll das die Normierung sein?
         System.out.println("-einf*sphere = "+
