@@ -8,17 +8,16 @@ import org.jogamp.vecmath.Vector3d;
  * Lines in IPNS representation (grade 2). 
  * 
  * Lines generates the motor algebra. They can be interpreted as flattended 
- * circles passing through infinity.
+ * circles passing through infinity.<p>
  * 
- * e1^e2, e1^e3, e2^e3, e1^ni, e2^ni, e3^ni
+ * e1^e2, e1^e3, e2^e3, e1^ni, e2^ni, e3^ni<p>
  * 
  * There are many ways of finding a line: e.g. 
  * the central axis l of a circle σ can be found by contraction with infinity: 
+ * ∞⌋σ = l.<p>
  * 
- * ∞⌋σ = l.
- * 
- * TODO
- * CGALineIPNS extends CGAOrientedCircleIPNS with r=inf
+ * TODO<p>
+ * CGALineIPNS extends CGAOrientedCircleIPNS with r=inf<p>
  *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -34,6 +33,7 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
     public CGALineIPNS(double[] values){
         super(values);
     }
+    
     
     // composition
     
@@ -88,11 +88,6 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
     public CGALineIPNS(Point3d c, Vector3d attitude){
         this(c, /*normalize(*/attitude/*)*/, 1d);
     }
-    private static Vector3d normalize(Vector3d attitude){
-        Vector3d result = attitude;
-        attitude.normalize();
-        return attitude;
-    }
     
     public CGALineIPNS(CGABivector B, double d){
         this(B.add(createInf(d)));
@@ -108,8 +103,19 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
         this((CGABivector) createE3(a).op(createE3(b)), d);
     }
     
+    // ungetested
+    public CGALineIPNS(CGACircleOPNS c){
+        this(inf.ip(c));
+    }
+    
     
     // etc
+    
+    private static Vector3d normalize(Vector3d attitude){
+        Vector3d result = attitude;
+        attitude.normalize();
+        return attitude;
+    }
     
     @Override
     public CGALineOPNS undual(){

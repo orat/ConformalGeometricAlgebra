@@ -40,6 +40,12 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
     }
     public CGAKVector(double[] values){
         super(values);
+        try {
+            testGrade();
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage()+" "+impl.toString());
+            throw(e);
+        }
     }
     
     public static CGAKVector create(double[] values, boolean isIPNS){

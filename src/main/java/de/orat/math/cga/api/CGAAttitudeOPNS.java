@@ -57,6 +57,6 @@ public class CGAAttitudeOPNS extends CGAKVector implements iCGAAttitude {
     }
     
     public CGAKVector undual(){
-        throw new RuntimeException("undual() not supported for generic opns attitude!");
+        throw new RuntimeException("undual() not supported for opns attitude!");
     }
 }

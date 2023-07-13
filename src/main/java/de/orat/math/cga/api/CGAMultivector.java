@@ -203,6 +203,16 @@ public class CGAMultivector {
      * Create the pseudoscalar - The canonical rotor for the R41 of the conformal 
      * space vector base.
      * 
+     * A pseudoscalar is a scalar which changes its sign under a parity inversion.<p>
+     * 
+     * As reflections through a plane are the combination of a rotation with the 
+     * parity transformation, pseudoscalars also change signs under reflections. <p>
+     * 
+     * One of the most powerful ideas in physics is that physical laws do not 
+     * change when one changes the coordinate system used to describe these laws. 
+     * That a pseudoscalar reverses its sign when the coordinate axes are inverted 
+     * suggests that it is not the best object to describe a physical quantity.<p>
+     * 
      * @return the multivector representing the pseudoscalar
      */
     private static CGAKVector createI(){

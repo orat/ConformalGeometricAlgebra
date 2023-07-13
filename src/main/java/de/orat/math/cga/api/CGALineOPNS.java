@@ -31,6 +31,7 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
         super(values);
     }
     
+    
     // composition
     
     /**
@@ -147,9 +148,7 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
      * Create a line in outer product null space representation (grade 3)
      * based on a point and the direction with weight==1. 
      * 
-     * TODO
-     * mir scheint das ist auch gar nicht korrekt
-     * test in testLineOPNSComposition() scheint aber ok zu sein
+     * test in testLineOPNSComposition() scheint aber ok zu sein.<p>
      * 
      * @param p euclidean point on the line
      * @param d euclidean (non normalized) direction of the line

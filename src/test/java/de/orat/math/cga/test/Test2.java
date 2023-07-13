@@ -4,6 +4,7 @@ import de.orat.math.cga.api.CGAAttitudeBivectorOPNS;
 import de.orat.math.cga.api.CGAAttitudeBivectorOPNS;
 import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
 import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
+import de.orat.math.cga.api.CGAAttitudeVectorIPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
 import de.orat.math.cga.api.CGAEuclideanVector;
@@ -18,6 +19,7 @@ import de.orat.math.cga.api.CGAEuclideanBivector;
 import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
 import de.orat.math.cga.api.CGAFlatPointOPNS;
+import de.orat.math.cga.api.CGAKVector;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
 import de.orat.math.cga.api.CGAPointPairOPNS;
@@ -1032,6 +1034,20 @@ public class Test2 {
         Point3d p2 = new Point3d(0,0,-0.1);
         Point3d p3 = new Point3d(0.3,1,0);
         
+        // via point and direction
+        Vector3d n = new Vector3d();
+        Vector3d v1 = new Vector3d(p3);
+        v1.sub(v1);
+        Vector3d v2 = new Vector3d(p2);
+        v1.sub(v1);
+        n.cross(v1, v2);
+        CGAPlaneOPNS planeOPNS1 = new CGAPlaneOPNS(p1, v1, v2);
+        System.out.println(planeOPNS1.toString("opns-plane 1"));
+        CGAPlaneOPNS planeOPNS1a = (new CGAPlaneIPNS(p1, n)).undual();
+        System.out.println(planeOPNS1a.toString("opns-plane 1a"));
+        assertTrue(planeOPNS1.equals(planeOPNS1a));
+        
+        
         // Normalenvektor n aus den obigen Punkten bestimmen
         
         // die letzten zwei Vorzeichen sind falsch
@@ -1065,12 +1081,12 @@ public class Test2 {
         //v2.sub(p3);
         
         // erstes und drittes Vorzeichen falsch
-        Vector3d v1 = new Vector3d(p2);
+        v1 = new Vector3d(p2);
         v1.sub(p3);
-        Vector3d v2 = new Vector3d(p1);
+        v2 = new Vector3d(p1);
         v2.sub(p3);
         
-        Vector3d n = new Vector3d();
+        n = new Vector3d();
         n.cross(v1, v2);
         System.out.println(toString("n(p1,p2,p3)",n));
         
@@ -2918,6 +2934,53 @@ public class Test2 {
         System.out.println(test.dual().toString("ipns"));
     }
     
+    @Test
+    public void testEuclideanBivector(){ 
+        System.out.println("------------------  test euclidean bivector ---------------------");
+        Point3d p1 = new Point3d(1,0,0.1);
+        Point3d p2 = new Point3d(0,0,-0.1);
+        Point3d p3 = new Point3d(0.3,1,0);
+        
+        Vector3d n = new Vector3d();
+        Vector3d v1 = new Vector3d(p3);
+        v1.sub(p1);
+        Vector3d v2 = new Vector3d(p2);
+        v2.sub(p1);
+        n.cross(v1, v2);
+        
+        CGAEuclideanVector v1c = new CGAEuclideanVector(v1);
+        CGAEuclideanVector V2c = new CGAEuclideanVector(v2);
+        CGAEuclideanVector nc = v1c.cross(V2c);
+        
+        CGAEuclideanVector vec = new CGAEuclideanVector(n);
+        assertTrue(nc.equals(vec));
+        
+        assertTrue(equals(nc.direction(), n));
+        
+        CGAEuclideanBivector bivec = new CGAEuclideanBivector(v1, v2);
+        System.out.println(bivec.toString("bivec"));
+        CGAEuclideanBivector bivec2 = new CGAEuclideanBivector(vec.euclideanDual());
+        System.out.println(bivec2.toString("bivec2"));
+        // bivec = (1.0*e1^e2 + 0.03999999999999998*e1^e3 - 0.2*e2^e3)
+        // bivec2 = (-1.0*e1^e2 - 0.03999999999999998*e1^e3 + 0.2*e2^e3)
+        assertTrue(bivec.equals(bivec2));
+    }
+    
+    @Test
+    public void testAttitudeIPNSVector(){
+        System.out.println("------------------  test attitude vector ---------------------");
+        Vector3d v = new Vector3d(1,2,3);
+        CGAAttitudeVectorOPNS attitudeVecOPNS = new CGAAttitudeVectorOPNS(v);
+        CGAAttitudeVectorIPNS attitudeVecIPNS = attitudeVecOPNS.dual();
+        CGAAttitudeVectorIPNS attitudeVecIPNS2 = new CGAAttitudeVectorIPNS(v);
+        // attVecIPNS = (2.220446049250313E-16*eo^e1^e2 - 1.1102230246251565E-16*eo^e1^e3 + 5.551115123125783E-17*eo^e2^e3 
+        // - 2.9999999999999982*e1^e2^ei + 1.9999999999999991*e1^e3^ei - 0.9999999999999996*e2^e3^ei)
+        // attVecIPNS2 = (3.0*e1^e2^ei - 2.0*e1^e3^ei + 1.0*e2^e3^ei)
+        // falsches Vorzeichen
+        System.out.println(attitudeVecIPNS.toString("attVecIPNS"));
+        System.out.println(attitudeVecIPNS2.toString("attVecIPNS2"));
+        assertTrue(attitudeVecIPNS.equals(attitudeVecIPNS2));
+    }
     @Test
     public void testgp(){
         System.out.println("------------------  test gp ---------------------");

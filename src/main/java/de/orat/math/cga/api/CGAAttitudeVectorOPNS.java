@@ -84,9 +84,6 @@ public class CGAAttitudeVectorOPNS extends CGAAttitudeOPNS implements iCGABivect
     
     @Override
     public CGAAttitudeVectorIPNS dual(){
-        return new CGAAttitudeVectorIPNS(impl.dual());
-    }
-    public CGAKVector undual(){
-        throw new RuntimeException("undual() not supported for opns attitude vector!");
+        return new CGAAttitudeVectorIPNS(impl.dual().getCompressed());
     }
 }

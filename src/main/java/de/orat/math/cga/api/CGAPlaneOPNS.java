@@ -8,7 +8,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * Plane in outer product null space representation (grade 4 multivector), 
  * corresponding to direct plane in [Dorst2007].
  * 
- * e1^e2^e3^ni, e1^e2^no^ni, e1^e3^no^ni, e2^e3^no^ni
+ * e1^e2^e3^ni, e1^e2^no^ni, e1^e3^no^ni, e2^e3^no^ni<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -25,6 +25,9 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     public CGAPlaneOPNS(double[] values){
         super(values);
     }
+    
+    
+    // composition
     
     /**
      * Create plane in outer product null space representation (grade 4 multivector).
@@ -87,6 +90,10 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
         this(inf.op((p1.op(p2)).dual()));
     }
     
+    // scheint korrekt zu sein
+    public CGAPlaneOPNS(Point3d p, Vector3d v1, Vector3d v2){
+        this((new CGARoundPointIPNS(p)).op(new CGAEuclideanBivector(v1, v2)).op(inf));
+    }
     /**
      * Create dual plane from a point on the plane an its normal vector (in outer product
      * null space representation).
@@ -97,8 +104,12 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
      * @param n normal vector.
      */
     public CGAPlaneOPNS(Point3d p, Vector3d n){
-        this(create(p,n));
+        //this(create(p,n));
+        // falsches Vorzeichen
+        this((new CGARoundPointIPNS(p)).op((new CGAEuclideanVector(n)).euclideanDual()).op(inf));
     }
+        
+    // WORKAROUND für obigen Constructor, hatte funktioniert
     private static CGAMultivector create(Point3d p, Vector3d n){
         //TODO vermutlich falsch
         //CGAMultivector cp = new CGARoundPointIPNS(p);

@@ -27,7 +27,15 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     // composition
     
     public CGAAttitudeVectorIPNS(Vector3d t){
-        super((new CGAEuclideanVector(t)).op(inf).undual());
+        // das scheint mir aber gar nicht richtig zu sein
+        //super((new CGAEuclideanVector(t)).op(inf).undual());
+        // scheint falsches Vorzeichen zu liefern
+        // ist euclideanDual() falsch?
+        // oder die verwendete Formel?
+        //FIXME
+        // beim Test von CGAEuclideanVector selbst mit euclideanDual stimmt das
+        // Vorzeichen auch schon nicht
+        super((new CGAEuclideanVector(t)).euclideanDual().negate().op(inf));
     }
     
     
@@ -60,8 +68,5 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     @Override
     public CGAAttitudeVectorOPNS undual(){
         return new CGAAttitudeVectorOPNS(super.undual().compress()/*dual().gp(-1d)*/);
-    }
-    public CGAKVector dual(){
-        throw new RuntimeException("dual() not supported for ipns attitude vector!");
     }
 }
