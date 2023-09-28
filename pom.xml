@@ -8,6 +8,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
+        <!-- verschiedene Implementierungen umschalten:
+            default   Dorst2007, impl1
+            ganja     via ganja codegenerator, impl2, not tested
+            jclifford impl3 not yet ready to use
+            casadi    impl4, based on extended-vahlen matrices
+        -->
+        <cga.impl>default</cga.impl>
         <skipTests>false</skipTests>
         <!--exec.mainClass>de.orat.math.cga.ConformalGeometricAlgebra</exec.mainClass-->
     </properties>
@@ -31,4 +38,27 @@
             <type>jar</type>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <executions>
+                  <execution>
+                    <phase>generate-resources</phase>
+                    <goals>
+                      <goal>write-project-properties</goal>
+                    </goals>
+                    <configuration>
+                      <outputFile>
+                        ${project.build.outputDirectory}/cga.properties
+                      </outputFile>
+                    </configuration>
+                  </execution>
+                </executions>
+              </plugin>
+        </plugins>    
+    </build>       
 </project>

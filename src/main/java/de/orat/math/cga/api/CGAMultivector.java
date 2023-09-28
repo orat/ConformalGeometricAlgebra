@@ -1,9 +1,15 @@
 package de.orat.math.cga.api;
 
 import de.orat.math.cga.impl1.CGA1Multivector;
+import de.orat.math.cga.impl2.CGA2Multivector;
 import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Quat4d;
 import org.jogamp.vecmath.Tuple3d;
@@ -21,9 +27,30 @@ public class CGAMultivector {
      */
     public static double eps = 1e-12;
 
+    static int default_ip_type = LEFT_CONTRACTION;
+    
+     
+    // default = Dorst2007, impl1
+    // casadi = extended vahlen Matrix via casadi, impl4
+    private static String implversion = "default";
+    static {
+        try {
+            ClassLoader loader = CGAMultivector.class.getClassLoader();
+            InputStream in = loader.getResourceAsStream("cga.properties");
+            Properties properties = new Properties();
+            properties.load(in);
+            implversion = (String) properties.get("cga.impl");
+            System.out.println("cga.impl loaded from application.properties: "+implversion);
+        } catch (IOException ex) {
+            implversion = "default";
+            System.out.println("Loading file common.properties failed to specify the implementation version!");
+        }
+        //System.out.println("cga-impl-version loaded: "+String.valueOf(implversion));
+    }
+
+    
     static CGAMultivector defaultInstance = new CGAMultivector();
     
-    static int default_ip_type = LEFT_CONTRACTION;
     iCGAMultivector impl;
     
     // do not change the scale of the following static constants
@@ -39,10 +66,25 @@ public class CGAMultivector {
     public static final CGAMultivector I = createI();
     public static final CGAMultivector Ii = o.op(I3i).op(inf);
     public static final CGAMultivector I0 = o.op(inf); //inf.op(o);
-    
+   
     CGAMultivector(){
-        impl = new CGA1Multivector();
+        switch (implversion){
+            case "ganja" -> {
+                //impl = new CGA2Multivector();
+                break;
+            }
+            case "jclifford" ->{
+                // impl = new CGA3Multivector()
+                break;
+            }
+            case "casadi" -> {
+                //impl = new CGA4Multivector();
+                break;
+            }
+            default -> impl = new CGA1Multivector();
+        }
     }
+    
     /**
      * @param values 
      * eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,

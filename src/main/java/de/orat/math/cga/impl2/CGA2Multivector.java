@@ -1,8 +1,10 @@
 package de.orat.math.cga.impl2;
 
-import de.orat.math.cga.impl1.CGA1Multivector;
+//import de.orat.math.cga.impl1.CGA1Multivector;
 import de.orat.math.cga.impl2.generated.CGA;
 import de.orat.math.cga.spi.iCGAMultivector;
+import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
+import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -322,9 +324,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         switch (type){
             //TODO
             // Hesteness inner product implementieren
-            case CGA1Multivector.RIGHT_CONTRACTION:
+            case /*CGA1Multivector.*/RIGHT_CONTRACTION:
                 return new CGA2Multivector(CGA.binop_Dot((CGA) b, this));
-            case CGA1Multivector.LEFT_CONTRACTION:
+            case /*CGA1Multivector.*/LEFT_CONTRACTION:
                 return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
             default:
                 throw new RuntimeException("Inner product type \""+String.valueOf(type)+"\" not yet implemented!");

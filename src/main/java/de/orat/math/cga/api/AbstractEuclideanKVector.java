@@ -1,9 +1,14 @@
 package de.orat.math.cga.api;
 
 /**
- * Euclidean k-vectors, also called euclidean blades are vectors, bivectors or
- * tri-vectors, which can be used to represent metric characteristics of geometrical
- * objects (e.g. area, volume).
+ * Euclidean k-vectors are vectors, bivectors, tri-vectors or 4-vectors, which 
+ * can be used to represent metric characteristics of geometrical objects 
+ * (e.g. area, volume).<p>
+ * 
+ * 1-vectors: points, dual-planes, dual-spheres, euclidean vectors
+ * bi-vectors: point-pairs, flat-points, dual-lines, free-vectors, tangent-vectors
+ * tri-vectors: lines, circles, free-bivectors, tangent-bivectors
+ * 4-vectors: planes, spheres, free-trivectors<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

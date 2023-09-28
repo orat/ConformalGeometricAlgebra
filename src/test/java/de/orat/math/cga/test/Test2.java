@@ -2863,6 +2863,7 @@ public class Test2 {
         System.out.println(m.toString("dual(m)"));
     }
     
+    @Test
     public void testEuclideanDual(){
         System.out.println("-------------- test euclidean dual -----------------");
         // a cross b = dual(a op b)
@@ -2887,6 +2888,16 @@ public class Test2 {
         cross.cross(a,b);
         System.out.println(toString("cross",cross));
         assertTrue(equals(cross, bi_div_I3.direction()));
+        
+        //TODO
+        Vector3d e1e = new Vector3d(1,0,0);
+        CGAEuclideanVector e1 = new CGAEuclideanVector(e1e);
+        CGAEuclideanBivector be1 = e1.euclideanDual();
+        // Euclidean bivector = (-1.0*e2^e3)
+        System.out.println(be1.toString("Euclidean bivector"));
+        // EuclideanBivector direkt aus nur einem Vektor erzeugen wie ist das
+        // definiert bezüglich der Vorzeichen?
+        //CGAEuclideanBivector be1a = new CGAEuclideanBivector(e1e);
     }
     
     @Test
@@ -2933,6 +2944,7 @@ public class Test2 {
         // ipns = (-8.881784197001252E-16*eo^e1^e2^e3 - 4.999999999999997*e1^e2^e3^ei)
         System.out.println(test.dual().toString("ipns"));
     }
+   
     
     @Test
     public void testEuclideanBivector(){ 
@@ -2972,6 +2984,8 @@ public class Test2 {
         Vector3d v = new Vector3d(1,2,3);
         CGAAttitudeVectorOPNS attitudeVecOPNS = new CGAAttitudeVectorOPNS(v);
         CGAAttitudeVectorIPNS attitudeVecIPNS = attitudeVecOPNS.dual();
+        //FIXME
+        // CGAAttitudeVectorIPNS() scheint mir fehlerhaft zu sein
         CGAAttitudeVectorIPNS attitudeVecIPNS2 = new CGAAttitudeVectorIPNS(v);
         // attVecIPNS = (2.220446049250313E-16*eo^e1^e2 - 1.1102230246251565E-16*eo^e1^e3 + 5.551115123125783E-17*eo^e2^e3 
         // - 2.9999999999999982*e1^e2^ei + 1.9999999999999991*e1^e3^ei - 0.9999999999999996*e2^e3^ei)
@@ -3044,7 +3058,6 @@ public class Test2 {
         CGAMultivector m2 = p4.op(p4);
         System.out.println(m2.toString("p4^p4"));
     }
-    
     
     public void testFlatPoints(){
         System.out.println("----------------- test flat points --------------------");

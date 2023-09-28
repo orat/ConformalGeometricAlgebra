@@ -35,6 +35,7 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
         //FIXME
         // beim Test von CGAEuclideanVector selbst mit euclideanDual stimmt das
         // Vorzeichen auch schon nicht
+        // vermutlich ist euclideanDual() falsch
         super((new CGAEuclideanVector(t)).euclideanDual().negate().op(inf));
     }
     

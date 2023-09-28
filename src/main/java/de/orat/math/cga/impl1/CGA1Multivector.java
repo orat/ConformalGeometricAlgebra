@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * CGA Multivector reference implementation based on the reference implementation 
- * described in Dorst2007.
+ * described in [Dorst2007].
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

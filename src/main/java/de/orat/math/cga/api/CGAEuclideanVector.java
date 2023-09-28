@@ -78,9 +78,10 @@ public class CGAEuclideanVector extends AbstractEuclideanKVector implements iCGA
     
     public CGAEuclideanBivector euclideanDual(){
        // https://arxiv.org/pdf/1205.5935.pdf eq. 89
-       // return new CGAEuclideanBivector(this.lc(I3i)); // [Dorst2009] p.80
+       return new CGAEuclideanBivector(this.lc(I3i)); // [Dorst2009] p.80
        // hat auch nichts gebracht, Vorzeichen scheint immer noch falsch zu sein
+       //TODO
        // https://arxiv.org/pdf/1205.5935.pdf eq. 90
-       return new CGAEuclideanBivector(div(I3));
+       //return new CGAEuclideanBivector(div(I3));
     }
 }

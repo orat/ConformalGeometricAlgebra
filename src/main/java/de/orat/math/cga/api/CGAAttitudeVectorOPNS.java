@@ -53,8 +53,8 @@ public class CGAAttitudeVectorOPNS extends CGAAttitudeOPNS implements iCGABivect
      * @param t direction vector. Its length is a distance of two parallel planes 
      * this attitude corresponds to. 
      * 
-     * The atttidue can be computed by the outer product
-     * of two parallel lines with direction t and distance of the length of t.
+     * <p>The attidue can be computed by the outer product
+     * of two parallel planes with direction t and distance of the length of t.
      */
     public CGAAttitudeVectorOPNS(Vector3d t){
         super((new CGAEuclideanVector(t)).op(inf));
