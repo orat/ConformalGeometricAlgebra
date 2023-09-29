@@ -2,6 +2,7 @@ package de.orat.math.cga.api;
 
 import de.orat.math.euclid.spi.iEuclidViewer3D;
 import java.awt.Color;
+import java.util.Optional;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -22,10 +23,18 @@ public class CGAViewer {
     public static float LINE_RADIUS = 0.005f; // in m
     public static float TANGENT_LENGTH = 0.1f*3f; // testweise *3 damit trotz Roboter sichtbar
 
+    private final iEuclidViewer3D impl;
+   
+    public static Optional<CGAViewer> getInstance(){
+         Optional<iEuclidViewer3D> viewer = ViewerService.getInstance().getViewer();
+         CGAViewer cgaViewer = null;
+         if (viewer.isPresent()){
+             cgaViewer = new CGAViewer(viewer.get());
+         }
+         return Optional.ofNullable(cgaViewer);
+    }
     
-    private iEuclidViewer3D impl;
-    
-    public CGAViewer(iEuclidViewer3D impl){
+    CGAViewer(iEuclidViewer3D impl){
         this.impl = impl;
     }
     
