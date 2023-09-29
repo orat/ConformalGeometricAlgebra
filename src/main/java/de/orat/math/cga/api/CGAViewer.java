@@ -355,7 +355,13 @@ public class CGAViewer {
                             LINE_RADIUS*1000, color, label);
     }
 
-   
+    public boolean addCGAObject(CGAMultivector m, String label, boolean isIPNS){
+        //TODO
+        // wenn generischer Multivektor, diesen analysieren um herauszufinden welcher
+        // Subtyp das sein sollte und dann in diesen casten
+        // d.h. dieser Code muss hier raus und zuvor überprüft werden ...
+        return false;
+    }
     /**
      * Add cga object into the visualization.
      *
@@ -522,10 +528,6 @@ public class CGAViewer {
         // flat-point als Würfel darstellen
 
         
-        //TODO
-        // wenn generischer Multivektor, diesen analysieren um herauszufinden welcher
-        // Subtyp das sein sollte und dann in diesen casten
-        // d.h. dieser Code muss hier raus und zuvor überprüft werden ...
         throw new IllegalArgumentException("\""+m.toString("")+"\" has unknown type!");
     }
 }
