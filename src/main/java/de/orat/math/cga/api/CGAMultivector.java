@@ -85,9 +85,10 @@ public class CGAMultivector {
         }
     }
     
+   
     /**
      * @param values 
-     * eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+     * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
      * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
      * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
      * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
@@ -208,6 +209,98 @@ public class CGAMultivector {
                             t[13], t[19], t[22], t[26], t[5], t[9], t[12], t[18],
                             t[14], t[20], t[23], t[27], t[15], t[21], t[24],
                             t[28], t[25], t[29], t[30], t[31]};
+    }
+    /**
+     * Flat weight.
+     * 
+     * Contains directional informations.<p>
+     * 
+     * @return Multivector containing only blades which include einf and e0.
+     */
+    public CGAMultivector flatWeight(){
+        // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+        // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
+        // e012inf, e013inf, e023inf, e123inf, e0123inf
+        double[] values =  impl.extractCoordinates();
+        /**
+         * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+         * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
+         * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
+         * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+         */
+        return new CGAMultivector(new double[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,values[9]/*17 eo^ei*/,
+                                       0, values[18]/*19 eo^e1^ei*/, 0, values[20]/*21 eo^e2^ei*/, 0, values[27]/*23 eo^e1^e2^ei*/,
+                                       0, values[21]/*25 eo^e3^ei*/, 0, values[28]/*27 eo^e1^e3^ei*/, 0, values[29]/*29 eo^e2^e3^ei*/,
+                                       0, values[31]/*31 eo^e1^e2^e3^ei*/});
+    }
+    /**
+     * Flat bulk.
+     * 
+     * Contains positional information, distance to the origin.<p>
+     * 
+     * @return Multivector containing only blades which include einf and no e0.
+     */
+    public CGAMultivector flatBulk(){
+        // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+        // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
+        // e012inf, e013inf, e023inf, e123inf, e0123inf
+        double[] values =  impl.extractCoordinates();
+        /**
+         * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+         * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
+         * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
+         * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+         */
+        return new CGAMultivector(new double[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,values[5]/*ei 16*/,
+                                       0, values[12]/*18 e1^ei*/, 0, values[14]/*20 e2^ei*/, 0, values[23]/* 22 e1^e2^ei*/,
+                                       0, values[15]/*24 e3^ei*/, 0, values[24]/*26 e1^e3^ei*/, 0, values[25]/* 28 e2^e3^ei*/,
+                                       0, values[30]/*30 e1^e2^e3^ei*/});
+    }
+    /**
+     * Round bulk.
+     * 
+     * Contains positional information, distance to the origin.<p>
+     * 
+     * @return Multivector which contains only blades which does not contain e0 or einf.
+     */
+    public CGAMultivector roundBulk(){
+        // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+        // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
+        // e012inf, e013inf, e023inf, e123inf, e0123inf
+        double[] values =  impl.extractCoordinates();
+        /**
+         * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+         * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
+         * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
+         * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+         */
+        return new CGAMultivector(new double[]{values[0]/*0 s*/,0, values[2]/*2 e1*/, 0, values[3]/*4 e2*/, 5, values[10]/*6 e1^e2*/,
+            0, values[4]/*8 e3*/, 9, values[11]/*10 e1^e3*/, 0, values[13]/*12 e2^e3*/, 13, values[22]/*14 e1^e2^e3*/, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+    }
+    /**
+     * Round weight.
+     * 
+     * Contains directional informations.<p>
+     * 
+     * @return Multivector which contains only blades which does not contain e0 or einf.
+     */
+    public CGAMultivector roundWeight(){
+        // s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+        // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
+        // e012inf, e013inf, e023inf, e123inf, e0123inf
+        double[] values =  impl.extractCoordinates();
+        /**
+         * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+         * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
+         * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
+         * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+         */
+        return new CGAMultivector(new double[]{0, values[1]/*1 e0*/, 0, values[6] /*3 eo^e1*/, 0, values[7]/*5 eo^e2*/, 0, values[16]/*7 eo^e1^e2*/,
+                    0, values[8]/*9 eo^e3*/, 0, values[17]/*11 eo^e1^e3*/, 0, values[19]/*13 eo^e2^e3*/,
+                    0, values[26]/* 15 eo^e1^e2^e3*/, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0});
     }
     
     public String[] basisBladeNames(){
