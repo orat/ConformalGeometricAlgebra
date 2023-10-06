@@ -19,6 +19,8 @@ import de.orat.math.cga.api.CGAEuclideanBivector;
 import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
 import de.orat.math.cga.api.CGAFlatPointOPNS;
+import de.orat.math.cga.api.CGAForceIPNS;
+import de.orat.math.cga.api.CGAForqueIPNS;
 import de.orat.math.cga.api.CGAKVector;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
@@ -1120,7 +1122,7 @@ public class Test2 {
         //System.out.println(toString("planeIPNS.dual(attitude)", planeOPNSAttitude));
         assertTrue(equals(planeIPNSAttitude, planeOPNSAttitude));
         
-        // c = (0.0,0.0,0.0)
+        // c1 = (0.0,0.0,0.0)
         System.out.println(toString("c",parameters.location()));
         CGAMultivector test = planeOPNS.op(new CGARoundPointIPNS(parameters.location()));
         assertTrue(test.isNull());
@@ -3194,7 +3196,7 @@ public class Test2 {
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));
         CGASphereOPNS S = (new CGASphereIPNS(p, 1.1d)).undual();
         
-        Point3d p1 = new Point3d(1d,1,1);
+        Point3d p1 = new Point3d(1d,-1,-1);
         CGARoundPointIPNS p1c = new CGARoundPointIPNS(p1);
         Point3d p2 = new Point3d(1,1,0d);
         CGARoundPointIPNS p2c = new CGARoundPointIPNS(p2);
@@ -3222,5 +3224,43 @@ public class Test2 {
         CGAMultivector m1 = Sipns.vee(pl.dual());
         // m1 = (0)
         System.out.println(m1.toString("m1"));
+    }
+    
+    
+    @Test
+    public void testForceAddition(){
+        System.out.println("------------------------------- test force additions ---------------------");
+        Point3d c1 = new Point3d(1,1,0);
+        Vector3d f1 = new Vector3d(0,0,1);
+        CGAForceIPNS F1 = new CGAForceIPNS(c1, f1);
+        System.out.println(F1.toString("F1"));
+        
+        
+        // test force representation as line
+        
+        Vector3d attitude = F1.attitude();
+        //WORKAROUND
+        attitude.normalize();
+        System.out.println("attitude(F1)="+String.valueOf(attitude.x)+", "+String.valueOf(attitude.y)+", "+String.valueOf(attitude.z));
+        Vector3d forceDir = new Vector3d(f1);
+        forceDir.normalize();
+        System.out.println("forceDir(f1)="+String.valueOf(forceDir.x)+", "+String.valueOf(forceDir.y)+", "+String.valueOf(forceDir.z));
+        assertTrue(equals(attitude, forceDir));
+        
+        double squeredWeight = F1.squaredWeight();
+        System.out.println("squaredWeight(F1)="+String.valueOf(squeredWeight));
+        assertTrue(equals(squeredWeight, f1.lengthSquared()));
+        
+        
+        // adding forces to forque
+        
+        Point3d c2 = new Point3d(0,0,0);//new Point3d(1,1,0);
+        Vector3d f2 = new Vector3d(0,0,-1);
+        CGAForceIPNS F2 = new CGAForceIPNS(c2, f2);
+        System.out.println(F2.toString("F2"));
+        
+        
+        CGAForqueIPNS forque1 = F1.add(F2);
+        System.out.println(forque1.toString("forque1"));
     }
 }

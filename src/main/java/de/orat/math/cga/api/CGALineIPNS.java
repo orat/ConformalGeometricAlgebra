@@ -69,8 +69,9 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
      * @throws IllegalArgumentException if attitude is (0,0,0)
      */
     public CGALineIPNS(Point3d c, Vector3d attitude, double weight){
-        // FIXME
-        // ungeklärt, was passiert wenn c=(0,0,0)--> das sollte möglich sein
+        // Was passiert wenn c=(0,0,0)?
+        // --> die Komponenten mit einf verschwinden
+        
         // local blade = weight * ( normal + ( center ^ normal ) * ni ) * i
         this(createE3(attitude).add(createE3(c).op(createE3(attitude)).gp(inf)).
                 gp(I3).gp(weight));
