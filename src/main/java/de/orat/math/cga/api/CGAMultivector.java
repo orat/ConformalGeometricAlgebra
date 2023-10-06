@@ -237,6 +237,8 @@ public class CGAMultivector {
      * Flat bulk.
      * 
      * Contains positional information, distance to the origin.<p>
+     *
+     * tested with testForce...scheint korrekt zu sein
      * 
      * @return Multivector containing only blades which include einf and no e0.
      */
@@ -251,7 +253,7 @@ public class CGAMultivector {
          * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
          * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
          */
-        return new CGAMultivector(new double[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,values[5]/*ei 16*/,
+        return new CGAMultivector(new double[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, values[5]/*ei 16*/,
                                        0, values[12]/*18 e1^ei*/, 0, values[14]/*20 e2^ei*/, 0, values[23]/* 22 e1^e2^ei*/,
                                        0, values[15]/*24 e3^ei*/, 0, values[24]/*26 e1^e3^ei*/, 0, values[25]/* 28 e2^e3^ei*/,
                                        0, values[30]/*30 e1^e2^e3^ei*/});

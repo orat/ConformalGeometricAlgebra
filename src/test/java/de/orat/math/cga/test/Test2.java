@@ -3230,8 +3230,8 @@ public class Test2 {
     @Test
     public void testForceAddition(){
         System.out.println("------------------------------- test force additions ---------------------");
-        Point3d c1 = new Point3d(1,1,0);
-        Vector3d f1 = new Vector3d(0,0,1);
+        Point3d c1 = new Point3d(5,5,1);
+        Vector3d f1 = new Vector3d(1.5,2,3);
         CGAForceIPNS F1 = new CGAForceIPNS(c1, f1);
         System.out.println(F1.toString("F1"));
         
@@ -3254,13 +3254,15 @@ public class Test2 {
         
         // adding forces to forque
         
-        Point3d c2 = new Point3d(0,0,0);//new Point3d(1,1,0);
-        Vector3d f2 = new Vector3d(0,0,-1);
+        Point3d c2 = new Point3d(-5,-5, -1);
+        Vector3d f2 = new Vector3d(-1,-2,-3);
         CGAForceIPNS F2 = new CGAForceIPNS(c2, f2);
         System.out.println(F2.toString("F2"));
         
         
         CGAForqueIPNS forque1 = F1.add(F2);
         System.out.println(forque1.toString("forque1"));
+        System.out.println(forque1.flatBulk().toString("flatBulk=moment"));
+        System.out.println(forque1.flatWeight().toString("flatWeight=direction=force"));
     }
 }
