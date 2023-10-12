@@ -66,6 +66,7 @@ import de.orat.math.cga.api.CGARoundPointOPNS;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGAScalarOPNS;
+import de.orat.math.cga.api.CGAScrewAxisIPNS;
 import de.orat.math.cga.api.CGASphereIPNS;
 import de.orat.math.cga.api.CGASphereOPNS;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
@@ -3226,6 +3227,20 @@ public class Test2 {
         System.out.println(m1.toString("m1"));
     }
     
+    @Test
+    public void testScrewAxis(){
+        System.out.println("------------------------------- test screw-axis additions ---------------------");
+        Point3d c1 = new Point3d(5,5,1);
+        Vector3d n1 = new Vector3d(1,1,0);
+        CGALineIPNS l1 = new CGALineIPNS(c1, n1);
+        
+        Point3d c2 = new Point3d(5,5,-1);
+        Vector3d n2 = new Vector3d(1,0,0);
+        CGALineIPNS l2 = new CGALineIPNS(c2, n2);
+        
+        CGAScrewAxisIPNS screwLine = l1.add(l2);
+        //Vector3d moment = screwLine.moment();
+    }
     
     @Test
     public void testForceAddition(){
@@ -3263,6 +3278,25 @@ public class Test2 {
         CGAForqueIPNS forque1 = F1.add(F2);
         System.out.println(forque1.toString("forque1"));
         System.out.println(forque1.flatBulk().toString("flatBulk=moment"));
+        Vector3d fb = forque1.flatBulk().extractE3InfToVector3d();
+        //System.out.println(toString("extracted moment",fb));
+        Vector3d m1 = new Vector3d();
+        m1.cross(new Vector3d(c1),f1);
+        Vector3d m2 = new Vector3d();
+        m2.cross(new Vector3d(c2),f2);
+        Vector3d m = new Vector3d(m1);
+        m.add(m2);
+        System.out.println(toString("m=m1+m1", m));
+        assertTrue(equals(m,fb));
+        
+        Vector3d f = new Vector3d(f1);
+        f.add(f2);
+        System.out.println(toString("f=f1+f2", f));
+        Vector3d attitudeF = forque1.attitude();
+        assertTrue(equals(attitudeF, f));
+        //System.out.println(toString("forque1.attitude()", attitudeF));
+        
+        
         System.out.println(forque1.flatWeight().toString("flatWeight=direction=force"));
     }
 }

@@ -1,6 +1,7 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.euclid.spi.iEuclidViewer3D;
+import de.orat.view3d.euclid3dviewapi.api.ViewerService;
+import de.orat.view3d.euclid3dviewapi.spi.iEuclidViewer3D;
 import java.awt.Color;
 import java.util.Optional;
 import org.jogamp.vecmath.Point3d;

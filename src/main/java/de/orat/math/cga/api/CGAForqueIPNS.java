@@ -1,13 +1,14 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.spi.iCGAMultivector;
-
 /**
  * Forque, Wrench, Screw-force.
+ *
+ * TODO
+ * statt von CGAFlatIPNS von CGAScrewAxisIPNS erben sobald ich das implementiert habe
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAForqueIPNS extends CGAMultivector {
+public class CGAForqueIPNS extends CGAFlatIPNS {
     
     public CGAForqueIPNS(double[] values) {
         super(values);
@@ -15,7 +16,9 @@ public class CGAForqueIPNS extends CGAMultivector {
     public CGAForqueIPNS(CGAMultivector m){
         super(m.impl);
     }
-    CGAForqueIPNS(iCGAMultivector m){
-        super(m);
+    
+    @Override
+    public CGAAttitudeVectorOPNS attitudeIntern(){
+        return new CGAAttitudeVectorOPNS(super.attitudeIntern());
     }
 }

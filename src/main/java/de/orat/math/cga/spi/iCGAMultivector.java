@@ -505,7 +505,9 @@ public interface iCGAMultivector {
     /**
      * Extract all of the 32 coordinates in CGA. This include also 0 values.
      * 
-     * @return coordinates array of length 32
+     * @return s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+     * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
+     * e012inf, e013inf, e023inf, e123inf, e0123inf (coordinates array of length 32)
      */
     public double[] extractCoordinates();
     public double[] extractCoordinates(int grade);

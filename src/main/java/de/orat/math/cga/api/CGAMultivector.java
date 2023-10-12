@@ -145,9 +145,7 @@ public class CGAMultivector {
     public static CGAMultivector createEz(double scale){
         return new CGAMultivector(defaultInstance.impl.createEz(scale));
     }
-    /*public static CGAEuclideanVector createE3(){
-        return new CGAEuclideanVector(createEx(1d).add(createEy(1d)).add(createEz(1d)));
-    }*/
+    
     /**
      * Create an E3 Vector or 0-Vector if the given argument is a null-vector.
      * 
@@ -178,6 +176,10 @@ public class CGAMultivector {
         return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     
+    public Vector3d extractE3InfToVector3d(){
+        double[] vector = extractCoordinates();
+        return new Vector3d(vector[18], vector[20], vector[24]);
+    }
     
     /**
      * Extract coordinates.
@@ -187,9 +189,9 @@ public class CGAMultivector {
      * e012inf, e013inf, e023inf, e123inf, e0123inf
      * @Deprecated 
      */
-    public double[] extractCoordinatesOrig(){
+    /*public double[] extractCoordinatesOrig(){
         return impl.extractCoordinates();
-    }
+    }*/
     
     /** 
      * Extract coordinates.

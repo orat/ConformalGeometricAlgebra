@@ -205,4 +205,11 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
         return result;
     }
     
+    public CGAScrewAxisIPNS add(CGALineIPNS line){
+        return new CGAScrewAxisIPNS(super.add(line));
+    }
+    public CGAScrewAxisIPNS sub(CGALineIPNS line){
+        return new CGAScrewAxisIPNS(super.sub(line));
+    }
+    
 }
