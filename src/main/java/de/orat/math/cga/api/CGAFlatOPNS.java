@@ -25,6 +25,11 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
         super(values);
     }
     
+    public static boolean is(CGAMultivector m){
+        if (!inf.op(m).isNull()) return false;
+        return !inf.lc(m).isNull();
+    }
+    
     // decompose
     
     public iCGAFlat.EuclideanParameters decomposeFlat(){

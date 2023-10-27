@@ -29,6 +29,11 @@ class CGATangentIPNS extends CGAKVector implements iCGATangentOrRound {
         super(m.impl);
     }
     
+    public static boolean is(CGAMultivector m){
+        if (inf.op(m).isNull()) return false;
+        if (inf.lc(m).isNull()) return false;
+        return m.sqr().isNull();
+    }
     
     // composition
     

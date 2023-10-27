@@ -6,9 +6,6 @@ import org.jogamp.vecmath.Vector3d;
 /**
  * Direction/attitude/free vector,  trivector (grade 4).
  * 
- * TODO
- * Hier fehlt noch eine korrespondierende Klasse mit der IPNS Darstellung?
- * 
  * e1^e2^e3^einf
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)

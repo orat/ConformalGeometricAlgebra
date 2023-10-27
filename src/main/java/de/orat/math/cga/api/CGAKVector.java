@@ -9,7 +9,7 @@ import org.jogamp.vecmath.Vector3d;
  * (in form of a linear combination) of the same grade k (0..5). 
  * 
  * k-blades are k-vectors but not all k-vectors are k-blades (sometimes shorter 
- * called blades).
+ * called blades).<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -24,6 +24,123 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
             throw(e);
         }
     }
+    
+    public static CGAKVector specialize(CGAMultivector m, boolean isIPNS){
+        
+        //TODO
+        // wie kann ich herausfinden ob m eine subclass von CGAKVector ist und damit
+        // gar kein neues objekt erzeugt werden muss?
+        
+        //TODO
+        // alle Klassen durchtesten
+        
+        switch (m.grade()){
+            
+            case 0:
+                // opns scalar
+                return new CGAScalarOPNS(m);
+            case 1:
+                // ipns plane? (flat)
+                if (CGAFlatIPNS.is(m)){
+                    return new CGAPlaneIPNS(m);
+                } 
+                // ipns round point (round)
+                if (CGARoundIPNS.is(m)){
+                    return new CGARoundPointIPNS(m);
+                }
+                // opns attitude scalar (attitude?)
+                if (isIPNS && CGAAttitudeIPNS.is(m)){
+                   return new CGAAttitudeIPNS(m);
+                // ipns attitude trivector? (attitude)
+                } else if (CGAAttitudeOPNS.is(m)){
+                    return new CGAAttitudeTrivectorOPNS(m);
+                }
+                break;
+            case 2:
+                //TODO wie kann ich line und screw-axis unterscheiden?
+                // ipns line (flat)
+                // ipns screw axis? (flat)
+                
+                //TODO wie kann kann oriented point und circle unterscheiden
+                // ipns oriented point (round)
+                // ipns circle (round)
+                
+                if (isIPNS){
+                    // ipns attitude bivector (attitude)
+                    if (CGAAttitudeIPNS.is(m)){
+                        return new CGAAttitudeBivectorIPNS(m);
+                    // ipns tangent bivector? (tangent)
+                    } else if (CGATangentIPNS.is(m)){
+                        return new CGATangentBivectorIPNS(m);
+                    }
+                // opns
+                } else {
+                    // opns flat point (flat)
+                    if (CGAFlatOPNS.is(m)){
+                        return new CGAFlatPointOPNS(m);
+                    // opns point pair (round)
+                    } else if (CGARoundOPNS.is(m)){
+                        return new CGAPointPairOPNS(m);
+                    }
+                }
+                break;
+            case 3:
+                // opns
+                if (!isIPNS){
+                    //TODO
+                    // opns line (flat)
+                    // opns screw axis? (flat)
+
+                    //TODO
+                    // opns circle (round)
+                    // opns oriented point (round)
+
+                    // opns attitude bivector (attitude)
+                    if (CGAAttitudeOPNS.is(m)){
+                        return new CGAAttitudeBivectorOPNS(m);
+                    // opns tangent bivector (identisch mit ipns flat point) (tangent)
+                    } else if (CGATangentOPNS.is(m)){
+                        return new CGATangentBivectorOPNS(m);
+                    }
+                // ipns
+                } else {
+                    // ipns flat point (flat)
+                    if (CGAFlatIPNS.is(m)){
+                        return new CGAFlatPointIPNS(m);
+                    // ipns point pair (round)
+                    } else if (CGARoundIPNS.is(m)){
+                        return new CGAPointPairIPNS(m);
+                    }
+                }
+                break;
+            case 4:
+                if (isIPNS){
+                    // ipns attitude scalar (attitude)
+                    if (CGAAttitudeIPNS.is(m)){
+                        return new CGAAttitudeIPNS(m);
+                    }
+                // opns
+                } else {
+                    // opns plane (flat)
+                    if (CGAFlatOPNS.is(m)){
+                        return new CGAPlaneOPNS(m);
+                    // opns round point (round)
+                    } else if (CGARoundOPNS.is(m)){
+                        return new CGARoundPointOPNS(m);
+                    // opns attitude trivector? (attitude)
+                    } else if (CGAAttitudeOPNS.is(m)){
+                        return new CGAAttitudeTrivectorOPNS(m);
+                    }
+                }
+                break;
+            case 5:
+                // ipns scalar
+                return new CGAScalarIPNS(m);
+            default:
+        }
+        return null;
+    }
+    
     /**
      * 
      * @param impl 

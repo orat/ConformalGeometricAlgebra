@@ -1,17 +1,23 @@
 package de.orat.math.cga.api;
 
+import de.orat.math.cga.api.CGAMotor.MotorParameters;
 import de.orat.view3d.euclid3dviewapi.api.ViewerService;
+import de.orat.view3d.euclid3dviewapi.spi.iAABB;
 import de.orat.view3d.euclid3dviewapi.spi.iEuclidViewer3D;
+import de.orat.view3d.euclid3dviewapi.util.AxisAlignedBoundingBox;
+import de.orat.view3d.euclid3dviewapi.util.Line;
+import de.orat.view3d.euclid3dviewapi.util.Plane;
 import java.awt.Color;
 import java.util.Optional;
+import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
-public class CGAViewer {
+public class CGAViewer extends CGAViewObject {
     
     public static Color COLOR_GRADE_1 = Color.RED;    // ipns: sphere, planes, round points
     public static Color COLOR_GRADE_2 = Color.GREEN;  // ipns: lines, ipns circle, oriented points; opns: flat-points, point-pairs
@@ -30,20 +36,278 @@ public class CGAViewer {
          Optional<iEuclidViewer3D> viewer = ViewerService.getInstance().getViewer();
          CGAViewer cgaViewer = null;
          if (viewer.isPresent()){
-             cgaViewer = new CGAViewer(viewer.get());
+             try {
+                cgaViewer = new CGAViewer(viewer.get());
+             } catch (Exception ex){
+                cgaViewer = null;
+                ex.printStackTrace();
+             }
          }
          return Optional.ofNullable(cgaViewer);
     }
     
-    CGAViewer(iEuclidViewer3D impl){
+    CGAViewer(iEuclidViewer3D impl) throws Exception {
+        super(null, null, null, -1l);
         this.impl = impl;
+        impl.open();
+    }
+    
+    /**
+     * 
+     * @param parent
+     * @param m
+     * @param label
+     * @param isIPNS
+     * @return null if the given multivector is no k-vector
+     * 
+     * TODO
+     * was ist mit einer Schraubachse? Ist die auch ein k-vector?
+     */
+    public CGAViewObject addCGAObject(CGAViewObject parent, CGAMultivector m, String label, boolean isIPNS){
+       CGAViewObject result = null;
+        // wenn generischer Multivektor, diesen analysieren um herauszufinden welcher
+        // Subtyp das sein sollte und dann diesen erzeugen
+        CGAKVector mm = CGAKVector.specialize(m, true);
+        if (mm != null){
+            result = addCGAObject(parent, mm, label);
+        } 
+        return result;
+    }
+    
+    /*public CGAViewObject addCGAObject(CGAKVector m, String label){
+        return addCGAObject(this, m, label);
+    }
+    public CGAViewObject addCGAObject(CGAKVector m, String label, Color color){
+        return addCGAObject(this, m, label);
+    }*/
+    
+    /**
+     * Add cga object into the visualization.
+     *
+     * @param m cga multivector
+     * @param label label
+     * @return true if the given object can be visualized, false if it is outside 
+     * the axis-aligned bounding box and this box is not extended for the given object
+     * @throws IllegalArgumentException if multivector is no visualizable type
+     */
+    CGAViewObject addCGAObject(CGAViewObject parent, CGAKVector m, String label){
+         return addCGAObject(parent, m, label, null);
+    }
+    CGAViewObject addCGAObject(CGAViewObject parent, CGAKVector m, String label, Color color){
+        
+        long id = -1;
+        long[] ids;
+            
+        // cga ipns objects
+        if (m instanceof CGARoundPointIPNS roundPointIPNS){
+            //TODO decompose bestimmt auch eine Attitude, was bedeutet das für einen round-point?
+            // brauche ich das überhaupt?
+            // decompose bestimmt zuerst auch einen round-point, aber den hab ich ja bereits
+            //FIXME
+            if (color == null){
+               id = addRoundPoint(roundPointIPNS.decompose(), label, true);
+            } else {
+               id = addRoundPoint(roundPointIPNS.decompose(), label, color);
+            }
+            return new CGAViewObject(m,label, parent, id);
+        
+        } else if (m instanceof CGALineIPNS lineIPNS){
+            if (color == null){
+                id = addLine(lineIPNS.decomposeFlat(), label, true);
+            } else {
+                id = addLine(lineIPNS.decomposeFlat(), label, color);
+            }
+            return new CGAViewObject(m,label, parent, id);
+            
+        } else if (m instanceof CGAPointPairIPNS pointPairIPNS){
+            //addPointPair(m.decomposeTangentOrRound(), label, true);
+            
+            iCGATangentOrRound.EuclideanParameters parameters = pointPairIPNS.decompose();
+            double r2 = parameters.squaredSize();
+            //double r2 = pointPairIPNS.squaredSize();
+            if (r2 < 0){
+                //FIXME
+                // decomposition schlägt fehl
+                // show imaginary point pairs as circles
+                //CGACircleIPNS circle = new CGACircleIPNS(pointPairIPNS);
+                //addCircle(pointPairIPNS.decomposeTangentOrRound(), label, true);
+                //return true;
+                System.out.println("Visualize imaginary point pair \""+label+"\" failed!");
+                return null;
+                
+            // tangent vector
+            } else if (r2 == 0){
+                System.out.println("CGA-Object \""+label+"\" is a tangent vector - not yet supported!");
+                return null;
+
+            // real point pair only?
+            //FIXME
+            } else {
+                //ddPointPair(cGAPointPairIPNS.decomposePoints(), label, true);
+                //iCGATangentOrRound.EuclideanParameters parameters = pointPairIPNS.decompose();
+                Point3d loc = parameters.location();
+                System.out.println("pp \""+label+"\" loc=("+String.valueOf(loc.x)+", "+String.valueOf(loc.y)+", "+String.valueOf(loc.z)+
+                        " r2="+String.valueOf(parameters.squaredSize()));
+                
+                if (color == null){
+                    ids = addPointPair(parameters, label, true);
+                } else {
+                    ids = addPointPair(parameters, label, color);
+                }  
+                // scheint zum gleichen Ergebnis zu führen
+                //iCGAPointPair.PointPair pp = pointPairIPNS.decomposePoints();
+                //addPointPair(pp, label, true);
+                //double r_ = pp.p1().distance(pp.p2())/2;
+                //System.out.println("Visualize real point pair \""+label+"\"with r="+String.valueOf(r_));
+                CGAViewObject parent2 = new CGAViewObject(m, label, parent, -1);
+                CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
+                parent.addChild(p1);
+                CGAViewObject p2 = new CGAViewObject(null,label+"_2",parent2, ids[1]);
+                parent.addChild(p2);
+                return parent2;
+            }
+            
+        } else if (m instanceof CGASphereIPNS sphereIPNS){
+            if (color == null){
+                id = addSphere(sphereIPNS.decompose(), label, true);
+            } else {
+                id = addSphere(sphereIPNS.decompose(), label, color, true);
+            }
+            return new CGAViewObject(m,label, parent, id);
+            
+        } else if (m instanceof CGAPlaneIPNS planeIPNS){
+            if (color == null){
+                ids = addPlane(planeIPNS.decomposeFlat(), label, true, true, true, false);
+            } else {
+                ids = addPlane(planeIPNS.decomposeFlat(), label, color, true, true, false);
+            }
+            return addComplexViewObject(m, label, parent, ids);
+            
+        } else if (m instanceof CGAOrientedPointIPNS orientedPointIPNS){
+            if (color == null){
+                ids = addOrientedPoint(orientedPointIPNS.decompose(), label, true);
+            } else {
+                ids = addOrientedPoint(orientedPointIPNS.decompose(), label, color);
+            }
+            return addComplexViewObject(m, label, parent, ids);
+            
+        } else if (m instanceof CGAFlatPointIPNS flatPointIPNS){
+            if (color == null){
+                id = addFlatPoint(flatPointIPNS.decomposeFlat(), label, true);
+            } else {
+                id = addFlatPoint(flatPointIPNS.decomposeFlat(), label, color);
+            }      
+            return new CGAViewObject(m,label, parent, id);
+            
+        } else if (m instanceof CGACircleIPNS circleIPNS){
+            if (color == null){
+                id = addCircle(circleIPNS.decompose(), label, true);
+            } else {
+                id = addCircle(circleIPNS.decompose(), label, color);
+            }
+            return new CGAViewObject(m,label, parent, id);
+            
+        }
+        //TODO
+        // attitude/free vector dashed/stripled arrow at origin
+        // tangent vector solid arrow at origin?
+        
+        
+        // cga opns objects
+        
+        if (m instanceof CGARoundPointOPNS roundPointOPNS){
+            if (color == null){
+                id = addRoundPoint(roundPointOPNS.decompose(), label, false);
+            } else {
+                id = addRoundPoint(roundPointOPNS.decompose(), label, color);
+            }
+            return new CGAViewObject(m,label, parent, id);
+            
+        } else if (m instanceof CGALineOPNS lineOPNS){
+            if (color == null){
+                id = addLine(lineOPNS.decomposeFlat(), label, false);
+            } else {
+                id = addLine(lineOPNS.decomposeFlat(), label, color);
+            }
+            return new CGAViewObject(m,label, parent, id);
+            
+        } else if (m instanceof CGAPointPairOPNS pointPairOPNS){
+            iCGATangentOrRound.EuclideanParameters parameters = pointPairOPNS.decompose();
+            
+            if (color == null){
+                ids = addPointPair(parameters, label, false);
+            } else {
+                ids = addPointPair(parameters, label, color);
+            }
+            //iCGAPointPair.PointPair pp = pointPairOPNS.decomposePoints();
+            //addPointPair(pp, label, false);
+            CGAViewObject parent2 = new CGAViewObject(m, label,  parent, -1);
+            CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
+            parent.addChild(p1);
+            CGAViewObject p2 = new CGAViewObject(null,label+"_2",parent2, ids[1]);
+            parent.addChild(p2);
+            return parent2;
+            
+        } else if (m instanceof CGASphereOPNS sphereOPNS){
+            if (color == null){
+                id = addSphere(sphereOPNS.decompose(), label, false);
+            } else {
+                id = addSphere(sphereOPNS.decompose(), label, color, false);
+            }
+            return new CGAViewObject(m,label, parent, id);
+            
+        } else if (m instanceof CGAPlaneOPNS planeOPNS){
+            if (color == null){
+                ids = addPlane(planeOPNS.decomposeFlat(), label, false, true, true, false);
+            } else {
+                ids = addPlane(planeOPNS.decomposeFlat(), label, color, true, true, false);
+            }
+            return addComplexViewObject(m, label, parent, ids);
+            
+        } else if (m instanceof CGACircleOPNS circleOPNS){
+            if (color == null){
+                id = addCircle(circleOPNS.decompose(), label, false);
+            } else {
+                id = addCircle(circleOPNS.decompose(), label, color);
+            }
+            return new CGAViewObject(m,label, parent, id);
+            
+        } else if (m instanceof CGAOrientedPointOPNS orientedPointOPNS){
+            if (color == null){
+                ids = addOrientedPoint(orientedPointOPNS.decompose(), label, false);
+            } else {
+                ids = addOrientedPoint(orientedPointOPNS.decompose(), label, color);
+            }
+            return addComplexViewObject(m, label, parent, ids);
+        }
+        //TODO
+        // flat-point als Würfel darstellen
+
+        
+        throw new IllegalArgumentException("\""+m.toString("")+"\" has unknown type!");
+    }
+    
+    private CGAViewObject addComplexViewObject(CGAMultivector m, String label, CGAViewObject parent, long[] ids){
+        CGAViewObject parent2 = new CGAViewObject(m, label,  parent, -1);
+        CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
+        parent.addChild(p1);
+        CGAViewObject p2 = new CGAViewObject(null,label+"_2",parent2, ids[1]);
+        parent.addChild(p2);
+        return parent2;
+    }
+    
+    void transform(CGAViewObject obj, CGAMotor motor){
+        impl.transform(obj.getId(), convert(motor));
+    }
+    
+    private Matrix4d convert(CGAMotor motor){
+        //TODO
+        MotorParameters motorParameters = motor.decomposeMotor();
+        
+        return null;
     }
     
     
-    
-    // grade 1 multivectors
-
-  
     /**
      * Add a point to the 3d view.
      *
@@ -51,13 +315,13 @@ public class CGAViewer {
      * @param isIPNS
      * @param label label or null if no label needed
      */
-    void addPoint(iCGATangentOrRound.EuclideanParameters parameters, String label, boolean isIPNS){
+    long addRoundPoint(iCGATangentOrRound.EuclideanParameters parameters, String label, boolean isIPNS){
         Color color = COLOR_GRADE_1;
         if (!isIPNS) color = COLOR_GRADE_4;
-        addPoint(parameters, label, color);
+        return addRoundPoint(parameters, label, color);
     }
     
-    void addPoint(iCGATangentOrRound.EuclideanParameters parameters, String label, Color color){
+    long addRoundPoint(iCGATangentOrRound.EuclideanParameters parameters, String label, Color color){
         
         if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
         
@@ -65,7 +329,7 @@ public class CGAViewer {
         System.out.println("Add point \""+label+"\" at ("+String.valueOf(location.x)+","+
                         String.valueOf(location.y)+", "+String.valueOf(location.z)+")!");
         location.scale(1000d);
-        impl.addSphere(location, POINT_RADIUS*2*1000, color, label);
+        return impl.addSphere(location, POINT_RADIUS*2*1000, color, label, false);
     }
     
     
@@ -76,14 +340,14 @@ public class CGAViewer {
      * @param label
      * @param isIPNS
      */
-    void addSphere(iCGATangentOrRound.EuclideanParameters parameters,
+    long addSphere(iCGATangentOrRound.EuclideanParameters parameters,
                                               String label, boolean isIPNS){
             Color color = COLOR_GRADE_1;
             if (!isIPNS) color = COLOR_GRADE_4;
-            addSphere(parameters, label, color);
+            return addSphere(parameters, label, color, true);
     }
-    void addSphere(iCGATangentOrRound.EuclideanParameters parameters,
-                                              String label, Color color){
+    long addSphere(iCGATangentOrRound.EuclideanParameters parameters,
+                                              String label, Color color, boolean transparency){
         
         if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
         
@@ -101,7 +365,7 @@ public class CGAViewer {
                         String.valueOf(location.y)+"mm, "+String.valueOf(location.z)+"mm) with radius "+
                         String.valueOf(radius)+"mm!");
 
-        impl.addSphere(location, radius, color, label);
+        return impl.addSphere(location, radius, color, label, true);
     }
 
     /**
@@ -114,14 +378,14 @@ public class CGAViewer {
      * @param showNormal 
      * @return true, if the plane is visible in the current bounding box
      */
-    boolean addPlane(iCGAFlat.EuclideanParameters parameters, String label,
-                     boolean isIPNS, boolean showPolygon, boolean showNormal){
+    long[] addPlane(iCGAFlat.EuclideanParameters parameters, String label,
+                     boolean isIPNS, boolean showPolygon, boolean showNormal, boolean transparency){
         Color color = COLOR_GRADE_1;
         if (!isIPNS) color = COLOR_GRADE_4;
-        return addPlane(parameters, label, color, showPolygon, showNormal);
+        return addPlane(parameters, label, color, showPolygon, showNormal, transparency);
     }
-    boolean addPlane(iCGAFlat.EuclideanParameters parameters, String label,
-                     Color color, boolean showPolygon, boolean showNormal){
+    long[] addPlane(iCGAFlat.EuclideanParameters parameters, String label,
+                     Color color, boolean showPolygon, boolean showNormal, boolean transparency){
         
         if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
         
@@ -130,17 +394,65 @@ public class CGAViewer {
         Vector3d a = parameters.attitude();
         System.out.println("plane "+label+" a=("+String.valueOf(a.x)+", "+String.valueOf(a.y)+", "+String.valueOf(a.z)+
                 "), o=("+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+String.valueOf(location.z)+")");
-        boolean result = true;
+        long[] result = null;
         if (showPolygon){
-            //TODO
-            result = true;
-            impl.addPlane(location, a, color, label, false);
+            result = new long[1];
+            result[0] = addPlane(location, a, color, label, showNormal, transparency);
         }
         // scheint zum Absturz zu führen
-        /*if (result && showNormal){
+        /*if (showNormal){
             addArrow(p1, a, TANGENT_LENGTH, 
                          LINE_RADIUS*1000, color, label);
         }*/
+        //TODO
+        return result;
+    }
+    /**
+     * Add a plane to the 3d view.
+     * 
+     * @param location first point of the plane, unit is [mm]
+     * @param n normal vector
+     * @param color color of the plane
+     * @param label the text of the label of the plane
+     * @return false if outside the bounding-box
+     */
+    long addPlane(Point3d location, Vector3d n, Color color, String label, 
+            boolean showNormal, boolean transparency){
+        
+        long result = -1;
+        
+        if (!isValid(location) || !isValid(n)){
+            throw new IllegalArgumentException("addPlane(): location or attitude with illegal values!");
+        }
+        
+        // Clipping
+        
+        //WORKAROUND clippng based on vector-algebra in the util package of 
+        // Euclid3dViewAPI
+        
+        Plane plane = new Plane(new Vector3d(location), n);
+
+        // clipping
+        iAABB aabb = impl.getAABB(); // createAxisAlignedBoundBox();
+        
+        // testweise die Ecken der bounding box visualisieren
+        /*List<Point3d> points = aabb.getCorners();
+        for (int i=0;i<points.size();i++){
+            this.addPoint(points.get(i), Color.BLUE, 30, String.valueOf(i));
+        }*/
+        
+        Point3d[] corners = aabb.clip(plane); // corners of a polygon in a plane
+        
+        if (corners.length > 2){
+            result = impl.addPolygone(location, corners, color, label, showNormal, transparency);
+            //System.out.println("addPlane \""+label+"\": "+String.valueOf(corners.length)+" corners found:");
+            /*for (int i=0;i<corners.length;i++){
+                System.out.println("Corner "+String.valueOf(i)+": ("+String.valueOf(corners[i].x)+", "+
+                        String.valueOf(corners[i].y)+", "+String.valueOf(corners[i].z)+")");
+            }*/
+        } else {
+            System.out.println("addPlane \""+label+"\" failed. Corners cauld not be determined!");
+        }
         return result;
     }
     
@@ -155,12 +467,12 @@ public class CGAViewer {
      * @param label
      * @return true if the line is inside the bounding box and therefore visible
      */
-    boolean addLine(iCGAFlat.EuclideanParameters parameters, String label, boolean isIPNS){
+    long addLine(iCGAFlat.EuclideanParameters parameters, String label, boolean isIPNS){
         Color color = COLOR_GRADE_2;
         if (!isIPNS) color = COLOR_GRADE_3;
         return addLine(parameters, label, color);
     }
-    boolean addLine(iCGAFlat.EuclideanParameters parameters, String label, Color color){
+    long addLine(iCGAFlat.EuclideanParameters parameters, String label, Color color){
         
         if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
         
@@ -171,14 +483,20 @@ public class CGAViewer {
                         ", "+String.valueOf(p1.z)+") with a=("+String.valueOf(a.x)+", "+String.valueOf(a.y)+", "+
                         String.valueOf(a.z)+")");
         
-        Point3d p2 = null;
-        //TODO
-        // bounding box cut in cga und damit die beiden Punkte bestimmen und
-        // diese dann übergeben
-        impl.addLine(p1, p2, color, LINE_RADIUS*1000,  label);
-        //TODO
-        return true;
+        iAABB aabb = impl.getAABB();
+        
+        // bis auf L_45 scheint das zu funktionieren
+        //return aabb.clip4(line);
+        
+        // funktioniert
+        Point3d[] points = aabb.clip(new Line(new Vector3d(p1), a));
+        
+        // funktioniert nicht, führt zum Absturz, out of memory
+        //return aabb.clip3(line);
+        
+        return impl.addLine(points[0], points[1], color, LINE_RADIUS*1000,  label);
     }
+    
     /**
      * Add oriented-point visualized as point and arrow.
      * 
@@ -186,13 +504,13 @@ public class CGAViewer {
      * @param label
      * @param isIPNS 
      */
-    void addOrientedPoint(iCGATangentOrRound.EuclideanParameters parameters, 
+    long[] addOrientedPoint(iCGATangentOrRound.EuclideanParameters parameters, 
                                                 String label, boolean isIPNS){
        Color color = COLOR_GRADE_2;
        if (!isIPNS) color = COLOR_GRADE_3;
-       addOrientedPoint(parameters, label, color);
+       return addOrientedPoint(parameters, label, color);
     }
-    void addOrientedPoint(iCGATangentOrRound.EuclideanParameters parameters, 
+    long[] addOrientedPoint(iCGATangentOrRound.EuclideanParameters parameters, 
                                                 String label, Color color){
        if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
        
@@ -207,17 +525,34 @@ public class CGAViewer {
        direction.normalize();
        direction.scale(TANGENT_LENGTH*1000/2d);
        
+       long[] result = new long[2];
+       
        // point
-       impl.addSphere(location, POINT_RADIUS*2*1000, color, label);
+       result[0] = impl.addSphere(location, POINT_RADIUS*2*1000, color, label, false);
        
        // arrow
        Point3d location2 = new Point3d(location);
        location2.sub(direction);
        direction.scale(2d);
-       impl.addArrow(location2, direction, 
+       result[1] = impl.addArrow(location2, direction, 
                         LINE_RADIUS*1000, color, null);
+       return result;
+       
+       //TODO oder besser als Kreis darstellen?
     }
 
+    long addFlatPoint(iCGAFlat.EuclideanParameters parameters, String label, boolean isIPNS){
+        Color color = COLOR_GRADE_2;
+        if (!isIPNS) color = COLOR_GRADE_3;
+        return addFlatPoint(parameters, label, color);
+    }
+    long addFlatPoint(iCGAFlat.EuclideanParameters parameters, String label, Color color){
+        if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
+        
+        return impl.addCube(parameters.location(), parameters.attitude(),
+                POINT_RADIUS*2*1000, color, label, true);
+    }
+    
     /**
      * Add a circle to the 3d view.
      *
@@ -225,14 +560,16 @@ public class CGAViewer {
      * @param label name of the circle shown in the visualisation
      * @param isIPNS true, if circle is given in inner-product-null-space representation
      */
-    void addCircle(iCGATangentOrRound.EuclideanParameters parameters,
+    long addCircle(iCGATangentOrRound.EuclideanParameters parameters,
                                               String label, boolean isIPNS){
         Color color = COLOR_GRADE_2;
         if (!isIPNS) color = COLOR_GRADE_3;
-        addCircle(parameters, label, color);
+        return addCircle(parameters, label, color);
     }
-    void addCircle(iCGATangentOrRound.EuclideanParameters parameters,
+    long addCircle(iCGATangentOrRound.EuclideanParameters parameters,
                                               String label, Color color){
+        
+        if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
         
         boolean isImaginary = false;
         double r2 = parameters.squaredSize();
@@ -250,7 +587,7 @@ public class CGAViewer {
                         String.valueOf(location.y)+"mm, "+String.valueOf(location.z)+"mm) with radius "+
                         String.valueOf(r)+"\"[mm] and n= ("+String.valueOf(direction.x)+","+
                         String.valueOf(direction.y)+", "+String.valueOf(direction.z)+") ");
-        impl.addCircle(location, direction, (float) r, color, label, isImaginary);
+        return impl.addCircle(location, direction, r, color, label, isImaginary, false);
     }
 
 
@@ -265,15 +602,16 @@ public class CGAViewer {
      * @param label
      * @param isIPNS true, if ipns representation
      */
-    void addPointPair(iCGAPointPair.PointPair pp, String label, boolean isIPNS){
-            Color color = COLOR_GRADE_3;
-            if (!isIPNS) color = COLOR_GRADE_2;
-            Point3d[] points = new Point3d[]{pp.p1(), pp.p2()};
-            points[0].scale(1000d);
-            points[1].scale(1000d);
-            impl.addSphere(points[0],  POINT_RADIUS*2*1000, color, label);
-            impl.addSphere(points[1],  POINT_RADIUS*2*1000, color, label);
-            //impl.addPointPair(points[0], points[1], label, color, color, LINE_RADIUS*1000, POINT_RADIUS*2*1000);
+    long[] addPointPair(iCGAPointPair.PointPair pp, String label, boolean isIPNS){
+        Color color = COLOR_GRADE_3;
+        if (!isIPNS) color = COLOR_GRADE_2;
+        Point3d[] points = new Point3d[]{pp.p1(), pp.p2()};
+        points[0].scale(1000d);
+        points[1].scale(1000d);
+        return new long[]{
+            impl.addSphere(points[0],  POINT_RADIUS*2*1000, color, label, false),
+            impl.addSphere(points[1],  POINT_RADIUS*2*1000, color, label, false)};
+        //impl.addPointPair(points[0], points[1], label, color, color, LINE_RADIUS*1000, POINT_RADIUS*2*1000);
     }
 
     /**
@@ -285,14 +623,17 @@ public class CGAViewer {
      * @param label
      * @param isIPNS true, if ipns represenation
      */
-    void addPointPair(iCGATangentOrRound.EuclideanParameters parameters,
+    long[] addPointPair(iCGATangentOrRound.EuclideanParameters parameters,
                                                      String label, boolean isIPNS){
         Color color = COLOR_GRADE_3;
         if (!isIPNS) color = COLOR_GRADE_2;
-        addPointPair(parameters, label, color);
+        return addPointPair(parameters, label, color);
     }
-    void addPointPair(iCGATangentOrRound.EuclideanParameters parameters,
+    long[] addPointPair(iCGATangentOrRound.EuclideanParameters parameters,
                                                      String label, Color color){    
+        
+        if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
+        
         Point3d l = parameters.location();
         Vector3d att = parameters.attitude();
         System.out.println("pp(tangendRound) \""+label+"\" loc=("+String.valueOf(l.x)+", "+String.valueOf(l.y)+", "+String.valueOf(l.z)+
@@ -306,8 +647,9 @@ public class CGAViewer {
         points[1].scale(1000d);
         //impl.addPointPair(points[0], points[1], label, color, color, LINE_RADIUS*1000, POINT_RADIUS*2*1000);
         
-        impl.addSphere(points[0],  POINT_RADIUS*2*1000, color, label);
-        impl.addSphere(points[1],  POINT_RADIUS*2*1000, color, label);
+        return new long[]{
+            impl.addSphere(points[0],  POINT_RADIUS*2*1000, color, label, false),
+            impl.addSphere(points[1],  POINT_RADIUS*2*1000, color, label, false)};
         //TODO
         // eventuell Linie zwischen beiden Punkten
     }
@@ -355,180 +697,10 @@ public class CGAViewer {
             impl.addArrow(parameters.location(), dir,
                             LINE_RADIUS*1000, color, label);
     }
-
-    public boolean addCGAObject(CGAMultivector m, String label, boolean isIPNS){
-        //TODO
-        // wenn generischer Multivektor, diesen analysieren um herauszufinden welcher
-        // Subtyp das sein sollte und dann in diesen casten
-        // d.h. dieser Code muss hier raus und zuvor überprüft werden ...
-        return false;
-    }
-    /**
-     * Add cga object into the visualization.
-     *
-     * @param m cga multivector
-     * @param label label
-     * @return true if the given object can be visualized, false if it is outside 
-     * the axis-aligned bounding box and this box is not extended for the given object
-     * @throws IllegalArgumentException if multivector is no visualizable type
-     */
-    public boolean addCGAObject(CGAKVector m, String label){
-         return addCGAObject(m, label, null);
-    }
-    public boolean addCGAObject(CGAKVector m, String label, Color color){
-
-        // cga ipns objects
-        if (m instanceof CGARoundPointIPNS roundPointIPNS){
-            //TODO decompose bestimmt auch eine Attitude, was bedeutet das für einen round-point?
-            // brauche ich das überhaupt?
-            // decompose bestimmt zuerst auch einen round-point, aber den hab ich ja bereits
-            //FIXME
-            if (color == null){
-                addPoint(roundPointIPNS.decompose(), label, true);
-            } else {
-                addPoint(roundPointIPNS.decompose(), label, color);
-            }
-            return true;
-        } else if (m instanceof CGALineIPNS lineIPNS){
-            if (color == null){
-                return addLine(lineIPNS.decomposeFlat(), label, true);
-            } else {
-                return addLine(lineIPNS.decomposeFlat(), label, color);
-            }
-        } else if (m instanceof CGAPointPairIPNS pointPairIPNS){
-            //addPointPair(m.decomposeTangentOrRound(), label, true);
-            
-            iCGATangentOrRound.EuclideanParameters parameters = pointPairIPNS.decompose();
-            double r2 = parameters.squaredSize();
-            //double r2 = pointPairIPNS.squaredSize();
-            if (r2 < 0){
-                //FIXME
-                // decomposition schlägt fehl
-                // show imaginary point pairs as circles
-                //CGACircleIPNS circle = new CGACircleIPNS(pointPairIPNS);
-                //addCircle(pointPairIPNS.decomposeTangentOrRound(), label, true);
-                //return true;
-                System.out.println("Visualize imaginary point pair \""+label+"\" failed!");
-                return false;
-            // tangent vector
-            } else if (r2 == 0){
-                System.out.println("CGA-Object \""+label+"\" is a tangent vector - not yet supported!");
-                return false;
-
-            // real point pair only?
-            //FIXME
-            } else {
-                //ddPointPair(cGAPointPairIPNS.decomposePoints(), label, true);
-                //iCGATangentOrRound.EuclideanParameters parameters = pointPairIPNS.decompose();
-                Point3d loc = parameters.location();
-                System.out.println("pp \""+label+"\" loc=("+String.valueOf(loc.x)+", "+String.valueOf(loc.y)+", "+String.valueOf(loc.z)+
-                        " r2="+String.valueOf(parameters.squaredSize()));
-                
-                if (color == null){
-                    addPointPair(parameters, label, true);
-                } else {
-                    addPointPair(parameters, label, color);
-                }  
-                // scheint zum gleichen Ergebnis zu führen
-                //iCGAPointPair.PointPair pp = pointPairIPNS.decomposePoints();
-                //addPointPair(pp, label, true);
-                //double r_ = pp.p1().distance(pp.p2())/2;
-                //System.out.println("Visualize real point pair \""+label+"\"with r="+String.valueOf(r_));
-                return true;
-            }
-            
-        } else if (m instanceof CGASphereIPNS sphereIPNS){
-            if (color == null){
-                addSphere(sphereIPNS.decompose(), label, true);
-            } else {
-                addSphere(sphereIPNS.decompose(), label, color);
-            }
-            return true;
-        } else if (m instanceof CGAPlaneIPNS planeIPNS){
-            if (color == null){
-                return addPlane(planeIPNS.decomposeFlat(), label, true, true, true);
-            } else {
-                return addPlane(planeIPNS.decomposeFlat(), label, color, true, true);
-            }
-        } else if (m instanceof CGAOrientedPointIPNS orientedPointIPNS){
-            if (color == null){
-                addOrientedPoint(orientedPointIPNS.decompose(), label, true);
-            } else {
-                addOrientedPoint(orientedPointIPNS.decompose(), label, color);
-            }
-            return true;
-        } else if (m instanceof CGACircleIPNS circleIPNS){
-            if (color == null){
-                addCircle(circleIPNS.decompose(), label, true);
-            } else {
-                addCircle(circleIPNS.decompose(), label, color);
-            }
-            return true;
-        }
-        //TODO
-        // flat-point
-        // attitude/free vector dashed/stripled arrow at origin
-        // tangent vector solid arrow at origin?
-        
-        // cga opns objects
-        if (m instanceof CGARoundPointOPNS roundPointOPNS){
-            if (color == null){
-                addPoint(roundPointOPNS.decompose(), label, false);
-            } else {
-                addPoint(roundPointOPNS.decompose(), label, color);
-            }
-            return true;
-        } else if (m instanceof CGALineOPNS lineOPNS){
-            if (color == null){
-                addLine(lineOPNS.decomposeFlat(), label, false);
-            } else {
-                addLine(lineOPNS.decomposeFlat(), label, color);
-            }
-            return true;
-        } else if (m instanceof CGAPointPairOPNS pointPairOPNS){
-            iCGATangentOrRound.EuclideanParameters parameters = pointPairOPNS.decompose();
-            
-            if (color == null){
-                addPointPair(parameters, label, false);
-            } else {
-                addPointPair(parameters, label, color);
-            }
-            //iCGAPointPair.PointPair pp = pointPairOPNS.decomposePoints();
-            //addPointPair(pp, label, false);
-            return true;
-        } else if (m instanceof CGASphereOPNS sphereOPNS){
-            if (color == null){
-                addSphere(sphereOPNS.decompose(), label, false);
-            } else {
-                addSphere(sphereOPNS.decompose(), label, color);
-            }
-            return true;
-        } else if (m instanceof CGAPlaneOPNS planeOPNS){
-            if (color == null){
-                addPlane(planeOPNS.decomposeFlat(), label, false, true, true);
-            } else {
-                addPlane(planeOPNS.decomposeFlat(), label, color, true, true);
-            }
-            return true;
-        } else if (m instanceof CGACircleOPNS circleOPNS){
-            if (color == null){
-                addCircle(circleOPNS.decompose(), label, false);
-            } else {
-                addCircle(circleOPNS.decompose(), label, color);
-            }
-            return true;
-        } else if (m instanceof CGAOrientedPointOPNS orientedPointOPNS){
-            if (color == null){
-                addOrientedPoint(orientedPointOPNS.decompose(), label, false);
-            } else {
-                addOrientedPoint(orientedPointOPNS.decompose(), label, color);
-            }
-            return true;
-        }
-        //TODO
-        // flat-point als Würfel darstellen
-
-        
-        throw new IllegalArgumentException("\""+m.toString("")+"\" has unknown type!");
+    
+    private static boolean isValid(Tuple3d tuple3d){
+        if (!Double.isFinite(tuple3d.x)) return false;
+        if (!Double.isFinite(tuple3d.y)) return false;
+        return Double.isFinite(tuple3d.z);
     }
 }

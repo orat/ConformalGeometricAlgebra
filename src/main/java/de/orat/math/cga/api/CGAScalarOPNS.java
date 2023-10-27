@@ -1,7 +1,7 @@
 package de.orat.math.cga.api;
 
 /**
- * A scalar is the (basis-) blade with grade 0 (e0).
+ * A scalar is the (basis-) blade with grade 0.
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

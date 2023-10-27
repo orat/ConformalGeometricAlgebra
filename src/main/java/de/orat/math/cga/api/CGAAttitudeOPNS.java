@@ -32,6 +32,10 @@ public class CGAAttitudeOPNS extends CGAKVector implements iCGAAttitude {
         super(impl);
     }
     
+    public static boolean is(CGAMultivector m){
+        if (!inf.op(m).isNull()) return false;
+        return inf.lc(m).isNull();
+    }
     
     // decomposition
     

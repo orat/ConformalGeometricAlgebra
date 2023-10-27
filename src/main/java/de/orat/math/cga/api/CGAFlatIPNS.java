@@ -28,6 +28,16 @@ abstract class CGAFlatIPNS extends CGAKVector implements iCGAFlat {
         super(values);
     }
     
+    /**
+     * Tests if the given multivector is a ipns flat.
+     * 
+     * @param m
+     * @return 
+     */
+    public static boolean is(CGAMultivector m){
+        if (inf.op(m).isNull()) return false;
+        return inf.lc(m).isNull();
+    }
     
     // decompose
     
