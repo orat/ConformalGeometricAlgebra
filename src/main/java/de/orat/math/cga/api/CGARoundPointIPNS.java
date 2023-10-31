@@ -8,7 +8,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  * A round point in inner product null space representation (grade 1), 
  * corresponding to dual round point in [Dorst2007]. 
  * 
- * no, e1, e2, e3, ni
+ * no, e1, e2, e3, ni<p>
  * 
  * Normalized homogeneous points, or null-vectors, in the conformal model typically
  * have a weight of 1.<p>
@@ -245,5 +245,13 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
     @Override
     public CGAKVector dual(){
         throw new RuntimeException("The given multivector is ipns-type - dual() is not allowed! Use undual() instead!");
+    }
+    
+    public CGARoundPointIPNS midPoint(CGARoundPointIPNS p2){
+        return midPoint(this, p2);
+    }
+    public static CGARoundPointIPNS midPoint(CGARoundPointIPNS p1, CGARoundPointIPNS p2){
+        CGAMultivector m = p1.add(p2).gp(0.5);
+        return new CGARoundPointIPNS(m.gp(inf).gp(m).negate().div(m.ip(inf).sqr().gp(2)));
     }
 }

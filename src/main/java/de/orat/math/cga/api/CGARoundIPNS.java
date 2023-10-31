@@ -32,6 +32,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
         if (inf.lc(m).isNull()) return false;
         return !m.sqr().isNull();
     }
+    
     // untested
     /**
      * Creates real or imaginary round in outer product null space representation.
@@ -64,6 +65,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
         //return !m.sqr().isNull();
        return m.isScalar() && m.decomposeScalar() == 0;
     } 
+    
     private boolean test(){
         boolean result = false;
         if ((inf.op(this).decomposeScalar() != 0) && 
@@ -220,6 +222,15 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
 	return e0_einf.ip(normalizedRound.op(e0_einf));
     }*/
     
+    // ungetested, effizienter als einen CGAMultivector erst nach Sphere zu casten 
+    // um dann die super methoden squaredSize() hier aufzurufen, vielleicht diese Methode
+    // verwenden um die squaredSize() zu implementieren?
+    //TODO
+    static double squaredSize(CGAMultivector m){
+        return -m.gp(m.gradeInversion()).
+                div((inf.lc(m)).sqr()).extractGrade(0).decomposeScalar(); 
+    }
+    
     /**
      * Determination of squared size.
      * 
@@ -229,6 +240,8 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
      * @return squared size/-radius squared, negative values are possible and describe imaginary rounds
      */
     public double squaredSize(){
+        //TODO testen ob die statische Methode funktioniert
+        // return squaredSize(this);
         return squaredSizeIntern1().decomposeScalar();
     }
     public CGAScalarOPNS squaredSizeIntern1(){

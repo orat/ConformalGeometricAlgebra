@@ -35,10 +35,11 @@ public class CGAScrewAxisIPNS extends CGAFlatIPNS implements iCGABivector {
     
     /*public double getScrewAxis(){
     
-    }
-    public double getPitch(){
-        
     }*/
+    public double getPitch(){
+        //TODO
+        return -1;
+    }
             
             
             

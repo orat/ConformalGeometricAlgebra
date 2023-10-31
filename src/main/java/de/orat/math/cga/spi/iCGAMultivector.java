@@ -406,17 +406,17 @@ public interface iCGAMultivector {
      * Unit under reverse norm.
      * 
      * Implementation based on reverse() instead of conjugate()! This is different
-     * to ganja.js? 
+     * to ganja.js?<p>
      * 
-     * This follows https://github.com/pygae/clifford and also Kleppe:
+     * This follows https://github.com/pygae/clifford and also Kleppe:<p>
      * 
      * normalize = {
      *   _P(1)/(sqrt(abs(_P(1)*_P(1)~)))
-     * }
+     * }<p>
      * 
-     * Multivectors can have a negative squared-magnitude.  So, without 
+     * Multivectors can have a negative squared-magnitude. So, without 
      * introducing formally imaginary numbers, we can only fix the normalized 
-     * multivector's magnitude to +-1.
+     * multivector's magnitude to +-1.<p>
      * 
      * TODO
      * kann ich das Vorzeichen nicht enfach bestimmen und gegebenenfalls hinterher

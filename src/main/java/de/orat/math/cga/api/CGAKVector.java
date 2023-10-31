@@ -25,6 +25,14 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         }
     }
     
+    /**
+     * Create a specialzed CGAKVector from a given multivector.
+     * 
+     * @param m k-vector
+     * @param isIPNS true, the an ipns multivector is created
+     * @return null, if the given Multivector is not recognized as a specialization
+     * of CGAKVector
+     */
     public static CGAKVector specialize(CGAMultivector m, boolean isIPNS){
         
         //TODO
@@ -35,18 +43,25 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         // alle Klassen durchtesten
         
         switch (m.grade()){
-            
             case 0:
                 // opns scalar
                 return new CGAScalarOPNS(m);
+                
             case 1:
                 // ipns plane? (flat)
                 if (CGAFlatIPNS.is(m)){
                     return new CGAPlaneIPNS(m);
                 } 
-                // ipns round point (round)
                 if (CGARoundIPNS.is(m)){
-                    return new CGARoundPointIPNS(m);
+                    //TODO besser statische Methode CGARound.squaredSize(CGAMultivector) verwenden
+                    CGASphereIPNS sphere = new CGASphereIPNS(m);
+                    // ipns round point (round)
+                    if (sphere.squaredSize() < eps){
+                        return new CGARoundPointIPNS(m);
+                    // ipns sphere (round)
+                    } else {
+                        return sphere;
+                    }
                 }
                 // opns attitude scalar (attitude?)
                 if (isIPNS && CGAAttitudeIPNS.is(m)){
@@ -56,16 +71,30 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     return new CGAAttitudeTrivectorOPNS(m);
                 }
                 break;
+                
             case 2:
-                //TODO wie kann ich line und screw-axis unterscheiden?
-                // ipns line (flat)
-                // ipns screw axis? (flat)
-                
-                //TODO wie kann kann oriented point und circle unterscheiden
-                // ipns oriented point (round)
-                // ipns circle (round)
-                
                 if (isIPNS){
+                    if (CGAFlatIPNS.is(m)){
+                        // ipns screw axis? (flat)
+                        CGAScrewAxisIPNS screwAxis = new CGAScrewAxisIPNS(m);
+                        // ipns line (flat)
+                        //TODO getPitch() muss noch implementiert werden
+                        if (screwAxis.getPitch() < eps){
+                            return new CGALineIPNS(m);
+                        } else {
+                            return screwAxis;
+                        }
+                    }
+                    if (CGARoundIPNS.is(m)){
+                        CGACircleIPNS circle = new CGACircleIPNS(m);
+                        // ipns oriented point (round)
+                        if (circle.squaredSize() < eps){
+                            return new CGAOrientedPointIPNS(m);
+                        } else {
+                            // ipns circle (round)
+                            return circle;
+                        }
+                    }
                     // ipns attitude bivector (attitude)
                     if (CGAAttitudeIPNS.is(m)){
                         return new CGAAttitudeBivectorIPNS(m);
@@ -73,6 +102,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     } else if (CGATangentIPNS.is(m)){
                         return new CGATangentBivectorIPNS(m);
                     }
+                    
                 // opns
                 } else {
                     // opns flat point (flat)
@@ -84,17 +114,29 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     }
                 }
                 break;
+                
             case 3:
                 // opns
                 if (!isIPNS){
-                    //TODO
-                    // opns line (flat)
-                    // opns screw axis? (flat)
-
-                    //TODO
-                    // opns circle (round)
-                    // opns oriented point (round)
-
+                    if (CGAFlatOPNS.is(m)){
+                        // opns line (flat)
+                        // opns screw axis? (flat)
+                        //TODO CGAScrewAxisOPNS muss noch implementiert werden
+                        //CGAScrewAxisOPNS screwAxis = new CGAScrewAxisOPNS(m);
+                        //if screwAxis.getPitch(9 < eps){}
+                        return new CGALineOPNS(m);
+                    }
+                    if (CGARoundOPNS.is(m)){
+                        CGACircleOPNS circle = new CGACircleOPNS(m);
+                        // opns oriented point (round)
+                        if (circle.squaredSize() < eps){
+                            return new CGAOrientedPointOPNS(m);
+                        // opns circle (round)
+                        } else {
+                            return circle;
+                        }
+                    }
+                    
                     // opns attitude bivector (attitude)
                     if (CGAAttitudeOPNS.is(m)){
                         return new CGAAttitudeBivectorOPNS(m);
@@ -102,6 +144,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     } else if (CGATangentOPNS.is(m)){
                         return new CGATangentBivectorOPNS(m);
                     }
+                    
                 // ipns
                 } else {
                     // ipns flat point (flat)
@@ -113,6 +156,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     }
                 }
                 break;
+                
             case 4:
                 if (isIPNS){
                     // ipns attitude scalar (attitude)
@@ -133,6 +177,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     }
                 }
                 break;
+                
             case 5:
                 // ipns scalar
                 return new CGAScalarIPNS(m);
@@ -142,7 +187,6 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
     }
     
     /**
-     * 
      * @param impl 
      * @throws IllegalArgumentException if the grade of the given argument is not correct
      */

@@ -26,8 +26,15 @@ import org.jogamp.vecmath.Vector3d;
  */
 public class CGAForceIPNS extends CGALineIPNS {
     
+    public CGAForceIPNS(CGAMultivector m){
+        super(m);
+    }
     public CGAForceIPNS(Point3d location, Vector3d force) {
         super(location, normalize(force), force.length());
+    }
+    
+    public CGAForceOPNS undual(){
+        return new CGAForceOPNS(super.undual());
     }
     
     private static Vector3d normalize(Vector3d force){

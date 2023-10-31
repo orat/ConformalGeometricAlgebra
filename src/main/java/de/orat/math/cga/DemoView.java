@@ -1,6 +1,10 @@
 package de.orat.math.cga;
 
 import de.orat.math.cga.api.CGACircleIPNS;
+import de.orat.math.cga.api.CGAKVector;
+import de.orat.math.cga.api.CGALineOPNS;
+import de.orat.math.cga.api.CGAMultivector;
+import static de.orat.math.cga.api.CGAMultivector.inf;
 import de.orat.math.cga.api.CGAPlaneIPNS;
 import de.orat.math.cga.api.CGAPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
@@ -19,13 +23,61 @@ public class DemoView {
         Optional<CGAViewer> viewer = CGAViewer.getInstance();
         if (viewer.isPresent()){
             CGAViewer viewer3D = viewer.get();
+            
+            CGARoundPointIPNS pm = new CGARoundPointIPNS(new Point3d(1, 0.3, -0.7));
+            viewer3D.addCGAObject(pm, "pm");
+            CGARoundPointIPNS pp = new CGARoundPointIPNS(new Point3d(1, 1, 1));
+             viewer3D.addCGAObject(pp, "pp");
+            
+            CGARoundPointIPNS p1 = new CGARoundPointIPNS(new Point3d(1, 0.3, -0.2));
+            //viewer3D.addCGAObject(p1, "p1");
+            CGARoundPointIPNS p2 = new CGARoundPointIPNS(new Point3d(-1, -0.3, -0.2));
+            viewer3D.addCGAObject(p2, "p2");
+            CGALineOPNS L1 = (new CGALineOPNS(p1, p2)).normalize();
+            viewer3D.addCGAObject(L1, "L1");
+            
+            CGARoundPointIPNS midPoint = p1.midPoint(p2);
+            viewer3D.addCGAObject(midPoint, "midPoint(p1,p2)");
+            
+            CGARoundPointIPNS p3 = new CGARoundPointIPNS(new Point3d(0.3, 1, 1));
+            //viewer3D.addCGAObject(p3, "p3");
+            CGARoundPointIPNS p4 = new CGARoundPointIPNS(new Point3d(-0.3, -1, -1));
+            viewer3D.addCGAObject(p4, "p4");
+            CGALineOPNS L2 = (new CGALineOPNS(p3, p4)).normalize();
+            viewer3D.addCGAObject(L2, "L2");
+            
+            // Inverse hat keinen Effekt gezeigt
+            CGALineOPNS L21 = new CGALineOPNS(L2.gp(L1).gp(L2/*.inverse()*/));
+            System.out.println(L21.toString("L2")); // normalize ändert nichts
+            
+            viewer3D.addCGAObject(L21, "L21");
+            CGALineOPNS L212 = new CGALineOPNS(L1.gp(L21).gp(L1));
+            //CGALineOPNS L212 = new CGALineOPNS(L1.sub(L21)); // senkrecht zu L2 wenn sich L1 und L2 schneiden
+            System.out.println(L212.toString("L212")); // trivector aber keine line? att schlägt fehl
+            viewer3D.addCGAObject(L212, "L212");
+           
+        } else {
+            System.out.println("No viewer implementation found!");
+        }
+    }
+    
+   
+    
+    public void todo(){
+         
+        Optional<CGAViewer> viewer = CGAViewer.getInstance();
+        if (viewer.isPresent()){
+            CGAViewer viewer3D = viewer.get();
+            
             Point3d center = new Point3d(); 
             
             // add sphere ipns
             double radius = 0.3;
             double weight = 1d;
             CGASphereIPNS sphereIPNS = new CGASphereIPNS(center, radius, weight);
-            viewer3D.addCGAObject(sphereIPNS, "sphere");
+            //viewer3D.addCGAObject(sphereIPNS, "sphere");
+            CGASphereIPNS m = (CGASphereIPNS) CGAKVector.specialize(sphereIPNS, true);
+            viewer3D.addCGAObject(m, "sphere");
             
             // add plane ipns
             Point3d p = new Point3d();
@@ -50,9 +102,6 @@ public class DemoView {
             CGAPointPairIPNS pointPairIPNS = new CGAPointPairIPNS(
                     new CGARoundPointIPNS(center1), new CGARoundPointIPNS(center2));
             viewer3D.addCGAObject(pointPairIPNS,"pp");
-            
-        } else {
-            System.out.println("No viewer implementation found!");
         }
     }
 }

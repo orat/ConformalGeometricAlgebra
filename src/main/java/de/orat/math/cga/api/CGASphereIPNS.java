@@ -3,15 +3,14 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Point3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
-import org.jogamp.vecmath.Vector3d;
 
 /**
  * Sphere in inner product null space representation (grade 1)
- * corresponding to dual real or imaginary sphere in Dorst2007.
+ * corresponding to dual real or imaginary sphere in [Dorst2007].
  * 
- * no, e1, e2, e3, ni
+ * no, e1, e2, e3, ni<p>
  * 
- * A sphere with radius=0 is a round point.
+ * A sphere with radius=0 is a round point.<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

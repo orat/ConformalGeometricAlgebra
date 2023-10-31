@@ -472,6 +472,14 @@ public class CGAViewer extends CGAViewObject {
         if (!isIPNS) color = COLOR_GRADE_3;
         return addLine(parameters, label, color);
     }
+    /**
+     * Add line based on euclidean parameters location and direction. 
+     * 
+     * @param parameters
+     * @param label
+     * @param color
+     * @return null, if failed e.g. clipping failed
+     */
     long addLine(iCGAFlat.EuclideanParameters parameters, String label, Color color){
         
         if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
@@ -494,7 +502,12 @@ public class CGAViewer extends CGAViewObject {
         // funktioniert nicht, führt zum Absturz, out of memory
         //return aabb.clip3(line);
         
-        return impl.addLine(points[0], points[1], color, LINE_RADIUS*1000,  label);
+        if (points.length == 2){
+            return impl.addLine(points[0], points[1], color, LINE_RADIUS*1000,  label);
+        } else {
+            System.out.println("Clipping of line \""+label+"\" failed, because no intersection with the bounding box!");
+            return -1;
+        }
     }
     
     /**

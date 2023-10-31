@@ -3243,6 +3243,57 @@ public class Test2 {
     }
     
     @Test
+    public void testSpecializationMethod(){
+        Point3d center = new Point3d(); 
+        
+        // sphere ipns
+        double radius = 0.3;
+        double weight = 1d;
+        CGASphereIPNS sphereIPNS = new CGASphereIPNS(center, radius, weight);
+        CGASphereIPNS m = (CGASphereIPNS) CGAKVector.specialize(sphereIPNS, true);
+        
+        // round point ipns
+        CGARoundPointIPNS pointIPNS = new CGARoundPointIPNS(center);
+        CGARoundPointIPNS m3 = (CGARoundPointIPNS) CGAKVector.specialize(pointIPNS,true);
+
+        // plane ipns
+        Point3d p = new Point3d();
+        Vector3d n = new Vector3d(1,0,0);
+        CGAPlaneIPNS planeIPNS = new CGAPlaneIPNS(p,n);
+        CGAPlaneIPNS m4 = (CGAPlaneIPNS) CGAKVector.specialize(planeIPNS, true);
+
+        // flat point ipns
+        CGAFlatPointIPNS flatPoint = new CGAFlatPointIPNS(p);
+        CGAFlatPointIPNS m5 = (CGAFlatPointIPNS) CGAKVector.specialize(flatPoint, true);
+        
+        // line ipns
+        CGALineIPNS line = new CGALineIPNS(p,n);
+        CGALineIPNS m6 = (CGALineIPNS) CGAKVector.specialize(line, true);
+        
+        // screw ipns
+        //TODO
+        
+        // circle ipns
+        Point3d center1 = new Point3d(1,1,1);
+        Vector3d normal = new Vector3d(1,0,0);
+        double radius1 = 0.3;
+        CGACircleIPNS circleIPNS = new CGACircleIPNS(center1, normal, radius1, weight);
+        CGACircleIPNS m7 = (CGACircleIPNS) CGAKVector.specialize(circleIPNS, true);
+
+        // oriented point ipns
+        //TODO
+        
+        // point-pair ipns
+        Point3d center2 = new Point3d (2,2,2);
+        CGAPointPairIPNS pointPairIPNS = new CGAPointPairIPNS(
+                new CGARoundPointIPNS(center1), new CGARoundPointIPNS(center2));
+        CGAPointPairIPNS m8 = (CGAPointPairIPNS) CGAKVector.specialize(pointPairIPNS, true);
+        
+        //TODO
+        // opns
+    }
+    
+    @Test
     public void testForceAddition(){
         System.out.println("------------------------------- test force additions ---------------------");
         Point3d c1 = new Point3d(5,5,1);

@@ -762,6 +762,12 @@ public class CGAMultivector {
      * introducing formally imaginary numbers, we can only fix the normalized 
      * multivector's magnitude to +-1.<p>
      * 
+     * Every time an object has an einf element (as signle einf or as part of a 
+     * blade) it can be scaled. To normalize it, th eenif needs to be 1.0.<p>
+     * 
+     * Gaalop calculates by onor=o/abs(o) to normalize an object. E.g. if o is a 
+     * vector, abs calculates the length of the vector.<p>
+     * 
      * @return the normalised multivector so that X*~X is +- 1
      */
     public CGAMultivector normalize(){
