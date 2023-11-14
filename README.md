@@ -12,7 +12,7 @@ This repository includes code to decompose multivectors into geometric 3d-parame
 
 The project is used to learn about different possibilities to implement CGA and to find a good CGA API as a basis to integrate CGA based on a DSL into the Java virtual machine ([see here](https://github.com/MobMonRob/DSL4GeometricAlgebra)). The overall aim is to integrate CGA polyglott into the Java VM, supported by a complete development tool chain with syntax-highlighting and debugging etc. This work will be done based on the [Netbeans IDE](https://netbeans.apache.org/).
 
-CGA can be implemented based on different metrics corresponding to different definitions of the origin and the point at infinity. Different metrics results in different formulas for composition of CGA-vectors and in the formulas for determining lenghts and angles. In this API the origin is defined as $\epsilon_0=0.5(\epsilon_--\epsilon_+)$ and the point at infinity as $\epsilon_\infty=\epsilon_+ +\epsilon_-$ with $\epsilon_-^2=-1$. This corresponds to ganja.js, the book [Hildenbrand2009] and also the paper [Klepper2016].
+CGA can be implemented based on different metrics corresponding to different definitions of the origin and the point at infinity. Different metrics results in different formulas for composition of CGA-vectors and in the formulas for determining lenghts and angles. In this API the origin is defined as $\epsilon_0=0.5(\epsilon_--\epsilon_+)$ and the point at infinity as $\epsilon_\infty=\epsilon_+ +\epsilon_-$ with $\epsilon_-^2=-1$ and $\epsilon_+^2=1$. This corresponds to ganja.js, the book [Hildenbrand2009] and also the paper [Klepper2016].
 
 Be careful. This software is still in an early draft version. Changes in the API are planned e.g. to correct some object naming.
 
