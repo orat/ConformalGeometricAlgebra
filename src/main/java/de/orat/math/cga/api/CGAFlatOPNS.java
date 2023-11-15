@@ -15,7 +15,7 @@ import org.jogamp.vecmath.Vector3d;
  */
 abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
     
-    CGAFlatOPNS(CGAMultivector m){
+    CGAFlatOPNS(CGAMultivector m) throws IllegalArgumentException{
         super(m.impl);
     }
     protected CGAFlatOPNS(iCGAMultivector m){

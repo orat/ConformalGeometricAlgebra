@@ -31,18 +31,25 @@ public interface iCGAMultivector {
      * 
      * @return pseudo scalar
      */
-    // the pseudo scalar is always the last blade
-    // wird bisher nur von meet verwendet
     default iCGAMultivector createI(){
         double[] values = new double[32];
+        // the pseudo scalar should de always the last blade
         values[31] = 1d;
         return create(values);
     }
+    
     // the scalar is always the first blade
     //TODO
     // default-impl
     public iCGAMultivector createScalar(double d);
     
+    /**
+     * Compressed version of this multivector if the multivector data structure
+     * does support this. E.g. ganja does not support this, because always a
+     * vector of length 32 is saved.
+     * 
+     * @return a compressed multivector or this.
+     */
     default iCGAMultivector getCompressed(){
         return this;
     }
@@ -142,12 +149,13 @@ public interface iCGAMultivector {
     /**
      * Computes the meet with the specified element.
      * 
+     * TODO das ist doch nicht das richtige meet()?
      * @param mv the second element of the meet.
      * @return a new element from the meet with the specified element.
      */
-    default iCGAMultivector meet(iCGAMultivector mv){
-        return (gp(createI()).ip(this, LEFT_CONTRACTION));
-    }
+    /*default */iCGAMultivector meet(iCGAMultivector mv);//{
+     //   return (gp(createI()).ip(this, LEFT_CONTRACTION));
+    //}
     
     /**
      * Computes the meet with the specified element in a common subspace.
@@ -223,7 +231,9 @@ public interface iCGAMultivector {
      * 
      * @return a new element that is the dual of this element (up to a sign).
      */
-    public /*default*/ iCGAMultivector dual();//{
+    public default iCGAMultivector dual() {
+        return gp(createI());
+    }
     // return gp(createI().versorInverse());
     //   return gp(createI().reverse()); //???
     //   return ip(createI().versorInverse(),LEFT_CONTRACTION);
@@ -493,8 +503,8 @@ public interface iCGAMultivector {
     // irgendwie sollten alle diese Methode in die Metric-Klasse ausgelagert werden
     
     /**
-     * Get the index of the basevector in the conformal vector which represents
-     * the euclid x base vector.
+     * Get the index of the basevector in the grade 1 part of the multivector 
+     * which represents the euclid x base vector.
      * 
      * @return index in the conformal vector representing the euclid x base vector
      */

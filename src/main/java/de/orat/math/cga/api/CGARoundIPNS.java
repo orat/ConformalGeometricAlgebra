@@ -17,7 +17,7 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
     
     boolean isNormalized = false;
     
-    CGARoundIPNS(CGAMultivector m){
+    CGARoundIPNS(CGAMultivector m) throws IllegalArgumentException{
         super(m);
     }
     CGARoundIPNS(iCGAMultivector impl){

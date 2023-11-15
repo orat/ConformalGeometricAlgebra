@@ -8,10 +8,7 @@ import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Quat4d;
 import org.jogamp.vecmath.Tuple3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -70,7 +67,7 @@ public class CGAMultivector {
     CGAMultivector(){
         switch (implversion){
             case "ganja" -> {
-                //impl = new CGA2Multivector();
+                impl = new CGA2Multivector();
                 break;
             }
             case "jclifford" ->{
@@ -167,7 +164,7 @@ public class CGAMultivector {
     
     public Vector3d extractE3ToVector3d(){
         double[] vector = impl.extractCoordinates(1);
-        int index = impl.getEStartIndex();
+        int index = impl.getEStartIndex(); // 1 
         return new Vector3d(vector[index++], vector[index++], vector[index]);
     }
     public Point3d extractE3ToPoint3d(){
@@ -180,18 +177,6 @@ public class CGAMultivector {
         double[] vector = extractCoordinates();
         return new Vector3d(vector[18], vector[20], vector[24]);
     }
-    
-    /**
-     * Extract coordinates.
-     * 
-     * @return s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
-     * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
-     * e012inf, e013inf, e023inf, e123inf, e0123inf
-     * @Deprecated 
-     */
-    /*public double[] extractCoordinatesOrig(){
-        return impl.extractCoordinates();
-    }*/
     
     /** 
      * Extract coordinates.

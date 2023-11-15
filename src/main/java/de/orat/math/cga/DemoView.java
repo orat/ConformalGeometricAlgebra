@@ -1,10 +1,12 @@
 package de.orat.math.cga;
 
 import de.orat.math.cga.api.CGACircleIPNS;
+import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAKVector;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.inf;
+import static de.orat.math.cga.api.CGAMultivector.o;
 import de.orat.math.cga.api.CGAPlaneIPNS;
 import de.orat.math.cga.api.CGAPointPairIPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
@@ -36,8 +38,8 @@ public class DemoView {
             CGALineOPNS L1 = (new CGALineOPNS(p1, p2)).normalize();
             viewer3D.addCGAObject(L1, "L1");
             
-            CGARoundPointIPNS midPoint = p1.midPoint(p2);
-            viewer3D.addCGAObject(midPoint, "midPoint(p1,p2)");
+            //CGARoundPointIPNS midPoint = p1.midPoint(p2);
+            //viewer3D.addCGAObject(midPoint, "midPoint(p1,p2)");
             
             CGARoundPointIPNS p3 = new CGARoundPointIPNS(new Point3d(0.3, 1, 1));
             //viewer3D.addCGAObject(p3, "p3");
@@ -56,6 +58,29 @@ public class DemoView {
             System.out.println(L212.toString("L212")); // trivector aber keine line? att schlägt fehl
             viewer3D.addCGAObject(L212, "L212");
            
+            /*
+            CGARoundPointIPNS a = new CGARoundPointIPNS(L1.gp(p4).gp(L1));
+            CGARoundPointIPNS midPoint1 = a.midPoint(new CGARoundPointIPNS(o)); // Punkt auf L1
+            viewer3D.addCGAObject(midPoint1, "midPoint(o,L1oL1)");
+            CGARoundPointIPNS b = new CGARoundPointIPNS(L2.gp(midPoint1).gp(L2));
+            CGARoundPointIPNS midPoint2 = midPoint1.midPoint(b); // Punkt auf L2
+            viewer3D.addCGAObject(midPoint2, "P2 midPoint(midpoint1, b)");
+            CGARoundPointIPNS c = new CGARoundPointIPNS(L1.gp(midPoint2).gp(L1));
+            CGARoundPointIPNS midPoint3 = midPoint2.midPoint(c);
+            viewer3D.addCGAObject(midPoint3, "P1 midPoint(midpoint2, c)");
+           */
+                   
+            CGAMultivector L1L2 = L1.gp(L2);
+            CGAMultivector X = L1L2.sub(o.ip(L1L2).op(inf));
+            CGAMultivector Y = o.ip(L1L2);
+            
+            CGAMultivector X2 = X.extractGrade(2);
+            CGAEuclideanVector P = new CGAEuclideanVector(X.extractGrade(0).gp(Y.extractGrade(3)).
+                    sub(Y.extractGrade(1).gp(X2)).div(X2.sqr()));
+            System.out.println(P.toString("P")); // normaler 3d-Vector
+            CGARoundPointIPNS PA = new CGARoundPointIPNS(P);
+            viewer3D.addCGAObject(PA, "PA"); // Punkt auf der Lotlinie
+            
         } else {
             System.out.println("No viewer implementation found!");
         }

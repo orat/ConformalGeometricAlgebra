@@ -5,8 +5,8 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Line in outer product null space representation (grade 3 multivector),
- * corresponding to direct line in [Dorst2007].
+ * Flat line (1D) in outer product null space representation (grade 3 multivector,
+ * trivector), corresponding to direct line in [Dorst2007].
  * 
  * e1^e2^ni, e1^e3^ni, e2^e3^ni, e1^no^ni, e2^no^ni, e3^no^ni<p>
  * 
@@ -198,7 +198,7 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
      * TODO
      * sollte eigentlich conformalDirection heissen, da attitude nur die Ausrichtung
      * ohne Vorzeichen ist.
-     * umbenennen in conformalVectorDirection()
+     * umbenennen in attitude und attitude() entsprechend in direction() umbenennen?
      * 
      * @return vector direction (inclusive weight == not normalized attitude)
      */

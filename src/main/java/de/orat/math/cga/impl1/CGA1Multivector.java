@@ -85,7 +85,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     
     @Override
     public int getEStartIndex(){
-        return 1;
+        return 1; // e0 kommt noch vor e1 daher start bei 1 und nicht bei 0
     }
     @Override
     public int getEinfIndex(){

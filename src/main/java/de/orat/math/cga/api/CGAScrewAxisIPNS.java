@@ -4,7 +4,7 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * CGALineIPNS + Vielfaches von einf, entsteht bei der Addition von CGALineIPNS-Objekten.
+ * CGALineIPNS + Vielfaches von einf, entsteht bei der Addition von CGALineIPNS-Objekten?
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -40,125 +40,13 @@ public class CGAScrewAxisIPNS extends CGAFlatIPNS implements iCGABivector {
         //TODO
         return -1;
     }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+     
+    // ungetestet
+    public CGALineIPNS getLineIPNS(){
+        //TODO unklar ob das so funktioniert
+        // der code eignet sich zumindest, wenn ich einen Nullvektor sprich einen roundpoint
+        // + ein Vielfaches von inf als Multivektor habe, so wie ich das bekommen wenn ich 2 Punkte
+        // addiert und durch 2 teile
+        return new CGALineIPNS(gp(inf).gp(this).negate().div(ip(inf).sqr().gp(2)));
+    }
 }

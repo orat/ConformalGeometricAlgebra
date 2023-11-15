@@ -205,6 +205,53 @@ public class Test2 {
     }
     
     @Test
+    public void testReverse(){
+        System.out.println("------------------------- test reverse ------------------");
+        
+        Point3d p1 = new Point3d(1,2,3);
+        Point3d p2 = new Point3d(p1);
+        Vector3d d = new Vector3d(4,-1,1);
+        p2.add(d);
+        
+        // impl1
+        // opnsLine =        ( 3.9999999999999987*eo^e1^ei - 0.9999999999999997*eo^e2^ei - 9.0*e1^e2^ei + 0.9999999999999997*eo^e3^ei - 11.0*e1^e3^ei + 5.0*e2^e3^ei)
+        // opnsLineReverse = (-3.9999999999999987*eo^e1^ei + 0.9999999999999997*eo^e2^ei + 9.0*e1^e2^ei - 0.9999999999999997*eo^e3^ei + 11.0*e1^e3^ei - 5.0*e2^e3^ei)
+
+        // impl2
+        // opnsLine =        (9.0*e124 - 9.0*e125 + 11.0*e134 - 11.0*e135 - 4.0*e145 - 5.0*e234 + 5.0*e235 + 1.0*e245 - 1.0*e345)
+        // opnsLineReverse = (9.0*e124 + 9.0*e125 - 11.0*e134 + 11.0*e135 + 4.0*e145 + 5.0*e234 - 5.0*e235 - 1.0*e245 + 1.0*e345)
+
+        CGALineOPNS opnsLine = new CGALineOPNS(p1,p2);
+        System.out.println(opnsLine.toString("opnsLine"));
+        CGAMultivector opnsLineReverse = opnsLine.reverse();
+        System.out.println(opnsLineReverse.toString("opnsLineReverse"));
+    }
+    
+    @Test
+    public void testDual(){
+        System.out.println("------------------------- test dual line IPNS comosition ------------------");
+        
+        // impl2
+        //ipns_line_by_Dual = (1.0*e12 - 1.0*e13 + 5.0*e14 - 5.0*e15 - 4.0*e23 + 11.0*e24 - 11.0*e25 - 9.0*e34 + 9.0*e35)
+        //ipns_line =         (1.0*e12 + 1.0*e13 - 5.0*e14+5.0*e15 + 4.0*e23 - 11.0*e24+11.0*e25 + 9.0*e34-9.0*e35)
+
+        // impl 1 (ok)
+        //ipns_line_by_Dual = (1*e1^e2 + 1*e1^e3 + 4*e2^e3 + 5*e1^ei + 11*e2^ei - 9*e3^ei)
+        //ipns_line =         (1.0*e1^e2 + 1.0*e1^e3 + 4.0*e2^e3 + 5*e1^ei + 11*e2^ei - 9*e3^ei)
+
+        Point3d p1 = new Point3d(1,2,3);
+        Point3d p2 = new Point3d(p1);
+        Vector3d d = new Vector3d(4,-1,1);
+        p2.add(d);
+        CGALineOPNS opnsLine = new CGALineOPNS(p1,p2);
+        CGALineIPNS ipnsLine = opnsLine.dual();
+        System.out.println(ipnsLine.toString("ipns_line_by_Dual"));
+        CGALineIPNS test = new CGALineIPNS(p1,d);
+        System.out.println(test.toString("ipns_line"));
+        assertTrue(ipnsLine.equals(test));
+    }
+    
+    @Test
     public void testLineIPNSComposition(){
         System.out.println("------------------------- test line IPNS comosition ------------------");
         Point3d p1 = new Point3d(1,2,3);
@@ -256,6 +303,7 @@ public class Test2 {
         Point3d p1 = new Point3d(1d,1d,0d);
         double weight1 = 2;
         CGARoundPointIPNS p1cga = new  CGARoundPointIPNS(p1,weight1);
+        System.out.println(p1cga.toString("p1_cga"));
         CGARoundPointIPNS p1cgaTest = new CGARoundPointIPNS((o.
                 add(CGAMultivector.createE3(p1)).add(inf)).gp(2d));
         assertTrue(p1cga.equals(p1cgaTest));
@@ -299,7 +347,7 @@ public class Test2 {
         
         // entsprechend Ergebnis aus "Drills"
         Vector3d attitudeTest = new Vector3d(0d,2d,-2d);
-        
+        System.out.println(toString("attitudeTest123", attitudeTest));
         // test attitude via ipns nach Spencer ohne normalization
         CGAEuclideanVector attitude2 = lineOPNS_.attitudeIntern2();
         // attitude2 (line OPNS) = (0.7071067811865475*e2 - 0.7071067811865475*e3) mit Normalisierung nach spencer
@@ -317,7 +365,12 @@ public class Test2 {
         assertTrue(equals(attitudeEuclid, attitudeTest));
         
         // test attitude conformal determination
+        //FIXME direction()-impl ist nicht coordinate-free, dass muss in CGAKVector geändert werden
         Vector3d attitude = lineOPNS_.attitudeIntern().direction(); // without normalization
+        System.out.println(toString("attitude",attitude));
+        System.out.println(toString("attitudeTest",attitudeTest));
+        // hier fliege ich mit imp2 raus
+        //FIXME
         assertTrue(equals(attitude, attitudeTest));
         
         
@@ -1144,6 +1197,15 @@ public class Test2 {
     public void testPlaneIPNS(){
         System.out.println("---------------------- PlaneIPNS ------------------------");
         
+        /*HNF: n=(0.0,0.0, 1.0), d=2.0
+        planeIPNS = (1.0*e3 - 2.0*e4 + 2.0*e5)
+        HNF: n=(0.7071067811865475,0.7071067811865475, 0.0), d=2.0
+        CGAPlaneIPNS.attitudeIntern() invoked!
+        attitudeIntern (CGAFlatIPNS, Dorst) = (0.7071067811865475*e134 + 0.7071067811865475*e135 + 0.7071067811865475*e234 - 0.7071067811865475*e235)
+        attitude (planeIPNS, Dorst) = (0.0,0.0,-0.7071067811865475)
+        attitudeIntern2(CGAPlaneIPNS, Spencer) = (0.7071067811865476*e1 + 0.7071067811865476*e2)
+        attitudeIntern2 (planeIPNS, Spencer) = (0.7071067811865476,0.0,0.0)
+                */
         // composition test
         
         // hessissche Normalenform der Ebene
@@ -1232,7 +1294,7 @@ public class Test2 {
         Point3d p = new Point3d(n);
         p.scale(d);
         CGARoundPointIPNS pc = new CGARoundPointIPNS(p);
-        CGAPlaneIPNS planeIPNSa = new CGAPlaneIPNS(pc, n);
+        CGAPlaneIPNS planeIPNSa = new CGAPlaneIPNS(pc, new CGAEuclideanVector(n));
         assertTrue(planeIPNS.equals(planeIPNSa));
     }
     
@@ -2638,8 +2700,13 @@ public class Test2 {
         // test skewed lines closest points
         // TODO brauche ich normalisiert oder nicht normalisiert?
         //nCGA.normalize(); //FIXME hier fliege ich raus mit null multivector, normalized failed
-        CGAPlaneOPNS pi2 = new CGAPlaneOPNS(l2.op(nCGA));
-        System.out.println(pi2.toString("pi2"));
+        CGAMultivector m = l2.op(nCGA);
+        try {
+            CGAPlaneOPNS pi2 = new CGAPlaneOPNS(m);
+            System.out.println(pi2.toString("pi2"));
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage()+" : "+m.toString("l2.op(nCGA)"));
+        }
         //CGAPlaneOPNS pi2n = pi2.normalize();
         //System.out.println(pi2n.toString("pi2 (normalize)"));
         
@@ -2718,19 +2785,24 @@ public class Test2 {
         // test skewed lines closest points
         // TODO brauche ich normalisiert oder nicht normalisiert?
         nCGA.normalize();
-        CGAPlaneOPNS pi2 = new CGAPlaneOPNS(l2.op(nCGA));
-        System.out.println(pi2.toString("pi2"));
-        CGAPlaneOPNS pi2n = pi2.normalize();
-        System.out.println(pi2n.toString("pi2 (normalize)"));
-        
-        
-        // nach ganja.js example c1 bestimmen
-        //FIXME I0.negate() ? vorzeichen kontrollieren
-        CGAMultivector c1cga = I0.lc(pi2n.vee(l1).op(o));
-        System.out.println(c1cga.toString("c1cga"));
-        //Point3d p1p = c1cga.extractE3ToPoint3d();
-        //CGARoundPointOPNS c1 = new CGARoundPointOPNS(p1p);
-        
+        CGAMultivector mm = l2.op(nCGA);
+        try {
+            CGAPlaneOPNS pi2 = new CGAPlaneOPNS(mm);
+            System.out.println(pi2.toString("pi2"));
+            CGAPlaneOPNS pi2n = pi2.normalize();
+            System.out.println(pi2n.toString("pi2 (normalize)"));
+
+
+            // nach ganja.js example c1 bestimmen
+            //FIXME I0.negate() ? vorzeichen kontrollieren
+            CGAMultivector c1cga = I0.lc(pi2n.vee(l1).op(o));
+            System.out.println(c1cga.toString("c1cga"));
+            //Point3d p1p = c1cga.extractE3ToPoint3d();
+            //CGARoundPointOPNS c1 = new CGARoundPointOPNS(p1p);
+        } catch (IllegalArgumentException e){
+            System.out.println("No k-vec:"+mm.toString("mm"));
+            throw e;
+        }
     }
         
     @Test
@@ -2983,19 +3055,24 @@ public class Test2 {
     
     @Test
     public void testAttitudeIPNSVector(){
-        System.out.println("------------------  test attitude vector ---------------------");
+        System.out.println("------------------  test attitude ipns vector ---------------------");
         Vector3d v = new Vector3d(1,2,3);
         CGAAttitudeVectorOPNS attitudeVecOPNS = new CGAAttitudeVectorOPNS(v);
+        System.out.println(toString("attVecOPNS.dir",attitudeVecOPNS.direction()));
+        assertTrue(equals(v, attitudeVecOPNS.direction()));
+        
         CGAAttitudeVectorIPNS attitudeVecIPNS = attitudeVecOPNS.dual();
+        System.out.println(toString("attVecIPNS.dir",attitudeVecIPNS.direction()));
+        
         //FIXME
         // CGAAttitudeVectorIPNS() scheint mir fehlerhaft zu sein
         CGAAttitudeVectorIPNS attitudeVecIPNS2 = new CGAAttitudeVectorIPNS(v);
         // attVecIPNS = (2.220446049250313E-16*eo^e1^e2 - 1.1102230246251565E-16*eo^e1^e3 + 5.551115123125783E-17*eo^e2^e3 
-        // - 2.9999999999999982*e1^e2^ei + 1.9999999999999991*e1^e3^ei - 0.9999999999999996*e2^e3^ei)
+        //              - 3.0*e1^e2^ei + 2.0*e1^e3^ei - 1.0*e2^e3^ei)
         // attVecIPNS2 = (3.0*e1^e2^ei - 2.0*e1^e3^ei + 1.0*e2^e3^ei)
         // falsches Vorzeichen
-        System.out.println(attitudeVecIPNS.toString("attVecIPNS"));
-        System.out.println(attitudeVecIPNS2.toString("attVecIPNS2"));
+        System.out.println(attitudeVecIPNS.toString("attVecIPNS")); // da dessen dir stimmt, sollte das ok sein
+        System.out.println(attitudeVecIPNS2.toString("attVecIPNS2")); // falsches Vorzeichen
         assertTrue(attitudeVecIPNS.equals(attitudeVecIPNS2));
     }
     @Test

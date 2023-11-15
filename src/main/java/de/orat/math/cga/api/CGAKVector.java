@@ -20,7 +20,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         try {
             testGrade();
         } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage()+" "+impl.toString());
+            System.out.println("Composition of the k-vector is failed: "+m.toString("mv"));
             throw(e);
         }
     }
@@ -195,7 +195,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         try {
             testGrade();
         } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage()+": "+impl.toString());
+            System.out.println(e.getMessage());
             throw(e);
         }
     }
@@ -455,28 +455,33 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         // 0.36734504072736274*e2 + 0.1835667072335959*e3 - 
         // 0.3445510478954946*e1^e2^e3 + 0.18137731261233903*ei - 0.28195912872783596*e1^e2^ei + 0.253138237443652*e1^e3^ei - 0.15195837009131624*e2^e3^ei
         // schlägt fehlt bei imaginary point-pair == ipns circle. da rountpointipns keine 3-er-Komponenten enthalten darf
-        CGARoundPointIPNS result = new CGARoundPointIPNS((mn.negate().div(inf.lc(mn))).compress());
-        //CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(1d).ip(this)).negate().compress());
-        // z.B. locationFromTangentAndRound=eo + 0.02*e1 + 0.02*e2 + e3 + 0.5*ei
-        // bei input von p=(0.02,0.02,1.0), funktioniert, aber vermutlich nur,
-        // da hier die Wichtung bei e0==1 ist.
-        // locationFromTangentAndRound=2.0*eo + 0.5000000000000001*e2 - 0.5*ei
-        // hiermit funktioniert es nicht mehr
-        System.out.println("locationFromTangentAndRound="+result.toString());
-        
-        // center of this round, as a null vector
-        // https://github.com/pygae/clifford/blob/master/clifford/cga.py Zeile 284:
-        // self.mv * self.cga.einf * self.mv // * bedeutet geometrisches Produkt
-        //TODO ausprobieren?
-        
-        // euclidean part rausziehen, scheint zu funktionieren
-        CGAMultivector o = CGAMultivector.createOrigin(1d);
-        CGAMultivector resultEuclidean = o.op(inf).ip(o.op(inf).op(result));
-        // location (decomposed) euclidean only = (0.4999999999999998*e2)
-        // FIXME nur halb so gross wie ursprünglich
-        // bei circleipns ==0 FIXME
-        System.out.println(resultEuclidean.toString("location (decomposed) euclidean only"));
-        return result;
+        CGAMultivector m = mn.negate().div(inf.lc(mn));
+        try {
+            CGARoundPointIPNS result = new CGARoundPointIPNS(m.compress());
+            // z.B. locationFromTangentAndRound=eo + 0.02*e1 + 0.02*e2 + e3 + 0.5*ei
+            // bei input von p=(0.02,0.02,1.0), funktioniert, aber vermutlich nur,
+            // da hier die Wichtung bei e0==1 ist.
+            // locationFromTangentAndRound=2.0*eo + 0.5000000000000001*e2 - 0.5*ei
+            // hiermit funktioniert es nicht mehr
+            System.out.println("locationFromTangentAndRound="+result.toString());
+
+            // center of this round, as a null vector
+            // https://github.com/pygae/clifford/blob/master/clifford/cga.py Zeile 284:
+            // self.mv * self.cga.einf * self.mv // * bedeutet geometrisches Produkt
+            //TODO ausprobieren?
+
+            // euclidean part rausziehen, scheint zu funktionieren
+            CGAMultivector o = CGAMultivector.createOrigin(1d);
+            CGAMultivector resultEuclidean = o.op(inf).ip(o.op(inf).op(result));
+            // location (decomposed) euclidean only = (0.4999999999999998*e2)
+            // FIXME nur halb so gross wie ursprünglich
+            // bei circleipns ==0 FIXME
+            System.out.println(resultEuclidean.toString("location (decomposed) euclidean only"));
+            return result;
+        } catch (IllegalArgumentException e){
+            System.out.println("grade error :"+m.toString("roundPointIPNS"));
+            throw e;
+        }
     }
     /**
      * Determines location from tangend and round objects and also from its dual.
@@ -496,12 +501,17 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
     /**
      * Extract attitude/direction from I0^einf multivector representation.
      * 
+     * example: e1^ei + e2^ei + e3^ei
+     * 
      * @return direction/attitude
      */
     protected Vector3d extractAttitudeFromEeinfRepresentation(){
         double[] coordinates = impl.extractCoordinates(2);
         //FIXME indizes hängen von der impl ab
-        return new Vector3d(coordinates[12-6], coordinates[14-6], coordinates[15-6]);
+        Vector3d result = new Vector3d(coordinates[12-6], coordinates[14-6], coordinates[15-6]);
+        CGAMultivector res = this.ip(o).negate();
+        System.out.println("###"+res.toString("extractAttFromEinf")+" "+this.toString("orig"));
+        return result;
     }
     /**
      * Extract attitude/direction from Bivector^einf multivector representation.

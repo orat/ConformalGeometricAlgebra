@@ -1,7 +1,8 @@
 package de.orat.math.cga.impl2;
 
-//import de.orat.math.cga.impl1.CGA1Multivector;
+import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.impl2.generated.CGA;
+//import de.orat.math.cga.impl2.generated.R302;
 import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
@@ -12,7 +13,10 @@ import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
 public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implements iCGAMultivector {
     
     static CGA2Multivector defaultInstance = new CGA2Multivector(0,0d);
-            
+         
+    // creation of a default instance
+    public CGA2Multivector(){}
+    
     //TODO
     // "1","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134","e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345"
     // als Enumeration bauen, damit ich die Strings und Indizes automatisch robust zusammen definieren kann
@@ -24,10 +28,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         super(idx, value);
     }
     
-    // TODO
-    // Umstellen auf CGA1Multivector.toString() implementation
-    @Override
-    public String toString(){
+    
+    //@Override
+    /*public String toStringOrig(){
         StringBuilder sb = new StringBuilder();
         for (int i=0;i<_mVec.length;i++){
             sb.append(_basis[i]).append("=").append(String.valueOf(_mVec[i]));
@@ -35,6 +38,55 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         }
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
+    }*/
+    @Override
+    public String toString(){
+        return toString(this.basisBladeNames());
+    }
+    //private static double eps = 0.00001;
+    /**
+     * TODO
+     * Umstellen auf e0 und einf
+     *
+     * @param bvNames
+     * @return 
+     */
+    public String toString(String[] bvNames) {
+        boolean empty = true;
+        for (int i=0;i<_mVec.length;i++){
+            if (_mVec[i] != 0) {
+                empty = false;
+                break;
+            }
+        }
+        if (empty) {
+            return "0";
+        } else {
+            StringBuilder result = new StringBuilder();
+            boolean firstSummand = true;
+            for (int i=0; i<_mVec.length; i++) {
+                double value = _mVec[i];
+                String S = Double.toString(value);
+                if  (Math.abs(value) > CGAMultivector.eps){
+                    if (i == 0) {
+                        result.append(S);
+                    } else if (S.charAt(0) == '-') {
+                        if (!firstSummand) result.append(" - ");
+                        result.append(S.substring(1));
+                        result.append("*");
+                        result.append(bvNames[i]);
+                        
+                    } else {
+                        if (!firstSummand) result.append(" + ");
+                        result.append(S);
+                        result.append("*");
+                        result.append(bvNames[i]);
+                    }
+                    firstSummand = false;
+                }
+            }
+            return result.toString();
+        }
     }
     
     @Override
@@ -70,7 +122,11 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
     }
     /**
-     * dual.
+     * Dual operation.
+     * 
+     * TODO<br>
+     * warum funktioniert diese Implementierung nicht. Diese sollte viel performanter
+     * sein, als die default impl<p>
      * 
      * @return poincare duality operator
      */
@@ -78,32 +134,33 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     public CGA2Multivector dual(){
         return new CGA2Multivector(CGA.unop_Dual(this));
     }
+    
     /**
      * Conjugation.
      * 
-     * For Quaternionen:
-     * The conjugate is useful because it has the following properties:
+     * For Quaternionen:<br>
+     * The conjugate is useful because it has the following properties:<p>
      *
      * qa' * qb' = (qb*qa)' In this way we can change the order of the multiplicands.
      * q * q' = a2 + b2 + c2 + d2 = real number. Multiplying a quaternion by its 
      * conjugate gives a real number. This makes the conjugate useful for finding 
      * the multiplicative inverse. For instance, if we are using a quaternion q 
      * to represent a rotation then conj(q) represents the same rotation in the reverse direction.
-     * Pout = q * Pin * q' We use this to calculate a rotation transform.
+     * Pout = q * Pin * q' We use this to calculate a rotation transform.<p>
      *
-     * For CGA:
+     * For CGA:<p>
      * 
-     * This reverses all directions in space
+     * This reverses all directions in space<p>
      *
-     * A~ denotes the conjugate of A
+     * A~ denotes the conjugate of A<p>
      *
-     * conjugate, reverse and dual are related as follows.
+     * conjugate, reverse and dual are related as follows.<p>
      *
-     * A~= (A†)* = (A*)†
+     * A~= (A†)* = (A*)†<p>
      *
-     * identities
+     * identities<p>
      *
-     * (A * B)~ = B~* A~
+     * (A * B)~ = B~* A~<p>
      * 
      * @return Cifford conjugate
      */
@@ -116,8 +173,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
      * The reverse function of a multivector reverses the order of its factors, 
      * including the order of the base values within a component. 
      * 
-     * The reverse 
-     * function is denoted by †, so the reversal of A is denoted by A†.
+     * The reverse function is denoted by †, so the reversal of A is denoted by A†.<p>
      * 
      * @return reverse the order of the basis blades
      * 
@@ -139,23 +195,35 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
  
     @Override
     public int getEStartIndex(){
-        return 1;
+        return 0; // e4, e5 kommen am Ende daher start bei 0
     }
     @Override
     public int getEinfIndex(){
-        return 0;
+        throw new RuntimeException("not implemented1");
+        // das läßt sich nicht implementieren
+        //TODO
+        // besser im Interface durch eine methode ersetzen, die den Wert von einf
+        // beschafft
+        //return 0;
     }
     @Override
     public int getOriginIndex(){
-        return 4;
+        throw new RuntimeException("not implemented1");
+        // das läßt sich nicht implementieren
+        //TODO
+        // besser im Interface durch eine methode ersetzen, die den Wert von e0
+        // beschafft
     }
     /**
      * Get the k-blade (k-vector) of the given grade k.
      * 
      * 0-blades are scalars, 1-blades are vectors, 2-blades are bivectors, 
      * 3-blades are threevectors, 4-blades are quad-vectors and 5-blades are
-     * called pseudo-scalars.
+     * called pseudo-scalars.<p>
      * 
+     *  "","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134",
+     *  "e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345"<p>
+     *
      * equivalent to k-vector/k-blades
      * @param grade
      * @return 
@@ -339,7 +407,15 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
     @Override
     public iCGAMultivector createOrigin(double scale) {
-        return new CGA2Multivector(CGA.binop_Add(e4,e5));
+        CGA e4s = new CGA(4, -0.5*scale);
+	CGA e5s = new CGA(5, 0.5*scale);
+        return new CGA2Multivector(CGA.binop_Add(e4s,e5s));
+    }
+    @Override
+    public iCGAMultivector createInf(double scale) {
+        CGA e4s = new CGA(4, scale);
+	CGA e5s = new CGA(5, scale);
+        return new CGA2Multivector(CGA.binop_Add(e5s, e4s));
     }
     @Override
     public iCGAMultivector createEx(double scale) {
@@ -353,10 +429,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     public iCGAMultivector createEz(double scale) {
        return new CGA2Multivector(new CGA(3, scale));
     }
-    @Override
-    public iCGAMultivector createInf(double scale) {
-        return new CGA2Multivector(CGA.binop_smul(0.5d, CGA.binop_Sub(e5, e4)));
-    }
+    
     @Override
     public iCGAMultivector createScalar(double scale){
         return new CGA2Multivector(new CGA(0, scale));
@@ -403,66 +476,95 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
 
     @Override
     public int grade() {
-        //  { "1","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134","e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345" };
+        // 1 | index = 0
+        // e1,e2,e3,e4,e5 | index = 1-5
+        // e12,e13,e14,e15,e23,e24,e25,e34,e35,e45 | Index = 6-15
+        // e123,e124,e125,e134,e135,e145,e234,e235,e245,e345 | Index = 16-25
+        // e1234,e1235,e1245,e1345,e2345 | Index = 26-30
+        // e12345 | Index = 31
+        
 	int result = -1;
-        if (_mVec[0] != 0){
+        
+        // scalar
+        if (Math.abs(_mVec[0]) > CGAMultivector.eps){
             result = 0;
         }
+        
+        // 1-vectors
         boolean found = false;
         for (int i=1;i<6;i++){
-            if (_mVec[i] != 0) found = true;
+            if (Math.abs(_mVec[i]) > CGAMultivector.eps) found = true;
         }
         if (found){
+            // kein Scalar
             if (result == -1){
+                // weitere blades müssen noch getestet werden
                 result = 1;
             } else {
                 return -1;
             }
         }
+        
+        // 2-vectors
         found = false;
         for (int i=6;i<16;i++){
-             if (_mVec[i] != 0) found = true;
+             if (Math.abs(_mVec[i]) > CGAMultivector.eps) found = true;
         }
         if (found){
+            // kein scalar und kein 1-vector 
             if (result == -1){
+                // weitere blades müssen noch getestet werden
                 result = 2;
             } else {
                 return -1;
             }
         }
+        
+        // 3-vectors
         found = false;
         for (int i=16;i<26;i++){
-             if (_mVec[i] != 0) found = true;
+             if (Math.abs(_mVec[i]) > CGAMultivector.eps) found = true;
         }
         if (found){
+            // kein scalar, 1-vector und 2-vector
             if (result == -1){
+                // weitere blades müssen noch getestet werden
                 result = 3;
             } else {
                 return -1;
             }
         }
+        
+        // 4-vectors
         found = false;
         for (int i=26;i<31;i++){
-             if (_mVec[i] != 0) found = true;
+             if (Math.abs(_mVec[i]) > CGAMultivector.eps) found = true;
         }
         if (found){
             if (result == -1){
+                // weitere blades müssen noch getestet werden
                 result = 4;
             } else {
                 return -1;
             }
         }
+        
+        // pseudo-scalar
         found = false;
-        if (_mVec[31] != 0) found = true;
+        if (Math.abs(_mVec[31]) > CGAMultivector.eps) found = true;
         if (found){
             if (result == -1){
-                result = 5;
+                return 5;
             } else {
                 return -1;
             }
         }
+        
+        // wenn alle 32 Element == 0 dann grade 0
+        if (result == -1) return 0;
+        
         return result;
-     }
+    }
 
     @Override
     public iCGAMultivector extractGrade(int[] G) {
@@ -470,12 +572,18 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
 
     @Override
+    public iCGAMultivector meet(iCGAMultivector mv) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    @Override
     public iCGAMultivector join(iCGAMultivector mv) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    static String[] basisBladesNames = new String[]{"","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134",
+            "e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345"};
     @Override
     public String[] basisBladeNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       return basisBladesNames;
     }
 }

@@ -17,6 +17,7 @@ public class CGAEuclideanVector extends AbstractEuclideanKVector implements iCGA
     public CGAEuclideanVector(CGAMultivector m){
         super(m);
         // TODO test dass e0, einf nicht vorhanden ist!!!
+        //System.out.println(m.toString("euclidean vec"));
     }
     
     public CGAEuclideanVector(double[] values){
@@ -77,7 +78,6 @@ public class CGAEuclideanVector extends AbstractEuclideanKVector implements iCGA
     }
     
     public CGAEuclideanBivector euclideanDual(){
-       // https://arxiv.org/pdf/1205.5935.pdf eq. 89
        return new CGAEuclideanBivector(this.lc(I3i)); // [Dorst2009] p.80
        // hat auch nichts gebracht, Vorzeichen scheint immer noch falsch zu sein
        //TODO

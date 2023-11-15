@@ -40,7 +40,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  */
 public class CGARoundPointIPNS extends CGARoundIPNS {
     
-    public CGARoundPointIPNS(CGAMultivector m){
+    public CGARoundPointIPNS(CGAMultivector m) throws IllegalArgumentException {
         super(m.compress());
     }
     public CGARoundPointIPNS(double[] values){
@@ -79,10 +79,14 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
         if (weight == 1d) isNormalized=true;
     }
     
+    public CGARoundPointIPNS(CGAEuclideanVector v){
+        this(create(v.extractE3ToVector3d(),1d));
+    }
+    
     /**
      * Create point with given weight.
      * 
-     * implementation looks indentical to
+     * implementation looks identical with
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      *
      * @param p euclidian point/vector

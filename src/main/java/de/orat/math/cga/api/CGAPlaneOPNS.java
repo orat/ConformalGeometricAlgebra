@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Vector3d;
 import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
- * Plane in outer product null space representation (grade 4 multivector), 
+ * (Flat) plane in outer product null space representation (grade 4 multivector), 
  * corresponding to direct plane in [Dorst2007].
  * 
  * e1^e2^e3^ni, e1^e2^no^ni, e1^e3^no^ni, e2^e3^no^ni<p>
@@ -14,7 +14,7 @@ import de.orat.math.cga.spi.iCGAMultivector;
  */
 public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     
-    public CGAPlaneOPNS(CGAMultivector m){
+    public CGAPlaneOPNS(CGAMultivector m) throws IllegalArgumentException{
         super(m);
     }
     
@@ -30,9 +30,9 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     // composition
     
     /**
-     * Create plane in outer product null space representation (grade 4 multivector).
+     * Creates a (flat) plane in outer product null space representation (grade 4).
      * 
-     * TODO
+     * TODO<br>
      * herausfinden zu was für einer Ausrichtung des Normalenvektors dies führen soll.
      * 
      * @param p1 first point in inner product null space representation
@@ -44,9 +44,9 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     }
     
     /**
-     * Create plane in outer product null space representation (grade 4 multivector).
+     * Creates a  (flat) plane in outer product null space representation (grade 4).
      * 
-     * TODO
+     * TODO<br>
      * herausfinden zu was für einer Ausrichtung des Normalenvektors dies führen soll.
      * 
      * @param p1
@@ -76,11 +76,11 @@ public class CGAPlaneOPNS extends CGAFlatOPNS implements iCGAQuadvector {
     }
     
     /**
-     * Create a dual plane as a mid plane between two given result in outer product
-     * null space representation (grade 4 multivector).
+     * Creates a (flat) plane as a mid plane between two given result in outer product
+     * null space representation (grade 4).
      * 
-     * TODO
-     * unklares Vorzeichen des Normalenvektors der Ebene
+     * TODO<br>
+     * unklares Vorzeichen des Normalenvektors der Ebene<p>
      * 
      * @param p1 point 1
      * @param p2 point 2

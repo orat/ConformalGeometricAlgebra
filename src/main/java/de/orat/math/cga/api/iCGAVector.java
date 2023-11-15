@@ -21,10 +21,10 @@ interface iCGAVector extends iCGAkVector {
     @Override
     default void testGrade(){
         int grade = grade();
-        if (grade != 1 && grade != 0) throw new IllegalArgumentException("The given multivector is not not grade 1 or 0! grade()="
-                 +String.valueOf(grade));
+        if (grade != 1 && grade != 0) throw new IllegalArgumentException("The given multivector has the grade "
+                 +String.valueOf(grade)+" but only 0 or 1 is allowed!");
         // allows null vectors
-        if (grade == 0 && decomposeScalar() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
+        if (grade == 0 && Math.abs(decomposeScalar()) > CGAMultivector.eps) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
                  
     }
 }

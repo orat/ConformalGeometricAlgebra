@@ -9,14 +9,14 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
 
 /**
- * Planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
+ * (Flat) planes formed between the Euclidean and Null basis, v ∧ o and v ∧ ∞, which 
  * square to 0. 
  * 
- * Planes are grade 1. Corresponding to dual plane in [Dorst2007].<p>
+ * (Flat, IPNS) planes are grade 1. Corresponding to dual plane in [Dorst2007].<p>
  * 
  * Planes are flattended spheres.<p>
  * 
- * Given two null points p and q, we can construct the dual plane in between them 
+ * Given two null points p and q, we can construct the dual (ipns) plane in between them 
  * by simple substraction: π = p − q : subtracting one normalized point from a
  * nother eliminates the o blade and returns a vector of the form π = n + δ ∞
  * which represents a dual plane with normal n at distance δ from the origin.<p>
@@ -54,12 +54,13 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
     
     /**
      * Create plane in inner product null space representation (grade 1)
-     * based on the parameters of the Hesse-Normal-Form Be careful: 
-     * This corresponds to dual plane in Dorst2007.
+     * based on the parameters of the Hesse-Normal-Form.
      * 
-     * TODO
+     * Be careful: This corresponds to dual plane in Dorst2007.<p>
+     * 
+     * TODO<br>
      * - Ein nicht normalisiertes n liefert anderen Multivektor, aber könnte der
-     * nicht die gleiche Ebene representieren?
+     *   nicht die gleiche Ebene representieren?<p>
      * 
      * @param n (normalized) normal vector of the plane
      * @param d distance of the plane to the origin
@@ -72,8 +73,8 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
             .add(createInf(d)).gp(weight));
     }
     /**
-     * Composition of a plane in ipns representation based on its normal vector and 
-     * its distance to the origin.
+     * Composition of a plane in ipns representation based on its normal vector 
+     * and its distance to the origin.
      * 
      * @param n (normalized) normal vector of the plane
      * @param d distance of the plane to the origin
@@ -82,7 +83,6 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
         this(n,d,1d);
     }
     /**
-     * 
      * @param n normalized vector of the plane
      * @param p point laying in the plane
      */
@@ -91,14 +91,13 @@ public class CGAPlaneIPNS extends CGAFlatIPNS implements iCGAVector {
     }
    
     /**
-     * 
-     * following [McDonald2022] p.199
+     * Implementation following [McDonald2022 p.199].
      * 
      * @param p
      * @param n 
      */
-    public CGAPlaneIPNS(CGARoundPointIPNS p, Vector3d n){
-        this(p.ip((new CGAEuclideanVector(n)).gp(inf)));
+    public CGAPlaneIPNS(CGARoundPointIPNS p, CGAEuclideanVector n){
+        this(p.ip(n.gp(inf)));
     }
     /**
      * Composition of a plane based on a point, a normal vector and the weight. 

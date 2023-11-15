@@ -37,7 +37,7 @@ interface iCGAQuadvector extends iCGAkVector {
     @Override
     default void testGrade(){
         int grade = grade();
-        if (grade() != 4 && grade != 0) throw new IllegalArgumentException("The given multivector is not of grade 4 or a null vector!");
+        if (grade() != 4 && grade != 0) throw new IllegalArgumentException("The given multivector is not of grade 4 or 0!");
         if (grade == 0 && decomposeScalar() != 0) throw new IllegalArgumentException("The given multivector is of grade 0 but the scalar part is != 0!");
     }
 }

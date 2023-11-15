@@ -8,7 +8,8 @@ import java.util.Arrays;
 public class CGA {
 	// just for debug and print output, the basis names
 	public static final String[] _basis = new String[] { "1","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134","e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345" };
-	public static final int _basisLength = 32;
+	
+        public static final int _basisLength = 32;
 
         // WOKAROUND private--> public
 	public double[] _mVec = new double[CGA._basisLength];
