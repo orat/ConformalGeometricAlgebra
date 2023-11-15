@@ -54,12 +54,18 @@ public class CGAMultivector {
     public static final CGAMultivector o = createOrigin(1d);
     public static final CGAMultivector inf = createInf(1d);
     
+    //TODO vergleich mit den entsprechenden Kontanten in CGAMultivector, da gibts
+    // einen Überlapp
+    public static CGAMultivector e1 = CGAMultivector.createEx(1d);
+    public static CGAMultivector e2 = CGAMultivector.createEy(1d);
+    public static CGAMultivector e3 = CGAMultivector.createEz(1d);
+    
     //TODO
     // da diese Konstanten in den Formeln auftauchen müssen die Reihenfolge der
     // auftretenden Faktoren mit der Reihenfolge der Basisvektoren im pseudoscalar
     // übereinstimmen, sonst gibts Vorzeichenprobleme
     public static final CGAMultivector I3 = createI3();
-    public static final CGAMultivector I3i = I3.inverse(); // was kommt da raus? TODO
+    public static final CGAMultivector I3i = e1.op(e2).op(e3).gp(-1); //I3.inverse(); // was kommt da raus? TODO
     public static final CGAMultivector I = createI();
     public static final CGAMultivector Ii = o.op(I3i).op(inf);
     public static final CGAMultivector I0 = o.op(inf); //inf.op(o);
@@ -121,10 +127,10 @@ public class CGAMultivector {
      * Inf encodes the metric of an Euclidean space (projectively represented space). 
      * 
      * For a geometrical CGA-round point this factor represents the distance from 
-     * that point to the origin.
+     * that point to the origin.<p>
      * 
      * This basis blade is also called "reciprocal null vector" together with the
-     * basis vector representing the origin (createOrigin()).
+     * basis vector representing the origin (createOrigin()).<p>
      * 
      * @param scale
      * @return base vector representing the point at infinity
@@ -173,13 +179,35 @@ public class CGAMultivector {
         return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     
-    public Vector3d extractE3InfToVector3d(){
-        double[] vector = extractCoordinates();
-        return new Vector3d(vector[18], vector[20], vector[24]);
+    /**
+     * Extract attitude/direction from I0^einf multivector representation.
+     * 
+     * example: e1^ei + e2^ei + e3^ei
+     * 
+     * @return direction/attitude
+     */
+    public Vector3d extractE3FromE3einf(){
+        
+        //indizes hängen von der impl ab
+        //double[] coordinates = impl.extractCoordinates(2);
+        //Vector3d result = new Vector3d(coordinates[12-6], coordinates[14-6], coordinates[15-6]);
+        
+        // alternativ aber auch hier hängen indizes von der impl ab
+        // Achtung: das funktioniert nur auf Basis der extractCoordinates() Implementierung
+        // in CGAMultivector und NICHT mit impl.extractCoordinates()
+        //double[] vector = extractCoordinates();
+        //return new Vector3d(vector[18], vector[20], vector[24]);
+        
+        // TODO nachfolgenden Code eventuell als default impl in das Interface verschieben
+        // und in der impl-Class Also CGAMultivector1 die Methode durch die effizientere Methode siehe oben
+        // überschreiben
+        return extractGrade(2).rc(o).negate().extractE3ToVector3d();
+        //System.out.println("###"+res.toString("extractAttFromEinf")+" "+this.toString("orig"));
     }
     
     /** 
-     * Extract coordinates.
+     * 
+     * Get a specific coordinates representation.
      * 
      * @return 
      * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
@@ -514,8 +542,12 @@ public class CGAMultivector {
         return new CGAMultivector(impl.undual());//impl.dual().gp(-1));
     }
     
+    // corresponding to the crossproduct
+    // aber das macht doch nur Sinn für 3d, also pur euclidean vectors
+    // verschieben in die entsprechende class?
+    // die Impl sieht so plausibel aus.
     public CGAMultivector euclideanDual(){
-        return new CGAMultivector(this.lc(I3i).impl); // [Dorst2009] p.80
+        return new CGAMultivector(lc(I3i).impl); // [Dorst2009] p.80
         //return new CGAMultivector(this.gp(I3i).impl);
         //return new CGAMultivector(this.div(I3).impl);
     }

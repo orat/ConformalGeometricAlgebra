@@ -74,13 +74,11 @@ public class CGAEuclideanVector extends AbstractEuclideanKVector implements iCGA
         // das stimmt nicht, da kommt grade-3 heraus, vermutlich brauche ich euclideanDual() statt dual()
         // [Hildenbrand2004]
         // aber mit div(i3) statt dual() stimmts:
-        return new CGAEuclideanVector(op(v2).div(I3));
+        return new CGAEuclideanVector(op(v2).lc(I3i)); //div(I3));
     }
     
     public CGAEuclideanBivector euclideanDual(){
-       return new CGAEuclideanBivector(this.lc(I3i)); // [Dorst2009] p.80
-       // hat auch nichts gebracht, Vorzeichen scheint immer noch falsch zu sein
-       //TODO
+       return new CGAEuclideanBivector(this.lc(I3)); // [Dorst2009] p.80
        // https://arxiv.org/pdf/1205.5935.pdf eq. 90
        //return new CGAEuclideanBivector(div(I3));
     }

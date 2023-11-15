@@ -213,7 +213,7 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
      */
     @Override
     public CGARoundPointIPNS normalize(){
-        CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(createInf(-1d).ip(this)));
+        CGARoundPointIPNS result = new CGARoundPointIPNS(this.div(inf.negate().ip(this)));
         result.isNormalized = true;
         return result;
     }

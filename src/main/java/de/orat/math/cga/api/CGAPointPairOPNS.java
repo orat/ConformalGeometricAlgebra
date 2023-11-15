@@ -129,7 +129,7 @@ public class CGAPointPairOPNS extends CGARoundOPNS implements iCGABivector, iCGA
         CGAAttitudeOPNS result = attitudeIntern();
         // e.g. 0.24011910999709996*e1^e3^ei - 0.3999998699932229*e2^e3^ei
         System.out.println("attitude (CGAOrientedPointPairOPNS)="+result.toString());
-        return result.extractAttitudeFromEeinfRepresentation();
+        return result.extractE3FromE3einf();
     }*/
     
     @Override

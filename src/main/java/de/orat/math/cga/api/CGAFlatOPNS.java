@@ -143,7 +143,7 @@ abstract class CGAFlatOPNS extends CGAKVector implements iCGAFlat {
         // Bestimmung von I0 einf M
         // stimmt nicht
         //CGA1Multivector dir = CGA1Multivector.createBasisVector(4,-1d).ip(this, LEFT_CONTRACTION);
-        // Vector3d attitude = dir.extractAttitudeFromEeinfRepresentation();
+        // Vector3d attitude = dir.extractE3FromE3einf();
         
         // Nach Kleppe2016
         CGAMultivector dir = rc(createOrigin(1d)).rc(createInf(1d));

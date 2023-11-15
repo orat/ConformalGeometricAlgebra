@@ -39,9 +39,11 @@ public interface iCGAMultivector {
     }
     
     // the scalar is always the first blade
-    //TODO
-    // default-impl
-    public iCGAMultivector createScalar(double d);
+    default iCGAMultivector createScalar(double d){
+        double[] values = new double[32];
+        values[0] = d;
+        return create(values);
+    }
     
     /**
      * Compressed version of this multivector if the multivector data structure
@@ -509,12 +511,14 @@ public interface iCGAMultivector {
      * @return index in the conformal vector representing the euclid x base vector
      */
     public int getEStartIndex();
-    public int getEinfIndex();
-    public int getOriginIndex();
+    //public int getEinfIndex();
+    //public int getOriginIndex();
     
     /**
-     * Extract all of the 32 coordinates in CGA. This include also 0 values.
+     * Extract all of the 32 coordinates in a specific CGA representation array. 
      * 
+     * This include also the components with numerical or structural 0 values.<p>
+     *  
      * @return s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
      * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
      * e012inf, e013inf, e023inf, e123inf, e0123inf (coordinates array of length 32)

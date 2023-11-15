@@ -65,7 +65,7 @@ public class CGAAttitudeVectorOPNS extends CGAAttitudeOPNS implements iCGABivect
     
     @Override
     public Vector3d direction(){
-        return extractAttitudeFromEeinfRepresentation();
+        return extractE3FromE3einf();
     }
     
     

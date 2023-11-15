@@ -52,8 +52,10 @@ public class CGARotor extends CGAVersor {
      * 
      * @return quaternion representing a rotation around the origin
      */
-    public Quat4d decompose(){
+    /*public Quat4d decompose(){
         Quat4d result = new Quat4d();
+        //FIXME grade = 0 als argument scheint falsch zu sein
+        // getOriginIndex() gibts nicht mehr, statt dessen vielleicht getOriginValue() einführen?
         result.w = impl.extractCoordinates(0)[impl.getOriginIndex()];
         double[] vector = impl.extractCoordinates(2);
         //TODO weitere Indizes definieren
@@ -61,7 +63,7 @@ public class CGARotor extends CGAVersor {
         result.y = vector[5];  // j
         result.z = -vector[8]; // k
         return result;
-    }
+    }*/
     
     /**
      * An more efficient implementation can use the information that the multivector 

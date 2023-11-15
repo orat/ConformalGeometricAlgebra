@@ -22,6 +22,7 @@ public class CGAEuclideanBivector extends AbstractEuclideanKVector implements iC
         return new CGAEuclideanBivector(super.normalize());
     }
     
+    // entspricht cross product scheint richtig
     public CGAEuclideanVector euclideanDual(){
         return new CGAEuclideanVector(super.euclideanDual());
     }

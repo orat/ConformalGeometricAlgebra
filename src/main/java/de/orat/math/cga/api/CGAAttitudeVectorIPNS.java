@@ -28,15 +28,7 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     
     public CGAAttitudeVectorIPNS(Vector3d t){
         //super((new CGAEuclideanVector(t)).op(inf).dual()); // ok
-        // scheint falsches Vorzeichen zu liefern
-        // ist euclideanDual() falsch?
-        // oder die verwendete Formel?
-        //FIXME
-        // beim Test von CGAEuclideanVector selbst mit euclideanDual stimmt das
-        // Vorzeichen auch schon nicht
-        // vermutlich ist euclideanDual() falsch?
-        // ohne negate() funktioniert es
-        super((new CGAEuclideanVector(t)).euclideanDual()/*.negate()*/.op(inf));
+        super((new CGAEuclideanVector(t)).euclideanDual().negate().op(inf));
     }
     
     
@@ -44,7 +36,7 @@ public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivec
     
     public Vector3d attitude(){
         CGAAttitudeVectorOPNS attitude = attitudeIntern();
-        return attitude.extractAttitudeFromEeinfRepresentation();
+        return attitude.extractE3FromE3einf();
         //TODO
         // mit was muss ich den multivector multiplizieren um die betreffenden 
         // Komponenten dann mit attitude.extractE3ToVector3d() abspalten zu können?

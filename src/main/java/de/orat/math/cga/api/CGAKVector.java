@@ -471,7 +471,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
             //TODO ausprobieren?
 
             // euclidean part rausziehen, scheint zu funktionieren
-            CGAMultivector o = CGAMultivector.createOrigin(1d);
+            //CGAMultivector o = CGAMultivector.createOrigin(1d);
             CGAMultivector resultEuclidean = o.op(inf).ip(o.op(inf).op(result));
             // location (decomposed) euclidean only = (0.4999999999999998*e2)
             // FIXME nur halb so gross wie ursprünglich
@@ -497,22 +497,10 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
  
     
     // coordinates extraction
+   
+    // um die Attitude zu bestimmen, kann die Methode in CGAMultivector verwendet werden
+    // um aus Eeinf die attitude rauszuholen
     
-    /**
-     * Extract attitude/direction from I0^einf multivector representation.
-     * 
-     * example: e1^ei + e2^ei + e3^ei
-     * 
-     * @return direction/attitude
-     */
-    protected Vector3d extractAttitudeFromEeinfRepresentation(){
-        double[] coordinates = impl.extractCoordinates(2);
-        //FIXME indizes hängen von der impl ab
-        Vector3d result = new Vector3d(coordinates[12-6], coordinates[14-6], coordinates[15-6]);
-        CGAMultivector res = this.ip(o).negate();
-        System.out.println("###"+res.toString("extractAttFromEinf")+" "+this.toString("orig"));
-        return result;
-    }
     /**
      * Extract attitude/direction from Bivector^einf multivector representation.
      * 
@@ -520,10 +508,17 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      *
      * @return direction/attitude
      */
-    protected Vector3d extractAttitudeFromBivectorEinfRepresentation(){
-         double[] coordinates = impl.extractCoordinates(3);
-         return new Vector3d(coordinates[9], coordinates[8], coordinates[7]);
-    }
+    /*protected Vector3d extractAttitudeFromBivectorEinfRepresentation(){
+        
+        //indizes hängen von der impl ab
+        //double[] coordinates = impl.extractCoordinates(3);
+        //Vector3d v = new Vector3d(coordinates[9], coordinates[8], coordinates[7]);
+              
+        CGAMultivector m = extractGrade(3).rc(o).negate().lc(I3i); //euclideanDual(); //extractE3ToVector3d();
+        //System.out.println("###"+m.toString("extractAttFromBiVecEinf")+" "+toString("orig")+
+        //        " vec=("+String.valueOf(v.x)+","+String.valueOf(v.y)+","+String.valueOf(v.z)+")");
+        return m.extractE3ToVector3d();
+    }*/
     
     
     

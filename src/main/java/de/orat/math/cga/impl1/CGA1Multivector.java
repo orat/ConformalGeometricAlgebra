@@ -87,14 +87,18 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     public int getEStartIndex(){
         return 1; // e0 kommt noch vor e1 daher start bei 1 und nicht bei 0
     }
+    //FIXME kann nicht sinnvoll coordinatenfrei implementiert werden
+    /*@Deprecated
     @Override
     public int getEinfIndex(){
         return 0;
-    }
+    }*/
+    //FIXME kann nicht sinnvoll coordinatenfrei implementiert werden
+    /*@Deprecated
     @Override
     public int getOriginIndex(){
         return 4;
-    }
+    }*/
     /**
      * Extract the coordinates from all basis blades of the given grade
      * inclusive 0 values.

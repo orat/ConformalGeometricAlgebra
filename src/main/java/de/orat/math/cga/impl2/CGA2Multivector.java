@@ -197,7 +197,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     public int getEStartIndex(){
         return 0; // e4, e5 kommen am Ende daher start bei 0
     }
-    @Override
+    /*@Override
     public int getEinfIndex(){
         throw new RuntimeException("not implemented1");
         // das läßt sich nicht implementieren
@@ -213,7 +213,8 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         //TODO
         // besser im Interface durch eine methode ersetzen, die den Wert von e0
         // beschafft
-    }
+    }*/
+    
     /**
      * Get the k-blade (k-vector) of the given grade k.
      * 
@@ -347,10 +348,75 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return new CGA2Multivector(result);
     }
     
+    /**
+     * Get a specific coordinates representation.
+     * 
+     * @return 
+     * s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+     * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
+     * e0123, e012inf, e013inf, e023inf, e123inf, 
+     * e0123inf
+     */
     @Override
     public double[] extractCoordinates(){
         double[] result = new double[_mVec.length];
-        System.arraycopy(_mVec, 0, result, 0, _mVec.length);
+        //System.arraycopy(_mVec, 0, result, 0, _mVec.length);
+        
+        // interne representation
+        // static String[] basisBladesNames = new String[]{"","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
+        // "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345",
+        // "e1234","e1235","e1245","e1345","e2345",
+        //"e12345"};
+        
+        // scalar
+        result[0] = _mVec[0];
+        // 1-vec
+        result[1] = -_mVec[4]*0.5+_mVec[5]*0.5;
+        result[2] = _mVec[1];
+        result[3] = _mVec[2];
+        result[4] = _mVec[3];
+        result[5] = (_mVec[4]+_mVec[5])*0.5;
+         
+        // 2-vec
+        // intern: start index=6 "e12","e13","e14","e15","e23","e24","e25","e34","e35","e45"
+        // extern: start index=6 "e01 , e02,  e03, e0inf, e12,  e13, e1inf, e23, e2inf, e3inf
+        result[6] = (_mVec[8]  - _mVec[9]) *0.5; // e01 = 0.5(e14-e15)
+        result[7] = (_mVec[11] - _mVec[12])*0.5;
+        result[8] = (_mVec[13] - _mVec[14])*0.5;
+        result[9] = -1 - _mVec[15]; // e0inf = -1 - e45
+        result[10] = _mVec[6]; // e12
+        result[11] = _mVec[7]; // e13
+        result[12] = _mVec[8]  + _mVec[9]; // e1inf = e15+e14
+        result[13] = _mVec[10]; // e23
+        result[14] = _mVec[11] + _mVec[12];
+        result[15] = _mVec[13] + _mVec[14]; // e3inf
+        // 3-vec
+        // intern: index=16 "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345"
+        // extern: index=16 e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
+        result[16] = 0.5*(_mVec[18]-_mVec[17]); // e012=0.5*(e125-e124)
+        result[17] = 0.5*(_mVec[20]-_mVec[19]); // e013=0.5*(e135-e134)
+        result[18] = _mVec[21]; // e01inf=e145
+        result[19] = 0.5*(_mVec[23]-_mVec[22]);// e023=0.5*(e235-e234)
+        result[20] = _mVec[24]; // e02inf=e245
+        result[21] = _mVec[25]; // e03inf=e345
+        result[22] = _mVec[16]; // e123
+        result[23] = _mVec[17]+_mVec[18]; // e12inf=e124+e125
+        result[24] = _mVec[19]+_mVec[20]; // e13inf=e134+e135
+        result[25] = _mVec[22]+_mVec[23]; // e23inf=e234+e235
+                
+        // 4-vec
+        // intern: index=26 "e1234","e1235","e1245","e1345","e2345",
+        // extern: index=26 e0123, e012inf, e013inf, e023inf, e123inf, 
+        result[26] = 0.5*(_mVec[26]-_mVec[27]); // e0123=0.5*(e1234-e1235)
+        result[27] = _mVec[28]; // e012inf=-e1245
+        result[28] = _mVec[29]; // e013inf=-e1345
+        result[29] = _mVec[30]; // e023inf=-e2345
+        result[30] = _mVec[26]+_mVec[27]; // e123inf=e1234+e1235
+                
+        // 5-vec
+        // intern: index=31 "e12345"
+        // extern: index=31 e0123inf
+        result[31] = _mVec[31] + _mVec[16]; // e12345 + e123
         return result;
     }
 
@@ -432,7 +498,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     
     @Override
     public iCGAMultivector createScalar(double scale){
-        return new CGA2Multivector(new CGA(0, scale));
+        return new CGA2Multivector(0, scale);
     }
     
     @Override
@@ -474,6 +540,15 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return Math.abs(binop_Mul(this, this.Conjugate())._mVec[0]);
     }
 
+    /**
+     * Determine the grade of the mulutivector.
+     * 
+     * This multivector implementation does not include any compression of structural
+     * zeros. Thatś why this grade()-impl uses an epsilon value to descide if a
+     * component is zero.<p>
+     * 
+     * @return -1 if the multivector is no k-vector, 0 if all components are 0, 1-5 else
+     */
     @Override
     public int grade() {
         // 1 | index = 0
@@ -580,6 +655,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    
+    // Achtung: Das bezieht sich auf die interne Representation
+    
     static String[] basisBladesNames = new String[]{"","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134",
             "e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345"};
     @Override

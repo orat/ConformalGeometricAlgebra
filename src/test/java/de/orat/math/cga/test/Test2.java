@@ -1,20 +1,12 @@
 package de.orat.math.cga.test;
 
 import de.orat.math.cga.api.CGAAttitudeBivectorOPNS;
-import de.orat.math.cga.api.CGAAttitudeBivectorOPNS;
-import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
 import de.orat.math.cga.api.CGAAttitudeScalarOPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorIPNS;
 import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
-import de.orat.math.cga.api.CGAAttitudeVectorOPNS;
-import de.orat.math.cga.api.CGAEuclideanVector;
-import de.orat.math.cga.api.CGAFlatPointIPNS;
-import de.orat.math.cga.api.CGAFlatPointOPNS;
-import de.orat.math.cga.api.CGACircleIPNS;
 import de.orat.math.cga.api.CGACircleIPNS;
 //import de.orat.math.cga.api.CGACircleOPNS;
 import de.orat.math.cga.api.CGACircleOPNS;
-import de.orat.math.cga.api.CGAEuclideanBivector;
 import de.orat.math.cga.api.CGAEuclideanBivector;
 import de.orat.math.cga.api.CGAEuclideanVector;
 import de.orat.math.cga.api.CGAFlatPointIPNS;
@@ -22,16 +14,10 @@ import de.orat.math.cga.api.CGAFlatPointOPNS;
 import de.orat.math.cga.api.CGAForceIPNS;
 import de.orat.math.cga.api.CGAForqueIPNS;
 import de.orat.math.cga.api.CGAKVector;
-import de.orat.math.cga.api.CGALineOPNS;
-import de.orat.math.cga.api.CGAPlaneOPNS;
-import de.orat.math.cga.api.CGAPointPairOPNS;
-import de.orat.math.cga.api.CGASphereOPNS;
-import de.orat.math.cga.api.CGALineIPNS;
 import de.orat.math.cga.api.CGALineIPNS;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGALinePair;
 import de.orat.math.cga.api.CGALinePair;
-import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
@@ -53,6 +39,12 @@ import org.jogamp.vecmath.Vector3d;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.orat.math.cga.api.CGAMultivector.I0;
 import static de.orat.math.cga.api.CGAMultivector.I3;
+import static de.orat.math.cga.api.CGAMultivector.I3i;
+import static de.orat.math.cga.api.CGAMultivector.e1;
+import static de.orat.math.cga.api.CGAMultivector.e2;
+import static de.orat.math.cga.api.CGAMultivector.e3;
+import static de.orat.math.cga.api.CGAMultivector.inf;
+import static de.orat.math.cga.api.CGAMultivector.o;
 import de.orat.math.cga.api.CGAOrientedPointIPNS;
 import de.orat.math.cga.api.CGAOrientedPointIPNS;
 import de.orat.math.cga.api.CGAOrientedPointOPNS;
@@ -63,7 +55,6 @@ import de.orat.math.cga.api.CGAPointPairIPNS;
 import de.orat.math.cga.api.CGAPointPairOPNS;
 import de.orat.math.cga.api.CGARoundPointIPNS;
 import de.orat.math.cga.api.CGARoundPointOPNS;
-import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGAScalarIPNS;
 import de.orat.math.cga.api.CGAScalarOPNS;
 import de.orat.math.cga.api.CGAScrewAxisIPNS;
@@ -116,11 +107,6 @@ public class Test2 {
 
     private static double epsilon = 0.0000001;
     
-    public static CGAMultivector o = CGAMultivector.createOrigin(1d);
-    public static CGAMultivector inf = CGAMultivector.createInf(1d);
-    public static CGAMultivector e1 = CGAMultivector.createEx(1d);
-    public static CGAMultivector e2 = CGAMultivector.createEy(1d);
-    public static CGAMultivector e3 = CGAMultivector.createEz(1d);
     
     public Test2() {}
 
@@ -177,6 +163,18 @@ public class Test2 {
         double distSquare = p.distSquare(origin);
         System.out.println(toString("distSquare",distSquare));
         assertTrue(equals(distSquare,8d));
+    }
+    
+    @Test
+    public void testI3i(){
+        CGAMultivector m = I3.inverse();
+        CGAMultivector m1 = I3i;
+        assertTrue(m.equals(m1));
+        
+        // I3i = (-1.0*e1^e2^e3)
+        System.out.println(m.toString("I3i"));
+        CGAMultivector m2 = e1.op(e2).op(e3).gp(-1);
+        assertTrue(m1.equals(m2));
     }
     
     @Test
@@ -304,13 +302,18 @@ public class Test2 {
         double weight1 = 2;
         CGARoundPointIPNS p1cga = new  CGARoundPointIPNS(p1,weight1);
         System.out.println(p1cga.toString("p1_cga"));
+        // mit ganja p1_cga = (2.0*e1 + 2.0*e2 + 1.0*e4 + 3.0*e5)
         CGARoundPointIPNS p1cgaTest = new CGARoundPointIPNS((o.
                 add(CGAMultivector.createE3(p1)).add(inf)).gp(2d));
+        System.out.println(p1cgaTest.toString("p1cgaTest"));
         assertTrue(p1cga.equals(p1cgaTest));
-        
+        System.out.println("location1"); // hier komme ich noch an mit ganja
         // decomposition
         // locationIPNS
         Point3d p1Test = p1cga.location();
+        System.out.println("location2"); // hier nicht mehr
+        // mit location fliege ich raus bei ganja:
+        // Composition of the k-vector is failed: mv = (0.25*e1 + 1.0*e2 + 0.5*e4 + 1.0*e5 + 0.5*e125 + 0.25*e145)
         System.out.println(toString("p1Test", p1Test)+" "+toString("p1", p1));
         assert(equals(p1,p1Test));
         
@@ -413,8 +416,8 @@ public class Test2 {
         // attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst) = (-1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei)
         // attitudePlaneOPNS = (0.5773502691896258,0.5773502691896258,-0.5773502691896258)
         // attitudePlaneOPNS (test) = (2.0*e1^e2^ei + 2.0*e1^e3^ei + 2.0*e2^e3^ei)
-        iCGAFlat.EuclideanParameters palenOPNSParameters = planeOPNS.decomposeFlat();
-        Vector3d attitudePlaneOPNS = palenOPNSParameters.attitude(); //planeOPNS.attitude();
+        iCGAFlat.EuclideanParameters planeOPNSParameters = planeOPNS.decomposeFlat();
+        Vector3d attitudePlaneOPNS = planeOPNSParameters.attitude(); //planeOPNS.attitude();
         attitudePlaneOPNS.normalize();
         System.out.println(toString("attitudePlaneOPNS",attitudePlaneOPNS));
         CGAAttitudeBivectorOPNS attitudePlaneOPNSTest = 
@@ -2016,6 +2019,17 @@ public class Test2 {
         //l2l1.decomposeLinePair();
     }
     
+    @Test 
+    public void testAttitudeBivectorOPNSDecomposition(){
+        Vector3d v1 = new Vector3d(1,2,3);
+        Vector3d v2 = new Vector3d(1,0,2);
+        Vector3d cross = new Vector3d();
+        cross.cross(v1, v2);
+        CGAAttitudeBivectorOPNS bi = new CGAAttitudeBivectorOPNS(v1, v2);
+        Vector3d dir = bi.direction();
+        assertTrue(equals(cross, dir));
+    }
+    
     @Test
      public void testAttitudeCompositionAndDecomposition(){
         System.out.println("------------- test attitude composition and decomposition in OPNS representation ---------------------");
@@ -3406,7 +3420,7 @@ public class Test2 {
         CGAForqueIPNS forque1 = F1.add(F2);
         System.out.println(forque1.toString("forque1"));
         System.out.println(forque1.flatBulk().toString("flatBulk=moment"));
-        Vector3d fb = forque1.flatBulk().extractE3InfToVector3d();
+        Vector3d fb = forque1.flatBulk().extractE3FromE3einf(); //extractE3InfToVector3d();
         //System.out.println(toString("extracted moment",fb));
         Vector3d m1 = new Vector3d();
         m1.cross(new Vector3d(c1),f1);

@@ -14,7 +14,7 @@
             jclifford impl3 not yet ready to use
             casadi    impl4, based on extended-vahlen matrices
         -->
-        <cga.impl>ganja</cga.impl>
+        <cga.impl>default</cga.impl>
         <skipTests>false</skipTests>
         <!--exec.mainClass>de.orat.math.cga.ConformalGeometricAlgebra</exec.mainClass-->
     </properties>

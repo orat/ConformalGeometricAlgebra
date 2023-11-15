@@ -104,7 +104,7 @@ public class CGATangentVectorOPNS extends CGATangentOPNS implements iCGABivector
     public Vector3d attitude(){
         CGAMultivector result = attitudeIntern();
         System.out.println("attitude="+result.toString());
-        return result.extractAttitudeFromEeinfRepresentation();
+        return result.extractE3FromE3einf();
     }*/
    
     
