@@ -2,7 +2,6 @@ package de.orat.math.cga.impl2;
 
 import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.impl2.generated.CGA;
-//import de.orat.math.cga.impl2.generated.R302;
 import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
@@ -17,10 +16,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     // creation of a default instance
     public CGA2Multivector(){}
     
-    //TODO
-    // "1","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134","e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345"
-    // als Enumeration bauen, damit ich die Strings und Indizes automatisch robust zusammen definieren kann
-    
     CGA2Multivector(de.orat.math.cga.impl2.generated.CGA cga){
         super(cga._mVec);
     }
@@ -28,22 +23,11 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         super(idx, value);
     }
     
-    
-    //@Override
-    /*public String toStringOrig(){
-        StringBuilder sb = new StringBuilder();
-        for (int i=0;i<_mVec.length;i++){
-            sb.append(_basis[i]).append("=").append(String.valueOf(_mVec[i]));
-            sb.append("\n");
-        }
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
-    }*/
     @Override
     public String toString(){
         return toString(this.basisBladeNames());
     }
-    //private static double eps = 0.00001;
+    
     /**
      * TODO
      * Umstellen auf e0 und einf
@@ -197,26 +181,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     public int getEStartIndex(){
         return 0; // e4, e5 kommen am Ende daher start bei 0
     }
-    /*@Override
-    public int getEinfIndex(){
-        throw new RuntimeException("not implemented1");
-        // das läßt sich nicht implementieren
-        //TODO
-        // besser im Interface durch eine methode ersetzen, die den Wert von einf
-        // beschafft
-        //return 0;
-    }
-    @Override
-    public int getOriginIndex(){
-        throw new RuntimeException("not implemented1");
-        // das läßt sich nicht implementieren
-        //TODO
-        // besser im Interface durch eine methode ersetzen, die den Wert von e0
-        // beschafft
-    }*/
     
     /**
-     * Get the k-blade (k-vector) of the given grade k.
+     * Get the k-vector of the given grade k.
      * 
      * 0-blades are scalars, 1-blades are vectors, 2-blades are bivectors, 
      * 3-blades are threevectors, 4-blades are quad-vectors and 5-blades are
@@ -256,12 +223,12 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         throw new IllegalArgumentException("Only 0 < grade <= 5 is allowed!");
     }
     
-    @Override
     /**
      * Set the coordinates of the given grade.
      * 
      * @throws IllegalArgumentException if the given grade does not correspoind to the
      * length of the value array or the given grade does correspond to CGA at all.
+     * @Override
      */
     public void setCoordinates(int grade, double[] values){
         if (grade < 0 || grade > 5)
@@ -305,6 +272,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
             }
         }
     }
+    
     /**
      * Grade projection/extraction.
      * 
@@ -460,9 +428,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         switch (type){
             //TODO
             // Hesteness inner product implementieren
-            case /*CGA1Multivector.*/RIGHT_CONTRACTION:
+            case RIGHT_CONTRACTION:
                 return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
-            case /*CGA1Multivector.*/LEFT_CONTRACTION:
+            case LEFT_CONTRACTION:
                 return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
             default:
                 throw new RuntimeException("Inner product type \""+String.valueOf(type)+"\" not yet implemented!");
@@ -511,11 +479,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return true;
     }
 
-    /*@Override
-    public iCGAMultivector undual() {
-        return dual().gp(-1d);
-    }*/
-
     public boolean isNull() {
         for (int i=0;i<_mVec.length;i++){
             if (_mVec[i] != 0d){
@@ -523,18 +486,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
             }
         }
         return true;
-    }
-
-    //TODO
-    // unklar, wie ich das implementieren soll
-    @Override
-    public iCGAMultivector exp() {
-        // eigentlich sollte die class CGA eine method Pow() zur Verfügung stellen
-        // unklar warum sie das nicht tut.
-        // Das scheint mir die js impl in ganja.js zu sein für n>=4
-        // var res = Element.Scalar(1), y=1, M= this.Scale(1), N=this.Scale(1); for (var x=1; x<15; x++) 
-        // { res=res.Add(M.Scale(1/y)); M=M.Mul(N); y=y*(x+1); }; return res;
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
@@ -644,22 +595,30 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
 
     @Override
-    public iCGAMultivector extractGrade(int[] G) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
     public iCGAMultivector meet(iCGAMultivector mv) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("meet not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     @Override
     public iCGAMultivector join(iCGAMultivector mv) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("joint not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
+    public iCGAMultivector exp() {
+        // eigentlich sollte die class CGA eine method Pow() zur Verfügung stellen
+        // unklar warum sie das nicht tut.
+        // Das scheint mir die js impl in ganja.js zu sein für n>=4
+        // var res = Element.Scalar(1), y=1, M= this.Scale(1), N=this.Scale(1); for (var x=1; x<15; x++) 
+        // { res=res.Add(M.Scale(1/y)); M=M.Mul(N); y=y*(x+1); }; return res;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
     
     // Achtung: Das bezieht sich auf die interne Representation
     
+    //TODO
+    // als Enumeration bauen, damit ich die Strings und Indizes automatisch robust zusammen definieren kann
+   
     static String[] basisBladesNames = new String[]{"","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134",
             "e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345"};
     @Override

@@ -10,7 +10,7 @@
         <maven.compiler.target>16</maven.compiler.target>
         <!-- verschiedene Implementierungen umschalten:
             default   Dorst2007, impl1
-            ganja     via ganja codegenerator, impl2, not tested
+            ganja     via ganja codegenerator (java) based on R410
             jclifford impl3 not yet ready to use
             casadi    impl4, based on extended-vahlen matrices
         -->

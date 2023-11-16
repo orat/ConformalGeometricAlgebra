@@ -213,6 +213,10 @@ public class CGAMultivector {
      * 
      * Get a specific coordinates representation.
      * 
+     * Hint: This must not correspond to the list of basis blade names you get
+     * but the method basedBladeNames().bedause the coordinates representation is
+     * a fixed one, independend from the used implementation.<p>
+     * 
      * @return 
      * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
      * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
@@ -324,6 +328,16 @@ public class CGAMultivector {
                     0, 0, 0, 0, 0});
     }
     
+    /**
+     * Ordered list of the 32 basis blade names of the underlaying implementation.
+     * 
+     * The first has to correspond with the scalar and the last with the pseudoscalar.<p>
+     * 
+     * Hint: This list must not correspond to the order of the coordinates you get
+     * by the method extractCoordinates().<p>
+     * 
+     * @return array of 32 basis blade names
+     */
     public String[] basisBladeNames(){
         return impl.basisBladeNames();
     }

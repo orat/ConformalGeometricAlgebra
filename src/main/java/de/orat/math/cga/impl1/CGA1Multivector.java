@@ -72,7 +72,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         return (iCGAMultivector) compress();
     }
     
-    // coordinate extaction
+    // coordinate extraction
     
     @Override
     public CGA1Multivector extractGrade(int g){
@@ -87,18 +87,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     public int getEStartIndex(){
         return 1; // e0 kommt noch vor e1 daher start bei 1 und nicht bei 0
     }
-    //FIXME kann nicht sinnvoll coordinatenfrei implementiert werden
-    /*@Deprecated
-    @Override
-    public int getEinfIndex(){
-        return 0;
-    }*/
-    //FIXME kann nicht sinnvoll coordinatenfrei implementiert werden
-    /*@Deprecated
-    @Override
-    public int getOriginIndex(){
-        return 4;
-    }*/
+   
     /**
      * Extract the coordinates from all basis blades of the given grade
      * inclusive 0 values.
@@ -318,11 +307,7 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     public CGA1Multivector createI(){
         return new CGA1Multivector(super.createI(CGA_METRIC));
     }
-    // auskommentiert da die super.undual()-Methode noch nicht richtig implementiert ist
-    /*@Override
-    public iCGAMultivector undual(){
-        return new CGA1Multivector(super.undual(CGA_METRIC));
-    }*/
+   
     /**
      * Unit multivector.
      * 

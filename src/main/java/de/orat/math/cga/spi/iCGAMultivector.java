@@ -481,13 +481,10 @@ public interface iCGAMultivector {
         return scp(reverse());
     }
     
+    //public iCGAMultivector extractGrade(int[] G);
     
-    //public iCGAMultivector extractGrade(int grade);
-    public iCGAMultivector extractGrade(int[] G);
+    public iCGAMultivector extractGrade(int g);
     
-    default iCGAMultivector extractGrade(int g) {
-        return extractGrade(new int[]{g});
-    }
     
     /**
      * Get the grade of the multivector if it is homogenious, else -1
@@ -527,6 +524,13 @@ public interface iCGAMultivector {
     public double[] extractCoordinates(int grade);
     public void setCoordinates(int grade, double[] values);
     
+    /**
+     * Ordered list of the 32 basis blade names of the underlaying implementation.
+     * 
+     * The first has to correspond with the scalar and the last with the pseudoscalar.<p>
+     * 
+     * @return array of 32 basis blade names
+     */
     public String[] basisBladeNames();
     
     public iCGAMultivector exp();
