@@ -1917,6 +1917,9 @@ public class Test2 {
         // l_OPNSTest = (2.0*eo^e2^ei + 2.0*e1^e2^ei - 2.0*eo^e3^ei - 2.0*e1^e3^ei - 2.0*e2^e3^ei)
         // attitudeIntern (CGAOrientedFiniteFlatOPNS, Dorst) = (1.9999999999999991*e2^ei - 1.9999999999999991*e3^ei)
         System.out.println(toString("attitude (Dorst2007)",attitude));
+        // default n = (-0.0,2.0,-2.0)
+        // hier fliege ich bei ganja wegen falschem Vorzeichen raus
+        //FIXME
         assertTrue(equals(n, attitude));
         
         // attitude [Kleppe2016] directional component of a lineOPNS_
@@ -2041,7 +2044,7 @@ public class Test2 {
         // y-richtung wieder rausholen - test
         Vector3d yDirVec2 = ydir.direction();
         toString("yDir (decomposed)",yDirVec2);
-        assert(equals(yDirVec, yDirVec2));
+        assertTrue(equals(yDirVec, yDirVec2));
     }
      
     // test tangent vector construction and decomposition
@@ -3072,7 +3075,17 @@ public class Test2 {
         System.out.println("------------------  test attitude ipns vector ---------------------");
         Vector3d v = new Vector3d(1,2,3);
         CGAAttitudeVectorOPNS attitudeVecOPNS = new CGAAttitudeVectorOPNS(v);
+        System.out.println(attitudeVecOPNS.toString("attVecOPNS"));
         System.out.println(toString("attVecOPNS.dir",attitudeVecOPNS.direction()));
+        // default
+        // attVecOPNS = (1.0*e1^ei + 2.0*e2^ei + 3.0*e3^ei)
+        // attVecOPNS.dir = (0.9999999999999997,1.9999999999999993,2.999999999999999)
+
+        // ganja
+        // attVecOPNS = (1.0*e14 + 1.0*e15 + 2.0*e24 + 2.0*e25 + 3.0*e34 + 3.0*e35)
+        // attVecOPNS ist ok
+        
+        //attVecOPNS.dir = (-1.0,-2.0,-3.0) alle Vorzeichen falsch
         assertTrue(equals(v, attitudeVecOPNS.direction()));
         
         CGAAttitudeVectorIPNS attitudeVecIPNS = attitudeVecOPNS.dual();

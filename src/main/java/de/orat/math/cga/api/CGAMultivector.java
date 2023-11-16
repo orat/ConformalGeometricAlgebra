@@ -170,12 +170,12 @@ public class CGAMultivector {
     
     public Vector3d extractE3ToVector3d(){
         double[] vector = impl.extractCoordinates(1);
-        int index = impl.getEStartIndex(); // 1 
+        int index = impl.getEStartIndex(); // 1 for impl1 and 0 for impl2
         return new Vector3d(vector[index++], vector[index++], vector[index]);
     }
     public Point3d extractE3ToPoint3d(){
         double[] vector = impl.extractCoordinates(1);
-        int index = impl.getEStartIndex();
+        int index = impl.getEStartIndex(); // 1 for impl1 and 0 for impl2
         return new Point3d(vector[index++], vector[index++], vector[index]);
     }
     
@@ -201,7 +201,11 @@ public class CGAMultivector {
         // TODO nachfolgenden Code eventuell als default impl in das Interface verschieben
         // und in der impl-Class Also CGAMultivector1 die Methode durch die effizientere Methode siehe oben
         // überschreiben
-        return extractGrade(2).rc(o).negate().extractE3ToVector3d();
+        CGAMultivector m = extractGrade(2).rc(o).negate();
+        System.out.println(m.toString("E3"));
+        // default: E3 = (0.9999999999999997*e1 + 1.9999999999999993*e2 + 2.999999999999999*e3)
+        // ganja: E3 = (1.0*e1 - 2.0*e2 - 3.0*e3)
+        return m.extractE3ToVector3d();
         //System.out.println("###"+res.toString("extractAttFromEinf")+" "+this.toString("orig"));
     }
     

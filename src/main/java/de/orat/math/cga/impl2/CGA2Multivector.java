@@ -360,7 +360,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     @Override
     public double[] extractCoordinates(){
         double[] result = new double[_mVec.length];
-        //System.arraycopy(_mVec, 0, result, 0, _mVec.length);
         
         // interne representation
         // static String[] basisBladesNames = new String[]{"","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
@@ -370,26 +369,29 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         
         // scalar
         result[0] = _mVec[0];
+        
         // 1-vec
-        result[1] = -_mVec[4]*0.5+_mVec[5]*0.5;
-        result[2] = _mVec[1];
-        result[3] = _mVec[2];
-        result[4] = _mVec[3];
-        result[5] = (_mVec[4]+_mVec[5])*0.5;
+        // extern: startindex=1 e0, e1, e2, e3, einf
+        result[1] = (_mVec[5] -_mVec[4])*0.5; // e0=0.5*(e5-e4)
+        result[2] = _mVec[1]; // e1
+        result[3] = _mVec[2]; // e2
+        result[4] = _mVec[3]; // e3
+        result[5] = (_mVec[4]+_mVec[5])*0.5; // einf = e5+e4
          
         // 2-vec
         // intern: start index=6 "e12","e13","e14","e15","e23","e24","e25","e34","e35","e45"
         // extern: start index=6 "e01 , e02,  e03, e0inf, e12,  e13, e1inf, e23, e2inf, e3inf
         result[6] = (_mVec[8]  - _mVec[9]) *0.5; // e01 = 0.5(e14-e15)
-        result[7] = (_mVec[11] - _mVec[12])*0.5;
-        result[8] = (_mVec[13] - _mVec[14])*0.5;
+        result[7] = (_mVec[11] - _mVec[12])*0.5; // e02 = 0.5(e24-e25)
+        result[8] = (_mVec[13] - _mVec[14])*0.5; // e03 = 0.5(e34-e35)
         result[9] = -1 - _mVec[15]; // e0inf = -1 - e45
         result[10] = _mVec[6]; // e12
         result[11] = _mVec[7]; // e13
         result[12] = _mVec[8]  + _mVec[9]; // e1inf = e15+e14
         result[13] = _mVec[10]; // e23
-        result[14] = _mVec[11] + _mVec[12];
-        result[15] = _mVec[13] + _mVec[14]; // e3inf
+        result[14] = _mVec[11] + _mVec[12]; // e2inf=e25+e24
+        result[15] = _mVec[13] + _mVec[14]; // e3inf=e35+e34
+        
         // 3-vec
         // intern: index=16 "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345"
         // extern: index=16 e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
@@ -416,7 +418,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         // 5-vec
         // intern: index=31 "e12345"
         // extern: index=31 e0123inf
-        result[31] = _mVec[31] + _mVec[16]; // e12345 + e123
+        result[31] = _mVec[31]; // e12345
         return result;
     }
 
@@ -459,7 +461,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
             //TODO
             // Hesteness inner product implementieren
             case /*CGA1Multivector.*/RIGHT_CONTRACTION:
-                return new CGA2Multivector(CGA.binop_Dot((CGA) b, this));
+                return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
             case /*CGA1Multivector.*/LEFT_CONTRACTION:
                 return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
             default:
@@ -541,11 +543,11 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
 
     /**
-     * Determine the grade of the mulutivector.
+     * Determine the grade of the multivector.
      * 
      * This multivector implementation does not include any compression of structural
      * zeros. Thatś why this grade()-impl uses an epsilon value to descide if a
-     * component is zero.<p>
+     * component is available.<p>
      * 
      * @return -1 if the multivector is no k-vector, 0 if all components are 0, 1-5 else
      */
