@@ -21,4 +21,4 @@ The project depends on the vecmath library in the refactured version of jogamp. 
 Alternatively clone it from [GitHub](https://github.com/JogAmp/vecmath/tree/dev1.7.1), update the compiler version in it's pom.xml and build it.
 
 ## GA Implementation Setup
-The GA imlemenntation can be switched by project configuration. In the Maven .pom file there is a property <cga.impl>. If the value is set to "default" then the reference implementation corresponding to the book [[Dorst2007](https://geometricalgebra.org/index.html)] is is used. With "ganja" you can switch to an implementation with the nondegenerate metric R410 created by the ganja.js code generator. Further implementations are work in progress.
+The GA imlemenntation can be switched by project configuration. In the Maven .pom file there is a property <cga.impl>. If the value is set to "default" then the reference implementation corresponding to the book [[Dorst2007](https://geometricalgebra.org/index.html)] is is used. With "ganja" you can switch to an implementation with the nondegenerate metric $R^{4, 1}$ created by the ganja.js code generator. Further implementations are work in progress.
