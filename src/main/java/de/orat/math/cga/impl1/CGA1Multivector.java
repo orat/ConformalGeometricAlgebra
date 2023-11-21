@@ -88,6 +88,8 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         return 1; // e0 kommt noch vor e1 daher start bei 1 und nicht bei 0
     }
    
+    // coordinates
+    
     /**
      * Extract the coordinates from all basis blades of the given grade
      * inclusive 0 values.
@@ -109,15 +111,13 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
         }
         return result;
     }
-    
-  
-   
     // ungetestet
     // {"","e0", "e1","e2","e3","einf",
     // "e01","e02","e03","e0i","e12","e13","e1i","e23","e2i","e3i",
     // "e012","e013","e01i","e023","e02i","e03i","e123","e12i","e13i","e23i",
     // "e0123","e012i","e013i","e023i","e123i",
     // "e0123i"};
+    @Override
     public void setCoordinates(double[] values){
         blades = new ArrayList<>();
         for (int i=0;i<values.length;i++){
@@ -144,13 +144,15 @@ public class CGA1Multivector extends Multivector implements iCGAMultivector {
     public String[] basisBladeNames(){
         return CGA1Metric.basisBladeNames();
     }
-    
     @Override
     public iCGAMultivector create(double[] values){
         CGA1Multivector result = new CGA1Multivector();
+        // setCoordinates() darf hier verwendet werden, da diese Implementierung
+        // das default-coordinate-System definiert, da mit get/setCoordinates() korrespondiert.
         result.setCoordinates(values);
         return result;
     }
+    
     
     // base vector creation
     

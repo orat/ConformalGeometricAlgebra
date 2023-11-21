@@ -56,7 +56,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     //TODO besser statische Methode CGARound.squaredSize(CGAMultivector) verwenden
                     CGASphereIPNS sphere = new CGASphereIPNS(m);
                     // ipns round point (round)
-                    if (sphere.squaredSize() < eps){
+                    if (Math.abs(sphere.squaredSize()) < eps){
                         return new CGARoundPointIPNS(m);
                     // ipns sphere (round)
                     } else {
@@ -65,10 +65,13 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                 }
                 // opns attitude scalar (attitude?)
                 if (isIPNS && CGAAttitudeIPNS.is(m)){
+                   //FIXME
+                   // mit ganja lande ich vermutlich hier wenn ich ein sphereIPNS als
+                   // m übergebe. Warum?
                    return new CGAAttitudeIPNS(m);
                 // ipns attitude trivector? (attitude)
                 } else if (CGAAttitudeOPNS.is(m)){
-                    return new CGAAttitudeTrivectorOPNS(m);
+                   return new CGAAttitudeTrivectorOPNS(m);
                 }
                 break;
                 

@@ -131,7 +131,7 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
      * 
      * @param o origin of the shphere
      * @param r radius of the sphere (A negative radius does not create an imagninary 
-     *          sphere. Use the method createImaginarySphere() instead.)
+          sphere. Use the method createImaginarySphere() instead.)
      */
     public CGASphereIPNS(Point3d o, double r){
         this(new CGARoundPointIPNS(o), r);

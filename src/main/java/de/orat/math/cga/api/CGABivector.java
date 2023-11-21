@@ -6,10 +6,10 @@ import org.jogamp.vecmath.Tuple3d;
  * Bivectors describe points and pairs of points in OPNS representation.
  * 
  * Bivectors are linear combinations of Blades with grade 2. They are also called
- * timelike.
+ * timelike.<p>
  * 
  * Inheritage from this class typicall not possible because inheritage from round
- * or flat is needed. Thatś why additional interface iCGABivector is available.
+ * or flat is needed. Thatś why additional interface iCGABivector is available.<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */

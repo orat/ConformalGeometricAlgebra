@@ -11,7 +11,8 @@ public interface iCGAMultivector {
     // base methods to create specific cga multivectors
     
     /**
-     * Creates a multivector based on the values of all 32 blades.
+     * Creates a multivector based on the values of all 32 blades corresponding
+     * to the implementation. 
      * 
      * @param values of 32 blades
      * @return multivector
@@ -174,51 +175,24 @@ public interface iCGAMultivector {
     
     // monadic/unary operators
     
-    /**
-     * The inverse of the multivector even if it is not a versor.
-     * 
-     * @return the inverse of an arbitray multivector or 0 if no inverse exist.
-     * @throws java.lang.ArithmeticException if multivector is not invertible.
-     */
-    default iCGAMultivector generalInverse(){
-        iCGAMultivector conjugate = conjugate();
-        iCGAMultivector gradeInversion = gradeInversion();
-        iCGAMultivector reversion = reverse();
-        iCGAMultivector negate14 = negate14();
-        iCGAMultivector part = gp(conjugate).gp(gradeInversion).gp(reversion);
-        double scalar = part.gp(negate14).gp(part).scalarPart();
-        return conjugate.gp(gradeInversion).gp(reversion).gp(negate14).gp(part).gp(1d/scalar);
-    }
+    
+    public iCGAMultivector generalInverse();
+    
     /**
      * Inverse for versors and invertable blades only.
      * 
-     * Hint: It can be used only for versors or invertable blades. So squaredLength != 0 
-     * is needed.
-    
+     * Hint: It can be used only for versors or invertable blades. <br>
+     * So squaredLength != 0 is needed.<p>
+     * 
+     * Typically this implementation is more performant than an geneneral inverse
+     * implementation.<p>
+     * 
      * @return inverse
      */
     default iCGAMultivector versorInverse(){
         return reverse().gp(1d/lengthSquared());
     }
     
-    /**
-     * Negates only the signs of the vector and 4-vector parts of an multivector. 
-     * 
-     * Used only to implement general inverse functionality.
-     * 
-     * @return multivector with changed signs for vector and 4-vector parts
-     */
-    default iCGAMultivector negate14(){
-        double[] coordinates = extractCoordinates();
-        for (int i=1;i<6;i++){
-            coordinates[i] = -coordinates[i];
-        }
-        for (int i=26;i<31;i++){
-            coordinates[i] = -coordinates[i];
-        }
-        return create(coordinates);
-    }
-   
     /**
      * Computes the inner product null space representation, if this element 
      * is of type outer product null space representation.
@@ -249,12 +223,21 @@ public interface iCGAMultivector {
     
     public double scalarPart();
     
-    // This implementation is fine but some implementations of this interface
-    // overwrites this with a not wanted strict functionality
+    /**
+     * Test all coordinates.
+     * 
+     * Hint: Before the tests are done all coordinates are transforemed into the
+     *       "default"-coordinate-system as defined by extractCoordinates() 
+     *       implementation. In result this methods is not coordinate-independant.<p>
+     * 
+     * @param precision
+     * @return true if all coordinates are 0 (in the range of the given precision)
+     */
     default boolean isNull(double precision){
+        //FIXME extractCoordinates() wechselt vorher das Koordinatensystem
         double[] coords = this.extractCoordinates();
         for (int i=0;i<coords.length;i++){
-            if (coords[i] > precision) return false;
+            if (Math.abs(coords[i]) > precision) return false;
         }
         return true;
     }
@@ -304,14 +287,14 @@ public interface iCGAMultivector {
     /**
      * Reverse - the most important involution.
      * 
-     * The reverse is distributive: (A + B)∼ =  ̃A +  ̃B.
+     * The reverse is distributive: (A + B)∼ =  ̃A +  ̃B.<p<
      * 
      * (A B)∼ =  ̃B  ̃A
      * (A ∧ B)∼ =  ̃B ∧  ̃A
-     * (A · B)∼ =  ̃B ·  ̃A
+     * (A · B)∼ =  ̃B ·  ̃A<p>
      *
      * Note that the conjugate and reverse operation commute as their result 
-     * ultimately differs by a sign.
+     * ultimately differs by a sign.<p>
      * 
      * @return reverse
      */
@@ -502,25 +485,30 @@ public interface iCGAMultivector {
     // irgendwie sollten alle diese Methode in die Metric-Klasse ausgelagert werden
     
     /**
-     * Get the index of the basevector in the grade 1 part of the multivector 
+     * Get the index of the basevector in the grade 1 part2 of the multivector 
      * which represents the euclid x base vector.
      * 
      * @return index in the conformal vector representing the euclid x base vector
      */
     public int getEStartIndex();
-    //public int getEinfIndex();
-    //public int getOriginIndex();
     
     /**
      * Extract all of the 32 coordinates in a specific CGA representation array. 
      * 
-     * This include also the components with numerical or structural 0 values.<p>
+     * This includes also the components with numerical or structural 0 values.<p>
      *  
      * @return s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
      * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
      * e012inf, e013inf, e023inf, e123inf, e0123inf (coordinates array of length 32)
      */
     public double[] extractCoordinates();
+    /**
+     * Set coordinates corresponding to getCoordinates() - e0-einf degenerate metric.
+     * 
+     * @param values 
+     */
+    public void setCoordinates(double[] values);
+    
     public double[] extractCoordinates(int grade);
     public void setCoordinates(int grade, double[] values);
     

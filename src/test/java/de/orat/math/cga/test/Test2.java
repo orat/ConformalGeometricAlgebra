@@ -167,14 +167,54 @@ public class Test2 {
     
     @Test
     public void testI3i(){
+        System.out.println("------------------------- test i3i ------------------");
         CGAMultivector m = I3.inverse();
-        CGAMultivector m1 = I3i;
-        assertTrue(m.equals(m1));
+        // default impl ok
+        // I3 = (1.0*e123)
+        // I3i via inverse(I3) = (-1.0*e1^e2^e3)
+        // I3i hard coded = (-1.0*e1^e2^e3)
+        // ganja impl falsch
+        // I3 = (1.0*e123) ok
+        // I3i via inverse(I3) = (1.0*e123 + 1.0*e235) falsch!!!
+        // I3i hard coded = (1.0*e123) falsch!!!
+        System.out.println(I3.toString("I3"));
+        System.out.println(m.toString("I3i via inverse(I3)"));
+        System.out.println(I3i.toString("I3i hard coded"));
+        assertTrue(m.equals(I3i));
         
-        // I3i = (-1.0*e1^e2^e3)
-        System.out.println(m.toString("I3i"));
+       
         CGAMultivector m2 = e1.op(e2).op(e3).gp(-1);
-        assertTrue(m1.equals(m2));
+        assertTrue(I3i.equals(m2));
+    }
+    
+    @Test
+    public void testInverse(){
+        System.out.println("------------------------- test inverse ------------------");
+        Point3d p1 = new Point3d(0,0,0);
+        Vector3d d = new Vector3d(0,0,1);
+        CGALineOPNS test = new CGALineOPNS(p1,d);
+        CGAMultivector m = test.gp(test.inverse());
+        System.out.println(m.toString("m"));
+    }
+    
+    
+    // DefVarsE3(); // Define variables for E3
+    // ?M = 1 + e1 + e2^e3; // Define some multivector
+    // ?iM = !M; // Evaluate inverse of M
+    // ?"M * iM = " + M*iM; // Check that iM is inverse of M
+    // ?W = 1 + e1; // A non-invertible multivector
+    // ?iW = !W; // The inversion
+    //FIXME ist das wirklich für cga?
+    public void testInverse2(){
+        // TODO
+        
+        /* output
+        M = 1 + 1^e1 + 1^e23
+        iM = 0.2 + 0.2^e1 + -0.6^e23 + 0.4^I
+        M * iM = 1
+        W = 1 + 1^e1
+        iW = 0
+        */
     }
     
     @Test
@@ -369,6 +409,10 @@ public class Test2 {
         
         // test attitude conformal determination
         //FIXME direction()-impl ist nicht coordinate-free, dass muss in CGAKVector geändert werden
+        //  X = (2.0*e24 + 2.0*e25 - 2.0*e34 - 2.0*e35), einf^X  = (0) != 0
+        // in ganja R41 coordinates == 0  aber transformation in e0einf coordinates führt zu 
+        // != 0, unklar warum 
+        //FIXME
         Vector3d attitude = lineOPNS_.attitudeIntern().direction(); // without normalization
         System.out.println(toString("attitude",attitude));
         System.out.println(toString("attitudeTest",attitudeTest));
@@ -1055,24 +1099,6 @@ public class Test2 {
   
     }
     
-    // DefVarsE3(); // Define variables for E3
-    // ?M = 1 + e1 + e2^e3; // Define some multivector
-    // ?iM = !M; // Evaluate inverse of M
-    // ?"M * iM = " + M*iM; // Check that iM is inverse of M
-    // ?W = 1 + e1; // A non-invertible multivector
-    // ?iW = !W; // The inversion
-    //FIXME ist das wirklich für cga?
-    public void testInverse(){
-        // TODO
-        
-        /* output
-        M = 1 + 1^e1 + 1^e23
-        iM = 0.2 + 0.2^e1 + -0.6^e23 + 0.4^I
-        M * iM = 1
-        W = 1 + 1^e1
-        iW = 0
-        */
-    }
     
     @Test
     public void testBasisBlades(){
@@ -3350,16 +3376,17 @@ public class Test2 {
     public void testSpecializationMethod(){
         Point3d center = new Point3d(); 
         
+        // round point ipns
+        CGARoundPointIPNS pointIPNS = new CGARoundPointIPNS(center);
+        CGARoundPointIPNS m3 = (CGARoundPointIPNS) CGAKVector.specialize(pointIPNS,true);
+
         // sphere ipns
         double radius = 0.3;
         double weight = 1d;
         CGASphereIPNS sphereIPNS = new CGASphereIPNS(center, radius, weight);
         CGASphereIPNS m = (CGASphereIPNS) CGAKVector.specialize(sphereIPNS, true);
         
-        // round point ipns
-        CGARoundPointIPNS pointIPNS = new CGARoundPointIPNS(center);
-        CGARoundPointIPNS m3 = (CGARoundPointIPNS) CGAKVector.specialize(pointIPNS,true);
-
+       
         // plane ipns
         Point3d p = new Point3d();
         Vector3d n = new Vector3d(1,0,0);
@@ -3434,14 +3461,14 @@ public class Test2 {
         System.out.println(forque1.toString("forque1"));
         System.out.println(forque1.flatBulk().toString("flatBulk=moment"));
         Vector3d fb = forque1.flatBulk().extractE3FromE3einf(); //extractE3InfToVector3d();
-        //System.out.println(toString("extracted moment",fb));
+        System.out.println(toString("extracted moment",fb));
         Vector3d m1 = new Vector3d();
         m1.cross(new Vector3d(c1),f1);
         Vector3d m2 = new Vector3d();
         m2.cross(new Vector3d(c2),f2);
         Vector3d m = new Vector3d(m1);
         m.add(m2);
-        System.out.println(toString("m=m1+m1", m));
+        System.out.println(toString("m=m1+m2", m));
         assertTrue(equals(m,fb));
         
         Vector3d f = new Vector3d(f1);

@@ -22,6 +22,12 @@ public class CGAScrewAxisIPNS extends CGAFlatIPNS implements iCGABivector {
         super(l.add(T));
     }
     
+    /**
+     * 
+     * @param p
+     * @param dir |dir|=Ganhhöhe
+     * @return 
+     */
     private static CGAMultivector createScrew(Point3d p, Vector3d dir){
         double h = dir.length();
         Vector3d dirN = new Vector3d(dir);

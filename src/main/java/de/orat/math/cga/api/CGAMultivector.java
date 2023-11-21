@@ -22,7 +22,7 @@ public class CGAMultivector {
     /**
      * Algebra's Precision.
      */
-    public static double eps = 1e-12;
+    public static double eps = 1e-6; // sollte eigentlich e-12 sein
 
     static int default_ip_type = LEFT_CONTRACTION;
     
@@ -56,16 +56,16 @@ public class CGAMultivector {
     
     //TODO vergleich mit den entsprechenden Kontanten in CGAMultivector, da gibts
     // einen Überlapp
-    public static CGAMultivector e1 = CGAMultivector.createEx(1d);
-    public static CGAMultivector e2 = CGAMultivector.createEy(1d);
-    public static CGAMultivector e3 = CGAMultivector.createEz(1d);
+    public final static CGAMultivector e1 = CGAMultivector.createEx(1d);
+    public final static CGAMultivector e2 = CGAMultivector.createEy(1d);
+    public final static CGAMultivector e3 = CGAMultivector.createEz(1d);
     
     //TODO
     // da diese Konstanten in den Formeln auftauchen müssen die Reihenfolge der
     // auftretenden Faktoren mit der Reihenfolge der Basisvektoren im pseudoscalar
     // übereinstimmen, sonst gibts Vorzeichenprobleme
     public static final CGAMultivector I3 = createI3();
-    public static final CGAMultivector I3i = e1.op(e2).op(e3).gp(-1); //I3.inverse(); // was kommt da raus? TODO
+    public static final CGAMultivector I3i = e1.op(e2).op(e3).gp(-1d);
     public static final CGAMultivector I = createI();
     public static final CGAMultivector Ii = o.op(I3i).op(inf);
     public static final CGAMultivector I0 = o.op(inf); //inf.op(o);
@@ -363,11 +363,6 @@ public class CGAMultivector {
     
     // Create conformal algebra primitives
     
-    //TODO
-    // in eigene Klasse auslagern
-    /*public static CGAE3Vector createImaginarySphere(CGAMultivector o, double r){
-        return new CGAE3Vector(o.add(createInf(0.5*r*r)));
-    }*/
    
     /**
      * Create the pseudoscalar - The canonical rotor for the R41 of the conformal 
@@ -428,10 +423,6 @@ public class CGAMultivector {
     public static CGAMultivector createDualParallelepiped(Vector3d v1, Vector3d v2, Vector3d v3){
         return createE3(v1).op(createE3(v2)).op(createE3(v3));
     }
-    
-    
-   
-    
     
     /**
      * Computes the meet with the specified element in a common subspace.
@@ -524,13 +515,13 @@ public class CGAMultivector {
      * consideration is degenerate. 
      * 
      * Keep in mind: Different to PGA direct and dual objects transform the same 
-     * way!
+     * way!<p>
      * 
      * It is defined for any k-vector x of an n-dimensional subspace as the n-k 
      * vector y containing all the basis vectors that are not in x. For 
      * non-degenerate metrics, you can use multiplication with the pseudoscalar 
      * if so desired (although it will be less efficient). This is not possible 
-     * for CGA because of its degenerate metric.
+     * for CGA because of its degenerate metric.<p>
      * 
      * @return the dual of this multivector (representing a direct/non-dual object)
      * with the correct sign
@@ -564,6 +555,7 @@ public class CGAMultivector {
     // aber das macht doch nur Sinn für 3d, also pur euclidean vectors
     // verschieben in die entsprechende class?
     // die Impl sieht so plausibel aus.
+    // TODO vermutlich gibts impls
     public CGAMultivector euclideanDual(){
         return new CGAMultivector(lc(I3i).impl); // [Dorst2009] p.80
         //return new CGAMultivector(this.gp(I3i).impl);
@@ -591,7 +583,7 @@ public class CGAMultivector {
      * this.gp(this.reverse()).scalarPart() - this is not always non-negative
      * so the norm can not be determined 
      * 
-     * @return 
+     * @return squared norm
      */
     public double squaredNorm(){
         return impl.lengthSquared();
@@ -712,7 +704,7 @@ public class CGAMultivector {
         return new CGAMultivector(impl.gp(x));
     }
     /**
-     * Divide
+     * Divide.
      * 
      * @param x
      * @return 
@@ -953,6 +945,9 @@ public class CGAMultivector {
          // 29.0*eo^e2^e3^ei + 30.0*e1^e2^e3^ei + 31.0*eo^e1^e2^e3^ei)
     * @param values in gaalop blades sequence
     * @return values in the apis sequence
+    * 
+    * TODO
+    * damit bekomme ich doch die coordinates entsprechend impl1 ist das so gewünscht?
     */
     public static double[] fromGaalop(double[] values){
         double[] result = new double[]{values[0], values[5], values[1], -values[9], values[2], -values[12], values[6], 

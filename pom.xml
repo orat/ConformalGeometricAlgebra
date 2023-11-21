@@ -10,9 +10,9 @@
         <maven.compiler.target>16</maven.compiler.target>
         <!-- verschiedene Implementierungen umschalten:
             default   Dorst2007, impl1
-            ganja     via ganja codegenerator (java) based on R410
+            ganja     via ganja codegenerator (java) based on R410, impl2
             jclifford impl3 not yet ready to use
-            casadi    impl4, based on extended-vahlen matrices
+            casadi    impl4, symbolic api, based on JCasADi, not yet ready to use
         -->
         <cga.impl>ganja</cga.impl>
         <skipTests>false</skipTests>

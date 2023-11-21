@@ -72,8 +72,9 @@ public class CGAAttitudeVectorOPNS extends CGAAttitudeOPNS implements iCGABivect
     // etc
     
     private void testDefiningProperties(){
-        if (!inf.op(this).isNull()){
-            throw new IllegalArgumentException("einf^X != 0");
+        CGAMultivector m = inf.op(this);
+        if (!m.isNull()){
+            throw new IllegalArgumentException(this.toString("X")+", einf^X "+m.toString("")+" != 0");
         }
         //FIXME
         // warum geht das nicht, bzw. warum sollte der folgende test eigentlich funktionieren

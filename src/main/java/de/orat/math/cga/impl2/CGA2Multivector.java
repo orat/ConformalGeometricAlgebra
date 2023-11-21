@@ -5,6 +5,7 @@ import de.orat.math.cga.impl2.generated.CGA;
 import de.orat.math.cga.spi.iCGAMultivector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
+import java.util.Arrays;
 
 /**
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -19,6 +20,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     CGA2Multivector(de.orat.math.cga.impl2.generated.CGA cga){
         super(cga._mVec);
     }
+    
     public CGA2Multivector(int idx, double value){
         super(idx, value);
     }
@@ -29,8 +31,8 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
     
     /**
-     * TODO
-     * Umstellen auf e0 und einf
+     * TODO<br>
+     * Umstellen auf e0 und einf also default representation?<p>
      *
      * @param bvNames
      * @return 
@@ -92,7 +94,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
     
     /**
-     * Dot procuct.
+     * Inner/Dot product.
      * 
      * The dot product implemented is the left contraction - without any 
      * extensions or modifications. The geometric meaning is usually formulated
@@ -100,7 +102,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
      * projection of x onto y.
      * 
      * @param b
-     * @return 
+     * @return inner (dot) product
      */
     public CGA2Multivector ip(iCGAMultivector b){
         return new CGA2Multivector(CGA.binop_Dot(this, (CGA) b));
@@ -142,11 +144,11 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
      *
      * A~= (A†)* = (A*)†<p>
      *
-     * identities<p>
+     * Identities<p>
      *
      * (A * B)~ = B~* A~<p>
      * 
-     * @return Cifford conjugate
+     * @return Clifford conjugate
      */
     @Override
     public CGA2Multivector conjugate(){
@@ -192,7 +194,8 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
      *  "","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45","e123","e124","e125","e134",
      *  "e135","e145","e234","e235","e245","e345","e1234","e1235","e1245","e1345","e2345","e12345"<p>
      *
-     * equivalent to k-vector/k-blades
+     * equivalent to k-vector/k-blades<p>
+     * 
      * @param grade
      * @return 
      */
@@ -228,7 +231,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
      * 
      * @throws IllegalArgumentException if the given grade does not correspoind to the
      * length of the value array or the given grade does correspond to CGA at all.
-     * @Override
      */
     public void setCoordinates(int grade, double[] values){
         if (grade < 0 || grade > 5)
@@ -317,23 +319,91 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     }
     
     /**
-     * Get a specific coordinates representation.
+     * Set coordinates corresponding to getCoordinates().
      * 
-     * @return 
+     * @param values 
      * s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
      * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
      * e0123, e012inf, e013inf, e023inf, e123inf, 
      * e0123inf
      */
     @Override
+    public void setCoordinates(double[] values){
+        // interne representation
+        // "","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
+        // startindex 16: "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345",
+        // "e1234","e1235","e1245","e1345","e2345",
+        // "e12345";
+        
+        // scalar
+        _mVec[0] = values[0];
+        
+        // 1-vectors
+        _mVec[1] = values[2];
+        _mVec[2] = values[3];
+        _mVec[3] = values[4];
+        _mVec[4] = 0.5*values[5]-values[1];
+        _mVec[5] = values[1]+0.5*values[5];
+        
+        // 2-vectors
+        // "e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
+        _mVec[6] = values[10];
+        _mVec[7] = values[11];
+        _mVec[8] = 0.5*values[12]+values[6]; // e14 = 0.5e1inf+e01
+        _mVec[9] = // e15 = 
+        _mVec[10] = values[13]; // e23 
+        _mVec[11] = values[7]+0.5*values[14]; // e24 = 0.5e2inf+e02 
+        _mVec[12] = 0.5*values[14]-values[7]; // e25 = 0.5e2inf-e02
+        _mVec[13] = 0.5*values[15]-values[8]; // e34 = 0.5e3inf+e03
+        _mVec[14] = 0.5*values[15]-values[8]; // e35 = 0.5e3inf-e03
+        _mVec[15] = -values[9]; // e45 = -e0inf
+        
+        // 3-vectors
+        // target: "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345",
+        // start 16: e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
+        _mVec[16] = values[22]; // e123
+        _mVec[17] = 0.5*values[23]-values[16]; // e124 = 0.5e12inf-e012
+        _mVec[18] = 0.5*values[23]+values[16]; // e125 = 0.5e12inf+e012
+        _mVec[19] = 0.5*values[24]-values[17]; // e134 = 0.5e13inf-e013
+        _mVec[20] = 0.5*values[24]+values[17]; // e135 = 0.5e13inf+e013
+        _mVec[21] = values[18]; // e145 = e01inf
+        _mVec[22] = 0.5*values[25]-values[19]; // e234 = 0.5e23inf-e023
+        _mVec[23] = values[25]+values[19]; // e235 = e023+e23inf
+        _mVec[24] = values[20]; // e245 = e02inf
+        _mVec[25] = values[21]; // e345 = e03inf
+    
+        // 4-vectors
+        // "e1234","e1235","e1245","e1345","e2345",
+        // start bei 26: e0123, e012inf, e013inf, e023inf, e123inf, 
+        _mVec[26] = 0.5*values[30]+values[26]; // e1234=0.5e123inf-e0123
+        _mVec[27] = 0.5*values[30]-values[26]; // e1235=0.5e123inf-e0123
+        _mVec[28] = -values[27]; // e1245=-e012inf
+        _mVec[29] = -values[28]; // e1345=-e013inf
+        _mVec[30] = -values[29]; // e2345=-e023inf
+                
+        // pseudoscalar
+        //  "e12345";
+        _mVec[31] = values[31]; // e12345=e0123inf
+    }
+    
+    /**
+     * Get the specific default coordinates representation.
+     * 
+     * @return 
+     * [s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf,
+     * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
+     * e0123, e012inf, e013inf, e023inf, e123inf, 
+     * e0123inf]
+     */
+    @Override
     public double[] extractCoordinates(){
         double[] result = new double[_mVec.length];
         
-        // interne representation
-        // static String[] basisBladesNames = new String[]{"","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
+        // interne (implementation) representation
+        // ["","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
         // "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345",
         // "e1234","e1235","e1245","e1345","e2345",
-        //"e12345"};
+        // "e12345"];
         
         // scalar
         result[0] = _mVec[0];
@@ -352,7 +422,9 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         result[6] = (_mVec[8]  - _mVec[9]) *0.5; // e01 = 0.5(e14-e15)
         result[7] = (_mVec[11] - _mVec[12])*0.5; // e02 = 0.5(e24-e25)
         result[8] = (_mVec[13] - _mVec[14])*0.5; // e03 = 0.5(e34-e35)
-        result[9] = -1 - _mVec[15]; // e0inf = -1 - e45
+        
+        result[9] = - _mVec[15]; // e0inf = -1 - e45
+        
         result[10] = _mVec[6]; // e12
         result[11] = _mVec[7]; // e13
         result[12] = _mVec[8]  + _mVec[9]; // e1inf = e15+e14
@@ -390,6 +462,55 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         return result;
     }
 
+    /**
+     * The inverse of the multivector even if it is not a versor.
+     * 
+     * Implementation of
+     * https://core.ac.uk/download/pdf/74374477.pdf<p>
+     * 
+     * (right side inversion)<p>
+     * 
+     * Works only with non-degenerative basis.<p>
+     * 
+     * @return the inverse of an arbitray multivector or 0 if no inverse exist.
+     * @throws java.lang.ArithmeticException if multivector is not invertible.
+     * 
+     * vgl. ganja.js:
+     * this.Conjugate.Mul(this.Involute).Mul(this.Reverse).Mul(this.Mul(this.Conjugate).
+     * Mul(this.Involute).Mul(this.Reverse).Map(1,4)).Mul(
+     * this.constructor.Scalar(1/this.Mul(this.Conjugate).Mul(this.Involute).
+     * Mul(this.Reverse).Mul(this.Mul(this.Conjugate).Mul(this.Involute).
+     * Mul(this.Reverse).Map(1,4))[0]));
+     */
+    public iCGAMultivector generalInverse(){
+        CGA2Multivector conjugate = conjugate();
+        CGA2Multivector gradeInversion = gradeInversion();
+        CGA2Multivector reversion = reverse();
+        CGA2Multivector part1 = (CGA2Multivector) conjugate.gp(gradeInversion).gp(reversion); 
+        CGA2Multivector part2 = (CGA2Multivector) gp(part1); 
+        CGA2Multivector part3 = negate14(part2);
+        double scalar = part2.gp(part3).scalarPart(); 
+        return part1.gp(part3).gp(1d/scalar);
+    }
+    
+    /**
+     * Negates only the signs of the vector and 4-vector parts of an multivector. 
+     * 
+     * @return multivector with changed signs for vector and 4-vector parts
+     */
+    private CGA2Multivector negate14(CGA2Multivector m){
+        // liefert vermutlich die falschen Koordinaten
+        //double[] coordinates = m.extractCoordinates();
+        double[] coordinates = Arrays.copyOf(m._mVec, m._mVec.length);
+        for (int i=1;i<6;i++){
+            coordinates[i] = -coordinates[i];
+        }
+        for (int i=26;i<31;i++){
+            coordinates[i] = -coordinates[i];
+        }
+        return (CGA2Multivector) create(coordinates);
+    }
+   
     
     // implementation of iCGAMultivector 
     
@@ -439,6 +560,8 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
 
     @Override
     public iCGAMultivector create(double[] values){
+        // setCoordinates() darf hier nicht verwendet werden, da dem ein anderes
+        // Koordinatensystem zugrunde liegen könnte
         return new CGA2Multivector(new CGA(values));
     }
     @Override
@@ -475,15 +598,6 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     public boolean isScalar() {
         for (int i=1;i<_mVec.length;i++){
             if (_mVec[i] != 0d) return false;
-        }
-        return true;
-    }
-
-    public boolean isNull() {
-        for (int i=0;i<_mVec.length;i++){
-            if (_mVec[i] != 0d){
-                return false;
-            }
         }
         return true;
     }
@@ -625,4 +739,12 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
     public String[] basisBladeNames() {
        return basisBladesNames;
     }
+    
+    /*@Override
+    public boolean isNull(double precision){
+        for (int i=0;i<_mVec.length;i++){
+            if (Math.abs(_mVec[i]) > precision) return false;
+        }
+        return true;
+    }*/
 }
