@@ -58,6 +58,7 @@ public interface iCGAMultivector {
     }
     
     public boolean isScalar();
+    
     // unklar wie sich das implementieren lässt
     //TODO
     //public boolean isVersor();
@@ -503,7 +504,7 @@ public interface iCGAMultivector {
      */
     public double[] extractCoordinates();
     /**
-     * Set coordinates corresponding to getCoordinates() - e0-einf degenerate metric.
+     * Set coordinates corresponding to extractCoordinates() - e0-einf degenerate metric.
      * 
      * @param values 
      */

@@ -123,34 +123,51 @@ public class CGA {
         double[] a = a_param._mVec;
 	res[0]=-a[31];
 	res[1]=-a[30];
+        
 	res[2]=a[29];
+        
 	res[3]=-a[28];
+        
 	res[4]=a[27];
 	res[5]=a[26];
 	res[6]=a[25];
+        
 	res[7]=-a[24];
+        
 	res[8]=a[23];
 	res[9]=a[22];
 	res[10]=a[21];
+        
 	res[11]=-a[20];
 	res[12]=-a[19];
+        
 	res[13]=a[18];
 	res[14]=a[17];
+        
 	res[15]=-a[16];
+        
 	res[16]=a[15];
+        
 	res[17]=-a[14];
 	res[18]=-a[13];
+        
 	res[19]=a[12];
 	res[20]=a[11];
+        
 	res[21]=-a[10];
 	res[22]=-a[9];
 	res[23]=-a[8];
+        
 	res[24]=a[7];
+        
 	res[25]=-a[6];
 	res[26]=-a[5];
 	res[27]=-a[4];
+        
 	res[28]=a[3];
+        
 	res[29]=-a[2];
+        
 	res[30]=a[1];
 	res[31]=a[0];
         CGA res_ret = new CGA(CGA.Empty);
@@ -171,6 +188,7 @@ public class CGA {
         double[] res = new double[CGA._basisLength];
         
 	res[0]=this._mVec[0];
+        
 	res[1]=-this._mVec[1];
 	res[2]=-this._mVec[2];
 	res[3]=-this._mVec[3];
@@ -186,6 +204,7 @@ public class CGA {
 	res[13]=-this._mVec[13];
 	res[14]=-this._mVec[14];
 	res[15]=-this._mVec[15];
+        
 	res[16]=this._mVec[16];
 	res[17]=this._mVec[17];
 	res[18]=this._mVec[18];
@@ -201,6 +220,7 @@ public class CGA {
 	res[28]=this._mVec[28];
 	res[29]=this._mVec[29];
 	res[30]=this._mVec[30];
+        
 	res[31]=-this._mVec[31];
         CGA res_ret = new CGA(CGA.Empty);
         res_ret._mVec = res;

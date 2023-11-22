@@ -26,7 +26,6 @@ public class CGAMultivector {
 
     static int default_ip_type = LEFT_CONTRACTION;
     
-     
     // default = Dorst2007, impl1
     // casadi = extended vahlen Matrix via casadi, impl4
     private static String implversion = "default";
@@ -45,7 +44,6 @@ public class CGAMultivector {
         //System.out.println("cga-impl-version loaded: "+String.valueOf(implversion));
     }
 
-    
     static CGAMultivector defaultInstance = new CGAMultivector();
     
     iCGAMultivector impl;
@@ -54,8 +52,6 @@ public class CGAMultivector {
     public static final CGAMultivector o = createOrigin(1d);
     public static final CGAMultivector inf = createInf(1d);
     
-    //TODO vergleich mit den entsprechenden Kontanten in CGAMultivector, da gibts
-    // einen Überlapp
     public final static CGAMultivector e1 = CGAMultivector.createEx(1d);
     public final static CGAMultivector e2 = CGAMultivector.createEy(1d);
     public final static CGAMultivector e3 = CGAMultivector.createEz(1d);
@@ -90,11 +86,7 @@ public class CGAMultivector {
     
    
     /**
-     * @param values 
-     * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
-     * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
-     * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
-     * eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+     * @param values corresponding to the implementation
      */
     public CGAMultivector(double[] values){
         this.impl = defaultInstance.impl.create(values).getCompressed();
@@ -245,7 +237,12 @@ public class CGAMultivector {
         // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, e0123, 
         // e012inf, e013inf, e023inf, e123inf, e0123inf
         double[] values =  impl.extractCoordinates();
+        CGAMultivector result = new CGAMultivector();
+        //result.impl.setCoordinates(values);
+        //return result;
+        
         /**
+         * FIXME was ist das für eine Blade-Reihenfolge?
          * s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
          * e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
          * e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
