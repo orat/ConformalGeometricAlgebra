@@ -350,7 +350,7 @@ public class CGA2Multivector extends de.orat.math.cga.impl2.generated.CGA implem
         _mVec[6] = values[10];
         _mVec[7] = values[11];
         _mVec[8] = 0.5*values[12]+values[6]; // e14 = 0.5e1inf+e01
-        _mVec[9] = // e15 = 
+        _mVec[9] = -values[6] + 0.5*values[12]; // e15 = -e01+0.5e1inf
         _mVec[10] = values[13]; // e23 
         _mVec[11] = values[7]+0.5*values[14]; // e24 = 0.5e2inf+e02 
         _mVec[12] = 0.5*values[14]-values[7]; // e25 = 0.5e2inf-e02
