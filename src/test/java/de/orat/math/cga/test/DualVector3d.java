@@ -334,7 +334,7 @@ public class DualVector3d {
      * 
      * FIXME hat vermutlich falsches Vorzeichen
      * Das stimmt noch gar nicht!!!
-     * @deprecated
+     * @Deprecated
      */
     public DualNumber dualAngleOld(DualVector3d s2){
         
@@ -1051,7 +1051,7 @@ public class DualVector3d {
      * 
      * @param s2
      * @return directed distance
-     * @deprecated
+     * @Deprecated
      * 
      */
     public double ddist(DualVector3d s2){
@@ -1079,7 +1079,7 @@ public class DualVector3d {
      * @return perpendicular distance, positive if and only if the
      * cross product s1 × s2 is in the direction of p1 − p2, where p1 and p2 are 
      * the feet of the common perpendicular on E1 and E2 and respectively
-     * @deprecated use dualAngle2() instead
+     * @Deprecated use dualAngle2() instead
      */
     public double dist(DualVector3d s2){
         double result;

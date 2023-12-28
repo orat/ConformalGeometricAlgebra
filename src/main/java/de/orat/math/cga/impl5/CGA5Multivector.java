@@ -7,14 +7,14 @@ import de.orat.math.cga.impl2.*;
 import de.orat.math.cga.api.CGAMultivector;
 import de.orat.math.cga.impl2.generated.CGA;
 import de.orat.math.cga.spi.iCGAMultivector;
-import de.orat.math.cgacasadi.CGABasisBladeSparsity;
-import de.orat.math.cgacasadi.CGACayleyTable;
-import static de.orat.math.cgacasadi.CGACayleyTable.CGABasisBladeNames;
-import de.orat.math.cgacasadi.CGACayleyTableGeometricProduct;
-import de.orat.math.cgacasadi.CGAKVectorSparsity;
-import de.orat.math.cgacasadi.CGAMultivectorSparsity;
+import util.cga.CGABasisBladeSparsity;
+import util.cga.CGACayleyTable;
+//import static util.cga.CGACayleyTable.CGABasisBladeNames;
+import util.cga.CGACayleyTableGeometricProduct;
+import util.cga.CGAKVectorSparsity;
+import util.cga.CGAMultivectorSparsity;
 import de.orat.math.cgacasadi.CasADiUtil;
-import de.orat.math.cgacasadi.DenseCGAColumnVector;
+import util.cga.DenseCGAColumnVector;
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
 import static de.orat.math.ga.basis.InnerProductTypes.RIGHT_CONTRACTION;
 import de.orat.math.sparsematrix.ColumnVectorSparsity;
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGA5Multivector implements iCGAMultivector {
@@ -58,7 +57,7 @@ public class CGA5Multivector implements iCGAMultivector {
     }
     
     public CGA5Multivector(int idx, double value){
-        sparsity = new CGABasisBladeSparsity(CGABasisBladeNames, idx);
+        sparsity = new CGABasisBladeSparsity(baseCayleyTable.getBasisBladeNames(), idx);
         //FIXME wozu dummy?
         boolean dummy = true;
         // non-symbolic DMs have no name
@@ -66,7 +65,7 @@ public class CGA5Multivector implements iCGAMultivector {
     }
     
     private static String getBasisBladeName(int idx){
-        return CGACayleyTableGeometricProduct.getBasisBladeName(idx);
+        return CGACayleyTableGeometricProduct.instance().getBasisBladeName(idx);
     }
     
     @Override
@@ -452,7 +451,7 @@ public class CGA5Multivector implements iCGAMultivector {
      */
     @Override
     public double[] extractCoordinates(){
-        double[] result = new double[CGACayleyTable.CGABasisBladeNames.length];
+        double[] result = new double[baseCayleyTable.getBladesCount()];
         double[] values = new DenseCGAColumnVector(
                       CasADiUtil.nonzeros(dm), sparsity.getrow()).toArray();
         int[] targetNonZeros = toAPISparsity().getrow();
