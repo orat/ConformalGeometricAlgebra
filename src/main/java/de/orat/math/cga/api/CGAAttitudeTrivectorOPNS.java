@@ -35,7 +35,11 @@ public class CGAAttitudeTrivectorOPNS extends CGAAttitudeOPNS implements iCGAQua
     @Override
     public Vector3d direction(){
         //FIXME ist das so sinnvoll? oder wie ist die attitude eines round-point definiert?
-        return new Vector3d(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY);
+        // CGARound.att()=16.0*e1234 + 16.0*e1235
+        // Es macht also keinen Sinn hier ein Vector3d zurückzuliefern, das sollte ein double sein?
+        // was bekomme ich bei Umstellung auf der Implementierung? Vielfaches von inf oder o?
+        //return new Vector3d(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY);
+        throw new RuntimeException("direction() not available for CGAAttitudeTriVector!");
     }
     
     public CGAAttitudeTrivectorIPNS dual(){

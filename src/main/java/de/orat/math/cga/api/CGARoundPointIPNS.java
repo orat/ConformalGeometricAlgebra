@@ -3,6 +3,7 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Tuple3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * A round point in inner product null space representation (grade 1), 
@@ -115,6 +116,28 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
                                       0d, squaredWeight());
     }*/
     
+    @Override
+    public EuclideanParameters decompose(){
+        // round point hat kein euclidean direction daher muss ich die gleichnamige
+        // methode von roundpoint hiermit überschreiben
+        return new EuclideanParameters(null, location(), 
+                                      squaredSize(), squaredWeight());
+    }
+    public Vector3d attitude(){
+        throw new RuntimeException("CGARoundPointIPNS does not implement Vector attitude()! Use attitudeRoundPoint instead!");
+    }
+    // returns the value of e1^e2^e3^einf aber das ist "E dir" representation
+    // d.h. inf kommt weg und dann bleibt ein trivector, der irgendwie ein Volumen
+    // repräsentiert, das könnte ich mit 4/3pir3 vergleichen, aber gibts da noch
+    // ein Vorzeichen?
+    public double attitudeRoundPoint(){
+        CGAAttitudeTrivectorOPNS att = attitudeIntern();
+        System.out.println("CGARoundPointIPNS.att()="+att.toString());
+        // für ein Sphere funktioniert direction() nicht, da ich dann nur ein double bekomme
+        //o.op(att) damit habe ich vermutlich e1^e2^e3 und jetzt brauche ich noch den
+        // Wert dieses Blades
+        return att.extractCoordinates()[30];
+    }
     /**
      * @return e1^e2^e3^ei
      */
@@ -122,6 +145,7 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
     public CGAAttitudeTrivectorOPNS attitudeIntern(){
         return new CGAAttitudeTrivectorOPNS(super.attitudeIntern());
     }
+    
     @Override
     public CGARoundPointIPNS locationIntern(){
         return this.normalize();

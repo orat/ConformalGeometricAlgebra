@@ -1484,12 +1484,6 @@ public class Test2 {
         // addieren sich zu 4?
         //TODO
         
-        // attitude
-        // extract ist noch nicht richtig!!!!
-        //TODO
-        Vector3d attitude = sphereOPNS.attitude();
-        // attitude (dualRound/dualTangent)=15.999999999999996*e1^e2^e3^ei
-        System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
         
         // location
         // Kugel im Ursprung, test damit nicht vollständig
@@ -1514,6 +1508,21 @@ public class Test2 {
         radiusSquared = sphereOPNS.squaredSize();
         System.out.println(toString("radiusSquared (sphereOPNS, Dorst)",radiusSquared));
         assertTrue(equals(radiusSquared,s*s)); 
+        
+        // attitude
+        double attitude = sphereOPNS.attitudeSphere();
+        // attitude (dualRound/dualTangent)=15.999999999999996*e1^e2^e3^ei
+        // attitude (sphereOPNS, Dorst) = (Infinity,Infinity,Infinity)
+        //CGAkVector attitudeOPNS (round/tangent) = (16.0*e1234 + 16.0*e1235)
+        //CGARound.att()=16.0*e1234 + 16.0*e1235
+        // die Methode um den euclidean vec aus der att zu bestimmen scheint falsch zu sein
+        System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
+        
+        double volume = Math.pow(radiusSquared, 3d/2d)*4d/3d*Math.PI;
+        System.out.println("volume = "+String.valueOf(volume));
+        // attitude (sphereOPNS, Dorst) = 32.0
+        // volume = 33.510321638291124
+        //FIXME Warum stimmt das nicht überein?
     }
     
     @Test
@@ -1565,18 +1574,13 @@ public class Test2 {
         assertTrue(equals(loc1, p1));
         
         // attitude
-        // e.g. sphereIPNS mit weight = 3 durch (0,-1,0)
-        // attitude (round/tangent) = (-2.999999999999997*e1^e2^e3^ei)
-        // attitude=-2.999999999999997*e1^e2^e3^ei
-        // attitude (sphere IPNS) = (0.0,0.0,0.0)
+        // attitude (sphere IPNS) = 6.0
+        // volume = 11.847687835088978
         //FIXME scheint falsch zu sein
-        Vector3d attitude = sphereIPNS.attitude();
+        double attitude = sphereIPNS.attitudeSphere();
         System.out.println(toString("attitude (sphere IPNS)", attitude));
-        
-        // attitude2 (sphere IPNS) = (0.0,-0.9999999999999998,0.0)
-        //FIXME vielleicht richtig, was bedeutet attitude für eine Kugel?
-        Vector3d attitude2 = sphereIPNS.locationIntern2().direction();
-        System.out.println(toString("attitude2 (sphere IPNS)", attitude2));
+        double volume = Math.pow(radius,3d/2d)*4d/3d*Math.PI;
+        System.out.println("volume = "+String.valueOf(volume));
         
         
         // location() nach Hildenbrand1998
@@ -1753,9 +1757,11 @@ public class Test2 {
         assert(equals(weight*weight, squaredWeight));
         
         // attitude
-        Vector3d a1 = cp.attitude();
-        System.out.println("attitude=("+String.valueOf(a1.x)+", "+String.valueOf(a1.y)+", "+String.valueOf(a1.z)+")");
-        assert(equals(a1,new Vector3d(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)));
+        double a1 = cp.attitudeRoundPoint();
+        System.out.println("attitude (roundpoint ipns)="+String.valueOf(a1));
+        
+        //FIXME
+        // vergleich a1 mit volumen aus radius
         
         // locationIPNS
         Point3d p1 = cp.location(); 
@@ -2315,7 +2321,7 @@ public class Test2 {
         System.out.println("input weight="+String.valueOf(weight));
         CGARoundPointIPNS pc = new CGARoundPointIPNS(p, weight);
         
-        Vector3d attitude = pc.attitude();
+        double attitude = pc.attitudeRoundPoint();
         System.out.println(toString("attitude (CGARoundPointIPNS)", attitude));
         // attitude (round/tangent) = (-2.9999999999999973*e1^e2^e3^ei)
         // attitude (CGAOrientedFiniteRoundIPNS)=-2.9999999999999973*e1^e2^e3^ei
@@ -2323,12 +2329,15 @@ public class Test2 {
         CGAMultivector carrierFlat = pc.carrierFlat();
         System.out.println(carrierFlat.toString("carrierFlat (RoundPointIPNS)"));
         
+        //FIXME
+        // Vergleiche attitude mit carrierFlat und Vergleiche mit Volumen aus r
+        
         System.out.println("\nSphereIPNS:");
         double radiusSquared = 2d;
         CGASphereIPNS sphereIPNS = new CGASphereIPNS(p, radiusSquared, weight);
         //System.out.println(sphereIPNS.toString("sphereIPNS"));
         
-        Vector3d attitudeSphereIPNS = sphereIPNS.attitude();
+        double attitudeSphereIPNS = sphereIPNS.attitudeSphere();
         System.out.println(toString("attitude (CGASphereIPNS)",attitudeSphereIPNS));
         // attitude (round/tangent) = (-2.999999999999997*e1^e2^e3^ei)
         // attitude (CGAOrientedFiniteRoundIPNS)=-2.999999999999997*e1^e2^e3^ei
@@ -2336,6 +2345,8 @@ public class Test2 {
         CGAMultivector carrierFlatSphereIPNS = sphereIPNS.carrierFlat();
         System.out.println(carrierFlatSphereIPNS.toString("carrierFlat (sphereIPNS)"));
        
+        //FIXME
+        // vergleiche attitude mit carrierFlat und volumne basierend auf r
         // circle
         System.out.println("\nCircleIPNS:");
         
@@ -2395,12 +2406,13 @@ public class Test2 {
         Point3d p = new Point3d(0.2564423003521458, -0.23434198923703015, 0.5895999999978854);
         p = new Point3d(1,2,3);
         CGARoundPointIPNS pc = new CGARoundPointIPNS(p);
-        Vector3d att2 = pc.attitude();
-        System.out.println(toString("att2", att2));
+        double att2 = pc.attitudeRoundPoint();
+        System.out.println(toString("att2 (round point ipns)", att2));
         iCGATangentOrRound.EuclideanParameters parameters = pc.decompose();
         Vector3d attitude = parameters.attitude();
-        // att = (Infinity,Infinity,Infinity)
-        System.out.println(toString("att", attitude));
+        //System.out.println(toString("attitude(roundpoint ipns)", attitude));
+        //FIXME
+        // vergleich mit volume und klären wie ich pc.decompose() implementieren sollte
     }
     
     public void testLinePair2(){

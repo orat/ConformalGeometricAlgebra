@@ -206,7 +206,7 @@ public class CGAMultivector {
      * Get a specific coordinates representation.
      * 
      * Hint: This must not correspond to the list of basis blade names you get
-     * but the method basedBladeNames().bedause the coordinates representation is
+     * but the method basedBladeNames().because the coordinates representation is
      * a fixed one, independend from the used implementation.<p>
      * 
      * @return 

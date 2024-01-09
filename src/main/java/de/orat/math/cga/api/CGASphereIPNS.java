@@ -3,6 +3,7 @@ package de.orat.math.cga.api;
 import org.jogamp.vecmath.Point3d;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import de.orat.math.cga.spi.iCGAMultivector;
+import org.jogamp.vecmath.Vector3d;
 
 /**
  * Sphere in inner product null space representation (grade 1)
@@ -141,6 +142,22 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     
     
     // decomposition
+    
+    public Vector3d attitude(){
+        throw new RuntimeException("CGASphereIPNS does not implement Vector attitude()! Use attitudeSphere instead!");
+    }
+    // returns the value of e1^e2^e3^einf aber das ist "E dir" representation
+    // d.h. inf kommt weg und dann bleibt ein trivector, der irgendwie ein Volumen
+    // repräsentiert, das könnte ich mit 4/3pir3 vergleichen, aber gibts da noch
+    // ein Vorzeichen?
+    public double attitudeSphere(){
+        CGAAttitudeTrivectorOPNS att = attitudeIntern();
+        System.out.println("CGASphereIPNS.att()="+att.toString());
+        // für ein Sphere funktioniert direction() nicht, da ich dann nur ein double bekomme
+        //o.op(att) damit habe ich vermutlich e1^e2^e3 und jetzt brauche ich noch den
+        // Wert dieses Blades
+        return att.extractCoordinates()[30];
+    }
     
     @Override
     public CGAAttitudeTrivectorOPNS attitudeIntern(){

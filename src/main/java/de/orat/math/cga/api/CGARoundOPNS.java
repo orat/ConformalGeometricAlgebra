@@ -93,7 +93,10 @@ public class CGARoundOPNS extends CGAKVector implements iCGATangentOrRound {
     }
     
     public Vector3d attitude(){
-        return attitudeIntern().direction();
+        CGAAttitudeOPNS att = attitudeIntern();
+        System.out.println("CGARound.att()="+att.toString());
+        // für ein Sphere funktioniert direction() nicht, da ich dann nur ein double bekomme
+        return att.direction();
         
         //Das geht so nicht, da bei pp,circle und sphere extract unterschiedlich erfolgen muss
         /*CGAMultivector result = attitudeIntern();
