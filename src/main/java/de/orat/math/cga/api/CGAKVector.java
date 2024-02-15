@@ -372,6 +372,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      * @return squared weight >0
      */
     protected static double squaredWeight(CGAMultivector attitude, CGARoundPointIPNS probePoint){
+        //FIXME abs() scheint mir unnötig zu sein
         return Math.abs(probePoint.lc(attitude).sqr().decomposeScalar());
         // liefert gleiches Ergebnis
         // CGAMultivector A = probePoint.ip(attitude);

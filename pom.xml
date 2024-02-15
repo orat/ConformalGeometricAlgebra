@@ -14,7 +14,7 @@
             jclifford impl3 not yet ready to use
             casadi    impl4, symbolic api, based on JCasADi, not yet ready to use
         -->
-        <cga.impl>ganja</cga.impl>
+        <cga.impl>default</cga.impl>
         <skipTests>false</skipTests>
         <!--exec.mainClass>de.orat.math.cga.ConformalGeometricAlgebra</exec.mainClass-->
     </properties>

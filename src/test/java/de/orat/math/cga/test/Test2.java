@@ -70,6 +70,9 @@ import de.orat.math.cga.api.iCGAFlat;
 import de.orat.math.cga.api.iCGAFlat.EuclideanParameters;
 import de.orat.math.cga.api.iCGATangentOrRound;
 import de.orat.math.cga.api.iCGATangentOrRound;
+import java.util.PrimitiveIterator.OfDouble;
+import java.util.Random;
+import java.util.stream.DoubleStream;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -727,7 +730,7 @@ public class Test2 {
         System.out.println("p4="+p4c.toString());
         
         CGASphereOPNS s = new CGASphereOPNS(p1c,p2c,p3c,p4c);
-        // s=2.0*eo^e1^e2^e3 - 1.0*e1^e2^e3^ei (korrekt)
+        // r=2.0*eo^e1^e2^e3 - 1.0*e1^e2^e3^ei (korrekt)
         System.out.println("s="+s.toString());
         
         // location als normalized sphere mit r=0
@@ -739,7 +742,7 @@ public class Test2 {
 	at de.orat.math.cga.api.CGARoundPointOPNS.<init>(CGARoundPointOPNS.java:15)
 	at de.orat.math.cga.test.Test2.testGanjaExampleCreatePointsPlaneSphere(Test2.java:484)
 */
-        //CGARoundPointOPNS l = new CGARoundPointOPNS(s.negate().div(inf.lc(s)));
+        //CGARoundPointOPNS l = new CGARoundPointOPNS(r.negate().div(inf.lc(r)));
         
         // location = (1.0*eo + 0.5*ei) 
         // FIXME ei ist falsch? oder muss ich im Ergenis noch r=0 annehmen, damit der ei-Termin verschwindet?
@@ -792,9 +795,9 @@ public class Test2 {
         //var d = (a,b)=>((a<<b).Length*2)**.5;
         
         // The duality operator can be used to produce a sphereIPNS from a point.
-        // var s = ()=>!(p1c - .3**2*.5*ni);
+        // var r = ()=>!(p1c - .3**2*.5*ni);
         // ganja.js: -1.08e1234 - 0.07e1235 - 0.5e1345 + e2345
-        // s=-eo^e1^e2^e3 + 0.5*eo^e1^e3^ei 
+        // r=-eo^e1^e2^e3 + 0.5*eo^e1^e3^ei 
         //   -eo^e2^e3^ei - 0.625*e1^e2^e3^ei
         double weightS1 = 1d;
         double radius1 = 0.3;
@@ -858,7 +861,7 @@ public class Test2 {
         // p1c= -1.11e1234-1.11e1235-0.44e1245-0.89e1345
 
         // You can use the regressive product to calculate intersections..
-        //var location = ()=>s&p1c;
+        //var location = ()=>r&p1c;
         CGACircleOPNS c = new CGACircleOPNS(s.vee(p));
         // ganja.js: location=-1.11e123 - 0.48e124 - 0.03e125 - 0.40e134 + 0.48e135 + 
         // 0.22e145 - 1.11e234 -1.11e235-0.44e245-0.89e345
@@ -927,7 +930,7 @@ public class Test2 {
         
         // C2 = ()=>S&L 
         CGAPointPairOPNS pp = new CGAPointPairOPNS(S.vee(L));
-        // java: s&l_OPNS=eo^e1 - 0.89*e1^e2 - 0.5*e1^ei
+        // java: r&l_OPNS=eo^e1 - 0.89*e1^e2 - 0.5*e1^ei
         // ganja.js: -0.89e12-e15 = 0.89e12-0.5e1i + e01 (korrekt)
         System.out.println("s&l="+pp.toString());
         CGAPointPairOPNS ppTest = new CGAPointPairOPNS(o.op(e1).sub(e1.op(e2).gp(0.89)).
@@ -941,12 +944,12 @@ public class Test2 {
         // C3 = ()=>S&S2 sphereIPNS meet sphereIPNS
         CGACircleOPNS C3 = new CGACircleOPNS(S.vee(S2));
         // ganja.js: -1.35e123+1.39e235 = -1.35e123+0.7e23i+1.39e023
-        // java: s&s=1.4*eo^e2^e3 - 1.35*e1^e2^e3 - 0.7*e2^e3^ei (korrekt)
+        // java: r&r=1.4*eo^e2^e3 - 1.35*e1^e2^e3 - 0.7*e2^e3^ei (korrekt)
         System.out.println("s&s="+C3.toString());
         
         // C4 = ()=>S&C 
         CGAPointPairOPNS C4 = new CGAPointPairOPNS(S.vee(C));
-        // java s&location=1.39*eo^e2 - 1.35*e1^e2 - 0.69*e2^ei
+        // java r&location=1.39*eo^e2 - 1.35*e1^e2 - 0.69*e2^ei
         // ganja -1.35e12+1.39e25
         // TODO
         System.out.println("s&c="+C4.toString());
@@ -1461,16 +1464,20 @@ public class Test2 {
     public void testSpheresOPNS(){
         System.out.println("----------------- spheres OPNS --------------------");
         
-        // Def. Kugel durch 4 Punkte die auf der Kugeloberflächen liegen sollen
+        // Def. Kugel durch 4 Punkte die auf der Kugeloberflächen liegen sollen:
+        
+        // Kugel um 1 auf der x-Achse verschoben
         Vector3d v = new Vector3d(1d,0d,0d);
-        double s = 2;
-        Point3d p1 = new Point3d(0d,-1d*s,0d);
+        // Kugelradius 2
+        double r = 2;
+        
+        Point3d p1 = new Point3d(0d,-1d*r,0d);
         p1.add(v);
-        Point3d p2 = new Point3d(1d*s,0d,0d);
+        Point3d p2 = new Point3d(1d*r,0d,0d);
         p2.add(v);
-        Point3d p3 = new Point3d(0d,1d*s,0d);
+        Point3d p3 = new Point3d(0d,1d*r,0d);
         p3.add(v);
-        Point3d p4 = new Point3d(0d,0d,1d*s);
+        Point3d p4 = new Point3d(0d,0d,1d*r);
         p4.add(v);
         // damit sollte das Zentrum der Kugel im Ursprung+v liegen
         CGASphereOPNS sphereOPNS = new CGASphereOPNS(p1,p2,p3,p4);
@@ -1482,6 +1489,8 @@ public class Test2 {
         // Unklar, ob das so stimmt!!!
         // vielleicht bringt jeder der 4 normierten Punkte weight=1 mit und diese
         // addieren sich zu 4?
+        // siehe unten: weight sollte mit der reliability der Ausgangspunkte 
+        // zusammenhanängen? liegen die Punkte in einer Ebene oder 3d anisotropy?
         //TODO
         
         
@@ -1497,17 +1506,17 @@ public class Test2 {
         // Hitzer
         double radiusSquared = sphereOPNS.squaredSizeIntern3().decomposeScalar();
         System.out.println(toString("radiusSquared (sphereOPNS, Hitzer2005)",radiusSquared));        
-        assertTrue(equals(radiusSquared,s*s));
+        assertTrue(equals(radiusSquared,r*r));
         
         // Spencer via dual
         double radiusSquared5 = sphereOPNS.dual().squaredSizeIntern5().decomposeScalar();
         System.out.println(toString("radiusSquared (sphereOPNS via dual, Spencer)",radiusSquared5));        
-        assertTrue(equals(radiusSquared5,s*s));
+        assertTrue(equals(radiusSquared5,r*r));
         
         // Dorst/Hitzer2
         radiusSquared = sphereOPNS.squaredSize();
         System.out.println(toString("radiusSquared (sphereOPNS, Dorst)",radiusSquared));
-        assertTrue(equals(radiusSquared,s*s)); 
+        assertTrue(equals(radiusSquared,r*r)); 
         
         // attitude
         double attitude = sphereOPNS.attitudeSphere();
@@ -1518,11 +1527,38 @@ public class Test2 {
         // die Methode um den euclidean vec aus der att zu bestimmen scheint falsch zu sein
         System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
         
-        double volume = Math.pow(radiusSquared, 3d/2d)*4d/3d*Math.PI;
-        System.out.println("volume = "+String.valueOf(volume));
-        // attitude (sphereOPNS, Dorst) = 32.0
-        // volume = 33.510321638291124
-        //FIXME Warum stimmt das nicht überein?
+        // 
+        double volumeSphere = Math.pow(radiusSquared, 3d/2d)*4d/3d*Math.PI;
+        System.out.println("volume sphere = "+String.valueOf(volumeSphere));
+        
+        Vector3d ad = new Vector3d(p1);
+        p1.sub(p4);
+        Vector3d bd = new Vector3d(p2);
+        bd.sub(p4);
+        Vector3d cd = new Vector3d(p3);
+        cd.sub(p4);
+        bd.cross(bd, cd);
+        // volume tetrahedron = 0.6666666666666666
+        // das ist doch viel zu klein?
+        double volumeTetrahedron = Math.abs(ad.dot(bd))/6d;
+        System.out.println("volume tetrahedron = "+String.valueOf(volumeTetrahedron));
+        
+        double weight = Math.sqrt(Math.abs(squaredWeight));
+        System.out.println("weight="+String.valueOf(weight));
+        System.out.println("attitude/weight="+String.valueOf(attitude/weight));
+                
+        //FIXME Herausfinden was die attitude genau für ein Mass ist und da weight mit drinhängt
+        
+        // What you are computing is in fact a weighted sphere; this is perhaps 
+        // most easily seem by its dual, which will be of the form \alpha (c - \rho^2 n_\infty/2), 
+        // so the factor you are interested is \alpha \rho^2. That shows that 
+        // the radius is in there, and the factor \alpha can be interpreted as 
+        // a measure of the numerical reliability of the spanned sphere due to 
+        // the points. I would imagine that it is proportional to the volume of 
+        // the tetrahedron spanned by the points: smaller as they are more coplanar.
+        // A similar factor (but 1 dim lower) occurs as the denominator in the 
+        // expression for the circumcenter of 3 points (see GA4CS, pg 457).
+        //Cheers, Leo
     }
     
     @Test
@@ -1575,7 +1611,7 @@ public class Test2 {
         
         // attitude
         // attitude (sphere IPNS) = 6.0
-        // volume = 11.847687835088978
+        // volumeSphere = 11.847687835088978
         //FIXME scheint falsch zu sein
         double attitude = sphereIPNS.attitudeSphere();
         System.out.println(toString("attitude (sphere IPNS)", attitude));
@@ -2412,7 +2448,7 @@ public class Test2 {
         Vector3d attitude = parameters.attitude();
         //System.out.println(toString("attitude(roundpoint ipns)", attitude));
         //FIXME
-        // vergleich mit volume und klären wie ich pc.decompose() implementieren sollte
+        // vergleich mit volumeSphere und klären wie ich pc.decompose() implementieren sollte
     }
     
     public void testLinePair2(){
@@ -3437,6 +3473,166 @@ public class Test2 {
     }
     
     @Test
+    public void testExp(){
+        System.out.println("------------------------------- test exp ---------------------");
+        double[] doubleArray = createRandomCGAR41BivectorArray();
+        // Umwandlung von R41 nach R311 
+        CGAMultivector mv = new CGAMultivector(convertCoordinatesFromR41ToR311(doubleArray));
+        System.out.println(mv.toString("bivector"));
+        CGAMultivector expMV = mv.exp();
+        double[] exp = exp(doubleArray);
+        
+        CGAMultivector expMV2 = new CGAMultivector(convertCoordinatesFromR41ToR311(exp));
+        System.out.println(expMV.toString("expMV"));
+        System.out.println(expMV2.toString("expMV2"));
+        assertTrue(expMV.equals(expMV2));
+    }
+    
+    /**
+     * Get the coordinates in R41 representation.
+     * 
+     * @return 
+     * [s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf,
+     * e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
+     * e0123, e012inf, e013inf, e023inf, e123inf, 
+     * e0123inf]
+     */
+    public static double[] convertCoordinatesFromR41ToR311(double[] _mVec){
+        double[] result = new double[_mVec.length];
+        
+        // interne (implementation) representation
+        // ["","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
+        // "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345",
+        // "e1234","e1235","e1245","e1345","e2345",
+        // "e12345"];
+        
+        // scalar
+        result[0] = _mVec[0];
+        
+        // 1-vec
+        // extern: startindex=1 e0, e1, e2, e3, einf
+        result[1] = (_mVec[5] -_mVec[4])*0.5; // e0=0.5*(e5-e4)
+        result[2] = _mVec[1]; // e1
+        result[3] = _mVec[2]; // e2
+        result[4] = _mVec[3]; // e3
+        result[5] = (_mVec[4]+_mVec[5])*0.5; // einf = e5+e4
+         
+        // 2-vec
+        // intern: start index=6 "e12","e13","e14","e15","e23","e24","e25","e34","e35","e45"
+        // extern: start index=6 "e01 , e02,  e03, e0inf, e12,  e13, e1inf, e23, e2inf, e3inf
+        result[6] = (_mVec[8]  - _mVec[9]) *0.5; // e01 = 0.5(e14-e15)
+        result[7] = (_mVec[11] - _mVec[12])*0.5; // e02 = 0.5(e24-e25)
+        result[8] = (_mVec[13] - _mVec[14])*0.5; // e03 = 0.5(e34-e35)
+        
+        result[9] = - _mVec[15]; // e0inf = -1 - e45
+        
+        result[10] = _mVec[6]; // e12
+        result[11] = _mVec[7]; // e13
+        result[12] = _mVec[8]  + _mVec[9]; // e1inf = e15+e14
+        result[13] = _mVec[10]; // e23
+        result[14] = _mVec[11] + _mVec[12]; // e2inf=e25+e24
+        result[15] = _mVec[13] + _mVec[14]; // e3inf=e35+e34
+        
+        // 3-vec
+        // intern: index=16 "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345"
+        // extern: index=16 e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
+        result[16] = 0.5*(_mVec[18]-_mVec[17]); // e012=0.5*(e125-e124)
+        result[17] = 0.5*(_mVec[20]-_mVec[19]); // e013=0.5*(e135-e134)
+        result[18] = _mVec[21]; // e01inf=e145
+        result[19] = 0.5*(_mVec[23]-_mVec[22]);// e023=0.5*(e235-e234)
+        result[20] = _mVec[24]; // e02inf=e245
+        result[21] = _mVec[25]; // e03inf=e345
+        result[22] = _mVec[16]; // e123
+        result[23] = _mVec[17]+_mVec[18]; // e12inf=e124+e125
+        result[24] = _mVec[19]+_mVec[20]; // e13inf=e134+e135
+        result[25] = _mVec[22]+_mVec[23]; // e23inf=e234+e235
+                
+        // 4-vec
+        // intern: index=26 "e1234","e1235","e1245","e1345","e2345",
+        // extern: index=26 e0123, e012inf, e013inf, e023inf, e123inf, 
+        result[26] = 0.5*(_mVec[26]-_mVec[27]); // e0123=0.5*(e1234-e1235)
+        result[27] = _mVec[28]; // e012inf=-e1245
+        result[28] = _mVec[29]; // e013inf=-e1345
+        result[29] = _mVec[30]; // e023inf=-e2345
+        result[30] = _mVec[26]+_mVec[27]; // e123inf=e1234+e1235
+                
+        // 5-vec
+        // intern: index=31 "e12345"
+        // extern: index=31 e0123inf
+        result[31] = _mVec[31]; // e12345
+        return result;
+    }
+    
+    // https://enki.ws/ganja.js/examples/coffeeshop.html#NSELGA
+    // exponential of a general bivector only for CGA (R41)
+    private static double[] exp(double[] B){
+        // B*B = S + Ti*ei*I
+        double S = -B[0]*B[0]-B[1]*B[1]-B[2]*B[2]+B[3]*B[3]-B[4]*B[4]-B[5]*B[5]+B[6]*B[6]-B[7]*B[7]+B[8]*B[8]+B[9]*B[9];
+        double T1 = 2*(B[4]*B[9]-B[5]*B[8]+B[6]*B[7]); //e2345
+        double T2 = 2*(B[1]*B[9]-B[2]*B[8]+B[3]*B[7]); //e1345
+        double T3 = 2*(B[0]*B[9]-B[2]*B[6]+B[3]*B[5]); //e1245
+        double T4 = 2*(B[0]*B[8]-B[1]*B[6]+B[3]*B[4]); //e1235
+        double T5 = 2*(B[0]*B[7]-B[1]*B[5]+B[2]*B[4]); //e1234
+        
+        // Calculate the norms of the invariants
+        double Tsq = -T1*T1-T2*T2-T3*T3-T4*T4+T5*T5;
+        double norm = Math.sqrt(S*S - Tsq);
+        double sc = -0.5/norm; 
+        double lambdap = 0.5*S+0.5*norm;
+        double lp = Math.sqrt(Math.abs(lambdap));
+        double lm = Math.sqrt(-0.5*S+0.5*norm);
+        // The associated trig (depending on sign lambdap)
+        //double [cp, sp] = lambdap>0?[cosh(lp), sinh(lp)/lp]:lambdap<0?[cos(lp), sin(lp)/lp]:[1,1]
+        double cp, sp;
+        if (lambdap>0){
+            cp = Math.cosh(lp);
+            sp = Math.sinh(lp)/lp;
+        } else if (lambdap<0){
+            cp = Math.cos(lp);
+            sp = Math.sin(lp)/lp;
+        } else {
+            cp = 1;
+            sp = 1;
+        }
+        //var [cm, sm] = [cos(lm), lm==0?1:sin(lm)/lm]
+        double cm = Math.cos(lm);
+        double sm;
+        if (lm==0) sm=1; else sm= Math.sin(lm)/lm;
+        // Calculate the mixing factors alpha and beta_i.
+        double cmsp = cm*sp;
+        double cpsm = cp*sm;
+        double spsm = sp*sm/2d;
+        double D = cmsp-cpsm;
+        double E = sc*D;
+        double alpha = D*(0.5-sc*S) + cpsm;
+        double beta1 = E*T1;
+        double beta2 = -E*T2;
+        double beta3 = E*T3;
+        double beta4 = -E*T4;
+        double beta5 = -E*T5;
+        
+        // Create the final rotor.
+        double[] result = new double[32];
+        result[0] = cp*cm; // scalar
+        result[6] = (B[0]*alpha+B[7]*beta5-B[8]*beta4+B[9]*beta3); // e12
+        result[7] = (B[1]*alpha-B[5]*beta5+B[6]*beta4-B[9]*beta2); // e13
+        result[8] = (B[2]*alpha+B[4]*beta5-B[6]*beta3+B[8]*beta2); // e24
+        result[9] = (B[3]*alpha+B[4]*beta4-B[5]*beta3+B[7]*beta2); // e15
+        result[10] = (B[4]*alpha+B[2]*beta5-B[3]*beta4+B[9]*beta1); // e23
+        result[11] = (B[5]*alpha-B[1]*beta5+B[3]*beta3-B[8]*beta1); // e24
+        result[12] = (B[6]*alpha-B[1]*beta4+B[2]*beta3-B[7]*beta1); // e25
+        result[13] = (B[7]*alpha+B[0]*beta5-B[3]*beta2+B[6]*beta1); // e34
+        result[14] = (B[8]*alpha+B[0]*beta4-B[2]*beta2+B[5]*beta1); // e35
+        result[15] = (B[9]*alpha-B[0]*beta3+B[1]*beta2-B[4]*beta1); // e45
+        result[26] = spsm*T5; // e1234
+        result[27] = spsm*T4; // e1235
+        result[28] = spsm*T3; // e1245
+        result[29] = spsm*T2; // e1345
+        result[30] = spsm*T1; // e2345
+        return result;
+    }
+    
+    @Test
     public void testForceAddition(){
         System.out.println("------------------------------- test force additions ---------------------");
         Point3d c1 = new Point3d(5,5,1);
@@ -3492,5 +3688,28 @@ public class Test2 {
         
         
         System.out.println(forque1.flatWeight().toString("flatWeight=direction=force"));
+    }
+    
+   
+    //B=B0​e12​+B1​e13​+B2​e14​+B3​e15​
+    // +B4​e23​+B5​e24​+B6​e25​+B7​e34​+B8​e35​+B9​e45​
+    public static double[] createRandomCGAR41BivectorArray(){
+        double[] result = new double[32];
+        OfDouble iterator = (new Random()).doubles(-1, 1).iterator();
+        for (int i=6; i<10;i++){
+            result[i] = iterator.nextDouble();
+        }
+        for (int i=10; i<16;i++){
+             result[i] = iterator.nextDouble();
+        }
+        return result;
+    }      
+    public static double[] createRandomCGAArray(){
+        Random random = new Random();
+        return random.doubles(-1, 1).
+                limit(32).toArray();
+    }
+    public static CGAMultivector createRandomMultivector(){
+        return new CGAMultivector(createRandomCGAArray());
     }
 }
