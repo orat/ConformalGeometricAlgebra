@@ -3475,12 +3475,12 @@ public class Test2 {
     @Test
     public void testExp(){
         System.out.println("------------------------------- test exp ---------------------");
-        double[] doubleArray = createRandomCGAR41BivectorArray();
-        // Umwandlung von R41 nach R311 
-        CGAMultivector mv = new CGAMultivector(convertCoordinatesFromR41ToR311(doubleArray));
-        System.out.println(mv.toString("bivector"));
+        double[] r41bivector = createRandomCGAR41BivectorArray();
+        // Umwandlung von R41 nach R311, dann ist das aber kein Bivector mehr
+        CGAMultivector mv = new CGAMultivector(convertCoordinatesFromR41ToR311(r41bivector));
+        System.out.println(mv.toString("bivectorconvertedToR311"));
         CGAMultivector expMV = mv.exp();
-        double[] exp = exp(doubleArray);
+        double[] exp = exp(r41bivector);
         
         CGAMultivector expMV2 = new CGAMultivector(convertCoordinatesFromR41ToR311(exp));
         System.out.println(expMV.toString("expMV"));
@@ -3490,6 +3490,12 @@ public class Test2 {
     
     /**
      * Get the coordinates in R41 representation.
+     * 
+     * @param _mvec
+     * ["s","e1","e2","e3","e4","e5","e12","e13","e14","e15","e23","e24","e25","e34","e35","e45",
+     *  "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345",
+     *  "e1234","e1235","e1245","e1345","e2345",
+     *  "e12345"]
      * 
      * @return 
      * [s, e0, e1, e2, e3, einf, e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf,
@@ -3597,7 +3603,7 @@ public class Test2 {
         //var [cm, sm] = [cos(lm), lm==0?1:sin(lm)/lm]
         double cm = Math.cos(lm);
         double sm;
-        if (lm==0) sm=1; else sm= Math.sin(lm)/lm;
+        if (lm==0) sm=1d; else sm= Math.sin(lm)/lm;
         // Calculate the mixing factors alpha and beta_i.
         double cmsp = cm*sp;
         double cpsm = cp*sm;
