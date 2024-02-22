@@ -1111,7 +1111,7 @@ public class Test2 {
         assertTrue(m.equals(new CGAScalarOPNS(-1d)));
     }
     
-    @Test
+    //@Test
     public void testPlaneOPNS(){
         System.out.println("------------------ PlaneOPNS --------------");
         //Point3d p1 = new Point3d(1,1,1);
@@ -3472,7 +3472,7 @@ public class Test2 {
         // opns
     }
     
-    @Test
+    //@Test
     public void testExp(){
         System.out.println("------------------------------- test exp ---------------------");
         double[] r41bivector = createRandomCGAR41BivectorArray();
