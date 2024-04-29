@@ -29,6 +29,7 @@ Clone and checkout
 3. [Euclid3dViewAPI](https://github.com/orat/Euclid3DViewAPI)
 4. [SparseMatrix](https://github.com/orat/SparseMatrix)
 5. [CGACasADi](https://github.com/orat/CGACasADi)
+6. [JCasADi](https://github.com/MobMonRob/JCasADi)
 
 and build those projects to have them available in your local Maven cache. SparseMatrix is a simple Java sparse matrix implementation used primarily as interface between the annotation based Java API and the DSL. So it allows to write code independend from GA-specific objects. It is used only for the experimentally started CasADi-based implementation. CGACasADi is a fast symbolic implementation of CGA based on [CasADI](www.casadi.org/). A Java-Wrapper for CasADI based on [Swig](https://www.swig.org/) is used for Java integration. This is only used very experimentally and is not needed for the default implementations.
 
