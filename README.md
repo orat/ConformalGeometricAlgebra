@@ -26,11 +26,15 @@ Alternatively clone it from [GitHub](https://github.com/JogAmp/vecmath/tree/dev1
 
 Clone and checkout
 1. [GeometricAlgebra](https://github.com/orat/GeometricAlgebra)
-2. [Euclid3dView](https://github.com/orat/EuclidView3d)
-3. [SparseMatrix](https://github.com/orat/SparseMatrix)
-4. [CGACasADi](https://github.com/orat/CGACasADi)
+3. [Euclid3dViewAPI](https://github.com/orat/Euclid3DViewAPI)
+4. [SparseMatrix](https://github.com/orat/SparseMatrix)
+5. [CGACasADi](https://github.com/orat/CGACasADi)
 
 and build those projects to have them available in your local Maven cache. SparseMatrix is a simple Java sparse matrix implementation used primarily as interface between the annotation based Java API and the DSL. So it allows to write code independend from GA-specific objects. It is used only for the experimentally started CasADi-based implementation. CGACasADi is a fast symbolic implementation of CGA based on [CasADI](www.casadi.org/). A Java-Wrapper for CasADI based on [Swig](https://www.swig.org/) is used for Java integration. This is only used very experimentally and is not needed for the default implementations.
+
+I You want to use the the default Visualizer, you have to clone and checkout 
+
+[Euclid3dView](https://github.com/orat/EuclidView3d)
 
 ## GA Implementation Setup
 The GA imlemenntation can be switched by project configuration. In the Maven pom.xml file there is a property <cga.impl>. If the value is set to "default" then the reference implementation corresponding to the book [Dorst2007](https://geometricalgebra.org/index.html) is used. With "ganja" you can switch to an implementation with the nondegenerate metric $R^{4, 1}$ created by the code generator from [ganja.js](https://github.com/enkimute/ganja.js). Further implementations are work in progress.
