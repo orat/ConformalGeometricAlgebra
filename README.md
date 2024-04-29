@@ -26,7 +26,7 @@ Alternatively clone it from [GitHub](https://github.com/JogAmp/vecmath/tree/dev1
 
 Clone and checkout
 1. [GeometricAlgebra](https://github.com/orat/GeometricAlgebra)
-2. [ConformalGeometricAlgebra](https://github.com/orat/ConformalGeometricAlgebra)
+2. [Euclid3dView](https://github.com/orat/EuclidView3d)
 3. [SparseMatrix](https://github.com/orat/SparseMatrix)
 4. [CGACasADi](https://github.com/orat/CGACasADi)
 
