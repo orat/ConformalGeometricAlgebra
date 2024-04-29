@@ -25,13 +25,11 @@ The project depends on the [vecmath library](https://download.java.net/media/jav
 Alternatively clone it from [GitHub](https://github.com/JogAmp/vecmath/tree/dev1.7.1), update the compiler version in it's pom.xml and build it.
 
 Clone and checkout
-1. [GeometricAlgebra](https://github.com/orat/GeometricAlgebra)
-3. [Euclid3dViewAPI](https://github.com/orat/Euclid3DViewAPI)
-4. [SparseMatrix](https://github.com/orat/SparseMatrix)
-5. [CGACasADi](https://github.com/orat/CGACasADi)
-6. [JCasADi](https://github.com/MobMonRob/JCasADi)
 
-and build those projects to have them available in your local Maven cache. SparseMatrix is a simple Java sparse matrix implementation used primarily as interface between the annotation based Java API and the DSL. So it allows to write code independend from GA-specific objects. It is used only for the experimentally started CasADi-based implementation. CGACasADi is a fast symbolic implementation of CGA based on [CasADI](www.casadi.org/). A Java-Wrapper for CasADI based on [Swig](https://www.swig.org/) is used for Java integration. This is only used very experimentally and is not needed for the default implementations.
+1. [GeometricAlgebra](https://github.com/orat/GeometricAlgebra)
+2. [Euclid3dViewAPI](https://github.com/orat/Euclid3DViewAPI)
+
+and build those projects to have them available in your local Maven cache. 
 
 I You want to use the the default Visualizer, you have to clone and checkout 
 
