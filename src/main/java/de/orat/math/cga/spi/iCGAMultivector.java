@@ -428,7 +428,7 @@ public interface iCGAMultivector {
         else return this.gp(1d / Math.sqrt(Math.abs(s)));
     }
     /**
-     * Magnitude (modulus), absolute value or length. 
+     * Magnitude (modulus), absolute value or length, reverse norm
      *
      * Implementation based on reverse() instead of conjugate(). This is different
      * to ganja.js.

@@ -4,8 +4,9 @@ import de.orat.math.cga.spi.iCGAMultivector;
 
 /**
  * A versor is a multivector that can be expressed as the geometric product of 
- * invertable vectors, especially of non-null 1-vectors. A Verson can combine
- * reflections, rotations and anisotropic scaling.
+ * invertable vectors, especially of non-null 1-vectors. 
+ * 
+ * A Versor can combine reflections, rotations and anisotropic scaling.<p>
  * 
  * Hint: A sum of two versors does not in general result in a versor!<p>
  * 

@@ -4,7 +4,6 @@ import de.orat.math.cga.api.CGAMotor.MotorParameters;
 import de.orat.view3d.euclid3dviewapi.api.ViewerService;
 import de.orat.view3d.euclid3dviewapi.spi.iAABB;
 import de.orat.view3d.euclid3dviewapi.spi.iEuclidViewer3D;
-import de.orat.view3d.euclid3dviewapi.util.AxisAlignedBoundingBox;
 import de.orat.view3d.euclid3dviewapi.util.Line;
 import de.orat.view3d.euclid3dviewapi.util.Plane;
 import java.awt.Color;

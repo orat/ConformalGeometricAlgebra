@@ -48,17 +48,6 @@
             <artifactId>EuclidView3d</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>de.orat.math.sparsematrix</groupId>
-            <artifactId>SparseMatrix</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>de.orat.math.cgacasadi</groupId>
-            <artifactId>CGACasADi</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
     
     <build>
