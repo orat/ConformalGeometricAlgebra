@@ -31,7 +31,7 @@ Clone and checkout
 
 and build those projects to have them available in your local Maven cache. 
 
-I You want to use the the default Visualizer, you have to clone and checkout [Euclid3dView](https://github.com/orat/EuclidView3d) and add it to your runtime dependencies.
+If you want to use the the default Visualizer, you have to clone and checkout [Euclid3dView](https://github.com/orat/EuclidView3d) and add it to your runtime dependencies.
 
 ## GA Implementation Setup
 The GA imlemenntation can be switched by project configuration. In the Maven pom.xml file there is a property <cga.impl>. If the value is set to "default" then the reference implementation corresponding to the book [Dorst2007](https://geometricalgebra.org/index.html) is used. With "ganja" you can switch to an implementation with the nondegenerate metric $R^{4, 1}$ created by the code generator from [ganja.js](https://github.com/enkimute/ganja.js). Further implementations are work in progress.
