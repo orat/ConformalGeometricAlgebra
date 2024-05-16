@@ -3694,6 +3694,19 @@ public class Test2 {
         System.out.println(forque1.flatWeight().toString("flatWeight=direction=force"));
     }
     
+    @Test
+    public void testCommutation(){
+        CGAMultivector einf = CGAMultivector.createInf(1);
+        CGAMultivector e0 = CGAMultivector.createOrigin(1);
+        Point3d Px = new Point3d(1,0,0);
+        CGARoundPointIPNS x = new CGARoundPointIPNS(Px);
+        CGAMultivector xAxis = e0.commutation(x.commutation(einf));
+        System.out.println(xAxis.toString("xaxis"));
+        int grade = xAxis.grade();
+        System.out.println("------------- test communtation --------------");
+        System.out.println("grade="+String.valueOf(grade));
+        //CGAEuclideanBivector xAx = new CGAEuclideanBivector(xAxis);
+    }
    
     //B=B0​e12​+B1​e13​+B2​e14​+B3​e15​
     // +B4​e23​+B5​e24​+B6​e25​+B7​e34​+B8​e35​+B9​e45​

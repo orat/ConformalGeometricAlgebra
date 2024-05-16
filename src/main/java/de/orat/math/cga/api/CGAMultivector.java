@@ -451,15 +451,17 @@ public class CGAMultivector {
     /**
      * Computes the commutation with the specified element.
      * 
-     * linear differential
-     * commutator durch X darstellen als eigenes Symbol
-     * a × B = 0.5 (aB − B a)
+     * linear differential?<p>
+     * 
+     * TODO<br>
+     * commutator durch X darstellen als eigenes Symbol<br>
+     * a × B = 0.5 (aB − B a)<p>
      * 
      * @param mv the second element of the commutation.
      * @return a new element from the commutation with the specified element.
      */
     public final CGAMultivector commutation(CGAMultivector mv){
-        return ((gp(mv)).sub(mv.gp(this))).gp(0.5);
+        return ((gp(mv)).sub(mv.gp(this))).gp(0.5).compress();
     }
     
     
