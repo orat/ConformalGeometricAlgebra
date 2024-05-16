@@ -712,10 +712,17 @@ public class CGAMultivector {
     public CGAMultivector div(CGAMultivector x){
         return gp(x.inverse());
     }
-    // expansion/wedge
+    
+    /**
+     * Outer/wedge product.
+     * 
+     * @param x multivector as second operant
+     * @return wedge/outer product of this with the given multivector x
+     */
     public CGAMultivector op(CGAMultivector x){
          return new CGAMultivector(impl.op(x.impl));
     }
+    
     /**
      * Vee/meet or regressive product.
      * 

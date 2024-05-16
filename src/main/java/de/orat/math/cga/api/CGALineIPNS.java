@@ -49,9 +49,9 @@ public class CGALineIPNS extends CGAFlatIPNS implements iCGABivector {
         this(plane1.op(plane2));
     }
     
-    public CGALineIPNS(CGAPointPairIPNS pointPair){
+    /*public CGALineIPNS(CGAPointPairIPNS pointPair){
         this(pointPair.op(inf));
-    }
+    }*/
      
     public CGALineIPNS(CGARoundPointIPNS point, CGAAttitudeVectorOPNS attitude){
         this(point.op(attitude));

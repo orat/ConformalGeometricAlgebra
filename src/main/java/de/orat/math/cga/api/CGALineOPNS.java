@@ -97,6 +97,9 @@ public class CGALineOPNS extends CGAFlatOPNS implements iCGATrivector {
              new CGARoundPointIPNS(p2, weight2));
     }
     
+    public CGALineOPNS(CGAPointPairOPNS pointPair){
+        this(pointPair.op(inf));
+    }
     /**
      * Create a (non normalized) line in outer product null space representation 
      * (grade 3).

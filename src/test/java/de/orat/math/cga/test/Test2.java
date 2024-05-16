@@ -3698,7 +3698,9 @@ public class Test2 {
     public void testCommutation(){
         CGAMultivector einf = CGAMultivector.createInf(1);
         CGAMultivector e0 = CGAMultivector.createOrigin(1);
+        CGARoundPointIPNS MS0 = new CGARoundPointIPNS(e0);
         Point3d Px = new Point3d(1,0,0);
+        Point3d ur = new Point3d(0d,0d,0d);
         CGARoundPointIPNS x = new CGARoundPointIPNS(Px);
         CGAMultivector xAxis = e0.commutation(x.commutation(einf));
         System.out.println(xAxis.toString("xaxis"));
@@ -3706,6 +3708,20 @@ public class Test2 {
         System.out.println("------------- test communtation --------------");
         System.out.println("grade="+String.valueOf(grade));
         //CGAEuclideanBivector xAx = new CGAEuclideanBivector(xAxis);
+        //CGALineIPNS xAe = new CGALineIPNS(ur, Px);
+        //System.out.println(xAe.toString("xae"));
+        //System.out.println("grade="+String.valueOf(xAe.grade()));
+        //CGAEuclideanBivector xAx = new CGAEuclideanBivector(xAe);
+        CGALineIPNS xAe = (new CGALineOPNS(ur, Px)).dual();
+        System.out.println(xAe.toString("xae"));
+        //System.out.println("grade="+String.valueOf(xAe.grade()));
+        CGAEuclideanBivector xAx = new CGAEuclideanBivector(xAe);
+        
+        CGAPointPairIPNS pp = new CGAPointPairIPNS(x, MS0);
+        CGAMultivector mv = pp.op(inf);
+        System.out.println(mv.toString("mv")); // grade 4
+        
+        
     }
    
     //B=B0​e12​+B1​e13​+B2​e14​+B3​e15​
