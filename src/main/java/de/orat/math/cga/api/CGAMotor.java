@@ -1,5 +1,7 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.AxisAngle4d;
+import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
@@ -21,6 +23,10 @@ public class CGAMotor extends CGAVersor {
         this(rotor.gp(translator));
     }
     
+    public CGAMotor gp(CGAMotor m){
+        return new CGAMotor(super.gp(m));
+    }
+    
     /**
      * 
      * @param B
@@ -32,6 +38,16 @@ public class CGAMotor extends CGAVersor {
     }
     
     public record MotorParameters(Vector3d dir, double alpha){}
+    
+    // ungetestet
+    public Matrix4d toMatrix4d(){
+        MotorParameters param = decomposeMotor();
+        Matrix4d result = new Matrix4d();
+        result.setIdentity();
+        result.setRotation(new AxisAngle4d(param.dir(), param.alpha()));
+        result.setTranslation(new Vector3d(param.dir()));
+        return result;
+    }
     
     public MotorParameters decomposeMotor(){
         double cosAlpha = decomposeScalar();
