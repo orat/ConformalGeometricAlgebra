@@ -16,6 +16,7 @@ import de.orat.math.cga.api.CGAKVector;
 import de.orat.math.cga.api.CGALineIPNS;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGALinePair;
+import de.orat.math.cga.api.CGAMotor;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
@@ -51,6 +52,7 @@ import de.orat.math.cga.api.CGAPlaneIPNS;
 import de.orat.math.cga.api.CGAPlaneOPNS;
 import de.orat.math.cga.api.CGAPointPairIPNS;
 import de.orat.math.cga.api.CGAPointPairOPNS;
+import de.orat.math.cga.api.CGARotor;
 import de.orat.math.cga.api.CGARoundPointIPNS;
 import de.orat.math.cga.api.CGARoundPointOPNS;
 import de.orat.math.cga.api.CGAScalarIPNS;
@@ -71,6 +73,8 @@ import de.orat.math.cga.api.iCGATangentOrRound;
 import java.util.PrimitiveIterator.OfDouble;
 import java.util.Random;
 import java.util.stream.DoubleStream;
+import org.jogamp.vecmath.AxisAngle4d;
+import org.jogamp.vecmath.Matrix4d;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -3724,6 +3728,81 @@ public class Test2 {
         
     }
    
+    
+    @Test
+    public void testTranslator(){
+        Point3d p1 = new Point3d(1.0,1.0,1d);
+        double weight1 = 1d;
+        System.out.println("------------------------------- test translator ---------------------");
+        System.out.println("p1=("+String.valueOf(p1.x)+","+String.valueOf(p1.y)+","+String.valueOf(p1.z)+")");
+        CGARoundPointIPNS cp1 = new CGARoundPointIPNS(p1, weight1);
+        System.out.println(cp1.toString("cp1"));
+        Vector3d v = new Vector3d(1,2,3);
+        CGATranslator t = new CGATranslator(v);
+        CGARoundPointIPNS cp2 = new CGARoundPointIPNS(t.transform(cp1));
+        System.out.println(cp2.toString("cp2"));
+        Point3d p2 = cp2.location();
+        System.out.println(toString("p2",p2));
+        p1.add(v);
+        assertTrue(equals(p1,p2));
+    }
+    
+    @Test
+    public void testMotor(){
+        System.out.println("------------------------------- test motor ---------------------");
+        Point3d p1 = new Point3d(1,2,3);
+        Vector3d v = new Vector3d(4,-1,1);
+        Point3d p2 = new Point3d(p1);
+        p2.add(v);
+        
+        double theta = 30*Math.PI/180;
+        double d = 2d;
+        
+        Point3d o = new Point3d();
+        Vector3d x = new Vector3d(1d,0d,0d);
+        Vector3d z = new Vector3d(0d,0d,1d);
+       
+        // homogene Matrix
+        Matrix4d m4d = new Matrix4d();
+        m4d.setIdentity();
+        m4d.setRotation(new AxisAngle4d(0d,0d,1d, theta));
+        m4d.setTranslation(new Vector3d(0,0,d));
+        
+        
+        Point3d oT = new Point3d(o);
+        m4d.transform(oT);
+        System.out.println(toString("oT",oT));
+        Vector3d xT = new Vector3d(x);
+        m4d.transform(xT);
+        System.out.println(toString("xT",xT));
+        
+        // CGA
+        CGAEuclideanBivector Bz = new CGAEuclideanBivector(x, new Vector3d(0d,1d,0d));
+        CGARotor R = new CGARotor(Bz, theta);
+        
+        CGATranslator T = new CGATranslator(new Vector3d(0d, 0d, d));
+        CGAMotor M = new CGAMotor(R, T);
+        
+        CGAOrientedPointIPNS zAxis = new CGAOrientedPointIPNS(o, z);
+        CGAAttitudeVectorIPNS xAxis = new CGAAttitudeVectorIPNS(x);
+         
+        CGAOrientedPointIPNS zAxisT = new CGAOrientedPointIPNS(M.transform(zAxis));
+        CGAAttitudeVectorIPNS xAxisT = new CGAAttitudeVectorIPNS(M.transform(xAxis));
+        
+        Point3d oTCGA = zAxisT.location();
+        System.out.println(toString("oTCGA",oTCGA));
+        Vector3d zTCGA = zAxisT.attitude();
+        System.out.println(toString("zTCGA", zTCGA));
+        Vector3d xTCGA = xAxisT.attitude();
+        System.out.println(toString("xTCGA", xTCGA));
+       
+        assertTrue(equals(oT, oTCGA));
+        assertTrue(equals(xT, xTCGA));
+        
+        //CGALineIPNS test = new CGALineIPNS(p1,v);
+        //System.out.println(test.toString("lineIPNS"));
+    }
+    
     //B=B0​e12​+B1​e13​+B2​e14​+B3​e15​
     // +B4​e23​+B5​e24​+B6​e25​+B7​e34​+B8​e35​+B9​e45​
     public static double[] createRandomCGAR41BivectorArray(){

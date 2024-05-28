@@ -9,18 +9,30 @@ import org.jogamp.vecmath.Vector3d;
  * all together. 
  * 
  * It describes a rotation around a rotation axis combined with a
- * translation in direction of this axis.
+ * translation in direction of this axis or in other words it describes a
+ * rotation about an arbitrary axis in space.<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAMotor extends CGAVersor {
     
     public CGAMotor(CGAMultivector m){
+        // test m auf even und darauf das gp mit reverse == 1
+        //TODO
         super(m.impl);
     }
     
+    // Voraussetzung: tranlator ist in Richtung der rotation-axis
+    //FIXME überprüfen und exception werfen?
     public CGAMotor(CGARotor rotor, CGATranslator translator){
-        this(rotor.gp(translator));
+        // muss ich hier nicht noch mit dem reverse des rotor multiplizieren
+        // oder einfach transform() aufrufen? Nein! siehe [Perwass2000-Book]
+        // T R T.reverse() funktioniert nicht für Translation in Richtung der rot-axis von R
+        // allgmeine Form ist daher:
+        // T2 T1 R T1.reverse mit T2 in Richtung der rot-axis und T1 in der rot-Ebene von R
+        // wenn ich dann aber gar keine T1 brauche dann bleibt T2 R übrig
+        //this(rotor.gp(translator));
+        this(translator.gp(rotor));
     }
     
     public CGAMotor gp(CGAMotor m){
@@ -28,7 +40,7 @@ public class CGAMotor extends CGAVersor {
     }
     
     /**
-     * 
+     * ??????
      * @param B
      * @param d 
      * @throws IllegalArgumentException if d=(0,0,0)
@@ -74,6 +86,7 @@ public class CGAMotor extends CGAVersor {
         }
         
         double alpha = Math.atan2(sinAlpha,cosAlpha);
+        //FIXME
         double d = Double.NaN;
         dir.scale(d);
         return new MotorParameters(dir, alpha);
@@ -81,6 +94,8 @@ public class CGAMotor extends CGAVersor {
 
     @Override
     public boolean isEven() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // because the product of two even Multivectors is also even
+        // https://rastergraphics.wordpress.com/2012/12/06/brief-introduction-to-conformal-geometric-algebra/
+        return true;
     }
 }

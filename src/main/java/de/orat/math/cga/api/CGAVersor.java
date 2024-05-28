@@ -16,6 +16,7 @@ public abstract class CGAVersor extends CGAMultivector {
      
     public CGAVersor(CGAMultivector m){
         super(m.impl);
+        // das geht so nicht
         //if (!m.isVersor()) throw new IllegalArgumentException("Construction of versor object from "
         //        +m.toString()+" failed!");
     }
@@ -37,6 +38,7 @@ public abstract class CGAVersor extends CGAMultivector {
         result = result.compress();
         return result;
     }
+    
     
     /**
      * is even?

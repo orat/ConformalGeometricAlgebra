@@ -38,44 +38,36 @@ public class DHUtils {
     }
     
     private static List<CGAMotor> buildChain(DH[] segments){
-      List<CGAMotor> chain = new ArrayList<>();
-      CGAEuclideanBivector Bz = new CGAEuclideanBivector(new Vector3d(1d,0d,0d), new Vector3d(0d,1d,0d));
-      CGAEuclideanBivector Bx = new CGAEuclideanBivector(new Vector3d(0d,1d,0d), new Vector3d(0d,0d,1d));
-        
-      for (int i=0;i<segments.length;++i){
-        DH dh = segments[i];
-        CGARotor R = new CGARotor(Bz, dh.theta());
-        //chain.add(R);
-        
-        CGATranslator T = new CGATranslator(new Vector3d(0d, 0d, dh.d()));
-        //chain.add(T);
-       
-        chain.add(new CGAMotor(R, T));
-        
-        R = new CGARotor(Bx, dh.alpha());
-        //chain.add(R);
-        
-        T = new CGATranslator(new Vector3d(dh.r(), 0d, dh.d()));
-        //chain.add(T);
-        
-         chain.add(new CGAMotor(R, T));
-      }
-      return chain;
+        List<CGAMotor> chain = new ArrayList<>();
+        CGAEuclideanBivector Bz = new CGAEuclideanBivector(new Vector3d(1d,0d,0d), new Vector3d(0d,1d,0d));
+        CGAEuclideanBivector Bx = new CGAEuclideanBivector(new Vector3d(0d,1d,0d), new Vector3d(0d,0d,1d));
+
+        for (int i=0;i<segments.length;++i){
+          DH dh = segments[i];
+          CGARotor R = new CGARotor(Bz, dh.theta());
+          CGATranslator T = new CGATranslator(new Vector3d(0d, 0d, dh.d()));
+          chain.add(new CGAMotor(R, T));
+
+          R = new CGARotor(Bx, dh.alpha());
+          T = new CGATranslator(new Vector3d(dh.r(), 0d, dh.d()));
+          chain.add(new CGAMotor(R, T));
+        }
+        return chain;
     }
     
     private static List<CGAMotor> getSimplified(List<CGAMotor> chain){
-      List<CGAMotor> result = new ArrayList<>();
-      // add first active (theta, d) trafo
-      result.add(new CGAMotor(chain.get(0)));
+        List<CGAMotor> result = new ArrayList<>();
+        // add first active (theta, d) trafo
+        result.add(new CGAMotor(chain.get(0)));
 
-      for (int i=1;i<chain.size()-1; i+=2){
-        // add passive trafo (alpha, r) * next active trafo (theta, d)
-        CGAMotor m = new CGAMotor(chain.get(i));
-        result.add(m.gp(chain.get(i+1)));
-      }
+        for (int i=1;i<chain.size()-1; i+=2){
+          // add passive trafo (alpha, r) * next active trafo (theta, d)
+          CGAMotor m = new CGAMotor(chain.get(i));
+          result.add(m.gp(chain.get(i+1)));
+        }
 
-      // add last passive trafo (alpha, r)
-      result.add(chain.get(chain.size()-1));
-      return result;
+        // add last passive trafo (alpha, r)
+        result.add(chain.get(chain.size()-1));
+        return result;
     }
 }

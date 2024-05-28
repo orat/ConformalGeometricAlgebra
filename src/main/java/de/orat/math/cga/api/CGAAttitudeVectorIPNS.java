@@ -8,7 +8,6 @@ import org.jogamp.vecmath.Vector3d;
  * IPNS representation corresponding to dual direction vector or dual free 
  * vector in [Dorst2007] (grade 3).
  * 
- * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAAttitudeVectorIPNS extends CGAAttitudeIPNS implements iCGATrivector {

@@ -1,6 +1,8 @@
 package de.orat.math.cga.spi;
 
 import static de.orat.math.ga.basis.InnerProductTypes.LEFT_CONTRACTION;
+import java.util.ArrayList;
+import java.util.List;
 import org.jogamp.vecmath.Tuple3d;
 
 /**
@@ -260,8 +262,8 @@ public interface iCGAMultivector {
         """Returns true if multivector is a versor.
         From :cite:`ga4cs` section 21.5, definition from 7.6.4
         """
-        Vhat = self.gradeInvol()
-        Vrev = ~self
+        Vhat = self.gradeInvol() // grade involution/inversion (a sign change operation)
+        Vrev = ~self             // reversion
         Vinv = Vrev/(self*Vrev)[()]
 
         # Test if the versor inverse (~V)/(V * ~V) is truly the inverse of the
@@ -455,9 +457,9 @@ public interface iCGAMultivector {
      * reverse norm or squared length.
      * 
      * Geometric Algebra: A powerful tool for solving geometric problems in visual computing
-     * Leandro A. F. Fernandes, and Manuel M. Oliveira
-     * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10
-     * 2009
+     * Leandro A. F. Fernandes, and Manuel M. Oliveira<br>
+     * DOI: 10.1109/SIBGRAPI-Tutorials.2009.10<br>
+     * 2009<p>
      * 
      * @return squared length
      */
@@ -477,6 +479,31 @@ public interface iCGAMultivector {
      * of different grades.
      */
     public int grade();
+    
+    // ungetestet, not very efficient implementation
+    default int[] grades(){
+        List<Integer> result = new ArrayList<>();
+        for (int grade=0;grade<=5;grade++){
+            double[] coords = extractCoordinates(grade);
+            for (int i=0;i<coords.length;i++){
+                if (coords[i] != 0) {
+                    result.add(grade);
+                    break;
+                }
+            }
+        }
+        return result.stream().mapToInt(i->i).toArray();
+    }
+    default boolean isEven(){
+        for (int grade: grades()){
+            if (grade % 2 != 0) return false;
+        }
+        return true;
+    }
+    default boolean isOdd(){
+        return !isEven();
+    }
+    
     
     //TODO
     // die folgenden Indize-Methoden taugen so nicht, besser statt dessen create/get-
