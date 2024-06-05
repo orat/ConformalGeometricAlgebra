@@ -34,11 +34,13 @@ public abstract class CGAVersor extends CGAMultivector {
         // odd number of blades
         CGAMultivector result = this.gp(m.gradeInversion()).gp(this.inverse());
         
-        // scheint nicht geholfen zu haben
         result = result.compress();
         return result;
     }
     
+    // eigentlich sollte ich doch mit log() den Bivector aus dem Rotor wieder rausbekommen
+    //TODO
+    // decompose()
     
     /**
      * is even?

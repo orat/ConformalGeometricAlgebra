@@ -16,7 +16,7 @@ import de.orat.math.cga.api.CGAKVector;
 import de.orat.math.cga.api.CGALineIPNS;
 import de.orat.math.cga.api.CGALineOPNS;
 import de.orat.math.cga.api.CGALinePair;
-import de.orat.math.cga.api.CGAMotor;
+import de.orat.math.cga.api.CGAScrew;
 import de.orat.math.cga.api.CGAMultivector;
 import static de.orat.math.cga.api.CGAMultivector.createInf;
 import static de.orat.math.cga.api.CGAMultivector.createOrigin;
@@ -60,6 +60,7 @@ import de.orat.math.cga.api.CGAScalarOPNS;
 import de.orat.math.cga.api.CGAScrewAxisIPNS;
 import de.orat.math.cga.api.CGASphereIPNS;
 import de.orat.math.cga.api.CGASphereOPNS;
+import de.orat.math.cga.api.CGASpinor;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
 import de.orat.math.cga.api.CGATangentTrivectorOPNS;
 import de.orat.math.cga.api.CGATangentVectorIPNS;
@@ -135,6 +136,55 @@ public class Test2 {
         }
         return result;
     }
+    private static boolean equals(Matrix4d m1, Matrix4d m2){
+        if (Math.abs(m1.m00-m2.m00) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m01-m2.m01) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m02-m2.m02) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m03-m2.m03) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m10-m2.m10) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m11-m2.m11) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m12-m2.m12) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m13-m2.m13) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m20-m2.m20) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m21-m2.m21) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m22-m2.m22) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m23-m2.m23) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m30-m2.m30) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m31-m2.m31) > epsilon){
+            return false;
+        }
+        if (Math.abs(m1.m32-m2.m32) > epsilon){
+            return false;
+        }
+        return Math.abs(m1.m33-m2.m33) <= epsilon;
+    }
+    
     // Metric: [-1.0, 0.9999999999999998, 1.0, 1.0, 1.0]
     @Test
     public void testCGAMetric(){
@@ -657,6 +707,44 @@ public class Test2 {
     public static String toString(String name, double value){
         return name+" = "+String.valueOf(value);
     }
+    public static String toString(String name, Matrix4d value){
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
+        sb.append(" = (");
+        sb.append(String.valueOf(value.m00));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m01));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m02));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m03));
+        sb.append(";\n ");
+        sb.append(String.valueOf(value.m10));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m11));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m12));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m13));
+        sb.append(";\n ");
+        sb.append(String.valueOf(value.m20));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m21));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m22));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m23));
+        sb.append(";\n ");
+        sb.append(String.valueOf(value.m30));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m31));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m32));
+        sb.append(", ");
+        sb.append(String.valueOf(value.m33));
+        sb.append(")");
+        return sb.toString();
+    }
     
     // alles korrekt
     @Test
@@ -1089,7 +1177,7 @@ public class Test2 {
         // ganja.js -0.5e1234-0.5e1235-e1345
         //TODO
         
-        // Graph the items. (hex numbers are html5 colors, two extra first bytes = alpha)
+        // Graph the items. (hex numbers are html5 colors, two extra first bytes = theta)
         // document.body.appendChild(this.graph([ 
         //      0x00FF0000, p1c, "p1c",                                       // point 
         //      0x00008800, ()=>project_point_on_round(p1c,S), "p1c on S",    // point on sphereIPNS
@@ -1526,7 +1614,7 @@ public class Test2 {
         // attitude (sphereOPNS, Dorst) = (Infinity,Infinity,Infinity)
         //CGAkVector attitudeOPNS (round/tangent) = (16.0*e1234 + 16.0*e1235)
         //CGARound.att()=16.0*e1234 + 16.0*e1235
-        // die Methode um den euclidean vec aus der att zu bestimmen scheint falsch zu sein
+        // die Methode um den euclidean p aus der att zu bestimmen scheint falsch zu sein
         System.out.println(toString("attitude (sphereOPNS, Dorst)",attitude));
         
         // 
@@ -1552,9 +1640,9 @@ public class Test2 {
         //FIXME Herausfinden was die attitude genau für ein Mass ist und da weight mit drinhängt
         
         // What you are computing is in fact a weighted sphere; this is perhaps 
-        // most easily seem by its dual, which will be of the form \alpha (c - \rho^2 n_\infty/2), 
-        // so the factor you are interested is \alpha \rho^2. That shows that 
-        // the radius is in there, and the factor \alpha can be interpreted as 
+        // most easily seem by its dual, which will be of the form \theta (c - \rho^2 n_\infty/2), 
+        // so the factor you are interested is \theta \rho^2. That shows that 
+        // the radius is in there, and the factor \theta can be interpreted as 
         // a measure of the numerical reliability of the spanned sphere due to 
         // the points. I would imagine that it is proportional to the volume of 
         // the tetrahedron spanned by the points: smaller as they are more coplanar.
@@ -2450,7 +2538,7 @@ public class Test2 {
         Vector3d attitude = parameters.attitude();
         //System.out.println(toString("attitude(roundpoint ipns)", attitude));
         //FIXME
-        // vergleich mit volumeSphere und klären wie ich pc.decompose() implementieren sollte
+        // vergleich mit volumeSphere und klären wie ich pc.decompose4PointAndVector() implementieren sollte
     }
     
     public void testLinePair2(){
@@ -3474,6 +3562,166 @@ public class Test2 {
         // opns
     }
     
+    @Test
+    public void testDecomposeSpinor(){
+        System.out.println("---------------------------- test decompose spinor ----------------------");
+        //Point3d p = new Point3d(1,2,3);
+        
+        //Vector3d vec = new Vector3d(3,7,5);
+        
+        // rotation around an axis passing the origin
+        Vector3d a = new Vector3d(1,0,0.2);
+        Vector3d b = new Vector3d (0,1, 0.1);
+        Vector3d vec = new Vector3d();
+        vec.cross(a,b);
+        vec.normalize();
+        double theta = Math.PI/2d/3d;
+        AxisAngle4d axisAngle = new AxisAngle4d(vec.x, vec.y, vec.z, theta);
+        Matrix4d m = new Matrix4d();
+        m.setIdentity();
+        m.setRotation(axisAngle);
+        System.out.println(toString("m", m));
+        //Point3d pT1 = new Point3d(p);
+        //m.transform(pT1);
+        
+        // test bivector
+        CGAEuclideanBivector B = new CGAEuclideanBivector(a,b);
+        B = B.normalize();
+        //CGAEuclideanBivector B = (new CGAEuclideanVector(vec)).euclideanDual();
+        CGASpinor rot = new CGASpinor(B, theta);
+        System.out.println(rot.toString("rot"));
+        //CGARoundPointIPNS cgaPoint = new CGARoundPointIPNS(rot.transform(new CGARoundPointIPNS(p)));
+        //Point3d pT2 = cgaPoint.location();
+        
+        Matrix4d m1 = rot.decompose4PointAndVector();
+        System.out.println(toString("m1",m1));
+        
+        assertTrue(equals(m, m1));
+    }
+    
+        @Test
+    public void testDecomposeRotor(){
+        System.out.println("---------------------------- test decompose rotor ----------------------");
+        
+        // Rotation around an axis through the origin 
+        Vector3d a = new Vector3d(1,0,0.2);
+        Vector3d b = new Vector3d (0,1, 0.1);
+        Vector3d vec = new Vector3d();
+        vec.cross(a,b);
+        vec.normalize();
+        double theta = Math.PI/2d;
+        
+        // with vector algebra
+        AxisAngle4d axisAngle = new AxisAngle4d(vec.x, vec.y, vec.z, theta);
+        Matrix4d m = new Matrix4d();
+        m.setIdentity();
+        m.setRotation(axisAngle);
+        System.out.println(toString("m", m));
+        
+        double d=2;
+        CGAScrew motor = new CGAScrew(a,b,theta, d);
+        System.out.println(motor.toString("motor"));
+        Matrix4d m2 = motor.decompose4PointAndVector();
+        System.out.println(toString("m2", m2));
+        System.out.println("------------------------------------------------------------------------------");
+        assertTrue(equals(m, m2));
+    }
+    
+    @Test
+    public void testDecomposeMotor(){
+        System.out.println("---------------------------- test decompose motor ----------------------");
+        
+        // Rotation around an axis through the origin and translation along this axis
+        Vector3d a = new Vector3d(1,0,0.2);
+        Vector3d b = new Vector3d (0,1, 0.1);
+        Vector3d vec = new Vector3d();
+        vec.cross(a,b);
+        vec.normalize();
+        double theta = Math.PI/2d;
+        double d = 0; // selbst für d==0 stimmt die Matrix nur ungefähr überein
+        
+        // with vector algebra
+        AxisAngle4d axisAngle = new AxisAngle4d(vec.x, vec.y, vec.z, theta);
+        Matrix4d m = new Matrix4d();
+        m.setIdentity();
+        m.setRotation(axisAngle);
+        vec.scale(d);
+        System.out.println(toString("t", vec));
+        m.setTranslation(vec);
+        System.out.println(toString("m", m));
+        
+        CGAScrew motor = new CGAScrew(a,b,theta, d);
+        System.out.println(motor.toString("motor"));
+        Matrix4d m2 = motor.decompose4PointAndVector();
+        System.out.println(toString("m2", m2));
+        System.out.println("------------------------------------------------------------------------------");
+        assertTrue(equals(m, m2));
+        
+        //t = (-1.3662601021279464,-0.6831300510639732,6.831300510639732)
+        //m = (0.03809523809523817, -0.9568524539009142, -0.2880661977710438, -1.3662601021279464;
+        //     0.9949476919961524, 0.009523809523809587, 0.09994191935161147, -0.6831300510639732;
+        //    -0.0928861831813371, -0.2904181098278019, 0.9523809523809527, 6.831300510639732;
+        //     0.0, 0.0, 0.0, 1.0
+        // motor = (0.6932599772158182 - 0.7033190727446562*e1^e2 - 0.07033190727446562*e1^e3 + 0.14066381454893123*e2^e3 + 0.4735867236360506*e1^ei + 0.2367933618180253*e2^ei - 2.367933618180253*e3^ei + 2.522406568911196*e1^e2^e3^ei)
+        // m2 = (7.914094654658532E-4, -0.9553796199693654, -0.29537968010384336, 0.0;
+        //       0.9949522374162776, -0.028888053619718246, 0.09610164212128369, 0.0;
+        //      -0.10034649436527905, -0.2939647293558449, 0.9505342281913597, 0.0;
+        //       0.0, 0.0, 0.0, 1.0
+    }
+    
+    
+    @Test
+    public void testTranslatorRotorMultiplicaiton(){
+        System.out.println("---------------------------- test translator rotor multiplication----------------------");
+        Vector3d a = new Vector3d(1,0,0.2);
+        Vector3d b = new Vector3d (0,1, 0.1);
+        Vector3d vec = new Vector3d();
+        vec.cross(a,b);
+        vec.normalize();
+        double theta = Math.PI/2d;
+        double d = 7;
+
+        // rotation around origin
+        AxisAngle4d axisAngle = new AxisAngle4d(vec.x, vec.y, vec.z, theta);
+        Matrix4d m = new Matrix4d();
+        m.setIdentity();
+        m.setRotation(axisAngle);
+        // translator along rotation axis
+        vec.scale(d);
+        m.setTranslation(vec);
+        
+        // nur der Translator
+        Matrix4d mT = new Matrix4d();
+        mT.setIdentity();
+        mT.setTranslation(vec);
+        System.out.println(toString("mT", mT));
+        
+        // nur den Rotor
+        Matrix4d mR = new Matrix4d();
+        mR.setIdentity();
+        mR.setRotation(axisAngle);
+        System.out.println(toString("mR", mR));
+        
+        System.out.println(toString("m", m));
+        //double d = p.length();
+        
+        System.out.println(toString("vec",vec));
+        CGARotor R = new CGASpinor(a,b, theta);
+        System.out.println(R.toString("R"));
+        Matrix4d R2 = R.decompose4PointAndVector();
+        System.out.println(toString("R2", R2));
+        
+        CGATranslator T = new CGATranslator(vec);
+        System.out.println(T.toString("T"));
+        CGAScrew M = new CGAScrew(T,R);
+        System.out.println(M.toString("M"));
+        Matrix4d m2 = M.decompose4PointAndVector();
+        System.out.println(toString("m2", m2));
+        System.out.println("------------------------------------------------------------------------------");
+        assertTrue(equals(m, m2));
+    }
+    
+    
     //@Test
     public void testExp(){
         System.out.println("------------------------------- test exp ---------------------");
@@ -3517,7 +3765,7 @@ public class Test2 {
         // scalar
         result[0] = _mVec[0];
         
-        // 1-vec
+        // 1-p
         // extern: startindex=1 e0, e1, e2, e3, einf
         result[1] = (_mVec[5] -_mVec[4])*0.5; // e0=0.5*(e5-e4)
         result[2] = _mVec[1]; // e1
@@ -3525,7 +3773,7 @@ public class Test2 {
         result[4] = _mVec[3]; // e3
         result[5] = (_mVec[4]+_mVec[5])*0.5; // einf = e5+e4
          
-        // 2-vec
+        // 2-p
         // intern: start index=6 "e12","e13","e14","e15","e23","e24","e25","e34","e35","e45"
         // extern: start index=6 "e01 , e02,  e03, e0inf, e12,  e13, e1inf, e23, e2inf, e3inf
         result[6] = (_mVec[8]  - _mVec[9]) *0.5; // e01 = 0.5(e14-e15)
@@ -3541,7 +3789,7 @@ public class Test2 {
         result[14] = _mVec[11] + _mVec[12]; // e2inf=e25+e24
         result[15] = _mVec[13] + _mVec[14]; // e3inf=e35+e34
         
-        // 3-vec
+        // 3-p
         // intern: index=16 "e123","e124","e125","e134","e135","e145","e234","e235","e245","e345"
         // extern: index=16 e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
         result[16] = 0.5*(_mVec[18]-_mVec[17]); // e012=0.5*(e125-e124)
@@ -3555,7 +3803,7 @@ public class Test2 {
         result[24] = _mVec[19]+_mVec[20]; // e13inf=e134+e135
         result[25] = _mVec[22]+_mVec[23]; // e23inf=e234+e235
                 
-        // 4-vec
+        // 4-p
         // intern: index=26 "e1234","e1235","e1245","e1345","e2345",
         // extern: index=26 e0123, e012inf, e013inf, e023inf, e123inf, 
         result[26] = 0.5*(_mVec[26]-_mVec[27]); // e0123=0.5*(e1234-e1235)
@@ -3564,7 +3812,7 @@ public class Test2 {
         result[29] = _mVec[30]; // e023inf=-e2345
         result[30] = _mVec[26]+_mVec[27]; // e123inf=e1234+e1235
                 
-        // 5-vec
+        // 5-p
         // intern: index=31 "e12345"
         // extern: index=31 e0123inf
         result[31] = _mVec[31]; // e12345
@@ -3606,7 +3854,7 @@ public class Test2 {
         double cm = Math.cos(lm);
         double sm;
         if (lm==0) sm=1d; else sm= Math.sin(lm)/lm;
-        // Calculate the mixing factors alpha and beta_i.
+        // Calculate the mixing factors theta and beta_i.
         double cmsp = cm*sp;
         double cpsm = cp*sm;
         double spsm = sp*sm/2d;
@@ -3639,6 +3887,7 @@ public class Test2 {
         result[30] = spsm*T1; // e2345
         return result;
     }
+    
     
     @Test
     public void testForceAddition(){
@@ -3778,10 +4027,10 @@ public class Test2 {
         
         // CGA
         CGAEuclideanBivector Bz = new CGAEuclideanBivector(x, new Vector3d(0d,1d,0d));
-        CGARotor R = new CGARotor(Bz, theta);
+        CGASpinor R = new CGASpinor(Bz, theta);
         
         CGATranslator T = new CGATranslator(new Vector3d(0d, 0d, d));
-        CGAMotor M = new CGAMotor(R, T);
+        CGAScrew M = new CGAScrew(T,R);
         
         CGAOrientedPointIPNS zAxis = new CGAOrientedPointIPNS(o, z);
         CGAAttitudeVectorIPNS xAxis = new CGAAttitudeVectorIPNS(x);
@@ -3801,6 +4050,14 @@ public class Test2 {
         
         //CGALineIPNS test = new CGALineIPNS(p1,v);
         //System.out.println(test.toString("lineIPNS"));
+    }
+    
+    @Test
+    public void testDecomposeTranslator(){
+        Vector3d vec = new Vector3d(1d, 2d, 3d);
+        CGATranslator T = new CGATranslator(vec);
+        Vector3d decomposeVec = T.decompose();
+        assertTrue(equals(vec, decomposeVec));
     }
     
     //B=B0​e12​+B1​e13​+B2​e14​+B3​e15​

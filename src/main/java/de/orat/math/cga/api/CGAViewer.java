@@ -1,6 +1,6 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.api.CGAMotor.MotorParameters;
+import de.orat.math.cga.api.CGAScrew.MotorParameters;
 import de.orat.view3d.euclid3dviewapi.api.ViewerService;
 import de.orat.view3d.euclid3dviewapi.spi.iAABB;
 import de.orat.view3d.euclid3dviewapi.spi.iEuclidViewer3D;
@@ -295,13 +295,13 @@ public class CGAViewer extends CGAViewObject {
         return parent2;
     }
     
-    void transform(CGAViewObject obj, CGAMotor motor){
+    void transform(CGAViewObject obj, CGAScrew motor){
         impl.transform(obj.getId(), convert(motor));
     }
     
-    private Matrix4d convert(CGAMotor motor){
+    private Matrix4d convert(CGAScrew motor){
         //TODO
-        MotorParameters motorParameters = motor.decomposeMotor();
+        //MotorParameters motorParameters = motor.decomposeMotor();
         
         return null;
     }

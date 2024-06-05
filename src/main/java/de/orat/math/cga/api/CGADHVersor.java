@@ -33,12 +33,12 @@ public class CGADHVersor extends CGAVersor {
     private static CGADHVersor create(CGAEuclideanVector v1, CGAEuclideanVector v2,
                                       double theta, double d, double a, double alpha){
         CGAEuclideanBivector Bxy = new CGAEuclideanBivector(v1,v2);
-        CGARotor Rz = new CGARotor(Bxy, theta);
+        CGARotor Rz = new CGASpinor(Bxy, theta);
         CGAEuclideanVector z = Bxy.euclideanDual();
         CGATranslator Tz = new CGATranslator(z.gp(d));
         CGATranslator Tx = new CGATranslator(v1.gp(a));
         CGAEuclideanBivector Byz = new CGAEuclideanBivector(v2,z);
-        CGARotor Rx = new CGARotor(Byz, alpha);
+        CGARotor Rx = new CGASpinor(Byz, alpha);
         return new CGADHVersor(Rz.gp(Tz).gp(Tx).gp(Rx));
     }
     

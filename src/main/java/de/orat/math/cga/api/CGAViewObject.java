@@ -51,7 +51,7 @@ public class CGAViewObject {
         return getCGAViewer().addCGAObject(this, m, label, color);
     }
 
-    public void transform(CGAMotor motor){
+    public void transform(CGAScrew motor){
         // TODO
         // alle children müssen auch transformiert werden
         getCGAViewer().transform(this, motor);

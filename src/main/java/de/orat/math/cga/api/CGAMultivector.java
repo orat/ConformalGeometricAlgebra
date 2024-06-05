@@ -202,11 +202,10 @@ public class CGAMultivector {
     }
     
     /** 
-     * 
      * Get a specific coordinates representation.
      * 
      * Hint: This must not correspond to the list of basis blade names you get
-     * but the method basedBladeNames().because the coordinates representation is
+     * by the method basedBladeNames() because the coordinates representation is
      * a fixed one, independend from the used implementation.<p>
      * 
      * @return 
@@ -787,6 +786,15 @@ public class CGAMultivector {
      */
     public int grade(){
         return impl.grade();
+    }
+    public int[] grades(){
+        return impl.grades();
+    }
+    public boolean isEven(){
+        return impl.isEven();
+    }
+    public boolean isOdd(){
+        return impl.isOdd();
     }
     /**
      * Create a normalized multivector.

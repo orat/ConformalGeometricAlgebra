@@ -4,6 +4,8 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
+ * Screw-axis/Screw-line.
+ * 
  * CGALineIPNS + Vielfaches von einf, entsteht bei der Addition von CGALineIPNS-Objekten?
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
@@ -18,6 +20,8 @@ public class CGAScrewAxisIPNS extends CGAFlatIPNS implements iCGABivector {
         super(createScrew(p, dir));
     }
     
+    // TODO T muss eine Translation in Richtung von l sein
+    // ungünstige Argumente, besser wäre hier nur pitch für translation zu übergeben
     public CGAScrewAxisIPNS(CGALineIPNS l, CGATranslator T){
         super(l.add(T));
     }

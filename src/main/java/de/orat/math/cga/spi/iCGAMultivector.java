@@ -244,6 +244,14 @@ public interface iCGAMultivector {
         }
         return true;
     }
+    default boolean isOne(double precision){
+        double[] coords = this.extractCoordinates();
+        if (Math.abs(coords[0]-1) > precision) return false;
+        for (int i=1;i<coords.length;i++){
+            if (Math.abs(coords[i]) > precision) return false;
+        }
+        return true;
+    }
     
     //default boolean isBlade(){
       /*
