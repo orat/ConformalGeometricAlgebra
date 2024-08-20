@@ -720,8 +720,8 @@ public class CGAViewer extends CGAViewObject {
         return Double.isFinite(tuple3d.z);
     }
 
-	@Override
-	public void remove() {
-		this.impl.removeNode(super.getId());
-	}
+    public void remove(long id) {
+        //TODO alle children removed?
+        this.impl.removeNode(id);
+    }
 }

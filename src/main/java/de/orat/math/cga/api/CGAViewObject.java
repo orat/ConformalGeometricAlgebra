@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAViewObject {
@@ -56,7 +55,8 @@ public class CGAViewObject {
         // alle children müssen auch transformiert werden
         getCGAViewer().transform(this, motor);
     }
-	public void remove() {
-		throw new UnsupportedOperationException("To be implemented by subclasses.");
-	}
+    
+    public void remove() {
+        getCGAViewer().remove(id);
+    }
 }
