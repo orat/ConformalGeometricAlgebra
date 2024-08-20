@@ -56,5 +56,7 @@ public class CGAViewObject {
         // alle children müssen auch transformiert werden
         getCGAViewer().transform(this, motor);
     }
-    public void remove(){}
+	public void remove() {
+		throw new UnsupportedOperationException("To be implemented by subclasses.");
+	}
 }
