@@ -72,10 +72,13 @@ public class CGAViewer extends CGAViewObject {
         } 
         return result;
     }
-    
-    /*public CGAViewObject addCGAObject(CGAKVector m, String label){
+
+	@Override
+	public CGAViewObject addCGAObject(CGAKVector m, String label) {
         return addCGAObject(this, m, label);
-    }
+	}
+
+	/*
     public CGAViewObject addCGAObject(CGAKVector m, String label, Color color){
         return addCGAObject(this, m, label);
     }*/
@@ -716,4 +719,9 @@ public class CGAViewer extends CGAViewObject {
         if (!Double.isFinite(tuple3d.y)) return false;
         return Double.isFinite(tuple3d.z);
     }
+
+	@Override
+	public void remove() {
+		this.impl.removeNode(super.getId());
+	}
 }
