@@ -69,7 +69,6 @@ public class CGARotor extends CGAVersor {
     
     // decomposition
     
-    
     // [Dorst2007]-book 13.15.
     public CGASpinor splitSpinor(){
         return new CGASpinor(o.negate().lc(this.gp(inf)));
@@ -100,13 +99,19 @@ public class CGARotor extends CGAVersor {
         double R66 = R5*R5;
         double R55 = R6*R6;
         
-        //TODO
-        // für mehr Effizient: Produkte vorher bilden und identy als static final vorher erzeugen
-        Matrix4d result = new Matrix4d(-R4*R4-R5*R5/*m00*/, R0*R4+R5*R6/*m01*/, R4*R6-R0*R5/*m02*/, R3*R5-R0*R1-R2*R4-R6*R7/*m03*/,
-		    R5*R6-R0*R4/*m10*/, -R4*R4-R6*R6/*m11*/, R0*R6+R4*R5/*m12*/, R1*R4-R0*R2-R3*R6-R5*R7/*m13*/,
-		    R0*R5+R4*R6/*m20*/, R4*R5-R0*R6/*m21*/, -R5*R5-R6*R6/*m22*/, R2*R6-R0*R3-R1*R5-R4*R7/*m23*/,
+        double R45 = R4*R5;
+        double R56 = R5*R6;
+        double R46 = R4*R6;
+        
+        double R04 = R0*R4;
+        double R05 = R0*R5;
+        double R06 = R0*R6;
+        
+        Matrix4d result = new Matrix4d(-R44-R55/*m00*/, R04+R56/*m01*/, R46-R05/*m02*/, R3*R5-R0*R1-R2*R4-R6*R7/*m03*/,
+		    R56-R04/*m10*/, -R44-R66/*m11*/, R06+R45/*m12*/, R1*R4-R0*R2-R3*R6-R5*R7/*m13*/,
+		    R05+R46/*m20*/, R45-R06/*m21*/, -R55-R66/*m22*/, R2*R6-R0*R3-R1*R5-R4*R7/*m23*/,
 		    0d/*m30*/, 0d/*m31*/, 0d/*m32*/, 0d/*m33*/);
-        result.mul(2d, result);
+        result.mul(2d);
         Matrix4d identity = new Matrix4d();
         identity.setIdentity();
         result.add(identity);
@@ -146,8 +151,8 @@ public class CGARotor extends CGAVersor {
     
     
     /**
-     * An more efficient implementation can use the information that the multivector 
-     * a versor.
+     * An more efficient implementation can use the information that the 
+     * multivector is a versor.
      * 
      * The inverse of a basis blade coincides with the conjugate.
      * 

@@ -1,5 +1,7 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Matrix3d;
+import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Quat4d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -73,6 +75,33 @@ public class CGASpinor extends CGARotor {
         result.x = -vector[12]; // i
         result.y = vector[10];  // j
         result.z = -vector[6]; // k
+        return result;
+    }
+    // ungetestet
+    public Matrix3d decompose2Matrix(){
+        // s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
+        // e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
+        // e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
+        // eo^e1^e3^ei, e2^e3^ei, eo^e2^e3^ei, e1^e2^e3^ei, eo^e1^e2^e3^ei
+        double[] coords = extractCoordinates();
+        
+        double R0 = coords[0]; // s
+        double R1 = coords[3]; // e01
+        double R2 = coords[5]; // e02
+        double R3 = coords[9]; // e03
+        double R4 = coords[6]; // e12
+        double R5 = -coords[10]; //e31
+        double R6 = coords[12]; // e23
+        
+        //TODO
+        // für mehr Effizient: Produkte vorher bilden und identy als static final vorher erzeugen
+        Matrix3d result = new Matrix3d(-R4*R4-R5*R5/*m00*/, R0*R4+R5*R6/*m01*/, R4*R6-R0*R5/*m02*/, 
+		    R5*R6-R0*R4/*m10*/, -R4*R4-R6*R6/*m11*/, R0*R6+R4*R5/*m12*/, 
+		    R0*R5+R4*R6/*m20*/, R4*R5-R0*R6/*m21*/, -R5*R5-R6*R6/*m22*/);
+        result.mul(2d, result);
+        Matrix3d identity = new Matrix3d();
+        identity.setIdentity();
+        result.add(identity);
         return result;
     }
     

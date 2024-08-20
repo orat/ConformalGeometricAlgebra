@@ -14,6 +14,10 @@ import org.jogamp.vecmath.Vector3d;
  * direction of the rotation axis, according to Chasles' theorem.<p>
  * 
  * This combinded motion is called screw. If used for velocity, it is called twist.
+ * A twist has 6 independent parameters - it is a screw with 5 parameters plus an 
+ * additional scalar quantity omega called amplitude. The amplitude describes the 
+ * rate which a rigid body twists about the screw.<p>
+ * 
  * If it is used for force/torque, it is called wrench.<p>
  * 
  * It describes a rotation around a rotation axis combined with a
@@ -27,13 +31,18 @@ import org.jogamp.vecmath.Vector3d;
  * e1^e2, e2^e3, e3^e1, eo^e1, eo^e2, eo^e3     // grade 2<br>
  * eo^e1^e2^e3                                  // grade 4<p>
  *
- * Motor Parameterization
- * Lars Tingelstad∗ and Olav Egeland
- * 2018
+ * In priciple a screw has a minimal set of 5 parameters, 4 describing a line in
+ * space and one for the pitch.<p>
+ * 
+ * Motor Parameterization<br>
+ * Lars Tingelstad∗ and Olav Egeland<br>
+ * 2018<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGAScrew extends CGAVersor {
+    
+    // composition 
     
     public CGAScrew(CGAMultivector m){
         // test m auf even und darauf das gp mit reverse == 1
@@ -71,6 +80,14 @@ public class CGAScrew extends CGAVersor {
         //this(translator.gp(rotor).gp(translator.reverse()));
     }
     
+    /**
+     * Create a specific screw which passes the origin.
+     * 
+     * @param a
+     * @param b
+     * @param theta
+     * @param d 
+     */
     public CGAScrew(Vector3d a, Vector3d b, double theta, double d){
          this(createTranslator(a,b,d), createRotor(a,b, theta));
     }
@@ -97,6 +114,16 @@ public class CGAScrew extends CGAVersor {
         this(screwAxis.gp(theta).exp());
     }
     
+    /**
+     * The pitch of a screw is the ratio of the tranlational displacement and the
+     * rotational displacement of a body.
+     * 
+     * @return pitch
+     */
+    public double getPitch(){
+        //TODO implement it
+        return 0;
+    }
     // scheint nicht zu stimmen
     /*public CGAScrew(AxisAngle4d axisAngle){
         this(createRotor(axisAngle), new CGATranslator(
@@ -126,9 +153,40 @@ public class CGAScrew extends CGAVersor {
         this(B.add(createE3(d).gp(inf)));
     }
     
-    public record MotorParameters(Vector3d dir, double alpha){}
+    //public record MotorParameters(Vector3d dir, double alpha){}
+    
+    
+    // decomposition
+    
+    // unklar ob das so überhaupt geht
+    // [Dorst2007]-book 13.15.
+    public CGARotor splitRotor(){
+        // p. 384
+        //return new CGARotor(o.negate().lc(this.gp(inf)));
+        //unklar ob das überhaupt einen Unterschied macht
+        return new CGARotor(o.lc(this.gp(inf)).negate());
+    }
+    // [Dorst2007]-book 13.15.
+    public Vector3d splitTranslation(CGARotor rotor){
+        CGAMultivector m = o.lc(this).gp(-2d).div(rotor);
+        return m.extractE3ToVector3d();
+    }
+    // p 384 unvollständig
+    /*public CGAMultivector log(){
+        CGARotor R = splitRotor();
+        CGAMultivector t = o.lc(this).gp(-2d).div(R);
+        if (R.isScalar() && R.decomposeScalar() == 1d) {
+            return t.negate().gp(inf.gp(0.5));
+        } else {
+            CGAMultivector R2 = R.extractGrade(2);
+            CGAMultivector I = R2.gp(1d/Math.sqrt(-R2.gp(R2)));
+            return t.op(I).negate().div(I)+1/(1-R.gp(R))...
+        }
+        
+    }*/
     
     // ungetestet
+    // macht so keinen Sinn hier
     /*public Matrix4d toMatrix4d(){
         MotorParameters param = decomposeMotor();
         Matrix4d R = new Matrix4d();
@@ -170,6 +228,18 @@ public class CGAScrew extends CGAVersor {
         return new MotorParameters(dir, alpha);
     }*/
 
+    // mir ist unklar, ob ich eine screw überhaupt in eine 4x4-Matrix darstellen kann
+    //TODO
+    public Matrix4d decompose4PointAndVector(){
+        CGARotor R = splitRotor();
+        Vector3d t = splitTranslation(R);
+        Matrix4d m = R.decompose4PointAndVector();
+        m.setM03(m.getM03()+t.x);
+        m.setM13(m.getM03()+t.y);
+        m.setM23(m.getM03()+t.z);
+        return m;
+    }
+    
     /**
      * Decompose the motor into a homogenious matrix.
      * 
@@ -188,7 +258,7 @@ public class CGAScrew extends CGAVersor {
      * 
      * @return a homoegenious matrix representing the motor
      */
-    public Matrix4d decompose4PointAndVector(){
+    /*public Matrix4d decompose4PointAndVector(){
         // s, eo, e1, eo^e1, e2, eo^e2, e1^e2, eo^e1^e2, e3, eo^e3, e1^e3, eo^e1^e3,
         // e2^e3, eo^e2^e3, e1^e2^e3, eo^e1^e2^e3, ei, eo^ei, e1^ei, eo^e1^ei,
         // e2^ei, eo^e2^ei, e1^e2^ei, eo^e1^e2^ei, e3^ei, eo^e3^ei, e1^e3^ei, 
@@ -208,10 +278,10 @@ public class CGAScrew extends CGAVersor {
         
         //TODO
         // für mehr Effizient: Produkte vorher bilden und identy als static final vorher erzeugen
-        Matrix4d R = new Matrix4d(-R4*R4-R5*R5/*m00*/, R0*R4+R5*R6/*m01*/, R4*R6-R0*R5/*m02*/, R3*R5-R0*R1-R2*R4-R6*R7/*m03*/,
-		    R5*R6-R0*R4/*m10*/, -R4*R4-R6*R6/*m11*/, R0*R6+R4*R5/*m12*/, R1*R4-R0*R2-R3*R6-R5*R7/*m13*/,
-		    R0*R5+R4*R6/*m20*/, R4*R5-R0*R6/*m21*/, -R5*R5-R6*R6/*m22*/, R2*R6-R0*R3-R1*R5-R4*R7/*m23*/,
-		    0d/*m30*/, 0d/*m31*/, 0d/*m32*/, 0d/*m33*/);
+        Matrix4d R = new Matrix4d(-R4*R4-R5*R5, R0*R4+R5*R6, R4*R6-R0*R5, R3*R5-R0*R1-R2*R4-R6*R7,
+		    R5*R6-R0*R4, -R4*R4-R6*R6, R0*R6+R4*R5, R1*R4-R0*R2-R3*R6-R5*R7,
+		    R0*R5+R4*R6, R4*R5-R0*R6, -R5*R5-R6*R6, R2*R6-R0*R3-R1*R5-R4*R7,
+		    0d, 0d, 0d, 0d);
         R.mul(2d, R);
         Matrix4d identity = new Matrix4d();
         identity.setIdentity();
@@ -243,7 +313,7 @@ public class CGAScrew extends CGAVersor {
         //T.setTranslation(new Vector3d(x,y,z));
         //T.mul(R);
         return R;
-    }
+    }*/
     
     /*public Matrix4d decompose2ScrewMatrix(){
         Vector3d s = new Vector3d();

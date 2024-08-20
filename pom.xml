@@ -43,11 +43,6 @@
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>de.orat.math.view</groupId>
-            <artifactId>EuclidView3d</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
     
     <build>

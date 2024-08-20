@@ -1,5 +1,6 @@
 package de.orat.math.cga.api;
 
+import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
@@ -58,5 +59,11 @@ public class CGAScrewAxisIPNS extends CGAFlatIPNS implements iCGABivector {
         // + ein Vielfaches von inf als Multivektor habe, so wie ich das bekommen wenn ich 2 Punkte
         // addiert und durch 2 teile
         return new CGALineIPNS(gp(inf).gp(this).negate().div(ip(inf).sqr().gp(2)));
+    }
+    
+    // eine screw-axis kann ich einen 4x4-matrix überführt werden oder in einen 6d-vector
+    public Matrix4d decompose(){
+        //TODO
+        return null;
     }
 }

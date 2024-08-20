@@ -1,6 +1,6 @@
 package de.orat.math.cga.api;
 
-import de.orat.math.cga.api.CGAScrew.MotorParameters;
+//import de.orat.math.cga.api.CGAScrew.MotorParameters;
 import de.orat.view3d.euclid3dviewapi.api.ViewerService;
 import de.orat.view3d.euclid3dviewapi.spi.iAABB;
 import de.orat.view3d.euclid3dviewapi.spi.iEuclidViewer3D;
@@ -299,6 +299,7 @@ public class CGAViewer extends CGAViewObject {
         impl.transform(obj.getId(), convert(motor));
     }
     
+    // TODO kann ich eine Screw überhaupt in eine 4x4-Matrix überführen?
     private Matrix4d convert(CGAScrew motor){
         //TODO
         //MotorParameters motorParameters = motor.decomposeMotor();
