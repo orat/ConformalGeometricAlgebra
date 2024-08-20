@@ -18,7 +18,8 @@ public class CGAViewObject {
     CGAViewObject(CGAMultivector mv, String label, CGAViewObject parent, long id){
         setParent(parent);
         this.label = label;
-        this.mv = mv;
+		this.mv = mv;
+		this.id = id;
     }
     final void setParent(CGAViewObject parent){
         this.parent = parent;
