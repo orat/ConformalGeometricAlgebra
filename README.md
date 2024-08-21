@@ -34,7 +34,7 @@ and build those projects to have them available in your local Maven cache.
 If you want to use the the default Visualizer, you have to clone and checkout [Euclid3dView](https://github.com/orat/EuclidView3d) and add it to your runtime dependencies.
 
 
-## Important formulae
+## Useful formulas
 ### Formulae to compose conformal geometric objects
 #### Geometric objects in outer product null space representation
 | description | formula | grade | class |
