@@ -27,10 +27,11 @@ abstract class CGARoundIPNS extends CGAKVector implements iCGATangentOrRound {
         super(values);
     }
     
+    // tested
     public static boolean is(CGAMultivector m){
         if (inf.op(m).isNull()) return false;
         if (inf.lc(m).isNull()) return false;
-        return !m.sqr().isNull();
+        return true;
     }
     
     // untested

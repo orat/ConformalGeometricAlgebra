@@ -282,4 +282,10 @@ public class CGARoundPointIPNS extends CGARoundIPNS {
         CGAMultivector m = p1.add(p2).gp(0.5);
         return new CGARoundPointIPNS(m.gp(inf).gp(m).negate().div(m.ip(inf).sqr().gp(2)));
     }
+    
+    public static boolean is(CGAMultivector m){
+        boolean result = CGARoundIPNS.is(m);
+        if (!result) return false;
+        return m.sqr().isNull();
+    }
 }

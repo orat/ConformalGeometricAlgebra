@@ -4111,7 +4111,26 @@ public class Test2 {
         Vector3d decomposeVec = T.decompose();
         assertTrue(equals(vec, decomposeVec));
     }
-    
+ 
+    @Test
+    public void testMultiWedge(){
+        System.out.println("-------------------- test multiwedge from ik -------------------------------------");
+        
+        // 1.0000000000000002*eo + 0.46446222*e1 + 0.1284755081432715*e2 - 0.004980000000000002*e3 + 0.11612795520000001*ei
+	CGAMultivector Pc = o.add(CGAMultivector.createEx(0.46446222)).
+                 add(CGAMultivector.createEy(0.1284755081432715)).
+                 add(CGAMultivector.createEz(0.004980000000000002)).
+                 add(CGAMultivector.createInf(0.11612795520000001));
+        
+        System.out.println(Pc.toString("input"));
+        
+	// opns plane (grade 4) - through joints 1, 2, 3 and 4, eq. 46
+        // 0.00498 + 0.46446221999999976*e1^e3 + 0.1284755081432714*e2^e3 - 0.004979999999999999*eo^ei 
+        // - 0.46446221999999976*eo^e1^e3^ei - 0.1284755081432714*eo^e2^e3^ei
+        //PIc := ((ε₀^ε₃)^Pc)^εᵢ 
+        CGAMultivector result = o.op(e3).op(Pc).op(inf);
+        System.out.println(result.toString("result"));
+    }
     //B=B0​e12​+B1​e13​+B2​e14​+B3​e15​
     // +B4​e23​+B5​e24​+B6​e25​+B7​e34​+B8​e35​+B9​e45​
     public static double[] createRandomCGAR41BivectorArray(){

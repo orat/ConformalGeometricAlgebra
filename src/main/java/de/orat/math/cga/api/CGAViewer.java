@@ -73,10 +73,10 @@ public class CGAViewer extends CGAViewObject {
         return result;
     }
 
-	@Override
-	public CGAViewObject addCGAObject(CGAKVector m, String label) {
+    @Override
+    public CGAViewObject addCGAObject(CGAKVector m, String label) {
         return addCGAObject(this, m, label);
-	}
+    }
 
 	/*
     public CGAViewObject addCGAObject(CGAKVector m, String label, Color color){
@@ -291,10 +291,14 @@ public class CGAViewer extends CGAViewObject {
     
     private CGAViewObject addComplexViewObject(CGAMultivector m, String label, CGAViewObject parent, long[] ids){
         CGAViewObject parent2 = new CGAViewObject(m, label,  parent, -1);
-        CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
+        for (int i=0;i<ids.length;i++){
+            CGAViewObject p = new CGAViewObject(null,label+"_"+String.valueOf(i+1),parent2, ids[i]);
+            parent.addChild(p);
+        }
+        /*CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
         parent.addChild(p1);
         CGAViewObject p2 = new CGAViewObject(null,label+"_2",parent2, ids[1]);
-        parent.addChild(p2);
+        parent.addChild(p2);*/
         return parent2;
     }
     

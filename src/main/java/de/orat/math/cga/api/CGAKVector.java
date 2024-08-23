@@ -2,7 +2,6 @@ package de.orat.math.cga.api;
 
 import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Vector3d;
 
 /**
  * A k-Vector is a multivector which is a linear combination of the 32 basis blades 
@@ -29,7 +28,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
      * Create a specialzed CGAKVector from a given multivector.
      * 
      * @param m k-vector
-     * @param isIPNS true, the an ipns multivector is created
+     * @param isIPNS true, an ipns multivector is created
      * @return null, if the given Multivector is not recognized as a specialization
      * of CGAKVector
      */
@@ -42,6 +41,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
         //TODO
         // alle Klassen durchtesten
         
+        m = new CGAMultivector(m.impl.getCompressed());
         switch (m.grade()){
             case 0:
                 // opns scalar
@@ -73,6 +73,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                 } else if (CGAAttitudeOPNS.is(m)){
                    return new CGAAttitudeTrivectorOPNS(m);
                 }
+                System.out.println("Illegal grade 1 object found: "+m.toString());
                 break;
                 
             case 2:
@@ -105,6 +106,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     } else if (CGATangentIPNS.is(m)){
                         return new CGATangentBivectorIPNS(m);
                     }
+                    System.out.println("Illegal ipns object of grade 2 found: "+m.toString());
                     
                 // opns
                 } else {
@@ -115,6 +117,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     } else if (CGARoundOPNS.is(m)){
                         return new CGAPointPairOPNS(m);
                     }
+                    System.out.println("Illegal opns object of grade 2 found: "+m.toString());
                 }
                 break;
                 
@@ -147,6 +150,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     } else if (CGATangentOPNS.is(m)){
                         return new CGATangentBivectorOPNS(m);
                     }
+                    System.out.println("Illegal opns object of grade 3 found:"+m.toString());
                     
                 // ipns
                 } else {
@@ -157,6 +161,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     } else if (CGARoundIPNS.is(m)){
                         return new CGAPointPairIPNS(m);
                     }
+                    System.out.println("Illegal ipns object of grade 3 found:"+m.toString());
                 }
                 break;
                 
@@ -166,6 +171,8 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     if (CGAAttitudeIPNS.is(m)){
                         return new CGAAttitudeIPNS(m);
                     }
+                    System.out.println("Illegal ipns object of grade 4 found:"+m.toString());
+                    
                 // opns
                 } else {
                     // opns plane (flat)
@@ -178,6 +185,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     } else if (CGAAttitudeOPNS.is(m)){
                         return new CGAAttitudeTrivectorOPNS(m);
                     }
+                    System.out.println("Illegal opns object of grade 4 found:"+m.toString());
                 }
                 break;
                 
@@ -185,6 +193,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                 // ipns scalar
                 return new CGAScalarIPNS(m);
             default:
+                System.out.println("Illegal object of unknown grade found:"+m.toString());
         }
         return null;
     }

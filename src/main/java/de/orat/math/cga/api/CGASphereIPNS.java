@@ -27,6 +27,15 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
         super(values);
     }
     
+    public static boolean is(CGAMultivector m){
+        boolean result = CGARoundIPNS.is(m);
+        if (!result) return false;
+        // test auf radius > 0
+        CGAMultivector mv =  m.sqr();
+        if (!mv.isScalar()) return false;
+        return mv.decomposeScalar() > eps;
+    }
+    
     // composition
     
     /**
@@ -143,6 +152,12 @@ public class CGASphereIPNS extends CGARoundIPNS implements iCGAVector {
     
     // decomposition
     
+    @Override
+    public EuclideanParameters decompose(){
+        //System.out.println(toString("CGASphereIPNS.decompose"));
+        return new EuclideanParameters(new Vector3d(Double.NaN, Double.NaN, Double.NaN), location(), 
+                                      squaredSize(), squaredWeight());
+    }
     public Vector3d attitude(){
         throw new RuntimeException("CGASphereIPNS does not implement Vector attitude()! Use attitudeSphere instead!");
     }
