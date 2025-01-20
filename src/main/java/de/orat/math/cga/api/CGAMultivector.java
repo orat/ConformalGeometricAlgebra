@@ -739,9 +739,23 @@ public class CGAMultivector {
         // es scheint aber so zu funktionieren
         // a&b = !(!a^!b)
         //return dual().op(x.dual()).dual();
-        return dual_i(dual_i(this).op(dual_i(x)));
+        
+        // letzte Fassung
+        //return dual_i(dual_i(this).op(dual_i(x)));
+        // neu 7.10.24, sieh comment unten
+        return (new CGAMultivector(x.impl.undual()).op(new CGAMultivector(this.impl.undual()))).dual();
+        
         //TODO besser die default impl im interface aufrufen?
         //return new CGAMultivector(impl.vee(x.impl));
+        
+        // So ganja.js has general definition of join operation used by CGA:
+        // a & b == (b.UnDual ^ a.UnDual).Dual
+        // In PGA this definition was replaced with (a.UnDual ^ b.UnDual).Dual to make PGA an extension of homogeneous coordinates for facilitating its adoption in computer graphics.
+        // Here you undualize pseudo points into hyperplanes and meet them into the hyperline and then dualize it into pseudo line passing through our 2 pseudo points.
+        // To use “&” for PGA in this calculator you need to swap the arguments
+        // join(a, b) == b & a.
+        // In ganja.js join operation for PGA can be defined like this:
+        // var join = (a, b) => (a.UnDual ^ b.UnDual).Dual;
     }
     private static CGAMultivector dual_i(CGAMultivector m){
         return new CGAMultivector(m.impl.dual());

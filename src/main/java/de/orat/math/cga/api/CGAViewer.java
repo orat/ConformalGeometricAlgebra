@@ -450,6 +450,11 @@ public class CGAViewer extends CGAViewObject {
         
         Point3d[] corners = aabb.clip(plane); // corners of a polygon in a plane
         
+        // testweise
+        for (int i=0;i<corners.length;i++){
+            System.out.println("corner["+String.valueOf(i)+"]: x="+String.valueOf(corners[i].x+", y="+String.valueOf(corners[i].y)+
+                    ", z="+String.valueOf(corners[i].z)));
+        }
         if (corners.length > 2){
             result = impl.addPolygone(location, corners, color, label, showNormal, transparency);
             //System.out.println("addPlane \""+label+"\": "+String.valueOf(corners.length)+" corners found:");

@@ -5,7 +5,7 @@ import org.jogamp.vecmath.Matrix4d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * A general rotor - rotation around an axis not needed to pass the origin.
+ * A general rotor - rotation around an axis (no need of the axis to pass the origin).
  * 
  * 
  * 1.0,                                         // grade 0<br>

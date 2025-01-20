@@ -987,9 +987,19 @@ public class Test2 {
         // + 0.2236*eo^e1^ei - 0.4472135954999568*eo^e2^ei - 0.259*e1^e2^ei 
         // + 0.894*eo^e3^ei + 1.0777*e1^e3^ei - 1.1180*e2^e3^ei
         // TODO
+        // s, e0, e1, e2, e3, einf, 
+        // e01, e02, e03, e0inf, e12, e13, e1inf, e23, e2inf, e3inf
+        // e012, e013, e01inf, e023, e02inf, e03inf, e123, e12inf, e13inf, e23inf, 
+        // e0123, e012inf, e013inf, e023inf, e123inf, 
+        // e0123inf
+        //double[] v = new double[]{0,0,0,0,0,0,
+        //                          0.0.0.0.0.0.0.0.0.0,
+        //                           };
+        //CGAMultivector cref = new CGAMultivector(v);
+        //assertTrue(c.equals(cref));
         System.out.println("c="+c.toString());
     }
-    
+    @Test
     public void testGanjaExampleIntersections(){
         
         System.out.println("------------------Ganja.js expample: intersections --------------");
@@ -998,6 +1008,7 @@ public class Test2 {
         CGARoundPointIPNS p = new CGARoundPointIPNS(new Vector3d(0d,0d,0d));
         // p1c=1.0*eo (korrekt)
         System.out.println("p="+p.toString());
+        assertTrue(p.equals(CGAMultivector.o));
         
         //S  = ()=>!(p1c-.5*ni),                 // main dual sphereIPNS around point 
         CGASphereOPNS S = (new CGASphereIPNS(p, 1d)).undual();
@@ -1011,7 +1022,7 @@ public class Test2 {
         // java: S2=-eo^e1^e2^e3 + 1.399*eo^e2^e3^ei - 0.85*e1^e2^e3^ei (korrekt)
         System.out.println("S2="+S2.toString());
         
-        CGAPlaneIPNS plane = new CGAPlaneIPNS(new Vector3d(0d,0d,1d), 0d,0d);
+        CGAPlaneIPNS plane = new CGAPlaneIPNS(new Vector3d(0d,0d,1d), 0d,1d);
         System.out.println("plane="+plane.toString());
         //C  = !(up(1.4e1)-.125*ni)&!(1e3),    // right circleIPNS
         //7 28.2.23 wechsel auf undual 
