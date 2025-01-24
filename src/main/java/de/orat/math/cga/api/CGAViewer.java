@@ -95,6 +95,7 @@ public class CGAViewer extends CGAViewObject {
     CGAViewObject addCGAObject(CGAViewObject parent, CGAKVector m, String label){
          return addCGAObject(parent, m, label, null);
     }
+    // returns null if the given CGAKVector m has unknown type
     CGAViewObject addCGAObject(CGAViewObject parent, CGAKVector m, String label, Color color){
         
         long id = -1;
@@ -285,8 +286,8 @@ public class CGAViewer extends CGAViewObject {
         //TODO
         // flat-point als Würfel darstellen
 
-        
-        throw new IllegalArgumentException("\""+m.toString("")+"\" has unknown type!");
+        System.out.println("add view object failed: \""+label+"\" has unknown type or is not yet supported!");
+        return null;
     }
     
     private CGAViewObject addComplexViewObject(CGAMultivector m, String label, CGAViewObject parent, long[] ids){
@@ -399,7 +400,7 @@ public class CGAViewer extends CGAViewObject {
         Point3d location = parameters.location();
         location.scale(1000d);
         Vector3d a = parameters.attitude();
-        System.out.println("plane "+label+" a=("+String.valueOf(a.x)+", "+String.valueOf(a.y)+", "+String.valueOf(a.z)+
+        System.out.println("Add plane "+label+" a=("+String.valueOf(a.x)+", "+String.valueOf(a.y)+", "+String.valueOf(a.z)+
                 "), o=("+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+String.valueOf(location.z)+")");
         long[] result = null;
         if (showPolygon){
@@ -499,7 +500,7 @@ public class CGAViewer extends CGAViewObject {
         Point3d p1 = parameters.location();
         p1.scale(1000d);
         Vector3d a = parameters.attitude();
-        System.out.println("add line \""+label+"\" at ("+String.valueOf(p1.x)+", "+String.valueOf(p1.y)+
+        System.out.println("Add line \""+label+"\" at ("+String.valueOf(p1.x)+", "+String.valueOf(p1.y)+
                         ", "+String.valueOf(p1.z)+") with a=("+String.valueOf(a.x)+", "+String.valueOf(a.y)+", "+
                         String.valueOf(a.z)+")");
         
@@ -550,6 +551,9 @@ public class CGAViewer extends CGAViewObject {
        direction.normalize();
        direction.scale(TANGENT_LENGTH*1000/2d);
        
+       System.out.println("Add oriented point \""+label+"\" at ("+String.valueOf(location.x)+","+
+                        String.valueOf(location.y)+", "+String.valueOf(location.z)+")!");
+      
        long[] result = new long[2];
        
        // point
@@ -574,7 +578,12 @@ public class CGAViewer extends CGAViewObject {
     long addFlatPoint(iCGAFlat.EuclideanParameters parameters, String label, Color color){
         if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
         
-        return impl.addCube(parameters.location(), parameters.attitude(),
+        Point3d location = parameters.location();
+        
+        System.out.println("Add flat point \""+label+"\" at ("+String.valueOf(location.x)+","+
+                        String.valueOf(location.y)+", "+String.valueOf(location.z)+")!");
+      
+        return impl.addCube(location, parameters.attitude(),
                 POINT_RADIUS*2*1000, color, label, true);
     }
     
@@ -659,13 +668,13 @@ public class CGAViewer extends CGAViewObject {
         
         if (color == null) throw new IllegalArgumentException("color==null not allowed, use method with argument ipns instead!");
         
-        Point3d l = parameters.location();
+        Point3d location = parameters.location();
         Vector3d att = parameters.attitude();
-        System.out.println("pp(tangendRound) \""+label+"\" loc=("+String.valueOf(l.x)+", "+String.valueOf(l.y)+", "+String.valueOf(l.z)+
+        System.out.println("Add point pair \""+label+"\" loc=("+String.valueOf(location.x)+", "+String.valueOf(location.y)+", "+String.valueOf(location.z)+
                   ", att=("+String.valueOf(att.x)+", "+String.valueOf(att.y)+", "+String.valueOf(att.z)+
                 "), r2="+String.valueOf(parameters.squaredSize()));
         Point3d[] points = decomposePointPair(parameters);
-        System.out.println("pp \""+label+"\" p1=("+String.valueOf(points[0].x)+", "+String.valueOf(points[0].y)+", "+String.valueOf(points[0].z)+
+        System.out.println("p1=("+String.valueOf(points[0].x)+", "+String.valueOf(points[0].y)+", "+String.valueOf(points[0].z)+
                     ", p2=("+String.valueOf(points[1].x)+", "+String.valueOf(points[1].y)+", "+String.valueOf(points[1].z)+")");
 
         points[0].scale(1000d);
