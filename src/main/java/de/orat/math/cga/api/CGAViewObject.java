@@ -9,17 +9,18 @@ import java.util.List;
  */
 public class CGAViewObject {
     
-    private long id;
+    private long id; // id != -1, wenn das Objekt im viewer visualisiert werden kann, else wenn es nur der parent von children-objekten ist
     private CGAMultivector mv;
     private String label;
     private CGAViewObject parent;
-    private List<CGAViewObject> children = new ArrayList<>();
+    private List<CGAViewObject> children;
     
     CGAViewObject(CGAMultivector mv, String label, CGAViewObject parent, long id){
+        this.children = new ArrayList<>();
         setParent(parent);
         this.label = label;
-		this.mv = mv;
-		this.id = id;
+        this.mv = mv;
+        this.id = id;
     }
     final void setParent(CGAViewObject parent){
         this.parent = parent;
@@ -52,12 +53,19 @@ public class CGAViewObject {
     }
 
     public void transform(CGAScrew motor){
-        // TODO
-        // alle children müssen auch transformiert werden
-        getCGAViewer().transform(this, motor);
+        CGAViewer viewer = getCGAViewer();
+        if (id != -1) viewer.transform(this, motor);
+        for (CGAViewObject obj: children){
+            viewer.transform(obj, motor);
+        }
     }
     
     public void remove() {
-        getCGAViewer().remove(id);
+        System.out.println("remove \""+this.label+"\"!");
+        CGAViewer viewer = getCGAViewer();
+        if (id != -1) viewer.remove(id);
+        for (CGAViewObject obj: children){
+            viewer.remove(obj.getId());
+        }
     }
 }

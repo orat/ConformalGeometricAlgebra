@@ -60,7 +60,7 @@ public class CGAViewer extends CGAViewObject {
      * @return null if the given multivector is no k-vector
      * 
      * TODO
-     * was ist mit einer Schraubachse? Ist die auch ein k-vector?
+     * was ist mit einer Schraubachse? Ist die auch ein k-vector? vermutlich nein!
      */
     public CGAViewObject addCGAObject(CGAViewObject parent, CGAMultivector m, String label, boolean isIPNS){
        CGAViewObject result = null;
@@ -162,12 +162,15 @@ public class CGAViewer extends CGAViewObject {
                 //addPointPair(pp, label, true);
                 //double r_ = pp.p1().distance(pp.p2())/2;
                 //System.out.println("Visualize real point pair \""+label+"\"with r="+String.valueOf(r_));
-                CGAViewObject parent2 = new CGAViewObject(m, label, parent, -1);
-                CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
-                parent.addChild(p1);
-                CGAViewObject p2 = new CGAViewObject(null,label+"_2",parent2, ids[1]);
-                parent.addChild(p2);
-                return parent2;
+                //TODO vgl. impl für plane, da wird eine Methode addComplexType verwendet
+                // sollte ich das hier nicht auch so machen?
+                //CGAViewObject parent2 = new CGAViewObject(m, label, parent, -1);
+                //CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
+                //parent.addChild(p1);
+                //CGAViewObject p2 = new CGAViewObject(null,label+"_2",parent2, ids[1]);
+                //parent.addChild(p2);
+                //return parent2;
+                return addComplexViewObject(m, label, parent, ids);
             }
             
         } else if (m instanceof CGASphereIPNS sphereIPNS){
@@ -290,16 +293,13 @@ public class CGAViewer extends CGAViewObject {
         return null;
     }
     
+    // der parent ist momentan immer der viewer selbst also root, das könnte sich aber ändern
     private CGAViewObject addComplexViewObject(CGAMultivector m, String label, CGAViewObject parent, long[] ids){
         CGAViewObject parent2 = new CGAViewObject(m, label,  parent, -1);
         for (int i=0;i<ids.length;i++){
             CGAViewObject p = new CGAViewObject(null,label+"_"+String.valueOf(i+1),parent2, ids[i]);
-            parent.addChild(p);
+            parent2.addChild(p);
         }
-        /*CGAViewObject p1 = new CGAViewObject(null,label+"_1",parent2, ids[0]);
-        parent.addChild(p1);
-        CGAViewObject p2 = new CGAViewObject(null,label+"_2",parent2, ids[1]);
-        parent.addChild(p2);*/
         return parent2;
     }
     
@@ -515,12 +515,13 @@ public class CGAViewer extends CGAViewObject {
         // funktioniert nicht, führt zum Absturz, out of memory
         //return aabb.clip3(line);
         
+        long result = -1;
         if (points.length == 2){
-            return impl.addLine(points[0], points[1], color, LINE_RADIUS*1000,  label);
+            result = impl.addLine(points[0], points[1], color, LINE_RADIUS*1000,  label);
         } else {
             System.out.println("Clipping of line \""+label+"\" failed, because no intersection with the bounding box!");
-            return -1;
         }
+        return result;
     }
     
     /**
@@ -684,8 +685,6 @@ public class CGAViewer extends CGAViewObject {
         return new long[]{
             impl.addSphere(points[0],  POINT_RADIUS*2*1000, color, label, false),
             impl.addSphere(points[1],  POINT_RADIUS*2*1000, color, label, false)};
-        //TODO
-        // eventuell Linie zwischen beiden Punkten
     }
     
     /**
@@ -738,8 +737,15 @@ public class CGAViewer extends CGAViewObject {
         return Double.isFinite(tuple3d.z);
     }
 
+    /**
+     * This viewer do not know about hierarchy of view elements. 
+     * 
+     * @param id 
+     */
     public void remove(long id) {
-        //TODO alle children removed?
-        this.impl.removeNode(id);
+       boolean result = impl.removeNode(id);
+       if (!result){
+           System.out.println("Try to remove node with id="+String.valueOf(id)+" but not found!");
+       }
     }
 }
