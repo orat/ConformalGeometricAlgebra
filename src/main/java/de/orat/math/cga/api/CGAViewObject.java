@@ -10,7 +10,12 @@ import java.util.List;
 public class CGAViewObject {
     
     private long id; // id != -1, wenn das Objekt im viewer visualisiert werden kann, else wenn es nur der parent von children-objekten ist
+    
+    //TODO soll verwendet werden, wenn später einmal animationen ermöglicht werden
+    // sollen bei denen der mv in der DSL geändert wird
+    // unklar ob sich das so überhaupt implementieren läßt
     private CGAMultivector mv;
+    
     private String label;
     private CGAViewObject parent;
     private List<CGAViewObject> children;

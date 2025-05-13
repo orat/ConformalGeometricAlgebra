@@ -62,7 +62,6 @@ public class CGAFlatPointOPNS extends CGAFlatOPNS implements iCGABivector {
     @Override
     public Point3d location(){
         
-        //CGAMultivector o = CGAMultivector.createOrigin(1d);
         CGAMultivector oinf = o.op(inf);
         
         // Dorst2007 drills 14.9.2. nr. 5

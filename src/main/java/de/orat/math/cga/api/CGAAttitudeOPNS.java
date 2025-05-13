@@ -4,21 +4,21 @@ import de.orat.math.cga.spi.iCGAMultivector;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- * Attitudes, also called free or direction vectors (directions),  free k-blades 
+ * Attitudes, also called free or direction vectors (directions), free k-blades 
  * are elements without position. 
  * 
  * They are made by wedging any Euclidean element (vector, bivector, or 
  * trivector) with ∞. Directions are invariant under translations 
- * (they do not change if moved), but they can of course be rotated.
+ * (they do not change if moved), but they can of course be rotated.<p>
 
  * They represent directions without a location. They are translation 
- * invariant but rotation covariant.
+ * invariant but rotation covariant.<p>
  * 
- * This means there is no e0-component in its formula.
+ * This means there is no e0-component in its formula.<p>
  * 
- * This is the base class for all attitude classes (Vector, Bivector, TreeVector).
+ * This is the base class for all attitude classes (Vector, Bivector, TreeVector).<p>
  * 
- * [Dorst2007] p. 376
+ * [Dorst2007] p.376<p>
  * 
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
@@ -37,12 +37,11 @@ public class CGAAttitudeOPNS extends CGAKVector implements iCGAAttitude {
         return inf.lc(m).isNull();
     }
     
+    
     // decomposition
     
     public Vector3d direction(){
-        // impl abhängig vom grade waere moeglich
-        //TODO
-        throw new RuntimeException("Implementation only for derviced classes available!");
+        throw new RuntimeException("Implementation only for derviced classes available because implementation is grade depenend!");
     }
     
     

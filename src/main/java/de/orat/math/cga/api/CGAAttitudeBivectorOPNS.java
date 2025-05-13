@@ -40,7 +40,7 @@ public class CGAAttitudeBivectorOPNS extends CGAAttitudeOPNS implements iCGATriv
     /* Extract attitude/direction from Bivector^einf multivector representation.
      * 
      * example: -1.9999999999999991*e1^e2^ei + 1.9999999999999991*e1^e3^ei + 1.9999999999999991*e2^e3^ei
-*/
+     */
     @Override
     public Vector3d direction(){
         CGAMultivector m = extractGrade(3).rc(o).negate().lc(I3i); //euclideanDual(); //extractE3ToVector3d();

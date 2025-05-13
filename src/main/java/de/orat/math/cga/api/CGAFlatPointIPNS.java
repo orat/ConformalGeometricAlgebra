@@ -19,6 +19,7 @@ public class CGAFlatPointIPNS extends CGAFlatIPNS implements iCGATrivector, iEuc
         super(values);
     }
     
+    
     // composition
     
     /**
@@ -143,5 +144,4 @@ public class CGAFlatPointIPNS extends CGAFlatIPNS implements iCGATrivector, iEuc
     public CGAFlatPointOPNS undual(){
         return new CGAFlatPointOPNS(super.undual().compress());
     }
-
 }

@@ -4,7 +4,6 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 
 /**
- *
  * @author Oliver Rettig (Oliver.Rettig@orat.de)
  */
 public class CGALinePair extends CGAMultivector {
