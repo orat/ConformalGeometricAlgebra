@@ -6,8 +6,8 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <!-- verschiedene Implementierungen umschalten:
             default   Dorst2007, impl1
             ganja     via ganja codegenerator (java) based on R410, impl2
@@ -15,7 +15,7 @@
             casadi    impl4, symbolic api, based on JCasADi, not yet ready to use
         -->
         <cga.impl>ganja</cga.impl>
-        <skipTests>true</skipTests>
+        <skipTests>false</skipTests>
         <!--exec.mainClass>de.orat.math.cga.ConformalGeometricAlgebra</exec.mainClass-->
     </properties>
     <dependencies>

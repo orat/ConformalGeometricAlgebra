@@ -132,6 +132,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                         //if screwAxis.getPitch(9 < eps){}
                         return new CGALineOPNS(m);
                     }
+ 
                     if (CGARoundOPNS.is(m)){
                         CGACircleOPNS circle = new CGACircleOPNS(m);
                         // opns oriented point (round)
@@ -141,12 +142,13 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                         } else {
                             return circle;
                         }
-                    }
+                    }²
                     
                     // opns attitude bivector (attitude)
                     if (CGAAttitudeOPNS.is(m)){
                         return new CGAAttitudeBivectorOPNS(m);
                     // opns tangent bivector (identisch mit ipns flat point) (tangent)
+                    // to distinguesh tangents from round/dual-round X
                     } else if (CGATangentOPNS.is(m)){
                         return new CGATangentBivectorOPNS(m);
                     }
@@ -157,7 +159,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                     // ipns flat point (flat)
                     if (CGAFlatIPNS.is(m)){
                         return new CGAFlatPointIPNS(m);
-                    // ipns point pair (round)
+                    // ipns point pair/dipole (round)
                     } else if (CGARoundIPNS.is(m)){
                         return new CGAPointPairIPNS(m);
                     }

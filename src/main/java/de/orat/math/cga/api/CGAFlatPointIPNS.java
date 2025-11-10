@@ -37,12 +37,6 @@ public class CGAFlatPointIPNS extends CGAFlatIPNS implements iCGATrivector, iEuc
      * Implementation following:
      * https://spencerparkin.github.io/GALua/CGAUtilMath.pdf
      * CGAUtil.lua l.153
-     *
-     * Bestimung der Formel durch Plane gechnitten mit Line. Diese Reihenfolge
-     * ist willkürlich und definiert das Vorzeichen der weight. Vermutlich stimmt
-     * das so nicht und es muss umgekehrt definiert werden, damit das mit der 
-     * composition der opns-representation und der ipns = opns.dual zusammenpasst.
-     * FIXME
      * 
      * @param c position/center/location of the flat point
      * @param weight weight

@@ -139,8 +139,6 @@ public class CGAPointPairIPNS extends CGARoundIPNS implements iCGATrivector, iCG
     private static CGAMultivector create(Point3d center, Vector3d normal, 
             double r, double weight){
         CGAMultivector c = createE3(center);
-        Vector3d normalizedNormal = new Vector3d(normal);
-        normalizedNormal.normalize();
         CGAMultivector n = createE3(normal);
         CGAMultivector sr2;
         
