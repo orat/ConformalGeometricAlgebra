@@ -142,7 +142,7 @@ public class CGAKVector extends CGAMultivector implements iCGAkVector {
                         } else {
                             return circle;
                         }
-                    }²
+                    }
                     
                     // opns attitude bivector (attitude)
                     if (CGAAttitudeOPNS.is(m)){
