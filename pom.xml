@@ -18,6 +18,13 @@
         <skipTests>false</skipTests>
         <!--exec.mainClass>de.orat.math.cga.ConformalGeometricAlgebra</exec.mainClass-->
     </properties>
+    <repositories>
+        <repository>
+            <id>JogAmpJava3D</id>
+            <name>JogAmpJava3D</name>
+            <url>https://jogamp.org/deployment/maven-java3d/</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>de.orat.math.ga</groupId>
@@ -47,24 +54,24 @@
     
     <build>
         <plugins>
-             <plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
                 <version>1.2.0</version>
                 <executions>
-                  <execution>
-                    <phase>generate-resources</phase>
-                    <goals>
-                      <goal>write-project-properties</goal>
-                    </goals>
-                    <configuration>
-                      <outputFile>
-                        ${project.build.outputDirectory}/cga.properties
-                      </outputFile>
-                    </configuration>
-                  </execution>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>
+                                ${project.build.outputDirectory}/cga.properties
+                            </outputFile>
+                        </configuration>
+                    </execution>
                 </executions>
-              </plugin>
+            </plugin>
         </plugins>    
     </build>       
 </project>
